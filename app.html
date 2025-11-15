@@ -561,7 +561,7 @@
                       <div class="bm-pos-summary">
                         <div class="bm-pos-summary-row">
                           <span>ยอดรวม (ยังไม่หักส่วนลด)</span>
-                          <span id="posSubtotal" class="bm-pos-summary-value"
+                          <span id="posSubtotalText" class="bm-pos-summary-value"
                             >0 บาท</span
                           >
                         </div>
@@ -570,7 +570,7 @@
                           <div class="bm-pos-summary-input">
                             <input
                               type="number"
-                              id="posDiscount"
+                              id="posDiscountInput"
                               class="form-control form-control-sm text-end"
                               value="0"
                               min="0"
@@ -581,7 +581,7 @@
                         <div class="bm-pos-summary-row bm-pos-summary-highlight">
                           <span>ยอดสุทธิ</span>
                           <span
-                            id="posNetTotal"
+                            id="posNetTotalText"
                             class="bm-pos-summary-value fw-bold"
                             >0 บาท</span
                           >
@@ -591,7 +591,7 @@
                           <div class="bm-pos-summary-input">
                             <input
                               type="number"
-                              id="posPaid"
+                              id="posCustomerPaidInput"
                               class="form-control form-control-sm text-end"
                               value="0"
                               min="0"
@@ -601,7 +601,7 @@
                         </div>
                         <div class="bm-pos-summary-row">
                           <span>เงินทอน</span>
-                          <span id="posChange" class="bm-pos-summary-value"
+                          <span id="posChangeText" class="bm-pos-summary-value"
                             >0 บาท</span
                           >
                         </div>
@@ -609,7 +609,7 @@
                         <div class="d-grid gap-2 mt-3">
                           <button
                             id="posSaveBtn"
-                            type="submit"
+                            type="button"
                             class="btn btn-success"
                           >
                             <i class="bi bi-check-circle me-1"></i>บันทึกบิล
@@ -1578,6 +1578,7 @@
   </body>
 
 </html>
+
 
 
 
