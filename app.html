@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>BEN MOTOR POS – แดชบอร์ดหลัก</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Fonts: Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  >
+
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  >
+
+  <style>
+    :root {
+      --bm-primary: #13b38b;
+      --bm-primary-soft: rgba(19, 179, 139, 0.1);
+      --bm-primary-strong: #0f766e;
+      --bm-accent: #0b7285;
+      --bm-bg: #f3f4f6;
+      --bm-sidebar-bg: #020617;
+      --bm-sidebar-bg-soft: #02081e;
+      --bm-sidebar-border: rgba(148, 163, 184, 0.35);
+      --bm-card-bg: #ffffff;
+      --bm-text-main: #020617;
+      --bm-text-muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--bm-text-main);
+      background-color: var(--bm-bg);
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #eff6ff, #e5e7eb);
+    }
+
+    .bm-app-layout {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .bm-sidebar {
+      width: 240px;
+      background:
+        radial-gradient(circle at top left, rgba(19, 179, 139, 0.12), transparent 60%),
+        radial-gradient(circle at bottom, rgba(37, 99, 235, 0.18), transparent 70%),
+        var(--bm-sidebar-bg);
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--bm-sidebar-border);
+      padding: 14px 12px;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      z-index: 1010;
+    }
+
+    .bm-sidebar-collapsed {
+      width: 78px;
+      padding-inline: 10px;
+    }
+
+    .bm-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .bm-sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      overflow: hidden;
+    }
+
+    .bm-sidebar-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 20%, #f9fafb, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #020617;
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.5);
+      flex-shrink: 0;
+    }
+
+    .bm-sidebar-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .bm-sidebar-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .bm-sidebar-subtitle {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .bm-sidebar-toggle-btn {
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.5);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .bm-sidebar-toggle-btn:hover {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .bm-sidebar-nav {
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .bm-nav-section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+      margin: 8px 6px 4px;
+      white-space: nowrap;
+    }
+
+    .bm-nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bm-nav-item {
+      margin-bottom: 2px;
+    }
+
+    .bm-nav-link {
+      border-radius: 999px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      text-decoration: none;
+      opacity: 0.88;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .bm-nav-link-icon {
+      width: 22px;
+      display: inline-flex;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .bm-nav-link-label {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bm-nav-link-badge {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      color: #cbd5f5;
+      flex-shrink: 0;
+    }
+
+    .bm-nav-link:hover {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.6);
+      opacity: 1;
+    }
+
+    .bm-nav-link.active {
+      background: linear-gradient(135deg, #13b38b, #22c55e);
+      border-color: rgba(248, 250, 252, 0.8);
+      color: #0b1120;
+      opacity: 1;
+      box-shadow: 0 10px 24px rgba(19, 179, 139, 0.7);
+    }
+
+    .bm-nav-link.active .bm-nav-link-badge {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: transparent;
+      color: #bbf7d0;
+    }
+
+    .bm-sidebar-footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+
+    .bm-user-mini {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .bm-user-mini-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .bm-user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 10%, #f9fafb, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #0f172a;
+      flex-shrink: 0;
+    }
+
+    .bm-user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .bm-user-name {
+      font-size: 0.78rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .bm-user-email {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .bm-logout-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(239, 68, 68, 0.8);
+      background: transparent;
+      color: #fecaca;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bm-logout-btn:hover {
+      background: rgba(248, 113, 113, 0.15);
+    }
+
+    .bm-build-label {
+      font-size: 0.68rem;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .bm-build-pill {
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      white-space: nowrap;
+    }
+
+    .bm-sidebar-collapsed .bm-sidebar-title-wrap,
+    .bm-sidebar-collapsed .bm-nav-link-label,
+    .bm-sidebar-collapsed .bm-nav-link-badge,
+    .bm-sidebar-collapsed .bm-user-info,
+    .bm-sidebar-collapsed .bm-build-label {
+      display: none;
+    }
+
+    .bm-sidebar-collapsed .bm-sidebar {
+      width: 78px;
+    }
+
+    .bm-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at top left, #eff6ff, #e5e7eb);
+    }
+
+    .bm-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(209, 213, 219, 0.9);
+      backdrop-filter: blur(14px);
+      background:
+        linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(248, 250, 252, 0.94));
+    }
+
+    .bm-topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 14px;
+    }
+
+    @media (min-width: 768px) {
+      .bm-topbar-inner {
+        padding: 10px 18px;
+      }
+    }
+
+    .bm-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .bm-topbar-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .bm-topbar-subtitle {
+      font-size: 0.76rem;
+      color: var(--bm-text-muted);
+      display: none;
+    }
+
+    @media (min-width: 992px) {
+      .bm-topbar-subtitle {
+        display: block;
+      }
+    }
+
+    .bm-topbar-center {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bm-search-wrap {
+      position: relative;
+      max-width: 360px;
+      margin-inline: auto;
+    }
+
+    .bm-search-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 30px 6px 30px;
+      font-size: 0.82rem;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    .bm-search-input:focus {
+      outline: none;
+      border-color: var(--bm-primary);
+      box-shadow: 0 0 0 3px rgba(19, 179, 139, 0.18);
+    }
+
+    .bm-search-icon-left {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.92rem;
+      color: #9ca3af;
+    }
+
+    .bm-search-kbd {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.68rem;
+      color: #9ca3af;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .bm-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--bm-text-muted);
+      white-space: nowrap;
+    }
+
+    .bm-topbar-datetime {
+      text-align: right;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .bm-topbar-datetime {
+        display: block;
+      }
+    }
+
+    .bm-topbar-datetime-main {
+      font-size: 0.8rem;
+      color: #111827;
+    }
+
+    .bm-topbar-datetime-sub {
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
+
+    .bm-topbar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 10%, #f9fafb, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      cursor: default;
+    }
+
+    .bm-content {
+      flex: 1;
+      min-height: 0;
+      padding: 12px 10px 16px;
+    }
+
+    @media (min-width: 768px) {
+      .bm-content {
+        padding: 16px 18px 20px;
+      }
+    }
+
+    .bm-section {
+      display: none;
+    }
+
+    .bm-section-active {
+      display: block;
+    }
+
+    .bm-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .bm-section-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .bm-section-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .bm-section-subtitle {
+      font-size: 0.78rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-section-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .bm-chip-light {
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 0.76rem;
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #4b5563;
+    }
+
+    .bm-chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .bm-chip-dot-danger {
+      background: #f97316;
+    }
+
+    .bm-card {
+      border-radius: 18px;
+      background: var(--bm-card-bg);
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    }
+
+    .bm-card-body {
+      padding: 12px 12px;
+    }
+
+    @media (min-width: 768px) {
+      .bm-card-body {
+        padding: 14px 16px;
+      }
+    }
+
+    .bm-card-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .bm-card-subtitle {
+      font-size: 0.74rem;
+      color: var(--bm-text-muted);
+      margin-bottom: 8px;
+    }
+
+    .bm-stat-value {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .bm-stat-label {
+      font-size: 0.74rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-grid-gap {
+      row-gap: 10px;
+    }
+
+    .bm-placeholder {
+      font-size: 0.8rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-placeholder strong {
+      color: var(--bm-text-main);
+    }
+
+    .bm-scroll-y-soft {
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+
+    .bm-kanban-col-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .bm-kanban-col-count {
+      font-size: 0.74rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-kanban-col {
+      background: #f3f4f6;
+      border-radius: 14px;
+      padding: 6px;
+      border: 1px dashed rgba(209, 213, 219, 0.9);
+      min-height: 60px;
+    }
+
+    .bm-kanban-item {
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      cursor: default;
+    }
+
+    .bm-kanban-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .bm-kanban-tag {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 2px 7px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin-left: 4px;
+    }
+
+    .bm-kanban-meta {
+      font-size: 0.7rem;
+      color: var(--bm-text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .bm-timeline {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+      font-size: 0.76rem;
+    }
+
+    .bm-timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .bm-timeline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .bm-timeline-dot-muted {
+      background: #9ca3af;
+    }
+
+    .bm-timeline-body {
+      color: var(--bm-text-muted);
+    }
+
+    .bm-timeline-body strong {
+      color: var(--bm-text-main);
+    }
+
+    .bm-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .bm-quick-action-btn {
+      border-radius: 999px;
+      border: 1px dashed #d1d5db;
+      background: #f9fafb;
+      font-size: 0.78rem;
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #374151;
+    }
+
+    .bm-quick-action-btn i {
+      font-size: 0.9rem;
+      color: #0ea5e9;
+    }
+
+    .bm-fab {
+      position: fixed;
+      bottom: 14px;
+      right: 14px;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #13b38b, #22c55e);
+      color: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.65);
+      cursor: pointer;
+      z-index: 1040;
+    }
+
+    .bm-fab i {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 575.98px) {
+      .bm-fab {
+        bottom: 12px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bm-app-layout">
+    <!-- SIDEBAR -->
+    <aside id="bm-sidebar" class="bm-sidebar">
+      <div class="bm-sidebar-header">
+        <div class="bm-sidebar-brand">
+          <div class="bm-sidebar-logo">
+            <i class="bi bi-wrench-adjust"></i>
+          </div>
+          <div class="bm-sidebar-title-wrap">
+            <div class="bm-sidebar-title">BEN MOTOR POS</div>
+            <div class="bm-sidebar-subtitle">Workshop Dashboard</div>
+          </div>
+        </div>
+        <button id="bm-sidebar-toggle" type="button" class="bm-sidebar-toggle-btn" aria-label="ย่อ/ขยายเมนูด้านข้าง">
+          <i class="bi bi-layout-sidebar-inset"></i>
+        </button>
+      </div>
+
+      <nav class="bm-sidebar-nav" aria-label="เมนูหลัก">
+        <div class="bm-nav-section-label">ภาพรวม</div>
+        <ul class="bm-nav-list mb-1">
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link active" data-section="dashboard">
+              <span class="bm-nav-link-icon"><i class="bi bi-speedometer2"></i></span>
+              <span class="bm-nav-link-label">แดชบอร์ด</span>
+              <span class="bm-nav-link-badge">วันนี้</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="jobs">
+              <span class="bm-nav-link-icon"><i class="bi bi-kanban"></i></span>
+              <span class="bm-nav-link-label">งานซ่อม</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="pos">
+              <span class="bm-nav-link-icon"><i class="bi bi-receipt-cutoff"></i></span>
+              <span class="bm-nav-link-label">เปิดบิล / POS</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="bm-nav-section-label">ข้อมูลร้าน</div>
+        <ul class="bm-nav-list mb-1">
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="stock">
+              <span class="bm-nav-link-icon"><i class="bi bi-box-seam"></i></span>
+              <span class="bm-nav-link-label">สต็อก &amp; อะไหล่</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="customers">
+              <span class="bm-nav-link-icon"><i class="bi bi-people"></i></span>
+              <span class="bm-nav-link-label">ลูกค้า &amp; รถลูกค้า</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="repair-knowledge">
+              <span class="bm-nav-link-icon"><i class="bi bi-layers"></i></span>
+              <span class="bm-nav-link-label">แนะนำการซ่อม</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="bm-nav-section-label">วิเคราะห์ / ตั้งค่า</div>
+        <ul class="bm-nav-list">
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="reports">
+              <span class="bm-nav-link-icon"><i class="bi bi-graph-up-arrow"></i></span>
+              <span class="bm-nav-link-label">รายงาน &amp; สรุปยอด</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="tools">
+              <span class="bm-nav-link-icon"><i class="bi bi-tools"></i></span>
+              <span class="bm-nav-link-label">เครื่องมือช่าง</span>
+            </a>
+          </li>
+          <li class="bm-nav-item">
+            <a href="#" class="bm-nav-link" data-section="settings">
+              <span class="bm-nav-link-icon"><i class="bi bi-gear"></i></span>
+              <span class="bm-nav-link-label">ตั้งค่า / ระบบ</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="bm-sidebar-footer">
+        <div class="bm-user-mini">
+          <div class="bm-user-mini-left">
+            <div class="bm-user-avatar" id="bm-user-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="bm-user-info">
+              <div class="bm-user-name" id="bm-user-name">ช่าง</div>
+              <div class="bm-user-email" id="bm-user-email">email@example.com</div>
+            </div>
+          </div>
+          <button type="button" id="bm-logout-btn" class="bm-logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>ออก</span>
+          </button>
+        </div>
+        <div class="bm-build-label">
+          <span class="bm-build-pill">เวอร์ชันอู่ : v0.1</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="bm-main">
+      <!-- TOPBAR -->
+      <header class="bm-topbar">
+        <div class="bm-topbar-inner">
+          <div class="bm-topbar-left">
+            <button
+              id="bm-sidebar-toggle-mobile"
+              type="button"
+              class="btn btn-light btn-sm d-inline-flex d-md-none align-items-center justify-content-center me-1"
+              style="border-radius:999px;border:1px solid #e5e7eb;background:#f9fafb;width:32px;height:32px;"
+              aria-label="เปิด/ปิดเมนูด้านข้าง"
+            >
+              <i class="bi bi-list"></i>
+            </button>
+            <div>
+              <div id="bm-topbar-title" class="bm-topbar-title">แดชบอร์ด BEN MOTOR</div>
+              <div id="bm-topbar-subtitle" class="bm-topbar-subtitle">
+                ภาพรวมงานซ่อมวันนี้, เงินเข้า, รถยังค้างอู่
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-topbar-center d-none d-sm-block">
+            <div class="bm-search-wrap">
+              <i class="bi bi-search bm-search-icon-left"></i>
+              <input
+                id="bm-global-search"
+                type="search"
+                class="bm-search-input"
+                placeholder="ค้นหาทะเบียน / ชื่อลูกค้า / เบอร์โทร / เลขบิล (กด Ctrl + K)"
+              >
+              <span class="bm-search-kbd d-none d-md-inline-flex">Ctrl + K</span>
+            </div>
+          </div>
+
+          <div class="bm-topbar-right">
+            <div class="bm-topbar-datetime">
+              <div id="bm-datetime-main" class="bm-topbar-datetime-main">--:--</div>
+              <div id="bm-datetime-sub" class="bm-topbar-datetime-sub">--</div>
+            </div>
+            <div class="bm-topbar-avatar">
+              <i class="bi bi-person"></i>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+      <section class="bm-content">
+        <!-- DASHBOARD -->
+        <section id="section-dashboard" class="bm-section bm-section-active">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">แดชบอร์ดภาพรวมอู่วันนี้</div>
+              <div class="bm-section-subtitle">
+                ดูงานซ่อมที่ต้องลุย, งานค้าง, และเงินเข้าออกของวันนี้แบบรวดเดียว
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <span class="bm-chip-dot"></span>
+                <span>งานกำลังซ่อม <span id="bm-dashboard-in-progress-count">0</span> คัน</span>
+              </div>
+              <div class="bm-chip-light">
+                <span class="bm-chip-dot bm-chip-dot-danger"></span>
+                <span>รถค้างอู่ <span id="bm-dashboard-pending-count">0</span> คัน</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 g-md-3 bm-grid-gap mb-2">
+            <div class="col-12 col-md-4">
+              <div class="bm-card">
+                <div class="bm-card-body">
+                  <div class="bm-card-title">ยอดวันนี้</div>
+                  <div class="bm-card-subtitle">ค่าแรง + อะไหล่ + รับซื้อ/ขายรถ</div>
+                  <div class="bm-stat-value" id="bm-stat-today-total">0 บาท</div>
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                    <div class="bm-stat-label">
+                      ค่าแรง: <span id="bm-stat-today-labor">0</span> บาท
+                    </div>
+                    <div class="bm-stat-label">
+                      อะไหล่: <span id="bm-stat-today-parts">0</span> บาท
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="bm-card">
+                <div class="bm-card-body">
+                  <div class="bm-card-title">งานซ่อม</div>
+                  <div class="bm-card-subtitle">จำนวนงานวันนี้แยกตามสถานะ</div>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <div class="bm-stat-value" id="bm-stat-jobs-today">0</div>
+                      <div class="bm-stat-label">งานทั้งหมดวันนี้</div>
+                    </div>
+                    <div class="text-end">
+                      <div class="bm-stat-label mb-1">
+                        กำลังซ่อม: <span id="bm-stat-jobs-in-progress">0</span>
+                      </div>
+                      <div class="bm-stat-label mb-1">
+                        รออะไหล่: <span id="bm-stat-jobs-waiting-parts">0</span>
+                      </div>
+                      <div class="bm-stat-label">
+                        รอชำระเงิน: <span id="bm-stat-jobs-wait-pay">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="bm-card">
+                <div class="bm-card-body">
+                  <div class="bm-card-title">สต็อก &amp; ลูกค้า</div>
+                  <div class="bm-card-subtitle">ของใกล้หมด + ลูกค้าประจำ</div>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <div class="bm-stat-value" id="bm-stat-stock-low">0</div>
+                      <div class="bm-stat-label">อะไหล่ใกล้หมด</div>
+                    </div>
+                    <div class="text-end">
+                      <div class="bm-stat-value" id="bm-stat-customers-regular">0</div>
+                      <div class="bm-stat-label">ลูกค้าประจำ</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 g-md-3 bm-grid-gap">
+            <div class="col-12 col-lg-7">
+              <div class="bm-card">
+                <div class="bm-card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div>
+                      <div class="bm-card-title">บอร์ดงานซ่อมวันนี้</div>
+                      <div class="bm-card-subtitle">
+                        ลิสต์งานแบบบอร์ด แยกตามสถานะ เพื่อเห็นภาพรวมทั้งวัน
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row g-2 bm-grid-gap bm-scroll-y-soft">
+                    <div class="col-12 col-md-6">
+                      <div class="bm-kanban-col-title">
+                        <span>รอรับเข้า</span>
+                        <span class="bm-kanban-col-count" id="bm-kanban-count-queue">0</span>
+                      </div>
+                      <div id="bm-kanban-col-queue" class="bm-kanban-col">
+                        <!-- jobs.js จะเติมข้อมูล -->
+                        <div class="bm-placeholder">ยังไม่มีงานรอรับเข้าซ่อม</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="bm-kanban-col-title">
+                        <span>กำลังซ่อม</span>
+                        <span class="bm-kanban-col-count" id="bm-kanban-count-in-progress">0</span>
+                      </div>
+                      <div id="bm-kanban-col-in-progress" class="bm-kanban-col">
+                        <!-- jobs.js จะเติมข้อมูล -->
+                        <div class="bm-placeholder">ยังไม่มีงานกำลังซ่อมในขณะนี้</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="bm-kanban-col-title">
+                        <span>รออะไหล่</span>
+                        <span class="bm-kanban-col-count" id="bm-kanban-count-waiting-parts">0</span>
+                      </div>
+                      <div id="bm-kanban-col-waiting-parts" class="bm-kanban-col">
+                        <!-- jobs.js จะเติมข้อมูล -->
+                        <div class="bm-placeholder">ใช้ดูงานที่ต้องรออะไหล่มาส่งก่อนซ่อมต่อ</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="bm-kanban-col-title">
+                        <span>รอชำระเงิน</span>
+                        <span class="bm-kanban-col-count" id="bm-kanban-count-wait-pay">0</span>
+                      </div>
+                      <div id="bm-kanban-col-wait-pay" class="bm-kanban-col">
+                        <!-- jobs.js จะเติมข้อมูล -->
+                        <div class="bm-placeholder">งานที่ทำเสร็จแล้ว แต่ลูกค้ายังไม่ชำระ</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+              <div class="bm-card mb-2">
+                <div class="bm-card-body">
+                  <div class="bm-card-title">วันนี้ต้องโฟกัสอะไร</div>
+                  <div class="bm-card-subtitle">
+                    งานด่วน, งานค้างข้ามวัน, รถที่ควรปิดงานให้จบ
+                  </div>
+                  <ul id="bm-focus-list" class="bm-timeline">
+                    <li class="bm-timeline-item">
+                      <div class="bm-timeline-dot"></div>
+                      <div class="bm-timeline-body">
+                        <strong>ยังไม่มีงานที่ถูกมาร์กเป็น &quot;ด่วน&quot; ในวันนี้</strong><br>
+                        คุณสามารถใช้ jobs.js มาตั้ง rule ให้ดึงงานด่วนมาแสดงตรงนี้ได้
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="bm-card">
+                <div class="bm-card-body">
+                  <div class="bm-card-title">ไทม์ไลน์วันนี้</div>
+                  <div class="bm-card-subtitle">
+                    บันทึกเหตุการณ์สำคัญ เช่น รับรถ, เริ่มซ่อม, ปิดบิล
+                  </div>
+                  <ul id="bm-timeline-today" class="bm-timeline">
+                    <li class="bm-timeline-item">
+                      <div class="bm-timeline-dot bm-timeline-dot-muted"></div>
+                      <div class="bm-timeline-body">
+                        <strong>ยังไม่มีข้อมูลจริง</strong><br>
+                        dashboard.js สามารถดึง history จากงานซ่อมทั้งหมดมาสร้างไทม์ไลน์ตรงนี้
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- JOBS -->
+        <section id="section-jobs" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">งานซ่อมทั้งหมด</div>
+              <div class="bm-section-subtitle">
+                ดูงานซ่อมวันนี้และย้อนหลัง แยกตามสถานะ/ประเภทงาน
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <button
+                type="button"
+                class="bm-chip-light"
+                id="bm-jobs-view-table-btn"
+              >
+                <i class="bi bi-table"></i>
+                มุมมองตาราง
+              </button>
+              <button
+                type="button"
+                class="bm-chip-light"
+                id="bm-jobs-view-card-btn"
+              >
+                <i class="bi bi-grid-3x3-gap"></i>
+                มุมมองการ์ด
+              </button>
+            </div>
+          </div>
+
+          <div class="bm-card mb-2">
+            <div class="bm-card-body">
+              <div class="row g-2 align-items-end">
+                <div class="col-12 col-md-3">
+                  <label class="form-label mb-1">ค้นหางานซ่อม</label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="bm-jobs-search"
+                    placeholder="ทะเบียน / ชื่อลูกค้า / เบอร์โทร"
+                  >
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label mb-1">สถานะ</label>
+                  <select id="bm-jobs-status" class="form-select form-select-sm">
+                    <option value="all">ทั้งหมด</option>
+                    <option value="queue">รอรับเข้า</option>
+                    <option value="in-progress">กำลังซ่อม</option>
+                    <option value="waiting-parts">รออะไหล่</option>
+                    <option value="wait-pay">รอชำระเงิน</option>
+                    <option value="done">เสร็จแล้ว</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label mb-1">วันที่เริ่ม (จาก)</label>
+                  <input type="date" id="bm-jobs-date-from" class="form-control form-control-sm">
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label mb-1">ถึงวันที่</label>
+                  <input type="date" id="bm-jobs-date-to" class="form-control form-control-sm">
+                </div>
+                <div class="col-6 col-md-3 text-md-end">
+                  <button type="button" class="btn btn-sm btn-outline-secondary me-1" id="bm-jobs-clear-filter">
+                    ล้างตัวกรอง
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary" id="bm-jobs-filter-apply">
+                    ใช้ตัวกรอง
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div id="bm-jobs-view-table" class="bm-placeholder">
+                มุมมองตารางงานซ่อม – jobs.js จะมาเติมตารางจริง (หัวคอลัมน์ เช่น เวลา, ทะเบียน, ลูกค้า, ยอด, สถานะ)
+              </div>
+              <div id="bm-jobs-view-card" class="bm-placeholder" style="display:none;">
+                มุมมองการ์ดงานซ่อม – jobs.js จะมาแสดงงานเป็นการ์ดทีละคัน เลือกดูละเอียดย่อยได้ง่าย ๆ
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- POS -->
+        <section id="section-pos" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">เปิดบิล / ใบรับรถ</div>
+              <div class="bm-section-subtitle">
+                เปิดบิลเร็วด้วยสูตรซ่อม + เลือกอะไหล่จากสต็อก + คำนวณยอดอัตโนมัติ
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-lightning-charge"></i>
+                สูตรด่วน: น้ำมันเครื่อง / ผ้าเบรก / ยาง
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                ส่วนนี้จะเป็นฟอร์ม POS เต็ม ๆ (ลูกค้า, รถ, รายการงาน, อะไหล่, ส่วนลด, ยอดสุทธิ, ข้อความส่งไลน์ลูกค้า)
+                ซึ่ง <strong>pos.js</strong> จะเป็นคนสร้าง element/logic จริงตามสเปกที่วางไว้
+              </div>
+              <div class="bm-quick-actions">
+                <button type="button" class="bm-quick-action-btn">
+                  <i class="bi bi-droplet-half"></i>
+                  เปลี่ยนน้ำมันเครื่อง
+                </button>
+                <button type="button" class="bm-quick-action-btn">
+                  <i class="bi bi-disc"></i>
+                  เปลี่ยนผ้าเบรก
+                </button>
+                <button type="button" class="bm-quick-action-btn">
+                  <i class="bi bi-tornado"></i>
+                  จัดเต็มเคลียร์ทั้งคัน
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STOCK -->
+        <section id="section-stock" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">สต็อก &amp; อะไหล่</div>
+              <div class="bm-section-subtitle">
+                ดูของใกล้หมด, ตัวเดินเร็ว/ช้า, และรายละเอียดอะไหล่ทั้งหมด
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <span class="bm-chip-dot"></span>
+                <span>แจ้งเตือนของใกล้หมด</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                ตารางสต็อกอะไหล่จะอยู่ตรงนี้ (ชื่ออะไหล่, หมวด, ราคาทุน, ราคาขาย, จำนวนคงเหลือ, จุดสั่งซื้อซ้ำ)
+                ให้ <strong>stock.js</strong> มาสร้างตารางและเชื่อมกับ Firestore ในภายหลัง
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section id="section-customers" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">ลูกค้า &amp; รถลูกค้า</div>
+              <div class="bm-section-subtitle">
+                ดูรายชื่อลูกค้าประจำ, รถที่ดูแลอยู่ และประวัติงานซ่อมแต่ละคัน
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-star-fill" style="color:#facc15;"></i>
+                ลูกค้าประจำ &amp; VIP
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                ตารางลูกค้า + รถลูกค้าจะอยู่ตรงนี้ ให้ <strong>customers.js</strong> มาสร้างตาราง + modal โปรไฟล์ลูกค้า
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REPAIR KNOWLEDGE -->
+        <section id="section-repair-knowledge" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">แนะนำการซ่อม</div>
+              <div class="bm-section-subtitle">
+                เก็บสูตรซ่อมประจำตัวช่าง แยกตามอาการ/ระบบรถ และดึงมาเปิดบิลได้ทันที
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-file-earmark-text"></i>
+                สูตรซ่อมประจำอู่
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                ส่วนนี้จะมีแท็บ <strong>ตามอาการ / ตามระบบ / สูตรโปรด</strong> ให้
+                <strong>repair-knowledge.js</strong> มาสร้าง UI จริงและเชื่อมกับ POS
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="section-reports" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">รายงาน &amp; สรุปยอด</div>
+              <div class="bm-section-subtitle">
+                ดูกำไรจริง, งานทำเงิน, งานแดกเวลา และ Heatmap งานซ่อมทั้งปี
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-cash-coin"></i>
+                กำไร/ชั่วโมงของช่าง
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                รายงานกราฟ/ตารางจะมาจาก <strong>reports.js</strong> เช่น กำไรต่อวัน, top งานทำเงิน, top งานแดกเวลา ฯลฯ
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOOLS -->
+        <section id="section-tools" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">เครื่องมือช่าง</div>
+              <div class="bm-section-subtitle">
+                ตัวช่วยคิดต้นทุน, กำไรงานซ่อม, อัตราทดสเตอร์ ฯลฯ
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-calculator"></i>
+                คำนวณกำไรงานซ่อม
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                ส่วนนี้ให้ <strong>tools.js</strong> มาสร้าง mini calculator ต่าง ๆ (กำไรงาน, อัตราทดสเตอร์, ค่าน้ำมัน/กม. ฯลฯ)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="section-settings" class="bm-section">
+          <div class="bm-section-header">
+            <div class="bm-section-title-wrap">
+              <div class="bm-section-title">ตั้งค่า / ระบบ</div>
+              <div class="bm-section-subtitle">
+                ตั้งค่าร้าน, ค่าแรงมาตรฐาน, Theme, Auto-lock และสำรองข้อมูล
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <div class="bm-chip-light">
+                <i class="bi bi-shield-lock"></i>
+                ปรับสิทธิ์ &amp; การเข้าถึงในอนาคต
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-body">
+              <div class="bm-placeholder">
+                แบบฟอร์มตั้งค่าหลักของระบบจะอยู่ตรงนี้ ให้ <strong>settings.js</strong> มาสร้าง field จริง ๆ
+                (ชื่อร้าน, ข้อความท้ายใบเสร็จ, theme, auto-lock, export/import ข้อมูล ฯลฯ)
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- Floating Quick Action Button -->
+      <button id="bm-fab" type="button" class="bm-fab" aria-label="เปิดเมนูลัด">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </main>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- App Shell Logic (จะไปเขียนในไฟล์ js/ui-shell.js) -->
+  <script type="module" src="./js/ui-shell.js"></script>
+</body>
+</html>
