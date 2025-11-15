@@ -1,31 +1,62 @@
 // BEN MOTOR POS – Dashboard Logic
 // ดึงข้อมูลจาก Firestore มาสรุปแสดงบนแดชบอร์ด
 
-import {
-  db,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs
-} from "./firebase-init.js";
-
+import { db, collection, getDocs } from "./firebase-init.js";
 import { formatCurrency, formatDateTime } from "./utils.js";
 
 // -----------------------------
-// Firestore refs
+// Helpers
 // -----------------------------
+const $ = (id) => document.getElementById(id);
+
+function toJsDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  if (typeof value.toDate === "function") {
+    try {
+      return value.toDate();
+    } catch (e) {
+      // ignore
+    }
+  }
+  const parsed = Date.parse(value);
+  if (!Number.isNaN(parsed)) {
+    return new Date(parsed);
+  }
+  return null;
+}
+
+function safeNumber(v, fallback = 0) {
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n)) return fallback;
+  return n;
+}
+
 const jobsCol = collection(db, "jobs");
 const stockCol = collection(db, "stock");
 const vehiclesCol = collection(db, "vehicles");
 
 // -----------------------------
-// Helpers: วันที่วันนี้ (ช่วงเวลาเริ่ม-จบของวัน)
+// โหลดสรุปงานซ่อมวันนี้ + งานด่วน + รถค้างในอู่
 // -----------------------------
-function getTodayRange() {
+async function loadTodayJobsSummary() {
+  const totalEl = $("dashTotalToday");
+  const jobsTodayEl = $("dashJobsToday");
+  const urgentCountEl = $("dashUrgentJobsCount");
+  const urgentListEl = $("dashUrgentJobsList");
+  const pendingVehiclesEl = $("dashVehiclesPending");
+
+  if (!totalEl && !jobsTodayEl && !urgentCountEl && !urgentListEl && !pendingVehiclesEl) {
+    return;
+  }
+
+  let totalToday = 0;
+  let jobsToday = 0;
+  let pendingJobsCount = 0;
+  const urgentJobs = [];
+
   const now = new Date();
-  const start = new Date(
+  const startOfToday = new Date(
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
@@ -34,393 +65,296 @@ function getTodayRange() {
     0,
     0
   );
-  const end = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    23,
-    59,
-    59,
-    999
-  );
-  return { start, end };
-}
-
-// อ่าน field แบบปลอดภัย
-function getNumber(value, fallback = 0) {
-  const num = typeof value === "number" ? value : Number(value);
-  if (!Number.isFinite(num)) return fallback;
-  return num;
-}
-
-// -----------------------------
-// Render helpers (เขียนเฉพาะถ้ามี element นั้น ๆ)
-// -----------------------------
-function setTextIfExists(id, text) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.textContent = text;
-  }
-}
-
-function renderListIfExists(id, itemsHtml) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.innerHTML = itemsHtml;
-  }
-}
-
-// -----------------------------
-// Load: Today Jobs Summary
-// -----------------------------
-async function loadTodayJobsSummary() {
-  const { start, end } = getTodayRange();
 
   try {
-    const qToday = query(
-      jobsCol,
-      where("createdAt", ">=", start),
-      where("createdAt", "<=", end)
-    );
-
-    const snap = await getDocs(qToday);
-    let totalToday = 0;
-    let totalJobs = 0;
-
-    let pending = 0;
-    let inProgress = 0;
-    let waitParts = 0;
-    let waitPayment = 0;
-    let done = 0;
-
-    const urgentJobs = [];
+    const snap = await getDocs(jobsCol);
 
     snap.forEach((docSnap) => {
       const data = docSnap.data() || {};
+
+      const createdAt =
+        toJsDate(
+          data.createdAt ||
+            data.created_at ||
+            data.createdDate ||
+            data.created_on ||
+            data.openedAt
+        ) || null;
+
       const status = data.status || "queue";
-      const totalNet =
-        getNumber(data.totalNet) ||
-        getNumber(data.total) ||
-        getNumber(data.grandTotal);
+      const priority = data.priority || data.urgency || data.jobUrgency || "";
 
-      totalJobs += 1;
+      const totals = data.totals || {};
+      let net = 0;
+      if (typeof data.totalNet === "number") {
+        net = data.totalNet;
+      } else if (typeof totals.net === "number") {
+        net = totals.net;
+      } else if (typeof data.total === "number") {
+        net = data.total;
+      }
 
-      // ยอดรวมวันนี้นับเฉพาะงานที่ปิดบิลแล้ว
+      const vehicle = data.vehicle || {};
+      const customer = data.customer || {};
+
+      const plate = vehicle.plate || vehicle.license || data.plate || data.license || "";
+      const model = vehicle.model || vehicle.name || data.model || "";
+      const customerName = customer.name || data.customerName || "";
+      const customerPhone = customer.phone || data.customerPhone || "";
+
+      // นับรถที่ยังค้างในอู่ = งานที่ยังไม่ปิดสถานะ
+      if (status !== "done") {
+        pendingJobsCount += 1;
+      }
+
+      if (!createdAt || createdAt < startOfToday) {
+        return;
+      }
+
+      jobsToday += 1;
+
       if (status === "done") {
-        totalToday += totalNet;
+        totalToday += safeNumber(net, 0);
       }
 
-      switch (status) {
-        case "queue":
-          pending += 1;
-          break;
-        case "in-progress":
-          inProgress += 1;
-          break;
-        case "waiting-parts":
-          waitParts += 1;
-          break;
-        case "waiting-payment":
-          waitPayment += 1;
-          break;
-        case "done":
-          done += 1;
-          break;
-        default:
-          pending += 1;
-      }
-
-      if (data.priority === "urgent" || data.priority === "ด่วน") {
+      const priorityLower = String(priority).toLowerCase();
+      if (priorityLower === "urgent" || priorityLower.includes("ด่วน")) {
         urgentJobs.push({
           id: docSnap.id,
-          plate: data.vehicle?.plate || data.plate || "-",
-          model: data.vehicle?.model || data.model || "",
-          customer: data.customer?.name || data.customerName || "",
-          createdAt: data.createdAt,
-          status,
-          total: totalNet
+          plate,
+          model,
+          customerName,
+          customerPhone,
+          net: safeNumber(net, 0),
+          createdAt
         });
       }
     });
 
-    // อัปเดตการ์ดสรุปวันนี้
-    setTextIfExists("dashboardTodayTotal", formatCurrency(totalToday) + " บาท");
-    setTextIfExists("dashboardTodayJobsCount", totalJobs.toString());
-    setTextIfExists("dashboardTodayDoneCount", done.toString());
+    if (totalEl) {
+      totalEl.textContent = `${formatCurrency(totalToday)} บาท`;
+    }
 
-    const pendingAll = pending + inProgress + waitParts + waitPayment;
-    setTextIfExists("dashboardTodayPendingCount", pendingAll.toString());
+    if (jobsTodayEl) {
+      jobsTodayEl.textContent = `${jobsToday} งาน`;
+    }
 
-    // jobs breakdown สำหรับ tooltip หรือ text เล็ก ๆ ถ้ามี element
-    const breakdownText =
-      `ค้างคิว: ${pending} | กำลังซ่อม: ${inProgress} | รออะไหล่: ${waitParts} | รอชำระ: ${waitPayment}`;
-    setTextIfExists("dashboardTodayJobsBreakdown", breakdownText);
+    if (pendingVehiclesEl) {
+      pendingVehiclesEl.textContent = `${pendingJobsCount} คัน`;
+    }
 
-    // งานด่วนวันนี้
-    let urgentHtml = "";
-    if (!urgentJobs.length) {
-      urgentHtml = `
-        <div class="bm-empty-state">
-          ยังไม่มีงานด่วนในวันนี้
-        </div>
-      `;
-    } else {
-      urgentHtml = urgentJobs
-        .slice(0, 10)
-        .map((job) => {
-          const label = [
-            job.plate || "-",
-            job.model ? ` (${job.model})` : ""
-          ].join("");
+    if (urgentCountEl) {
+      urgentCountEl.textContent = `${urgentJobs.length} งาน`;
+    }
 
-          const customerLabel = job.customer || "ไม่ระบุลูกค้า";
-          const timeLabel = job.createdAt
-            ? formatDateTime(job.createdAt)
-            : "";
+    if (urgentListEl) {
+      if (!urgentJobs.length) {
+        urgentListEl.innerHTML = `
+          <div class="bm-empty-state">
+            ยังไม่มีงานด่วนวันนี้
+          </div>
+        `;
+      } else {
+        urgentJobs.sort((a, b) => {
+          if (!a.createdAt || !b.createdAt) return 0;
+          return a.createdAt - b.createdAt;
+        });
 
-          return `
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div>
-                <div class="fw-semibold">${label}</div>
-                <div class="small text-muted">${customerLabel}</div>
-                ${
-                  timeLabel
-                    ? `<div class="small text-muted">${timeLabel}</div>`
-                    : ""
-                }
+        const itemsHtml = urgentJobs
+          .slice(0, 5)
+          .map((job) => {
+            const title = job.plate || job.model || job.customerName || job.id;
+            const subtitleParts = [];
+            if (job.model) subtitleParts.push(job.model);
+            if (job.customerName) subtitleParts.push(job.customerName);
+            const subtitle = subtitleParts.join(" • ");
+            const timeText = job.createdAt ? formatDateTime(job.createdAt) : "";
+            const moneyText = formatCurrency(job.net || 0);
+
+            return `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="me-2">
+                <div class="fw-semibold">${title}</div>
+                <div class="text-muted small">${subtitle}</div>
+                <div class="text-muted small">${timeText}</div>
               </div>
               <div class="text-end">
-                <div class="fw-semibold">${formatCurrency(job.total)}฿</div>
-                <div>
-                  <span class="badge rounded-pill text-bg-warning">ด่วน</span>
-                </div>
+                <div class="fw-semibold">${moneyText} บาท</div>
               </div>
             </div>
           `;
-        })
-        .join("");
-    }
+          })
+          .join("");
 
-    renderListIfExists("dashboardUrgentJobsList", urgentHtml);
+        urgentListEl.innerHTML = itemsHtml;
+      }
+    }
   } catch (error) {
-    console.error("โหลดข้อมูลงานวันนี้ไม่สำเร็จ:", error);
+    console.error("โหลดสรุปงานวันนี้ไม่สำเร็จ:", error);
   }
 }
 
 // -----------------------------
-// Load: Low Stock
+// โหลดสรุปอะไหล่ใกล้หมด
 // -----------------------------
 async function loadLowStockSummary() {
+  const countEl = $("dashLowStockCount");
+  const listEl = $("dashLowStockList");
+
+  if (!countEl && !listEl) return;
+
   try {
-    // ดึงอะไหล่ทั้งหมด (ถ้าในอนาคตข้อมูลเยอะมาก ค่อยเพิ่ม where / limit)
     const snap = await getDocs(stockCol);
 
-    const low = [];
-
+    const lowItems = [];
     snap.forEach((docSnap) => {
       const data = docSnap.data() || {};
-      const qty = getNumber(data.qty ?? data.quantity ?? data.stock ?? 0);
-      const minStock = getNumber(data.minStock ?? data.min ?? 0);
+      const qty = safeNumber(
+        data.qty ?? data.quantity ?? data.stock ?? 0,
+        0
+      );
+      const minStock = safeNumber(
+        data.minStock ?? data.min ?? 0,
+        0
+      );
 
       if (minStock > 0 && qty <= minStock) {
-        low.push({
+        lowItems.push({
           id: docSnap.id,
-          name: data.name || data.partName || "ไม่ระบุชื่ออะไหล่",
-          category: data.category || data.type || "",
+          name:
+            data.name ||
+            data.partName ||
+            `อะไหล่ไม่ระบุ (${docSnap.id.slice(-6)})`,
+          category: data.category || "",
           qty,
-          minStock,
-          salePrice: getNumber(data.salePrice ?? data.price ?? 0)
+          minStock
         });
       }
     });
 
-    setTextIfExists("dashboardLowStockCount", low.length.toString());
-
-    let html = "";
-    if (!low.length) {
-      html = `
-        <div class="bm-empty-state">
-          ตอนนี้ยังไม่มีอะไหล่ที่ใกล้หมด
-        </div>
-      `;
-    } else {
-      html = low
-        .sort((a, b) => a.qty - b.qty)
-        .slice(0, 8)
-        .map((item) => {
-          const cat = item.category ? ` • ${item.category}` : "";
-          return `
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <div class="fw-semibold">${item.name}</div>
-              <div class="small text-muted">
-                คงเหลือ ${item.qty} | จุดสั่งซื้อซ้ำ ${item.minStock}${cat}
-              </div>
-            </div>
-            <div class="text-end">
-              ${
-                item.salePrice
-                  ? `<div class="small">${formatCurrency(
-                      item.salePrice
-                    )}฿</div>`
-                  : ""
-              }
-              <span class="badge rounded-pill text-bg-danger">ใกล้หมด</span>
-            </div>
-          </div>
-        `;
-        })
-        .join("");
+    if (countEl) {
+      countEl.textContent = `${lowItems.length} รายการ`;
     }
 
-    renderListIfExists("dashboardLowStockList", html);
+    if (listEl) {
+      if (!lowItems.length) {
+        listEl.innerHTML = `
+          <div class="bm-empty-state">
+            ยังไม่มีอะไหล่ใกล้หมด
+          </div>
+        `;
+      } else {
+        const itemsHtml = lowItems
+          .slice(0, 5)
+          .map((item) => {
+            const categoryLabel = item.category ? ` • ${item.category}` : "";
+            return `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div class="me-2">
+                <div class="fw-semibold">${item.name}</div>
+                <div class="text-muted small">
+                  คงเหลือ ${item.qty} ชิ้น${categoryLabel}
+                </div>
+              </div>
+              <span class="badge rounded-pill text-bg-danger">
+                ${item.qty} / ${item.minStock}
+              </span>
+            </div>
+          `;
+          })
+          .join("");
+
+        listEl.innerHTML = itemsHtml;
+      }
+    }
   } catch (error) {
-    console.error("โหลดข้อมูลอะไหล่ใกล้หมดไม่สำเร็จ:", error);
+    console.error("โหลดสรุปอะไหล่ใกล้หมดไม่สำเร็จ:", error);
   }
 }
 
 // -----------------------------
-// Load: Vehicles (ซื้อ–ขาย)
+// โหลดสรุปรถซื้อ–ขาย (รถยังอยู่ในสต็อก)
 // -----------------------------
 async function loadVehiclesSummary() {
-  try {
-    const qInStock = query(
-      vehiclesCol,
-      where("status", "==", "in-stock")
-    );
-    const qSold = query(
-      vehiclesCol,
-      where("status", "==", "sold"),
-      orderBy("soldAt", "desc"),
-      limit(5)
-    );
+  const listEl = $("dashVehiclesInStock");
+  if (!listEl) return;
 
-    const [inStockSnap, soldSnap] = await Promise.all([
-      getDocs(qInStock),
-      getDocs(qSold)
-    ]);
+  try {
+    const snap = await getDocs(vehiclesCol);
 
     const inStock = [];
-    const soldRecent = [];
-
-    inStockSnap.forEach((docSnap) => {
+    snap.forEach((docSnap) => {
       const data = docSnap.data() || {};
+      if (data.status !== "in-stock") return;
+
+      const createdAt = toJsDate(data.createdAt) || null;
+
+      const model =
+        data.model || data.vehicleModel || data.name || "ไม่ระบุรุ่น";
+      const plate = data.plate || data.license || "";
+      const buyPrice = safeNumber(
+        data.buyPrice ?? data.purchasePrice ?? data.priceBuy ?? 0,
+        0
+      );
+
       inStock.push({
         id: docSnap.id,
-        brand: data.brand || data.make || "",
-        model: data.model || "",
-        plate: data.plate || data.license || "",
-        buyPrice: getNumber(data.buyPrice ?? data.costPrice ?? 0)
-      });
-    });
-
-    soldSnap.forEach((docSnap) => {
-      const data = docSnap.data() || {};
-      const buyPrice = getNumber(data.buyPrice ?? data.costPrice ?? 0);
-      const sellPrice = getNumber(data.sellPrice ?? data.salePrice ?? 0);
-      const profit = sellPrice - buyPrice;
-
-      soldRecent.push({
-        id: docSnap.id,
-        brand: data.brand || data.make || "",
-        model: data.model || "",
-        plate: data.plate || data.license || "",
+        model,
+        plate,
         buyPrice,
-        sellPrice,
-        profit,
-        soldAt: data.soldAt
+        createdAt
       });
     });
 
-    setTextIfExists("dashboardVehiclesInStockCount", inStock.length.toString());
-
-    let inStockHtml = "";
     if (!inStock.length) {
-      inStockHtml = `
+      listEl.innerHTML = `
         <div class="bm-empty-state">
-          ยังไม่มีรถที่ค้างสต็อก
+          ยังไม่มีรถซื้อเข้าในระบบ
         </div>
       `;
-    } else {
-      inStockHtml = inStock
-        .slice(0, 5)
-        .map((v) => {
-          const name = `${v.brand} ${v.model}`.trim() || "ไม่ระบุรุ่น";
-          const plate = v.plate || "-";
-          return `
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <div>
-              <div class="fw-semibold">${name}</div>
-              <div class="small text-muted">ทะเบียน ${plate}</div>
-            </div>
-            <div class="text-end">
-              ${
-                v.buyPrice
-                  ? `<div class="small">ราคาซื้อ ${formatCurrency(
-                      v.buyPrice
-                    )}฿</div>`
-                  : ""
-              }
-              <span class="badge rounded-pill text-bg-secondary">ค้างสต็อก</span>
-            </div>
-          </div>
-        `;
-        })
-        .join("");
+      return;
     }
 
-    renderListIfExists("dashboardVehiclesInStockList", inStockHtml);
+    inStock.sort((a, b) => {
+      if (!a.createdAt || !b.createdAt) return 0;
+      return b.createdAt - a.createdAt;
+    });
 
-    // กำไรจากรถขายล่าสุด (ถ้ามี element ไว้)
-    let soldHtml = "";
-    if (!soldRecent.length) {
-      soldHtml = `
-        <div class="bm-empty-state">
-          ยังไม่มีประวัติขายรถล่าสุด
+    const itemsHtml = inStock
+      .slice(0, 5)
+      .map((v) => {
+        const title = v.plate || v.model || "รถไม่ระบุ";
+        const subtitleParts = [];
+        if (v.model) subtitleParts.push(v.model);
+        if (v.createdAt) subtitleParts.push(formatDateTime(v.createdAt));
+        const subtitle = subtitleParts.join(" • ");
+        const buyText = formatCurrency(v.buyPrice || 0);
+
+        return `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="me-2">
+            <div class="fw-semibold">${title}</div>
+            <div class="text-muted small">${subtitle}</div>
+          </div>
+          <div class="text-end">
+            <div class="text-muted small">ราคาซื้อ</div>
+            <div class="fw-semibold">${buyText} บาท</div>
+          </div>
         </div>
       `;
-    } else {
-      soldHtml = soldRecent
-        .map((v) => {
-          const name = `${v.brand} ${v.model}`.trim() || "ไม่ระบุรุ่น";
-          const plate = v.plate || "-";
-          const profitText = formatCurrency(v.profit) + "฿";
-          const soldAtText = v.soldAt ? formatDateTime(v.soldAt) : "";
+      })
+      .join("");
 
-          return `
-          <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-              <div class="fw-semibold">${name}</div>
-              <div class="small text-muted">ทะเบียน ${plate}</div>
-              ${
-                soldAtText
-                  ? `<div class="small text-muted">ขายเมื่อ ${soldAtText}</div>`
-                  : ""
-              }
-            </div>
-            <div class="text-end">
-              <div class="small">ขาย ${formatCurrency(v.sellPrice)}฿</div>
-              <div class="small text-success fw-semibold">
-                กำไร ${profitText}
-              </div>
-            </div>
-          </div>
-        `;
-        })
-        .join("");
-    }
-
-    renderListIfExists("dashboardVehiclesSoldList", soldHtml);
+    listEl.innerHTML = itemsHtml;
   } catch (error) {
-    console.error("โหลดข้อมูลรถซื้อ–ขายไม่สำเร็จ:", error);
+    console.error("โหลดสรุปรถซื้อ–ขายไม่สำเร็จ:", error);
   }
 }
 
 // -----------------------------
-// Entry – เรียกเมื่ออยู่ในหน้า app.html เท่านั้น
+// Init
 // -----------------------------
-async function initDashboard() {
-  // ถ้าไม่มี section-dashboard ให้ไม่ต้องทำอะไร
+export async function initDashboard() {
   const section = document.querySelector('[data-section="dashboard"]');
   if (!section) return;
 
@@ -431,6 +365,7 @@ async function initDashboard() {
   ]);
 }
 
+// Bootstrap – รันเมื่อ DOM พร้อม
 document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
 });
