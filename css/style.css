@@ -1,29 +1,43 @@
-/* =========================================================
-   BEN MOTOR POS – Global Styles
-   ใช้ร่วมกันทั้งระบบ (index.html, app.html และหน้าอื่นในอนาคต)
-   ========================================================= */
-
-/* ---------- Base ---------- */
+/* =========================
+   BEN MOTOR POS – Global Theme
+   ========================= */
 
 :root {
-  --bm-primary: #13b38b;
-  --bm-primary-soft: rgba(19, 179, 139, 0.12);
-  --bm-primary-strong: #0f766e;
-  --bm-accent: #0b7285;
-  --bm-bg: #f3f4f6;
-  --bm-bg-soft: #f9fafb;
-  --bm-card-bg: #ffffff;
-  --bm-border-soft: #e5e7eb;
-  --bm-text-main: #020617;
-  --bm-text-muted: #6b7280;
-  --bm-danger: #ef4444;
-  --bm-warning: #f97316;
-  --bm-success: #22c55e;
-  --bm-info: #0ea5e9;
-  --bm-radius-card: 18px;
-  --bm-radius-pill: 999px;
-  --bm-shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --bm-primary: #9ae6b4;            /* เขียวอ่อนพาสเทล */
+  --bm-primary-strong: #22c55e;     /* เขียวเข้มสำหรับปุ่ม/active */
+  --bm-secondary: #bfdbfe;          /* ฟ้าอ่อน */
+  --bm-secondary-soft: #e0f2fe;     /* ฟ้าจาง พื้นหลัง gradient */
+  --bm-bg: #f3f4f6;                 /* พื้นหลังหลัก */
+  --bm-bg-soft: #f9fafb;            /* พื้นหลังภายใน */
+  --bm-card: #ffffff;               /* การ์ด/กล่อง */
+  --bm-text: #0f172a;               /* ตัวอักษรหลัก */
+  --bm-text-muted: #6b7280;         /* ตัวอักษรรอง */
+  --bm-border: #d1d5db;
+  --bm-warning: #facc15;
+  --bm-success: #4ade80;
+  --bm-danger: #f97373;
+  --bm-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.10);
+
+  --bm-sidebar-width: 260px;
+  --bm-bottom-nav-height: 64px;
+  --bm-radius-lg: 18px;
+  --bm-radius-md: 12px;
+  --bm-radius-sm: 999px;
 }
+
+/* Dark theme base support */
+.theme-dark {
+  --bm-bg: #020617;
+  --bm-bg-soft: #020617;
+  --bm-card: #020617;
+  --bm-text: #e5e7eb;
+  --bm-text-muted: #9ca3af;
+  --bm-border: #1f2933;
+}
+
+/* =========================
+   Global Base
+   ========================= */
 
 *,
 *::before,
@@ -33,336 +47,688 @@
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--bm-text-main);
+  height: 100%;
 }
 
-/* ป้องกัน double-tap zoom / highlight แปลก ๆ บนมือถือ */
 body {
-  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: radial-gradient(
+    circle at top left,
+    var(--bm-secondary-soft) 0,
+    var(--bm-bg) 45%,
+    var(--bm-bg) 100%
+  );
+  color: var(--bm-text);
 }
 
-/* ---------- Scrollbar แบบบาง ---------- */
-
-.bm-scroll-y-soft,
-.bm-sidebar-nav {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.9) transparent;
+/* ป้องกันแนวนอนเกิน */
+body {
+  overflow-x: hidden;
 }
 
-.bm-scroll-y-soft::-webkit-scrollbar,
-.bm-sidebar-nav::-webkit-scrollbar {
-  width: 6px;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  color: var(--bm-text);
 }
 
-.bm-scroll-y-soft::-webkit-scrollbar-track,
-.bm-sidebar-nav::-webkit-scrollbar-track {
-  background: transparent;
+/* =========================
+   Buttons & Utilities
+   ========================= */
+
+.bm-btn-primary {
+  background-image: linear-gradient(
+    135deg,
+    var(--bm-primary),
+    var(--bm-primary-strong)
+  );
+  border: none;
+  color: #022c22;
+  box-shadow: 0 12px 25px rgba(34, 197, 94, 0.35);
 }
 
-.bm-scroll-y-soft::-webkit-scrollbar-thumb,
-.bm-sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.7);
-  border-radius: 999px;
+.bm-btn-primary:hover,
+.bm-btn-primary:focus {
+  background-image: linear-gradient(
+    135deg,
+    var(--bm-primary-strong),
+    #16a34a
+  );
+  color: #022c22;
+  box-shadow: 0 12px 25px rgba(22, 163, 74, 0.45);
 }
 
-/* ---------- Utility ---------- */
+.bm-btn-primary:active {
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.60) inset;
+}
+
+.bm-empty-state {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed var(--bm-border);
+  color: var(--bm-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Text helpers */
 
 .bm-text-muted {
-  color: var(--bm-text-muted) !important;
-}
-
-.bm-pill {
-  border-radius: var(--bm-radius-pill);
-  padding: 2px 8px;
-  font-size: 0.76rem;
-}
-
-.bm-pill-soft {
-  background: var(--bm-bg-soft);
-  border: 1px solid var(--bm-border-soft);
   color: var(--bm-text-muted);
 }
 
-.bm-pill-primary {
-  background: var(--bm-primary-soft);
-  border: 1px solid rgba(19, 179, 139, 0.4);
-  color: var(--bm-primary-strong);
-}
+/* Badge pill custom */
 
-.bm-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
+.bm-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.9rem;
   border-radius: 999px;
+  font-size: 0.8rem;
+  background-color: rgba(148, 163, 184, 0.1);
+  color: var(--bm-text-muted);
 }
 
-.bm-dot-success {
-  background: var(--bm-success);
+/* Scroll area for cards */
+.bm-scroll-y {
+  max-height: 360px;
+  overflow-y: auto;
 }
 
-.bm-dot-danger {
-  background: var(--bm-danger);
+/* =========================
+   Login Page
+   ========================= */
+
+.bm-login-page {
+  background: radial-gradient(
+    circle at top left,
+    var(--bm-primary) 0,
+    var(--bm-secondary-soft) 30%,
+    var(--bm-bg) 70%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.bm-dot-warning {
-  background: var(--bm-warning);
+.bm-login-card {
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: radial-gradient(
+      circle at top left,
+      rgba(148, 255, 210, 0.08),
+      transparent 52%
+    ),
+    var(--bm-card);
 }
 
-.bm-dot-muted {
-  background: #9ca3af;
+/* =========================
+   App Layout
+   ========================= */
+
+.bm-app {
+  min-height: 100vh;
+  background: radial-gradient(
+    circle at top left,
+    var(--bm-secondary-soft) 0,
+    var(--bm-bg) 50%
+  );
 }
 
-/* ใช้กับ text ที่ต้องการตัด … */
-.bm-text-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
+.bm-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar (desktop / tablet) */
+
+.bm-sidebar {
+  width: var(--bm-sidebar-width);
+  padding: 1.25rem 1rem 1rem;
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 197, 94, 0.15),
+      transparent 55%
+    ),
+    #020617;
+  color: #e5e7eb;
+  flex-shrink: 0;
+}
+
+.bm-sidebar-header {
+  margin-bottom: 1.75rem;
+}
+
+.bm-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bm-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(135deg, var(--bm-primary), #4ade80);
+  color: #022c22;
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.55);
+  font-size: 1.4rem;
+}
+
+.bm-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.bm-logo-title {
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.bm-logo-subtitle {
+  font-size: 0.8rem;
+  color: #a5b4fc;
+}
+
+/* Sidebar nav */
+
+.bm-sidebar-nav {
+  margin-bottom: 1.5rem;
+}
+
+.bm-nav-item {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #cbd5f5;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  text-align: left;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.1s ease;
+}
+
+.bm-nav-item i {
+  font-size: 1.15rem;
+}
+
+.bm-nav-item:hover {
+  background: rgba(148, 163, 184, 0.12);
+  color: #ffffff;
+}
+
+.bm-nav-item.active {
+  background: linear-gradient(
+    135deg,
+    var(--bm-primary-strong),
+    #22c55e
+  );
+  color: #022c22;
+  transform: translateY(-1px);
+}
+
+/* Sidebar footer (user info) */
+
+.bm-sidebar-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  padding-top: 1rem;
+}
+
+.bm-user-mini {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.bm-user-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.bm-user-info {
+  font-size: 0.8rem;
+}
+
+.bm-user-email {
+  max-width: 150px;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-/* แถวที่คลิกได้ */
-.bm-clickable-row {
-  cursor: pointer;
-  transition: background-color 0.12s ease-out;
+.bm-link-logout {
+  color: #fca5a5;
+  font-size: 0.78rem;
 }
 
-.bm-clickable-row:hover {
+/* Main column */
+
+.bm-main-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Topbar */
+
+.bm-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  background: rgba(249, 250, 251, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.theme-dark .bm-topbar {
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.bm-topbar .container-fluid {
+  padding: 0.6rem 1rem;
+}
+
+.bm-topbar-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.bm-topbar-title {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.bm-topbar-subtitle {
+  font-size: 0.8rem;
+  color: var(--bm-text-muted);
+}
+
+/* Mobile home button */
+
+.bm-topbar-home {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: none;
   background-color: rgba(15, 23, 42, 0.04);
+  color: var(--bm-text);
 }
 
-/* ---------- Card / Panel เพิ่มเติม ---------- */
+/* Topbar date/time */
+
+.bm-date-text {
+  font-size: 0.8rem;
+  color: var(--bm-text-muted);
+}
+
+.bm-time-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* User button */
+
+.bm-user-btn {
+  border-radius: 999px;
+  border-color: rgba(148, 163, 184, 0.6);
+}
+
+/* Main content */
+
+.bm-main {
+  flex: 1;
+  padding: 1rem 0.85rem 0.85rem;
+}
+
+/* Cards */
 
 .bm-card {
-  border-radius: var(--bm-radius-card);
-  background: var(--bm-card-bg);
-  border: 1px solid rgba(209, 213, 219, 0.9);
+  background: var(--bm-card);
+  border-radius: var(--bm-radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.45);
   box-shadow: var(--bm-shadow-soft);
 }
 
-.bm-card-header-border {
-  border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+.bm-card-header {
+  padding: 1.1rem 1.25rem 0.6rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
-/* ใช้กับ panel ใน modal หรือส่วนย่อย ๆ */
-.bm-subpanel {
-  border-radius: 14px;
-  background: #f9fafb;
-  border: 1px solid rgba(229, 231, 235, 0.9);
-  padding: 8px 10px;
+.bm-card-body {
+  padding: 1rem 1.25rem 1.25rem;
 }
 
-/* ---------- Table สไตล์อู่ซ่อม ---------- */
-
-.bm-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
+.bm-card-title {
+  font-size: 1rem;
 }
 
-.bm-table thead {
-  background: #f3f4f6;
+.bm-card-subtitle {
+  font-size: 0.86rem;
+  color: var(--bm-text-muted);
 }
 
-.bm-table th,
-.bm-table td {
-  padding: 6px 8px;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.95);
-  text-align: left;
-}
-
-.bm-table th {
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: #4b5563;
+.bm-card-header-meta {
   white-space: nowrap;
 }
 
-.bm-table tbody tr:nth-child(even) {
-  background-color: #f9fafb;
+/* Stat cards */
+
+.bm-stat-card {
+  background: linear-gradient(
+    135deg,
+    rgba(148, 163, 184, 0.08),
+    rgba(148, 163, 184, 0.02)
+  );
+  border-radius: var(--bm-radius-md);
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
-.bm-table tbody tr:hover {
-  background-color: rgba(19, 179, 139, 0.06);
-}
-
-/* เวอร์ชันเล็ก */
-.bm-table-sm th,
-.bm-table-sm td {
-  padding: 4px 6px;
-}
-
-/* ---------- Badge สถานะงานซ่อม ---------- */
-
-.bm-badge-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: var(--bm-radius-pill);
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border: 1px solid transparent;
-}
-
-.bm-badge-status-queue {
-  background: #eff6ff;
-  border-color: #bfdbfe;
-  color: #1d4ed8;
-}
-
-.bm-badge-status-in-progress {
-  background: #ecfdf5;
-  border-color: #bbf7d0;
-  color: #15803d;
-}
-
-.bm-badge-status-waiting-parts {
-  background: #fffbeb;
-  border-color: #fef3c7;
-  color: #b45309;
-}
-
-.bm-badge-status-wait-pay {
-  background: #fef2f2;
-  border-color: #fee2e2;
-  color: #b91c1c;
-}
-
-.bm-badge-status-done {
-  background: #eef2ff;
-  border-color: #e0e7ff;
-  color: #4f46e5;
-}
-
-/* ---------- Tag small ---------- */
-
-.bm-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: var(--bm-radius-pill);
-  font-size: 0.7rem;
-  padding: 2px 7px;
-  background: #f3f4f6;
-  color: #4b5563;
-}
-
-.bm-tag i {
-  font-size: 0.85rem;
-}
-
-/* ---------- Modal ปรับเล็กน้อยให้เข้าธีม ---------- */
-
-.modal-content {
-  border-radius: 18px;
-  border: 1px solid rgba(209, 213, 219, 0.9);
-}
-
-.modal-header {
-  border-bottom-color: rgba(229, 231, 235, 0.9);
-}
-
-.modal-footer {
-  border-top-color: rgba(229, 231, 235, 0.9);
-}
-
-/* ---------- ปุ่มเฉพาะในระบบ ---------- */
-
-.bm-btn-outline-soft {
-  border-radius: var(--bm-radius-pill);
-  border: 1px solid var(--bm-border-soft);
-  background: #ffffff;
+.bm-stat-label {
   font-size: 0.8rem;
-  padding: 4px 10px;
-  display: inline-flex;
+  color: var(--bm-text-muted);
+}
+
+.bm-stat-value {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.bm-stat-desc {
+  font-size: 0.75rem;
+  color: var(--bm-text-muted);
+}
+
+/* Mini cards */
+
+.bm-mini-card {
+  background: var(--bm-bg-soft);
+  border-radius: var(--bm-radius-md);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  padding: 0.75rem 0.85rem;
+}
+
+.bm-mini-card-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 
-.bm-btn-outline-soft:hover {
-  background: #f3f4f6;
+.bm-mini-card-body {
+  max-height: 220px;
+  overflow-y: auto;
 }
 
-/* ปุ่มใช้คู่กับไอคอนสถานะเล็ก ๆ */
-.bm-btn-icon-only {
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
+/* Sections visibility */
+
+.bm-section {
+  display: none;
+}
+
+.bm-section.active {
+  display: block;
+}
+
+/* Field groups */
+
+.bm-field-group {
+  padding: 0.85rem 0.9rem;
+  border-radius: 14px;
+  background-color: var(--bm-bg-soft);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.bm-field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* POS */
+
+.bm-pos-form .form-label {
+  font-size: 0.82rem;
+  color: var(--bm-text-muted);
+}
+
+/* POS items table */
+
+.bm-pos-items-table table {
+  font-size: 0.86rem;
+}
+
+.bm-pos-items-table thead th {
+  white-space: nowrap;
+  font-weight: 500;
+  border-bottom-width: 1px;
+}
+
+.bm-pos-items-table tbody td {
+  vertical-align: middle;
+}
+
+.bm-pos-item-type-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--bm-border-soft);
-  background: #ffffff;
-  color: #4b5563;
-  font-size: 0.95rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
 }
 
-.bm-btn-icon-only:hover {
-  background: #f3f4f6;
+.bm-pos-item-type-labor {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #166534;
 }
 
-/* ---------- Kanban เพิ่มเติม (ใช้ได้กับ jobs.js / dashboard.js) ---------- */
-
-.bm-kanban-col {
-  transition: background-color 0.12s ease-out, border-color 0.12s ease-out;
+.bm-pos-item-type-part {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
 }
 
-.bm-kanban-col:hover {
-  background-color: #e5e7eb;
-  border-color: rgba(148, 163, 184, 0.9);
-}
+/* POS summary */
 
-.bm-kanban-item {
-  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
-}
-
-.bm-kanban-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.1);
-}
-
-/* ---------- Timeline ใช้ร่วมหลายหน้า ---------- */
-
-.bm-timeline-time {
-  font-size: 0.7rem;
-  color: var(--bm-text-muted);
-}
-
-.bm-timeline-highlight {
-  font-weight: 600;
-  color: var(--bm-text-main);
-}
-
-/* ---------- Global forms เพิ่มเติม ---------- */
-
-.bm-form-section-title {
+.bm-pos-summary {
+  background-color: var(--bm-bg-soft);
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  padding: 0.8rem 0.9rem;
   font-size: 0.9rem;
+}
+
+.bm-pos-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.bm-pos-summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.bm-pos-summary-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.bm-pos-summary-highlight {
+  margin-top: 0.3rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(148, 163, 184, 0.7);
+}
+
+.bm-pos-summary-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* POS presets */
+
+.bm-pos-presets .btn {
+  font-size: 0.8rem;
+}
+
+/* Jobs */
+
+#jobsTable tbody tr {
+  cursor: pointer;
+}
+
+#jobsTable tbody tr:hover {
+  background: rgba(148, 163, 184, 0.09);
+}
+
+/* Stock */
+
+#stockTable tbody tr.low-stock td:nth-child(5) {
+  color: #b91c1c;
   font-weight: 600;
-  margin-bottom: 4px;
 }
 
-.bm-form-section-subtitle {
-  font-size: 0.76rem;
-  color: var(--bm-text-muted);
-  margin-bottom: 8px;
+/* =========================
+   Bottom Navigation (Mobile)
+   ========================= */
+
+.bm-bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--bm-bottom-nav-height);
+  background: #020617;
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  padding: 0 0.15rem;
+  z-index: 1030;
 }
 
-/* เวลาต้องการแบ่ง field เป็นช่อง ๆ ในฟอร์มยาว */
-.bm-form-grid-gap {
-  row-gap: 8px;
+.bm-bottom-nav-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
 }
 
-/* ---------- Mobile tweaks ---------- */
+.bm-bottom-nav-btn i {
+  font-size: 1.1rem;
+}
 
+.bm-bottom-nav-btn.active {
+  color: #e5e7eb;
+}
+
+.bm-bottom-nav-btn.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 26px;
+  height: 3px;
+  border-radius: 999px;
+  background-image: linear-gradient(
+    135deg,
+    var(--bm-primary),
+    var(--bm-primary-strong)
+  );
+}
+
+/*ให้ bottom nav ไม่ซ้อน main content */
 @media (max-width: 767.98px) {
-  .bm-card {
-    border-radius: 16px;
+  .bm-main {
+    padding-bottom: calc(var(--bm-bottom-nav-height) + 0.75rem);
+  }
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+/* Mobile: ซ่อน sidebar, ใช้ bottom nav */
+@media (max-width: 767.98px) {
+  .bm-sidebar {
+    display: none !important;
+  }
+
+  .bm-main {
+    padding: 0.75rem 0.75rem 0.75rem;
+  }
+
+  .bm-card-header {
+    padding-inline: 0.9rem;
   }
 
   .bm-card-body {
-    padding-inline: 10px !important;
+    padding-inline: 0.9rem;
+  }
+}
+
+/* Tablet/desktop: ซ่อน bottom nav */
+@media (min-width: 768px) {
+  .bm-bottom-nav {
+    display: none;
+  }
+
+  .bm-topbar .container-fluid {
+    padding-inline: 1.4rem;
+  }
+
+  .bm-main {
+    padding-inline: 1.4rem;
+    padding-bottom: 1.4rem;
+  }
+}
+
+/* Large screen adjustments */
+@media (min-width: 1200px) {
+  .bm-main {
+    padding-inline: 2rem;
+  }
+
+  .bm-card-header,
+  .bm-card-body {
+    padding-inline: 1.5rem;
   }
 }
