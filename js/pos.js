@@ -641,4 +641,6 @@ function initPOS() {
 // -----------------------------
 document.addEventListener("DOMContentLoaded", () => {
   initPOS();
+
 });
+console.log("pos.js loaded OK");
