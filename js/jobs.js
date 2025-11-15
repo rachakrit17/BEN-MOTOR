@@ -12,143 +12,129 @@ import {
 
 import { formatCurrency, formatDateTime, showToast } from "./utils.js";
 
+// -----------------------------
+// Helpers
+// -----------------------------
+const $ = (id) => document.getElementById(id);
+
+// แปลงค่าเป็น Date อย่างยืดหยุ่น (รองรับ Firestore Timestamp, string, Date)
+function toJsDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  if (typeof value.toDate === "function") {
+    try {
+      return value.toDate();
+    } catch (e) {
+      // ignore
+    }
+  }
+  const parsed = Date.parse(value);
+  if (!Number.isNaN(parsed)) {
+    return new Date(parsed);
+  }
+  return null;
+}
+
 const jobsCol = collection(db, "jobs");
 
 let jobsCache = [];
 let currentJob = null;
 
 // -----------------------------
-// Helpers – DOM
+// Mapping ข้อมูลงานจาก Firestore
 // -----------------------------
-function $(id) {
-  return document.getElementById(id);
-}
+function mapJobData(docSnap) {
+  const raw = docSnap.data() || {};
+  const id = docSnap.id;
 
-function getSafeNumber(v, fallback = 0) {
-  const n = typeof v === "number" ? v : Number(v);
-  if (!Number.isFinite(n)) return fallback;
-  return n;
-}
+  const createdRaw =
+    raw.createdAt ||
+    raw.created_at ||
+    raw.createdDate ||
+    raw.created_on ||
+    null;
 
-// -----------------------------
-// Filter helpers
-// -----------------------------
-function getFilterValues() {
-  const searchInput = $("jobsSearchInput");
-  const statusSelect = $("jobsStatusFilter");
-  const dateSelect = $("jobsDateFilter");
+  const createdAt = toJsDate(createdRaw) || new Date();
+  const createdLocalAt = formatDateTime(createdAt);
 
-  const search = searchInput ? searchInput.value.trim().toLowerCase() : "";
-  const status = statusSelect ? statusSelect.value : "all";
-  const dateRange = dateSelect ? dateSelect.value : "today"; // today | 7d | 30d | all
+  const customer = raw.customer || {};
+  const vehicle = raw.vehicle || {};
+  const totals = raw.totals || {};
 
-  return { search, status, dateRange };
-}
+  const customerName = customer.name || raw.customerName || "-";
+  const customerPhone = customer.phone || raw.customerPhone || "";
+  const plate = vehicle.plate || raw.plate || raw.license || "";
+  const model = vehicle.model || vehicle.name || raw.model || "";
 
-function isInDateRange(job, rangeKey) {
-  if (rangeKey === "all") return true;
+  const status = raw.status || "queue";
+  const priority = raw.priority || raw.urgency || "normal";
 
-  const createdAt =
-    job.createdLocalAt instanceof Date
-      ? job.createdLocalAt
-      : job.createdAt instanceof Date
-      ? job.createdAt
-      : null;
+  const netTotal =
+    typeof totals.net === "number"
+      ? totals.net
+      : typeof raw.total === "number"
+      ? raw.total
+      : typeof raw.netTotal === "number"
+      ? raw.netTotal
+      : 0;
 
-  if (!createdAt) return true;
+  const items = Array.isArray(raw.items)
+    ? raw.items
+    : Array.isArray(raw.lines)
+    ? raw.lines
+    : [];
 
-  const now = new Date();
-  const msInDay = 24 * 60 * 60 * 1000;
-  const diffDays = (now - createdAt) / msInDay;
-
-  if (rangeKey === "today") {
-    return createdAt.toDateString() === now.toDateString();
-  }
-  if (rangeKey === "7d") {
-    return diffDays <= 7;
-  }
-  if (rangeKey === "30d") {
-    return diffDays <= 30;
-  }
-  return true;
-}
-
-function applyFilters() {
-  const { search, status, dateRange } = getFilterValues();
-
-  let filtered = [...jobsCache];
-
-  if (status && status !== "all") {
-    filtered = filtered.filter((j) => (j.status || "queue") === status);
-  }
-
-  if (dateRange) {
-    filtered = filtered.filter((j) => isInDateRange(j, dateRange));
-  }
-
-  if (search) {
-    filtered = filtered.filter((j) => {
-      const plate =
-        j.vehicle?.plate ||
-        j.vehicle?.license ||
-        j.plate ||
-        j.license ||
-        "";
-      const model = j.vehicle?.model || j.model || "";
-      const customer = j.customer?.name || j.customerName || "";
-      const phone = j.customer?.phone || j.phone || "";
-      const id = j.id || "";
-      const haystack = `${plate} ${model} ${customer} ${phone} ${id}`.toLowerCase();
-      return haystack.includes(search);
-    });
-  }
-
-  renderJobsTable(filtered);
+  return {
+    id,
+    raw,
+    createdAt,
+    createdLocalAt,
+    customerName,
+    customerPhone,
+    plate,
+    model,
+    status,
+    priority,
+    netTotal,
+    items
+  };
 }
 
 // -----------------------------
-// Load jobs from Firestore
+// โหลดงานซ่อมจาก Firestore
 // -----------------------------
 async function loadJobs() {
-  const tbody = document.querySelector("#jobsTable tbody");
+  const tbody = $("jobsTableBody");
+  const emptyState = $("jobsEmptyState");
+
   if (tbody) {
     tbody.innerHTML = `
       <tr>
         <td colspan="6" class="text-center py-3 text-muted">
-          กำลังโหลดข้อมูลงานซ่อมจากระบบ...
+          กำลังโหลดข้อมูลงานซ่อม…
         </td>
       </tr>
     `;
   }
 
   try {
-    // ดึงล่าสุด 200 งาน เรียงจากใหม่ไปเก่า
     const q = query(jobsCol, orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
 
     jobsCache = [];
-
     snap.forEach((docSnap) => {
-      const data = docSnap.data() || {};
-      const createdAt = data.createdAt?.toDate
-        ? data.createdAt.toDate()
-        : data.createdAt instanceof Date
-        ? data.createdAt
-        : null;
-
-      const createdLocalAt = data.createdLocalAt?.toDate
-        ? data.createdLocalAt.toDate()
-        : data.createdLocalAt instanceof Date
-        ? data.createdLocalAt
-        : createdAt;
-
-      jobsCache.push({
-        id: docSnap.id,
-        ...data,
-        createdAt,
-        createdLocalAt
-      });
+      jobsCache.push(mapJobData(docSnap));
     });
+
+    if (!jobsCache.length) {
+      if (tbody) {
+        tbody.innerHTML = "";
+      }
+      if (emptyState) {
+        emptyState.classList.remove("d-none");
+      }
+      return;
+    }
 
     applyFilters();
   } catch (error) {
@@ -166,389 +152,365 @@ async function loadJobs() {
 }
 
 // -----------------------------
-// Render table
+// ฟิลเตอร์งานซ่อม
 // -----------------------------
-function renderJobsTable(jobs) {
-  const tbody = document.querySelector("#jobsTable tbody");
-  const countEl = $("jobsCountText");
+function getFilterValues() {
+  const searchInput = $("jobsSearchInput");
+  const statusSelect = $("jobsStatusFilter");
+  const dateRangeSelect = $("jobsDateRange");
 
-  if (countEl) {
-    countEl.textContent = jobs.length.toString();
+  const text = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  const status = statusSelect ? statusSelect.value : "all";
+  const dateRange = dateRangeSelect ? dateRangeSelect.value : "today";
+
+  return { text, status, dateRange };
+}
+
+function filterByDate(job, range) {
+  if (!job.createdAt || !(job.createdAt instanceof Date)) return true;
+
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
+
+  let from = startOfToday;
+
+  if (range === "today") {
+    from = startOfToday;
+  } else if (range === "7days") {
+    from = new Date(startOfToday);
+    from.setDate(from.getDate() - 6);
+  } else if (range === "30days") {
+    from = new Date(startOfToday);
+    from.setDate(from.getDate() - 29);
+  } else {
+    // all
+    return true;
   }
 
+  return job.createdAt >= from;
+}
+
+function applyFilters() {
+  const tbody = $("jobsTableBody");
+  const emptyState = $("jobsEmptyState");
   if (!tbody) return;
 
-  if (!jobs.length) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center py-3 text-muted">
-          ยังไม่มีข้อมูลงานซ่อมตามเงื่อนไขที่เลือก
-        </td>
-      </tr>
-    `;
+  const { text, status, dateRange } = getFilterValues();
+
+  let filtered = jobsCache.slice();
+
+  if (text) {
+    filtered = filtered.filter((job) => {
+      const haystack = [
+        job.customerName,
+        job.customerPhone,
+        job.plate,
+        job.model,
+        job.id
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(text);
+    });
+  }
+
+  if (status && status !== "all") {
+    filtered = filtered.filter((job) => job.status === status);
+  }
+
+  if (dateRange && dateRange !== "all") {
+    filtered = filtered.filter((job) => filterByDate(job, dateRange));
+  }
+
+  if (!filtered.length) {
+    tbody.innerHTML = "";
+    if (emptyState) {
+      emptyState.classList.remove("d-none");
+    }
     return;
   }
 
-  const rowsHtml = jobs.slice(0, 200).map((job) => {
-    const plate =
-      job.vehicle?.plate ||
-      job.vehicle?.license ||
-      job.plate ||
-      job.license ||
-      "-";
-    const model = job.vehicle?.model || job.model || "";
-    const customer = job.customer?.name || job.customerName || "-";
-    const phone = job.customer?.phone || job.phone || "-";
-    const status = job.status || "queue";
-    const total = getSafeNumber(job.totalNet ?? job.total ?? 0);
+  if (emptyState) {
+    emptyState.classList.add("d-none");
+  }
 
-    const timeText = job.createdLocalAt
-      ? formatDateTime(job.createdLocalAt)
-      : job.createdAt
-      ? formatDateTime(job.createdAt)
-      : "-";
-
-    const statusBadge = getStatusBadge(status);
-
-    return `
-      <tr data-job-id="${job.id}">
-        <td class="small text-nowrap">${timeText}</td>
-        <td>
-          <div class="fw-semibold">${plate}</div>
-          <div class="small text-muted">${model}</div>
-        </td>
-        <td>
-          <div class="fw-semibold">${customer}</div>
-          <div class="small text-muted">${phone}</div>
-        </td>
-        <td class="text-end fw-semibold">
-          ${formatCurrency(total)}฿
-        </td>
-        <td class="text-nowrap">
-          ${statusBadge}
-        </td>
-        <td class="text-end">
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-secondary jobs-detail-btn">
-            รายละเอียด
-          </button>
-        </td>
-      </tr>
-    `;
-  });
-
-  tbody.innerHTML = rowsHtml.join("");
-
-  tbody.addEventListener(
-    "click",
-    (e) => {
-      const target = e.target;
-      if (!(target instanceof Element)) return;
-      const row = target.closest("tr[data-job-id]");
-      if (!row) return;
-      const jobId = row.getAttribute("data-job-id");
-      if (!jobId) return;
-
-      const job = jobsCache.find((j) => j.id === jobId);
-      if (!job) return;
-
-      openJobDetailModal(job);
-    },
-    { once: true }
-  );
+  renderJobsTable(filtered);
 }
 
-function getStatusBadge(status) {
-  let label = "";
-  let cls = "";
+// -----------------------------
+// เรนเดอร์ตารางงานซ่อม
+// -----------------------------
+function renderJobsTable(jobs) {
+  const tbody = $("jobsTableBody");
+  if (!tbody) return;
+
+  const rowsHtml = jobs
+    .map((job) => {
+      const statusBadge = renderStatusBadge(job.status);
+      const displayName = job.customerName || "-";
+      const displayPhone = job.customerPhone || "";
+      const displayPlate = job.plate || "-";
+      const displayModel = job.model || "";
+      const totalText = formatCurrency(job.netTotal || 0);
+
+      return `
+        <tr data-job-id="${job.id}">
+          <td class="small text-nowrap">${job.createdLocalAt}</td>
+          <td>
+            <div class="fw-semibold">${displayPlate}</div>
+            <div class="text-muted small">${displayModel}</div>
+          </td>
+          <td>
+            <div class="fw-semibold">${displayName}</div>
+            <div class="text-muted small">${displayPhone}</div>
+          </td>
+          <td class="text-end">
+            <span class="fw-semibold">${totalText}</span>
+          </td>
+          <td class="text-center">
+            ${statusBadge}
+          </td>
+          <td class="text-end">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              data-job-detail-btn="${job.id}"
+            >
+              ดูรายละเอียด
+            </button>
+          </td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  tbody.innerHTML = rowsHtml;
+
+  tbody.querySelectorAll("[data-job-detail-btn]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-job-detail-btn");
+      const job = jobsCache.find((j) => j.id === id);
+      if (job) {
+        openJobDetail(job);
+      }
+    });
+  });
+}
+
+function renderStatusBadge(status) {
+  let text = "ไม่ทราบสถานะ";
+  let cls = "bg-secondary";
 
   switch (status) {
     case "queue":
-      label = "รอรับเข้า";
-      cls = "badge rounded-pill text-bg-secondary";
+      text = "รอรับเข้า";
+      cls = "bg-secondary";
       break;
     case "in-progress":
-      label = "กำลังซ่อม";
-      cls = "badge rounded-pill text-bg-info";
+      text = "กำลังซ่อม";
+      cls = "bg-info";
       break;
     case "waiting-parts":
-      label = "รออะไหล่";
-      cls = "badge rounded-pill text-bg-warning";
+      text = "รออะไหล่";
+      cls = "bg-warning text-dark";
       break;
     case "waiting-payment":
-      label = "รอชำระเงิน";
-      cls = "badge rounded-pill text-bg-primary";
+      text = "รอชำระเงิน";
+      cls = "bg-warning text-dark";
       break;
     case "done":
-      label = "เสร็จงานแล้ว";
-      cls = "badge rounded-pill text-bg-success";
+      text = "ปิดงานแล้ว";
+      cls = "bg-success";
       break;
     default:
-      label = "ไม่ทราบสถานะ";
-      cls = "badge rounded-pill text-bg-secondary";
+      break;
   }
 
-  return `<span class="${cls}">${label}</span>`;
+  return `<span class="badge rounded-pill ${cls}">${text}</span>`;
 }
 
 // -----------------------------
-// Job detail modal
+// Modal รายละเอียดงาน
 // -----------------------------
-function openJobDetailModal(job) {
+function openJobDetail(job) {
   currentJob = job;
 
-  const modalEl = $("jobDetailModal");
-  if (!modalEl) {
-    // ถ้าไม่มี modal ใน HTML ให้แสดงแบบ alert ธรรมดา
-    alert(buildJobDetailText(job));
-    return;
-  }
-
-  const titleEl = $("jobDetailTitle");
-  const customerEl = $("jobDetailCustomer");
-  const vehicleEl = $("jobDetailVehicle");
-  const itemsEl = $("jobDetailItems");
-  const paymentEl = $("jobDetailPayment");
-  const noteEl = $("jobDetailNotes");
+  const contentEl = $("jobDetailContent");
   const statusSelect = $("jobDetailStatusSelect");
-
-  const plate =
-    job.vehicle?.plate ||
-    job.vehicle?.license ||
-    job.plate ||
-    job.license ||
-    "-";
-  const model = job.vehicle?.model || job.model || "";
-  const customer = job.customer?.name || job.customerName || "-";
-  const phone = job.customer?.phone || job.phone || "-";
-  const jobType = job.jobType || "";
-  const priority = job.priority || "";
-  const createdAtText = job.createdLocalAt
-    ? formatDateTime(job.createdLocalAt)
-    : job.createdAt
-    ? formatDateTime(job.createdAt)
-    : "-";
-
-  if (titleEl) {
-    titleEl.textContent = `งานซ่อม ${plate} – ${customer}`;
-  }
-
-  if (customerEl) {
-    customerEl.innerHTML = `
-      <div><strong>ลูกค้า:</strong> ${customer}</div>
-      <div><strong>เบอร์:</strong> ${phone}</div>
-      ${
-        jobType
-          ? `<div><strong>ประเภทงาน:</strong> ${jobType}</div>`
-          : ""
-      }
-      ${
-        priority
-          ? `<div><strong>ความเร่งด่วน:</strong> ${priority}</div>`
-          : ""
-      }
-    `;
-  }
-
-  if (vehicleEl) {
-    vehicleEl.innerHTML = `
-      <div><strong>ทะเบียน:</strong> ${plate}</div>
-      <div><strong>รุ่นรถ:</strong> ${model || "-"}</div>
-      ${
-        job.vehicle?.mileage
-          ? `<div><strong>เลขไมล์:</strong> ${job.vehicle.mileage}</div>`
-          : ""
-      }
-      <div><strong>เปิดงาน:</strong> ${createdAtText}</div>
-    `;
-  }
-
-  if (itemsEl) {
-    if (!job.items || !job.items.length) {
-      itemsEl.innerHTML = `
-        <div class="bm-empty-state">
-          ยังไม่มีรายการซ่อมในงานนี้
-        </div>
-      `;
-    } else {
-      const rows = job.items.map((item) => {
-        const typeLabel = item.type === "labor" ? "ค่าแรง" : "อะไหล่";
-        const qty = getSafeNumber(item.qty, 1);
-        const price = getSafeNumber(item.unitPrice, 0);
-        const total = getSafeNumber(item.lineTotal, qty * price);
-
-        return `
-          <tr>
-            <td>${typeLabel}</td>
-            <td>${item.description || "-"}</td>
-            <td class="text-end">${qty}</td>
-            <td class="text-end">${formatCurrency(price)}</td>
-            <td class="text-end">${formatCurrency(total)}</td>
-          </tr>
-        `;
-      });
-
-      itemsEl.innerHTML = rows.join("");
-    }
-  }
-
-  if (paymentEl) {
-    const subtotal = getSafeNumber(job.subtotal ?? job.total ?? 0);
-    const discount = getSafeNumber(job.discount ?? 0);
-    const net = getSafeNumber(job.totalNet ?? job.total ?? 0);
-    const paid = getSafeNumber(job.paid ?? 0);
-    const change = getSafeNumber(job.change ?? 0);
-
-    paymentEl.innerHTML = `
-      <div class="d-flex justify-content-between">
-        <span>ยอดรวม</span>
-        <span>${formatCurrency(subtotal)}฿</span>
-      </div>
-      <div class="d-flex justify-content-between">
-        <span>ส่วนลด</span>
-        <span>${formatCurrency(discount)}฿</span>
-      </div>
-      <hr class="my-2">
-      <div class="d-flex justify-content-between fw-semibold">
-        <span>ยอดสุทธิ</span>
-        <span>${formatCurrency(net)}฿</span>
-      </div>
-      <div class="d-flex justify-content-between mt-1">
-        <span>ลูกค้าจ่ายมา</span>
-        <span>${formatCurrency(paid)}฿</span>
-      </div>
-      <div class="d-flex justify-content-between">
-        <span>เงินทอน</span>
-        <span>${formatCurrency(change)}฿</span>
-      </div>
-    `;
-  }
-
-  if (noteEl) {
-    const customerNote = job.customerNote || "";
-    const internalNote = job.internalNote || "";
-    noteEl.innerHTML = `
-      ${
-        customerNote
-          ? `<div class="mb-2"><strong>หมายเหตุจากลูกค้า:</strong><br>${customerNote}</div>`
-          : ""
-      }
-      ${
-        internalNote
-          ? `<div><strong>โน้ตของช่าง:</strong><br>${internalNote}</div>`
-          : ""
-      }
-      ${
-        !customerNote && !internalNote
-          ? `<div class="bm-empty-state">ยังไม่มีโน้ตสำหรับงานนี้</div>`
-          : ""
-      }
-    `;
-  }
 
   if (statusSelect) {
     statusSelect.value = job.status || "queue";
   }
 
-  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-  modal.show();
-}
+  if (!contentEl) return;
 
-function buildJobDetailText(job) {
-  const plate =
-    job.vehicle?.plate ||
-    job.vehicle?.license ||
-    job.plate ||
-    job.license ||
-    "-";
-  const model = job.vehicle?.model || job.model || "";
-  const customer = job.customer?.name || job.customerName || "-";
-  const phone = job.customer?.phone || job.phone || "-";
+  const itemsRows =
+    job.items && Array.isArray(job.items) && job.items.length
+      ? job.items
+          .map((item, index) => {
+            const typeText =
+              item.type === "labor"
+                ? "ค่าแรง"
+                : item.type === "part"
+                ? "อะไหล่"
+                : item.type || "-";
+            const desc = item.description || item.name || "-";
+            const qty =
+              typeof item.qty === "number"
+                ? item.qty
+                : typeof item.quantity === "number"
+                ? item.quantity
+                : 1;
+            const unitPrice =
+              typeof item.unitPrice === "number"
+                ? item.unitPrice
+                : typeof item.price === "number"
+                ? item.price
+                : 0;
+            const lineTotal =
+              typeof item.lineTotal === "number"
+                ? item.lineTotal
+                : typeof item.total === "number"
+                ? item.total
+                : qty * unitPrice;
 
-  const lines = [];
+            return `
+              <tr>
+                <td class="text-center">${index + 1}</td>
+                <td>${typeText}</td>
+                <td>${desc}</td>
+                <td class="text-center">${qty}</td>
+                <td class="text-end">${formatCurrency(unitPrice)}</td>
+                <td class="text-end">${formatCurrency(lineTotal)}</td>
+              </tr>
+            `;
+          })
+          .join("")
+      : `<tr><td colspan="6" class="text-center text-muted py-3">ยังไม่มีรายการในบิลนี้</td></tr>`;
 
-  lines.push(`ลูกค้า: ${customer} (${phone})`);
-  lines.push(`รถ: ${plate} ${model}`);
-  lines.push(`สถานะ: ${job.status || "-"}`);
+  const totalText = formatCurrency(job.netTotal || 0);
 
-  if (job.items && job.items.length) {
-    lines.push("");
-    lines.push("รายการซ่อม:");
-    job.items.forEach((item) => {
-      lines.push(
-        `- ${item.type === "labor" ? "[แรง]" : "[อะไหล่]"} ${
-          item.description || "-"
-        } x${item.qty || 1} = ${formatCurrency(
-          item.lineTotal || 0
-        )}฿`
-      );
-    });
+  contentEl.innerHTML = `
+    <div class="mb-3">
+      <div class="fw-semibold">ข้อมูลลูกค้า</div>
+      <div class="text-muted small">
+        ชื่อ: ${job.customerName || "-"}<br />
+        เบอร์โทร: ${job.customerPhone || "-"}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-semibold">ข้อมูลรถ</div>
+      <div class="text-muted small">
+        ทะเบียน: ${job.plate || "-"}<br />
+        รุ่น/ยี่ห้อ: ${job.model || "-"}
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="fw-semibold d-flex justify-content-between align-items-center">
+        <span>รายการซ่อม / อะไหล่</span>
+        <span class="small text-muted">เปิดบิล: ${job.createdLocalAt}</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead>
+            <tr class="small text-muted">
+              <th class="text-center" style="width: 40px;">#</th>
+              <th style="width: 80px;">ชนิด</th>
+              <th>รายการ</th>
+              <th class="text-center" style="width: 80px;">จำนวน</th>
+              <th class="text-end" style="width: 120px;">ราคา/หน่วย</th>
+              <th class="text-end" style="width: 120px;">รวม</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsRows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mb-2 text-end">
+      <span class="me-2 text-muted small">ยอดสุทธิ</span>
+      <span class="fw-semibold fs-5">${totalText}</span>
+    </div>
+  `;
+
+  const modalEl = document.getElementById("jobDetailModal");
+  if (modalEl && window.bootstrap && typeof window.bootstrap.Modal === "function") {
+    const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
   }
-
-  const net = getSafeNumber(job.totalNet ?? job.total ?? 0);
-  if (net) {
-    lines.push("");
-    lines.push(`ยอดสุทธิ: ${formatCurrency(net)}฿`);
-  }
-
-  return lines.join("\n");
 }
 
 // -----------------------------
-// Update status
+// อัปเดตสถานะงานซ่อม
 // -----------------------------
 async function handleUpdateStatus() {
-  if (!currentJob) return;
+  if (!currentJob) {
+    showToast("ไม่พบงานซ่อมที่ต้องการอัปเดต", "error");
+    return;
+  }
 
   const statusSelect = $("jobDetailStatusSelect");
   if (!statusSelect) return;
 
-  const newStatus = statusSelect.value || "queue";
-  if (newStatus === currentJob.status) {
-    showToast("สถานะยังเหมือนเดิม ไม่มีการเปลี่ยนแปลง", "info");
-    return;
-  }
+  const newStatus = statusSelect.value;
+  if (!newStatus) return;
 
   try {
-    const btn = $("jobDetailSaveStatusBtn");
-    if (btn) btn.disabled = true;
+    const jobRef = doc(jobsCol, currentJob.id);
+    await updateDoc(jobRef, { status: newStatus });
 
-    const ref = doc(db, "jobs", currentJob.id);
-    await updateDoc(ref, {
-      status: newStatus
-    });
-
-    // อัปเดตใน cache
     const idx = jobsCache.findIndex((j) => j.id === currentJob.id);
     if (idx !== -1) {
       jobsCache[idx].status = newStatus;
       currentJob.status = newStatus;
     }
 
-    showToast("อัปเดตสถานะงานเรียบร้อย", "success");
-    applyFilters(); // refresh table แสดง badge ใหม่
+    applyFilters();
+    showToast("อัปเดตสถานะงานซ่อมเรียบร้อยแล้ว", "success");
+
+    const modalEl = document.getElementById("jobDetailModal");
+    if (
+      modalEl &&
+      window.bootstrap &&
+      typeof window.bootstrap.Modal === "function"
+    ) {
+      const modal = window.bootstrap.Modal.getInstance(modalEl);
+      if (modal) {
+        modal.hide();
+      }
+    }
   } catch (error) {
     console.error("อัปเดตสถานะงานไม่สำเร็จ:", error);
-    showToast("อัปเดตสถานะงานไม่สำเร็จ", "error");
-  } finally {
-    const btn = $("jobDetailSaveStatusBtn");
-    if (btn) btn.disabled = false;
+    showToast("อัปเดตสถานะงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
   }
 }
 
 // -----------------------------
-// Init Jobs page
+// Init
 // -----------------------------
-function initJobs() {
-  const section = document.querySelector('[data-section="jobs"]');
-  if (!section) return;
-
+export function initJobs() {
+  const form = $("jobsFilterForm");
   const searchInput = $("jobsSearchInput");
-  const statusSelect = $("jobsStatusFilter");
-  const dateSelect = $("jobsDateFilter");
-  const reloadBtn = $("jobsReloadBtn");
+  const statusFilter = $("jobsStatusFilter");
+  const dateRange = $("jobsDateRange");
   const saveStatusBtn = $("jobDetailSaveStatusBtn");
+  const statusSelect = $("jobDetailStatusSelect");
+
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      applyFilters();
+    });
+  }
 
   if (searchInput) {
     searchInput.addEventListener("input", () => {
@@ -556,37 +518,28 @@ function initJobs() {
     });
   }
 
-  if (statusSelect) {
-    statusSelect.addEventListener("change", () => {
+  if (statusFilter) {
+    statusFilter.addEventListener("change", () => {
       applyFilters();
     });
   }
 
-  if (dateSelect) {
-    dateSelect.addEventListener("change", () => {
+  if (dateRange) {
+    dateRange.addEventListener("change", () => {
       applyFilters();
     });
   }
 
-  if (reloadBtn) {
-    reloadBtn.addEventListener("click", () => {
-      loadJobs();
-    });
-  }
-
-  if (saveStatusBtn) {
+  if (saveStatusBtn && statusSelect) {
     saveStatusBtn.addEventListener("click", () => {
       handleUpdateStatus();
     });
   }
 
-  // โหลดครั้งแรก
   loadJobs();
 }
 
-// -----------------------------
-// Bootstrap
-// -----------------------------
+// bootstrap เผื่อกรณี ui-shell ไม่ได้เรียก
 document.addEventListener("DOMContentLoaded", () => {
   initJobs();
 });
