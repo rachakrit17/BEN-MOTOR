@@ -1,226 +1,289 @@
-// js/auth.js
-// Auth helper สำหรับ BEN MOTOR POS (ใช้ร่วมได้ทุกหน้า)
-// - จัดการเข้าสู่ระบบด้วยอีเมล/รหัสผ่าน และ Google
-// - ฟังก์ชันส่งลิงก์รีเซ็ตรหัสผ่าน
-// - ฟังก์ชัน requireAuth บังคับให้ต้องล็อกอินก่อนใช้งานหน้า
-// - เก็บ/ดึงอีเมลผู้ใช้ล่าสุดจาก localStorage
+// BEN MOTOR POS – Auth & Session Logic
 
-import { auth, googleProvider } from "./firebase-init.js";
 import {
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  sendPasswordResetEmail,
+  auth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+} from "./firebase-init.js";
 
-const LAST_USER_EMAIL_KEY = "ben_motor_last_user_email";
+// -----------------------------
+// Helpers
+// -----------------------------
 
-// ---------- LocalStorage helper ----------
+const LAST_EMAIL_KEY = "bm_last_email";
 
-function getLastUserEmail() {
+function isLoginPage() {
+  return !!document.getElementById("loginForm");
+}
+
+function isAppPage() {
+  return document.body.classList.contains("bm-app");
+}
+
+function redirectToApp() {
+  window.location.href = "app.html";
+}
+
+function redirectToLogin() {
+  window.location.href = "index.html";
+}
+
+function loadLastEmail() {
   try {
-    const value = localStorage.getItem(LAST_USER_EMAIL_KEY);
-    return value || "";
-  } catch (error) {
-    console.warn("Cannot read last user email from localStorage:", error);
+    const email = localStorage.getItem(LAST_EMAIL_KEY);
+    return email || "";
+  } catch (e) {
     return "";
   }
 }
 
-function setLastUserEmail(email) {
-  if (!email) return;
+function saveLastEmail(email) {
   try {
-    localStorage.setItem(LAST_USER_EMAIL_KEY, email);
-  } catch (error) {
-    console.warn("Cannot write last user email to localStorage:", error);
+    if (email) {
+      localStorage.setItem(LAST_EMAIL_KEY, email);
+    }
+  } catch (e) {
+    // ignore
   }
 }
 
-// ---------- Error message mapping (ภาษาไทย) ----------
+// Bootstrap toast (เฉพาะ index.html ใช้ #globalToast / #globalToastMessage)
+function showToast(message, type = "error") {
+  const toastEl = document.getElementById("globalToast");
+  const msgEl = document.getElementById("globalToastMessage");
+  if (!toastEl || !msgEl) return;
 
-function mapAuthErrorCodeToMessage(code) {
-  switch (code) {
+  msgEl.textContent = message || "";
+
+  toastEl.classList.remove("text-bg-danger", "text-bg-success", "text-bg-info");
+  if (type === "success") {
+    toastEl.classList.add("text-bg-success");
+  } else if (type === "info") {
+    toastEl.classList.add("text-bg-info");
+  } else {
+    toastEl.classList.add("text-bg-danger");
+  }
+
+  const toast = bootstrap.Toast.getOrCreateInstance(toastEl);
+  toast.show();
+}
+
+// แปลง error code ของ Firebase เป็นข้อความไทยสั้น ๆ
+function getAuthErrorMessage(error) {
+  if (!error || !error.code) return "ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง";
+
+  switch (error.code) {
     case "auth/invalid-email":
       return "รูปแบบอีเมลไม่ถูกต้อง";
     case "auth/user-disabled":
-      return "บัญชีนี้ถูกปิดการใช้งาน กรุณาติดต่อผู้ดูแลระบบ";
+      return "บัญชีนี้ถูกปิดการใช้งาน";
     case "auth/user-not-found":
-      return "ไม่พบบัญชีผู้ใช้นี้ในระบบ";
+      return "ไม่พบบัญชีผู้ใช้นี้";
     case "auth/wrong-password":
       return "รหัสผ่านไม่ถูกต้อง";
-    case "auth/too-many-requests":
-      return "พยายามเข้าสู่ระบบผิดพลาดหลายครั้ง โปรดลองใหม่ภายหลัง";
     case "auth/popup-closed-by-user":
-      return "คุณปิดหน้าต่างเข้าสู่ระบบก่อนเสร็จสิ้น";
+      return "ยกเลิกการเข้าสู่ระบบด้วย Google";
+    case "auth/network-request-failed":
+      return "มีปัญหาการเชื่อมต่ออินเทอร์เน็ต";
     default:
-      return "เกิดข้อผิดพลาดในการเข้าสู่ระบบ (" + (code || "unknown") + ")";
+      return "เกิดข้อผิดพลาดในการเข้าสู่ระบบ (" + error.code + ")";
   }
 }
 
-// ---------- Core auth actions ----------
+// อัปเดตข้อมูลผู้ใช้ใน app.html
+function updateAppUserInfo(user) {
+  const sidebarEmailEl = document.getElementById("sidebarUserEmail");
+  const shortEmailEl = document.getElementById("currentUserShortEmail");
+  const fullEmailEl = document.getElementById("currentUserFullEmail");
 
-/**
- * เข้าสู่ระบบด้วยอีเมล/รหัสผ่าน
- * @param {string} email
- * @param {string} password
- * @param {{ rememberDevice?: boolean }} options
- * @returns {Promise<{ user, credential }>}
- */
-async function loginWithEmailPassword(email, password, options = {}) {
-  const trimmedEmail = (email || "").trim();
-  const trimmedPassword = (password || "").trim();
-  const rememberDevice = options.rememberDevice ?? true;
+  const email = user?.email || "–";
 
-  if (!trimmedEmail || !trimmedPassword) {
-    const error = new Error("กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน");
-    error.code = "bm/missing-email-password";
-    throw error;
+  if (sidebarEmailEl) {
+    sidebarEmailEl.textContent = email;
+  }
+  if (shortEmailEl) {
+    shortEmailEl.textContent = email;
+  }
+  if (fullEmailEl) {
+    fullEmailEl.textContent = email;
+  }
+}
+
+// อัปเดตวันเวลาใน top bar (app.html)
+function startDateTimeTicker() {
+  const dateEl = document.getElementById("currentDateText");
+  const timeEl = document.getElementById("currentTimeText");
+  if (!dateEl || !timeEl) return;
+
+  const update = () => {
+    const now = new Date();
+    const dateFormatter = new Intl.DateTimeFormat("th-TH", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      weekday: "short"
+    });
+    const timeFormatter = new Intl.DateTimeFormat("th-TH", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    dateEl.textContent = dateFormatter.format(now);
+    timeEl.textContent = timeFormatter.format(now);
+  };
+
+  update();
+  setInterval(update, 60000);
+}
+
+// -----------------------------
+// Login Page Logic (index.html)
+// -----------------------------
+function initLoginPage() {
+  const loginForm = document.getElementById("loginForm");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const rememberMeInput = document.getElementById("rememberMe");
+  const googleLoginBtn = document.getElementById("googleLoginBtn");
+  const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+
+  if (!loginForm || !emailInput || !passwordInput) {
+    return;
   }
 
-  try {
-    const credential = await signInWithEmailAndPassword(
-      auth,
-      trimmedEmail,
-      trimmedPassword
-    );
-    const user = credential.user;
+  // เติมผู้ใช้ล่าสุด
+  const lastEmail = loadLastEmail();
+  if (lastEmail) {
+    emailInput.value = lastEmail;
+    if (rememberMeInput) {
+      rememberMeInput.checked = true;
+    }
+  }
 
-    if (rememberDevice && user?.email) {
-      setLastUserEmail(user.email);
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+      showToast("กรุณากรอกอีเมลและรหัสผ่านให้ครบ", "error");
+      return;
     }
 
-    return { user, credential };
-  } catch (error) {
-    const readableMessage = mapAuthErrorCodeToMessage(error?.code);
-    const wrapped = new Error(readableMessage);
-    wrapped.original = error;
-    wrapped.code = error?.code || "bm/email-login-error";
-    throw wrapped;
-  }
-}
+    try {
+      const btn = document.getElementById("emailLoginBtn");
+      if (btn) {
+        btn.disabled = true;
+      }
 
-/**
- * เข้าสู่ระบบด้วย Google
- * @param {{ rememberDevice?: boolean }} options
- * @returns {Promise<{ user, credential }>}
- */
-async function loginWithGoogle(options = {}) {
-  const rememberDevice = options.rememberDevice ?? true;
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-
-    if (rememberDevice && user?.email) {
-      setLastUserEmail(user.email);
-    }
-
-    return { user, credential: result };
-  } catch (error) {
-    // ถ้าปิด popup เอง ไม่ต้องถือว่าเป็น error ร้ายแรง
-    if (error?.code === "auth/popup-closed-by-user") {
-      const softError = new Error("คุณปิดหน้าต่างเข้าสู่ระบบก่อนเสร็จสิ้น");
-      softError.code = error.code;
-      softError.original = error;
-      throw softError;
-    }
-
-    const readableMessage = mapAuthErrorCodeToMessage(error?.code);
-    const wrapped = new Error(readableMessage);
-    wrapped.original = error;
-    wrapped.code = error?.code || "bm/google-login-error";
-    throw wrapped;
-  }
-}
-
-/**
- * ส่งอีเมลสำหรับรีเซ็ตรหัสผ่าน
- * (ให้หน้า UI จัดการข้อความแจ้งผู้ใช้เอง)
- * @param {string} email
- */
-async function sendPasswordReset(email) {
-  const trimmedEmail = (email || "").trim();
-  if (!trimmedEmail) {
-    const error = new Error("กรุณากรอกอีเมลก่อนขอรีเซ็ตรหัสผ่าน");
-    error.code = "bm/missing-email";
-    throw error;
-  }
-
-  try {
-    await sendPasswordResetEmail(auth, trimmedEmail);
-  } catch (error) {
-    const readableMessage = mapAuthErrorCodeToMessage(error?.code);
-    const wrapped = new Error(readableMessage);
-    wrapped.original = error;
-    wrapped.code = error?.code || "bm/reset-password-error";
-    throw wrapped;
-  }
-}
-
-/**
- * ออกจากระบบ (เลือกได้ว่าจะ redirect ไปไหนหลังออก)
- * @param {string|null} redirectUrl
- */
-async function logout(redirectUrl = "index.html") {
-  try {
-    await signOut(auth);
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    }
-  } catch (error) {
-    const wrapped = new Error("ออกจากระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
-    wrapped.original = error;
-    wrapped.code = "bm/logout-error";
-    throw wrapped;
-  }
-}
-
-/**
- * บังคับให้ต้องล็อกอินก่อนถึงจะใช้หน้าได้
- * - ถ้าไม่ล็อกอินจะ redirect ไปหน้า index.html (หรือ redirectUrl ที่ส่งมา)
- * - ถ้าล็อกอินแล้ว resolve user ให้
- * @param {string} redirectUrl
- * @returns {Promise<import("firebase/auth").User>}
- */
-function requireAuth(redirectUrl = "index.html") {
-  return new Promise((resolve) => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        unsub();
-        resolve(user);
+      if (rememberMeInput && rememberMeInput.checked) {
+        saveLastEmail(email);
       } else {
-        if (redirectUrl) {
-          window.location.href = redirectUrl;
+        saveLastEmail("");
+      }
+
+      if (btn) {
+        btn.disabled = false;
+      }
+
+      redirectToApp();
+    } catch (error) {
+      const btn = document.getElementById("emailLoginBtn");
+      if (btn) {
+        btn.disabled = false;
+      }
+      showToast(getAuthErrorMessage(error), "error");
+    }
+  });
+
+  if (googleLoginBtn) {
+    googleLoginBtn.addEventListener("click", async () => {
+      try {
+        googleLoginBtn.disabled = true;
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const email = result.user?.email || "";
+        if (email) {
+          saveLastEmail(email);
         }
+        googleLoginBtn.disabled = false;
+        redirectToApp();
+      } catch (error) {
+        googleLoginBtn.disabled = false;
+        showToast(getAuthErrorMessage(error), "error");
       }
     });
-  });
+  }
+
+  if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener("click", () => {
+      showToast(
+        "จัดการรีเซ็ตรหัสผ่านผ่าน Firebase Console หรือใช้เข้าสู่ระบบด้วย Google",
+        "info"
+      );
+    });
+  }
 }
 
-/**
- * สมัคร callback เวลา user login/logout เปลี่ยน
- * ใช้บนหน้าที่ต้อง sync UI ตามสถานะ auth
- * @param {(user: import("firebase/auth").User|null)=>void} callback
- * @returns {() => void} unsubscribe
- */
-function onAuthUserChanged(callback) {
-  return onAuthStateChanged(auth, callback);
+// -----------------------------
+// App Page Logic (app.html)
+// -----------------------------
+function initAppPage() {
+  startDateTimeTicker();
+
+  const sidebarLogoutBtn = document.getElementById("sidebarLogoutBtn");
+  const userLogoutBtn = document.getElementById("userLogoutBtn");
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      redirectToLogin();
+    } catch (error) {
+      alert("ออกจากระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+    }
+  };
+
+  if (sidebarLogoutBtn) {
+    sidebarLogoutBtn.addEventListener("click", handleLogout);
+  }
+  if (userLogoutBtn) {
+    userLogoutBtn.addEventListener("click", handleLogout);
+  }
 }
 
-// ---------- Export ----------
+// -----------------------------
+// Global auth state handler
+// -----------------------------
+onAuthStateChanged(auth, (user) => {
+  if (isLoginPage()) {
+    if (user) {
+      // ถ้าล็อกอินแล้วแต่ยังอยู่หน้า index ให้ส่งไป app.html
+      redirectToApp();
+    } else {
+      // ยังไม่ล็อกอิน แสดงหน้า login ตามปกติ
+      initLoginPage();
+    }
+    return;
+  }
 
-export {
-  auth,
-  googleProvider,
-  LAST_USER_EMAIL_KEY,
-  getLastUserEmail,
-  setLastUserEmail,
-  mapAuthErrorCodeToMessage,
-  loginWithEmailPassword,
-  loginWithGoogle,
-  sendPasswordReset,
-  logout,
-  requireAuth,
-  onAuthUserChanged
-};
+  if (isAppPage()) {
+    if (!user) {
+      // ถ้าไม่มี user ให้บังคับกลับหน้า login
+      redirectToLogin();
+      return;
+    }
+
+    // มี user แล้ว แสดงข้อมูลและเริ่มต้นส่วนของ app
+    updateAppUserInfo(user);
+    if (user.email) {
+      saveLastEmail(user.email);
+    }
+    initAppPage();
+    return;
+  }
+});

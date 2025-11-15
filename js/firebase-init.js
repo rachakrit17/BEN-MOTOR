@@ -1,15 +1,35 @@
-// js/firebase-init.js
-// Initial Firebase setup for BEN MOTOR POS (ES Modules + CDN)
+// BEN MOTOR POS – Firebase Initialization (ES Modules via CDN)
 
-// ใช้ Firebase v10+ Modular ผ่าน CDN ES Modules
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-storage.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-// จากโปรเจกต์ ben-motor ของคุณ
+// -----------------------------
+// Firebase Config (จากโปรเจกต์ ben-motor)
+// -----------------------------
 const firebaseConfig = {
   apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
   authDomain: "ben-motor.firebaseapp.com",
@@ -20,30 +40,47 @@ const firebaseConfig = {
   measurementId: "G-TVDDW82Q5B"
 };
 
-// Initialize Firebase
+// -----------------------------
+// Initialize core services
+// -----------------------------
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Analytics บางทีใช้ไม่ได้ถ้าไม่รันบน https/localhost เลยหุ้ม try ไว้
 let analytics = null;
 try {
   analytics = getAnalytics(app);
-} catch (error) {
-  // ไม่ต้องทำอะไร ปล่อย analytics เป็น null ไป
-  console.warn("Analytics is not available in this environment:", error?.message || error);
+} catch (err) {
+  // ถ้ารันในสภาพแวดล้อมที่ไม่รองรับ analytics ให้ข้ามเฉย ๆ
+  analytics = null;
 }
 
-// Services หลักที่เราจะใช้ในโปรเจกต์
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
-const db = getFirestore(app);
-const storage = getStorage(app);
-
-// export ไปให้ไฟล์อื่นใช้
+// -----------------------------
+// Export ให้ไฟล์อื่นใช้ผ่าน firebase-init.js ที่เดียว
+// -----------------------------
 export {
   app,
   analytics,
   auth,
-  googleProvider,
   db,
-  storage
+  // Auth helpers
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  // Firestore helpers
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  serverTimestamp
 };
