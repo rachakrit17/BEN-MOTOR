@@ -28,32 +28,37 @@
     :root {
       --bm-primary: #13b38b;
       --bm-primary-soft: rgba(19, 179, 139, 0.1);
-      --bm-primary-strong: #0f766e;
-      --bm-accent: #0b7285;
-      --bm-bg: #f3f4f6;
-      --bm-sidebar-bg: #020617;
-      --bm-sidebar-bg-soft: #02081e;
-      --bm-sidebar-border: rgba(148, 163, 184, 0.35);
-      --bm-card-bg: #ffffff;
-      --bm-text-main: #020617;
+      --bm-primary-soft-strong: rgba(19, 179, 139, 0.18);
+      --bm-primary-dark: #0b8a68;
+      --bm-bg-soft: #eef2ff;
+      --bm-bg-soft-2: #f3f4ff;
+      --bm-bg-body: #f4f7fb;
+      --bm-border-soft: rgba(15, 23, 42, 0.07);
+      --bm-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --bm-radius-lg: 1.4rem;
+      --bm-radius-md: 1rem;
+      --bm-radius-pill: 999px;
       --bm-text-muted: #6b7280;
+      --bm-text-soft: #9ca3af;
+      --bm-text-strong: #111827;
+      --bm-sidebar-width: 260px;
+      --bm-sidebar-width-collapsed: 84px;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--bm-text-main);
-      background-color: var(--bm-bg);
     }
 
     body {
-      min-height: 100vh;
+      font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       background: radial-gradient(circle at top left, #eff6ff, #e5e7eb);
     }
 
@@ -64,879 +69,1811 @@
     }
 
     .bm-sidebar {
-      width: 240px;
+      width: var(--bm-sidebar-width);
       background:
         radial-gradient(circle at top left, rgba(19, 179, 139, 0.12), transparent 60%),
-        radial-gradient(circle at bottom, rgba(37, 99, 235, 0.18), transparent 70%),
-        var(--bm-sidebar-bg);
+        radial-gradient(circle at bottom, rgba(37, 99, 235, 0.09), transparent 70%),
+        #020617;
       color: #e5e7eb;
+      padding: 1.2rem 1rem;
       display: flex;
       flex-direction: column;
-      border-right: 1px solid var(--bm-sidebar-border);
-      padding: 14px 12px;
-      position: sticky;
-      top: 0;
-      max-height: 100vh;
-      z-index: 1010;
+      gap: 1.2rem;
+      position: fixed;
+      inset-block: 0;
+      z-index: 1020;
+      transition: width 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 5px 0 18px rgba(15, 23, 42, 0.4);
     }
 
     .bm-sidebar-collapsed {
-      width: 78px;
-      padding-inline: 10px;
+      width: var(--bm-sidebar-width-collapsed);
+    }
+
+    @media (max-width: 991.98px) {
+      .bm-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .bm-sidebar-open {
+        transform: translateX(0);
+      }
     }
 
     .bm-sidebar-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .bm-sidebar-brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      overflow: hidden;
+      padding-inline: 0.4rem;
     }
 
     .bm-sidebar-logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 20%, #f9fafb, #22c55e);
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: #020617;
-      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.5);
-      flex-shrink: 0;
-    }
-
-    .bm-sidebar-title-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .bm-sidebar-title {
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      gap: 0.55rem;
       white-space: nowrap;
     }
 
-    .bm-sidebar-subtitle {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      white-space: nowrap;
-    }
-
-    .bm-sidebar-toggle-btn {
-      border-radius: 999px;
+    .bm-sidebar-logo-icon {
       width: 32px;
       height: 32px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.5);
-      color: #e5e7eb;
+      border-radius: 12px;
+      background: radial-gradient(circle at 20% 0%, #bbf7d0, transparent 55%),
+        radial-gradient(circle at 100% 0%, #7dd3fc, transparent 55%),
+        linear-gradient(135deg, #0f766e, #22c55e);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
+      font-size: 1.1rem;
+      color: #ecfdf5;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
     }
 
-    .bm-sidebar-toggle-btn:hover {
-      background: rgba(15, 23, 42, 0.9);
+    .bm-sidebar-logo-text {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 1.2rem;
+      color: #f9fafb;
+    }
+
+    .bm-sidebar-logo-sub {
+      font-size: 0.7rem;
+      color: rgba(209, 213, 219, 0.86);
+      margin-top: -2px;
+    }
+
+    .bm-sidebar-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.35), transparent 60%),
+        rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.8);
+    }
+
+    .bm-sidebar-toggle:hover {
+      border-color: rgba(248, 250, 252, 0.8);
+      color: #f9fafb;
     }
 
     .bm-sidebar-nav {
-      margin-top: 4px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(148, 163, 184, 0.35);
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 2px;
+      margin-top: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
     }
 
     .bm-nav-section-label {
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #6b7280;
-      margin: 8px 6px 4px;
-      white-space: nowrap;
-    }
-
-    .bm-nav-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .bm-nav-item {
-      margin-bottom: 2px;
+      color: rgba(148, 163, 184, 0.9);
+      margin: 0.75rem 0 0.3rem;
+      padding-inline: 0.4rem;
     }
 
     .bm-nav-link {
       border-radius: 999px;
-      padding: 7px 10px;
+      padding: 0.55rem 0.7rem;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.82rem;
-      color: #e5e7eb;
+      gap: 0.45rem;
+      color: rgba(209, 213, 219, 0.92);
       text-decoration: none;
-      opacity: 0.88;
+      font-size: 0.86rem;
       border: 1px solid transparent;
-      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .bm-nav-link:hover {
+      background: radial-gradient(circle at left, rgba(148, 163, 184, 0.15), transparent 60%);
+      border-color: rgba(148, 163, 184, 0.35);
+    }
+
+    .bm-nav-link-active {
+      background:
+        radial-gradient(circle at 0 0, rgba(187, 247, 208, 0.3), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(129, 230, 217, 0.25), transparent 55%),
+        linear-gradient(90deg, rgba(15, 118, 110, 0.94), rgba(22, 163, 74, 0.98));
+      border-color: rgba(248, 250, 252, 0.9);
+      color: #ecfdf5;
+      box-shadow: 0 15px 35px rgba(16, 185, 129, 0.45);
     }
 
     .bm-nav-link-icon {
-      width: 22px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
       display: inline-flex;
+      align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.9));
+      color: rgba(229, 231, 235, 0.95);
+      font-size: 1.1rem;
     }
 
     .bm-nav-link-label {
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .bm-nav-link-badge {
+    .bm-nav-pill {
       font-size: 0.7rem;
-      padding: 2px 7px;
+      padding: 0.18rem 0.6rem;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      color: #cbd5f5;
-      flex-shrink: 0;
+      background: rgba(15, 23, 42, 0.85);
+      color: rgba(248, 250, 252, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.7);
     }
 
-    .bm-nav-link:hover {
-      background: rgba(15, 23, 42, 0.9);
-      border-color: rgba(148, 163, 184, 0.6);
-      opacity: 1;
-    }
-
-    .bm-nav-link.active {
-      background: linear-gradient(135deg, #13b38b, #22c55e);
-      border-color: rgba(248, 250, 252, 0.8);
-      color: #0b1120;
-      opacity: 1;
-      box-shadow: 0 10px 24px rgba(19, 179, 139, 0.7);
-    }
-
-    .bm-nav-link.active .bm-nav-link-badge {
-      background: rgba(15, 23, 42, 0.9);
-      border-color: transparent;
-      color: #bbf7d0;
+    .bm-nav-pill-soft {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(148, 163, 184, 0.5);
     }
 
     .bm-sidebar-footer {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 0.72rem;
-      color: #9ca3af;
+      margin-top: auto;
+      padding-inline: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      color: rgba(148, 163, 184, 0.95);
     }
 
-    .bm-user-mini {
+    .bm-sidebar-user {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 6px;
+      gap: 0.55rem;
     }
 
-    .bm-user-mini-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      overflow: hidden;
-    }
-
-    .bm-user-avatar {
-      width: 26px;
-      height: 26px;
+    .bm-sidebar-user-avatar {
+      width: 28px;
+      height: 28px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 10%, #f9fafb, #38bdf8);
-      display: flex;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       font-size: 0.9rem;
-      color: #0f172a;
-      flex-shrink: 0;
+      color: #e5e7eb;
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.35), rgba(15, 23, 42, 0.95));
     }
 
-    .bm-user-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      overflow: hidden;
+    .bm-sidebar-user-main {
+      font-size: 0.8rem;
+      color: #e5e7eb;
     }
 
-    .bm-user-name {
+    .bm-sidebar-user-sub {
+      font-size: 0.7rem;
+      color: rgba(148, 163, 184, 0.95);
+    }
+
+    .bm-sidebar-logout-btn {
+      border-radius: 999px;
+      padding: 0.38rem 0.8rem;
       font-size: 0.78rem;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: rgba(241, 245, 249, 0.95);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9));
     }
 
-    .bm-user-email {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+    .bm-sidebar-logout-btn:hover {
+      border-color: rgba(248, 250, 252, 0.9);
     }
 
-    .bm-logout-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(239, 68, 68, 0.8);
-      background: transparent;
-      color: #fecaca;
-      padding: 4px 8px;
-      font-size: 0.7rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .bm-logout-btn:hover {
-      background: rgba(248, 113, 113, 0.15);
-    }
-
-    .bm-build-label {
-      font-size: 0.68rem;
-      color: #6b7280;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .bm-build-pill {
-      padding: 2px 7px;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.7);
-      white-space: nowrap;
-    }
-
-    .bm-sidebar-collapsed .bm-sidebar-title-wrap,
     .bm-sidebar-collapsed .bm-nav-link-label,
-    .bm-sidebar-collapsed .bm-nav-link-badge,
-    .bm-sidebar-collapsed .bm-user-info,
-    .bm-sidebar-collapsed .bm-build-label {
+    .bm-sidebar-collapsed .bm-nav-section-label,
+    .bm-sidebar-collapsed .bm-sidebar-logo-text,
+    .bm-sidebar-collapsed .bm-sidebar-logo-sub,
+    .bm-sidebar-collapsed .bm-sidebar-footer-text {
       display: none;
     }
 
     .bm-sidebar-collapsed .bm-sidebar {
-      width: 78px;
+      padding-inline: 0.5rem;
     }
 
     .bm-main {
       flex: 1;
-      min-width: 0;
+      min-height: 100vh;
+      margin-left: var(--bm-sidebar-width);
+      transition: margin-left 0.2s ease;
       display: flex;
       flex-direction: column;
-      background: radial-gradient(circle at top left, #eff6ff, #e5e7eb);
+    }
+
+    .bm-main-collapsed {
+      margin-left: var(--bm-sidebar-width-collapsed);
+    }
+
+    @media (max-width: 991.98px) {
+      .bm-main {
+        margin-left: 0;
+      }
     }
 
     .bm-topbar {
       position: sticky;
       top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(209, 213, 219, 0.9);
-      backdrop-filter: blur(14px);
+      z-index: 1010;
+      backdrop-filter: blur(16px);
       background:
-        linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(248, 250, 252, 0.94));
+        linear-gradient(to bottom, rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.7));
+      border-bottom: 1px solid rgba(15, 23, 42, 0.05);
     }
 
     .bm-topbar-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 8px 14px;
+      padding: 0.4rem 1.4rem;
+      gap: 0.75rem;
     }
 
-    @media (min-width: 768px) {
+    @media (max-width: 991.98px) {
       .bm-topbar-inner {
-        padding: 10px 18px;
+        padding-inline: 0.9rem;
       }
     }
 
     .bm-topbar-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .bm-topbar-hamburger {
+      display: none;
+    }
+
+    @media (max-width: 991.98px) {
+      .bm-topbar-hamburger {
+        display: inline-flex;
+      }
+    }
+
+    .bm-topbar-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
       min-width: 0;
     }
 
     .bm-topbar-title {
-      font-size: 0.98rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      color: #020617;
     }
 
     .bm-topbar-subtitle {
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       color: var(--bm-text-muted);
-      display: none;
-    }
-
-    @media (min-width: 992px) {
-      .bm-topbar-subtitle {
-        display: block;
-      }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: min(420px, 50vw);
     }
 
     .bm-topbar-center {
       flex: 1;
-      min-width: 0;
+      display: flex;
+      justify-content: center;
+      padding-inline: 0.4rem;
     }
 
-    .bm-search-wrap {
+    .bm-search-wrapper {
+      max-width: 520px;
+      width: 100%;
       position: relative;
-      max-width: 360px;
-      margin-inline: auto;
     }
 
     .bm-search-input {
-      width: 100%;
       border-radius: 999px;
-      border: 1px solid #d1d5db;
-      padding: 6px 30px 6px 30px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 0.4rem 2.6rem 0.4rem 2.4rem;
       font-size: 0.82rem;
+      background:
+        radial-gradient(circle at top left, rgba(191, 219, 254, 0.35), rgba(248, 250, 252, 0.95));
+      box-shadow: 0 14px 40px rgba(148, 163, 184, 0.28);
       color: #111827;
-      background: #ffffff;
     }
 
-    .bm-search-input:focus {
-      outline: none;
-      border-color: var(--bm-primary);
-      box-shadow: 0 0 0 3px rgba(19, 179, 139, 0.18);
+    .bm-search-input::placeholder {
+      color: rgba(148, 163, 184, 0.9);
     }
 
-    .bm-search-icon-left {
+    .bm-search-icon {
       position: absolute;
-      left: 9px;
+      left: 0.9rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 0.92rem;
-      color: #9ca3af;
+      color: rgba(107, 114, 128, 0.9);
+      font-size: 0.9rem;
     }
 
     .bm-search-kbd {
       position: absolute;
-      right: 8px;
+      right: 0.8rem;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 0.68rem;
-      color: #9ca3af;
-      padding: 1px 6px;
+      font-size: 0.72rem;
+      padding: 0.12rem 0.45rem;
       border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: rgba(148, 163, 184, 0.96);
+      background: rgba(248, 250, 252, 0.95);
     }
 
     .bm-topbar-right {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.78rem;
-      color: var(--bm-text-muted);
-      white-space: nowrap;
-    }
-
-    .bm-topbar-datetime {
-      text-align: right;
-      display: none;
-    }
-
-    @media (min-width: 768px) {
-      .bm-topbar-datetime {
-        display: block;
-      }
-    }
-
-    .bm-topbar-datetime-main {
+      gap: 0.8rem;
       font-size: 0.8rem;
-      color: #111827;
+      color: var(--bm-text-muted);
     }
 
-    .bm-topbar-datetime-sub {
-      font-size: 0.7rem;
-      color: #6b7280;
-    }
-
-    .bm-topbar-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 10%, #f9fafb, #38bdf8);
+    .bm-datetime {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
+      flex-direction: column;
+      gap: 0.04rem;
+      align-items: flex-end;
+    }
+
+    .bm-datetime-main {
+      font-size: 0.82rem;
+      font-weight: 500;
       color: #0f172a;
-      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .bm-datetime-sub {
+      font-size: 0.7rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.26rem 0.7rem 0.26rem 0.3rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: radial-gradient(circle at top left, rgba(191, 219, 254, 0.4), rgba(248, 250, 252, 0.98));
       cursor: default;
     }
 
-    .bm-content {
-      flex: 1;
-      min-height: 0;
-      padding: 12px 10px 16px;
+    .bm-user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.7));
+      color: #eff6ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
     }
 
-    @media (min-width: 768px) {
-      .bm-content {
-        padding: 16px 18px 20px;
+    .bm-user-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.04rem;
+    }
+
+    .bm-user-name {
+      font-size: 0.78rem;
+      color: #020617;
+    }
+
+    .bm-user-email {
+      font-size: 0.7rem;
+      color: rgba(100, 116, 139, 0.98);
+    }
+
+    .bm-user-menu-btn {
+      border: none;
+      background: transparent;
+      color: rgba(148, 163, 184, 0.9);
+      padding: 0;
+      font-size: 1rem;
+    }
+
+    .bm-content-wrapper {
+      flex: 1;
+      padding: 0.75rem 1.4rem 1.2rem;
+      min-height: 0;
+    }
+
+    @media (max-width: 991.98px) {
+      .bm-content-wrapper {
+        padding-inline: 0.9rem;
       }
     }
 
     .bm-section {
       display: none;
+      animation: bm-section-fade 0.16s ease-out;
     }
 
     .bm-section-active {
       display: block;
     }
 
-    .bm-section-header {
+    @keyframes bm-section-fade {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .bm-section-header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 0.8rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .bm-section-title-wrap {
+    .bm-section-title-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 0.05rem;
     }
 
     .bm-section-title {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
+      color: #020617;
     }
 
     .bm-section-subtitle {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--bm-text-muted);
     }
 
     .bm-section-toolbar {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 0.4rem;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
-    .bm-chip-light {
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      font-size: 0.76rem;
-      padding: 4px 8px;
+    .bm-chip-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      color: #4b5563;
+      gap: 0.35rem;
+      padding: 0.26rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: rgba(248, 250, 252, 0.98);
+      color: #111827;
+    }
+
+    .bm-chip-pill-soft {
+      background: rgba(248, 250, 252, 0.96);
     }
 
     .bm-chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .bm-chip-dot-danger {
+      background: #f97373;
+    }
+
+    .bm-chip-pill-label {
+      white-space: nowrap;
+    }
+
+    .bm-chip-light {
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      background: rgba(248, 250, 252, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .bm-chip-light .bm-chip-dot {
+      width: 7px;
+      height: 7px;
+    }
+
+    .bm-card {
+      border-radius: var(--bm-radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background:
+        radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.97));
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+      padding: 0.8rem 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 576px) {
+      .bm-card {
+        padding: 0.8rem 0.7rem;
+      }
+    }
+
+    .bm-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.55rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .bm-card-header-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.06rem;
+    }
+
+    .bm-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #020617;
+    }
+
+    .bm-card-subtitle {
+      font-size: 0.78rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-card-tag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.98);
+      color: rgba(248, 250, 252, 0.96);
+      white-space: nowrap;
+    }
+
+    .bm-card-tag-soft {
+      background: rgba(248, 250, 252, 0.96);
+      color: #0f172a;
+    }
+
+    .bm-card-body {
+      font-size: 0.8rem;
+      color: #0f172a;
+    }
+
+    .bm-note-text {
+      font-size: 0.78rem;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    @media (max-width: 768px) {
+      .bm-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 576px) {
+      .bm-stat-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bm-stat-card {
+      border-radius: var(--bm-radius-md);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.6rem 0.7rem;
+      background:
+        radial-gradient(circle at 0 0, rgba(191, 219, 254, 0.6), rgba(248, 250, 252, 0.98));
+    }
+
+    .bm-stat-label {
+      font-size: 0.75rem;
+      color: var(--bm-text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .bm-stat-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #020617;
+    }
+
+    .bm-stat-sub {
+      font-size: 0.75rem;
+      color: var(--bm-text-soft);
+      margin-top: 0.1rem;
+    }
+
+    .bm-grid-gap {
+      --bs-gutter-x: 0.55rem;
+      --bs-gutter-y: 0.55rem;
+    }
+
+    .bm-kanban-column {
+      border-radius: var(--bm-radius-md);
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      background: rgba(248, 250, 252, 0.94);
+      padding: 0.55rem 0.55rem 0.65rem;
+      min-height: 140px;
+    }
+
+    .bm-kanban-column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .bm-kanban-column-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #020617;
+    }
+
+    .bm-kanban-count-pill {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      color: var(--bm-text-muted);
+    }
+
+    .bm-kanban-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-height: 80px;
+    }
+
+    .bm-kanban-card {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 0.45rem 0.55rem;
+      background:
+        radial-gradient(circle at 0 0, rgba(219, 234, 254, 0.85), rgba(248, 250, 252, 0.98));
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.2);
+      cursor: grab;
+    }
+
+    .bm-kanban-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .bm-kanban-chip {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.06);
+      color: #374151;
+    }
+
+    .bm-kanban-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.25rem;
+      margin-top: 0.16rem;
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-kanban-dot {
       width: 7px;
       height: 7px;
       border-radius: 999px;
       background: #22c55e;
     }
 
-    .bm-chip-dot-danger {
-      background: #f97316;
+    .bm-kanban-dot-warning {
+      background: #fb923c;
     }
 
-    .bm-card {
-      border-radius: 18px;
-      background: var(--bm-card-bg);
-      border: 1px solid rgba(209, 213, 219, 0.8);
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+    .bm-kanban-dot-danger {
+      background: #f97373;
     }
 
-    .bm-card-body {
-      padding: 12px 12px;
+    .bm-kanban-timeline {
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+      margin-top: 0.16rem;
     }
 
-    @media (min-width: 768px) {
-      .bm-card-body {
-        padding: 14px 16px;
-      }
-    }
-
-    .bm-card-title {
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .bm-card-subtitle {
-      font-size: 0.74rem;
-      color: var(--bm-text-muted);
-      margin-bottom: 8px;
-    }
-
-    .bm-stat-value {
-      font-size: 1.15rem;
-      font-weight: 600;
-    }
-
-    .bm-stat-label {
-      font-size: 0.74rem;
-      color: var(--bm-text-muted);
-    }
-
-    .bm-grid-gap {
-      row-gap: 10px;
-    }
-
-    .bm-placeholder {
-      font-size: 0.8rem;
-      color: var(--bm-text-muted);
-    }
-
-    .bm-placeholder strong {
-      color: var(--bm-text-main);
-    }
-
-    .bm-scroll-y-soft {
-      max-height: 260px;
-      overflow-y: auto;
-      padding-right: 2px;
-    }
-
-    .bm-kanban-col-title {
-      font-size: 0.78rem;
-      font-weight: 600;
+    .bm-focus-list {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 6px;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
-    .bm-kanban-col-count {
-      font-size: 0.74rem;
-      color: var(--bm-text-muted);
+    .bm-focus-item {
+      border-radius: 0.9rem;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      padding: 0.5rem 0.55rem;
+      background: rgba(248, 250, 252, 0.98);
+      display: flex;
+      gap: 0.4rem;
     }
 
-    .bm-kanban-col {
-      background: #f3f4f6;
-      border-radius: 14px;
-      padding: 6px;
-      border: 1px dashed rgba(209, 213, 219, 0.9);
-      min-height: 60px;
-    }
-
-    .bm-kanban-item {
-      border-radius: 12px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      padding: 6px 8px;
-      font-size: 0.78rem;
-      margin-bottom: 6px;
-      cursor: default;
-    }
-
-    .bm-kanban-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .bm-kanban-tag {
-      font-size: 0.7rem;
+    .bm-focus-icon {
+      width: 26px;
+      height: 26px;
       border-radius: 999px;
-      padding: 2px 7px;
-      background: #eff6ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      background: rgba(59, 130, 246, 0.12);
       color: #1d4ed8;
-      margin-left: 4px;
     }
 
-    .bm-kanban-meta {
-      font-size: 0.7rem;
-      color: var(--bm-text-muted);
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
+    .bm-focus-main {
+      flex: 1;
+    }
+
+    .bm-focus-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .bm-focus-meta {
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+      margin-top: 0.08rem;
     }
 
     .bm-timeline {
-      list-style: none;
-      padding-left: 0;
-      margin-bottom: 0;
-      font-size: 0.76rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
     }
 
     .bm-timeline-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 6px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.35rem 0.65rem;
+      align-items: start;
+      font-size: 0.75rem;
+      color: #0f172a;
+    }
+
+    .bm-timeline-time {
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .bm-timeline-line {
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(148, 163, 184, 0.8), transparent);
+      border-radius: 999px;
+      min-height: 16px;
+      margin-inline: auto;
     }
 
     .bm-timeline-dot {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       border-radius: 999px;
       background: #22c55e;
-      margin-top: 4px;
-      flex-shrink: 0;
+      border: 2px solid #ecfdf5;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
     }
 
-    .bm-timeline-dot-muted {
-      background: #9ca3af;
+    .bm-timeline-type {
+      font-size: 0.7rem;
+      color: var(--bm-text-soft);
+      margin-top: 0.06rem;
     }
 
-    .bm-timeline-body {
+    .bm-empty-state {
+      font-size: 0.78rem;
+      color: var(--bm-text-soft);
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.9rem;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      background: rgba(248, 250, 252, 0.98);
+    }
+
+    .bm-form-label {
+      font-size: 0.78rem;
+      color: #0f172a;
+      margin-bottom: 0.25rem;
+    }
+
+    .bm-input,
+    .bm-select,
+    .bm-textarea {
+      font-size: 0.82rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 0.38rem 0.7rem;
+      background: rgba(248, 250, 252, 0.97);
+      color: #0f172a;
+    }
+
+    .bm-input::placeholder,
+    .bm-textarea::placeholder {
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .bm-input:focus,
+    .bm-select:focus,
+    .bm-textarea:focus {
+      border-color: rgba(59, 130, 246, 0.9);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.85);
+    }
+
+    .bm-textarea {
+      min-height: 90px;
+      resize: vertical;
+      padding-top: 0.5rem;
+    }
+
+    .bm-input-group-pill .input-group-text {
+      border-radius: 999px 0 0 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      border-right: none;
+      background: rgba(248, 250, 252, 0.96);
+      font-size: 0.78rem;
       color: var(--bm-text-muted);
     }
 
-    .bm-timeline-body strong {
-      color: var(--bm-text-main);
+    .bm-input-group-pill .bm-input {
+      border-radius: 0 999px 999px 0;
+      border-left: none;
     }
 
-    .bm-quick-actions {
+    .bm-btn-primary {
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      border: none;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      box-shadow: 0 16px 30px rgba(22, 163, 74, 0.4);
+    }
+
+    .bm-btn-primary:hover {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+    }
+
+    .bm-btn-outline {
+      border-radius: 999px;
+      padding: 0.38rem 0.95rem;
+      font-size: 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(248, 250, 252, 0.96);
+      color: #020617;
+    }
+
+    .bm-btn-outline-soft {
+      border-radius: 999px;
+      padding: 0.32rem 0.85rem;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(248, 250, 252, 0.97);
+      color: #0f172a;
+    }
+
+    .bm-btn-outline-soft:hover {
+      background: rgba(239, 246, 255, 0.92);
+    }
+
+    .bm-table-wrapper {
+      border-radius: var(--bm-radius-md);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(248, 250, 252, 0.98);
+      overflow: hidden;
+    }
+
+    .bm-table {
+      width: 100%;
+      margin-bottom: 0;
+      font-size: 0.78rem;
+      border-collapse: collapse;
+    }
+
+    .bm-table thead {
+      background: rgba(241, 245, 249, 0.98);
+    }
+
+    .bm-table th,
+    .bm-table td {
+      padding: 0.45rem 0.75rem;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+      vertical-align: middle;
+    }
+
+    .bm-table th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(148, 163, 184, 0.95);
+      font-weight: 600;
+    }
+
+    .bm-table tbody tr:nth-child(even) {
+      background: rgba(249, 250, 251, 0.92);
+    }
+
+    .bm-badge-status {
+      border-radius: 999px;
+      padding: 0.16rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .bm-badge-status-queue {
+      background: rgba(191, 219, 254, 0.95);
+      color: #1d4ed8;
+    }
+
+    .bm-badge-status-in-progress {
+      background: rgba(254, 243, 199, 0.95);
+      color: #b45309;
+    }
+
+    .bm-badge-status-waiting-parts {
+      background: rgba(254, 226, 226, 0.95);
+      color: #b91c1c;
+    }
+
+    .bm-badge-status-waiting-payment {
+      background: rgba(254, 249, 195, 0.95);
+      color: #92400e;
+    }
+
+    .bm-badge-status-done {
+      background: rgba(220, 252, 231, 0.95);
+      color: #15803d;
+    }
+
+    .bm-view-toggle {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 0.14rem;
+      background: rgba(248, 250, 252, 0.98);
+    }
+
+    .bm-view-toggle button {
+      border-radius: 999px;
+      border: none;
+      padding: 0.28rem 0.7rem;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-view-toggle button.bm-view-active {
+      background: rgba(15, 23, 42, 0.98);
+      color: #f9fafb;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.4);
+    }
+
+    .bm-card-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    @media (max-width: 992px) {
+      .bm-card-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 576px) {
+      .bm-card-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bm-job-card {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(248, 250, 252, 0.96);
+      padding: 0.55rem 0.6rem;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .bm-job-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .bm-job-card-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .bm-job-card-meta {
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-subpanel {
+      border-radius: 0.9rem;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      padding: 0.55rem 0.6rem;
+      background: rgba(248, 250, 252, 0.96);
+      margin-top: 0.25rem;
+    }
+
+    .bm-pill-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
+      gap: 0.4rem;
     }
 
-    .bm-quick-action-btn {
+    .bm-pill {
       border-radius: 999px;
-      border: 1px dashed #d1d5db;
-      background: #f9fafb;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
       font-size: 0.78rem;
-      padding: 4px 8px;
+      background: rgba(248, 250, 252, 0.97);
+      color: #0f172a;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 0.25rem;
+    }
+
+    .bm-pill-icon {
+      font-size: 0.88rem;
+      color: rgba(59, 130, 246, 0.9);
+    }
+
+    .bm-pill-ghost {
+      background: rgba(248, 250, 252, 0.32);
+    }
+
+    .bm-badge-small {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(248, 250, 252, 0.96);
       color: #374151;
     }
 
-    .bm-quick-action-btn i {
-      font-size: 0.9rem;
-      color: #0ea5e9;
+    .bm-badge-small-soft {
+      background: rgba(15, 23, 42, 0.88);
+      color: #f9fafb;
+      border-color: rgba(148, 163, 184, 0.85);
+    }
+
+    .bm-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #f97373;
+    }
+
+    .bm-calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    @media (max-width: 768px) {
+      .bm-calculator-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bm-mini-card {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.6rem 0.65rem;
+      background: rgba(248, 250, 252, 0.97);
+      font-size: 0.78rem;
+    }
+
+    .bm-mini-card-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+      color: #0f172a;
+    }
+
+    .bm-mini-card-sub {
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+      margin-bottom: 0.35rem;
+    }
+
+    .bm-mini-card-result {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .bm-pill-filter {
+      border-radius: 999px;
+      padding: 0.24rem 0.7rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.76rem;
+      background: rgba(248, 250, 252, 0.96);
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .bm-pill-filter-active {
+      background: rgba(15, 23, 42, 0.96);
+      color: #f9fafb;
+      border-color: rgba(148, 163, 184, 0.85);
+    }
+
+    .bm-section-notice {
+      font-size: 0.78rem;
+      color: var(--bm-text-muted);
+      border-radius: 0.9rem;
+      border: 1px dashed rgba(148, 163, 184, 0.65);
+      padding: 0.55rem 0.6rem;
+      background: rgba(248, 250, 252, 0.98);
+    }
+
+    .bm-section-notice strong {
+      color: #0f172a;
+    }
+
+    .bm-pill-tab-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      padding: 0.14rem;
+      background: rgba(248, 250, 252, 0.98);
+    }
+
+    .bm-pill-tab {
+      border-radius: 999px;
+      border: none;
+      padding: 0.28rem 0.8rem;
+      font-size: 0.78rem;
+      background: transparent;
+      color: var(--bm-text-muted);
+    }
+
+    .bm-pill-tab-active {
+      background: rgba(15, 23, 42, 0.98);
+      color: #f9fafb;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.45);
+    }
+
+    .bm-subtitle-soft {
+      font-size: 0.76rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-chip-tag {
+      font-size: 0.72rem;
+      padding: 0.22rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(248, 250, 252, 0.98);
+    }
+
+    .bm-badge-outline {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #4b5563;
+      background: rgba(248, 250, 252, 0.97);
+    }
+
+    .bm-pill-tag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.96);
+      color: var(--bm-text-muted);
+      border: 1px dashed rgba(148, 163, 184, 0.7);
     }
 
     .bm-fab {
       position: fixed;
-      bottom: 14px;
-      right: 14px;
-      width: 46px;
-      height: 46px;
+      right: 1.6rem;
+      bottom: 1.4rem;
+      z-index: 1030;
+      width: 50px;
+      height: 50px;
       border-radius: 999px;
-      background: linear-gradient(135deg, #13b38b, #22c55e);
-      color: #ffffff;
       border: none;
+      background: radial-gradient(circle at 0 0, #bbf7d0, transparent 55%),
+        radial-gradient(circle at 100% 0, #a7f3d0, transparent 60%),
+        linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 18px 40px rgba(22, 163, 74, 0.65);
-      cursor: pointer;
-      z-index: 1040;
-    }
-
-    .bm-fab i {
+      box-shadow: 0 20px 45px rgba(22, 163, 74, 0.65);
       font-size: 1.4rem;
     }
 
-    @media (max-width: 575.98px) {
+    .bm-fab:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 991.98px) {
       .bm-fab {
-        bottom: 12px;
-        right: 10px;
+        right: 1.1rem;
+        bottom: 1.1rem;
+      }
+    }
+
+    .bm-fab-menu {
+      position: fixed;
+      right: 1.6rem;
+      bottom: 4.3rem;
+      z-index: 1028;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .bm-fab-menu-open {
+      display: flex;
+    }
+
+    .bm-fab-chip {
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(248, 250, 252, 0.97);
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+      cursor: pointer;
+    }
+
+    .bm-fab-chip-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(59, 130, 246, 0.1);
+      color: #1d4ed8;
+      font-size: 1rem;
+    }
+
+    .bm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.42);
+      z-index: 1025;
+      display: none;
+    }
+
+    .bm-overlay-open {
+      display: block;
+    }
+
+    .bm-global-search-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8vh;
+      z-index: 1026;
+      pointer-events: none;
+    }
+
+    .bm-global-search-inner {
+      width: min(640px, 100% - 2.4rem);
+      background: rgba(248, 250, 252, 0.98);
+      border-radius: 1.2rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.75);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.14s ease, transform 0.14s ease;
+      pointer-events: auto;
+    }
+
+    .bm-global-search-panel-open .bm-global-search-inner {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bm-global-search-header {
+      padding: 0.65rem 0.8rem 0.55rem;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.95);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .bm-global-search-header-input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .bm-global-search-input {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.35rem 2.1rem 0.35rem 2.1rem;
+      font-size: 0.82rem;
+      background: rgba(248, 250, 252, 0.98);
+      color: #0f172a;
+    }
+
+    .bm-global-search-input::placeholder {
+      color: rgba(148, 163, 184, 0.9);
+    }
+
+    .bm-global-search-icon-left {
+      position: absolute;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(107, 114, 128, 0.95);
+      font-size: 0.9rem;
+    }
+
+    .bm-global-search-icon-right {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(148, 163, 184, 0.95);
+      font-size: 0.9rem;
+    }
+
+    .bm-global-search-footer {
+      padding: 0.4rem 0.85rem 0.45rem;
+      border-top: 1px solid rgba(226, 232, 240, 0.95);
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .bm-kbd {
+      border-radius: 0.3rem;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      padding: 0.08rem 0.35rem;
+      font-size: 0.72rem;
+      background: rgba(248, 250, 252, 0.98);
+      color: #4b5563;
+    }
+
+    .bm-global-search-body {
+      max-height: 360px;
+      overflow: auto;
+      padding: 0.35rem 0.75rem 0.55rem;
+    }
+
+    .bm-search-section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(148, 163, 184, 0.95);
+      margin: 0.4rem 0 0.2rem;
+    }
+
+    .bm-search-result-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bm-search-result-item {
+      border-radius: 0.6rem;
+      padding: 0.35rem 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+    }
+
+    .bm-search-result-item:hover {
+      background: rgba(239, 246, 255, 0.95);
+    }
+
+    .bm-search-result-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(219, 234, 254, 0.95);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #1d4ed8;
+      font-size: 0.9rem;
+    }
+
+    .bm-search-result-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.02rem;
+    }
+
+    .bm-search-result-title {
+      font-size: 0.78rem;
+      color: #0f172a;
+    }
+
+    .bm-search-result-sub {
+      font-size: 0.7rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-search-result-pill {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(248, 250, 252, 0.96);
+      color: #4b5563;
+    }
+
+    .bm-search-empty {
+      font-size: 0.76rem;
+      color: var(--bm-text-soft);
+      padding: 0.3rem 0.4rem;
+    }
+
+    .bm-card-soft {
+      border-radius: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 0.55rem 0.6rem;
+      font-size: 0.78rem;
+      background: rgba(248, 250, 252, 0.95);
+    }
+
+    .bm-card-soft-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #020617;
+      margin-bottom: 0.15rem;
+    }
+
+    .bm-card-soft-sub {
+      font-size: 0.76rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-section-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .bm-card-highlight {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      background:
+        radial-gradient(circle at 0 0, rgba(191, 219, 254, 0.9), rgba(248, 250, 252, 0.98));
+      padding: 0.55rem 0.6rem;
+      font-size: 0.78rem;
+    }
+
+    .bm-card-highlight-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 0.1rem;
+    }
+
+    .bm-card-highlight-sub {
+      font-size: 0.76rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-pill-large {
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(248, 250, 252, 0.96);
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .bm-pill-large-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(219, 234, 254, 0.95);
+      color: #1d4ed8;
+      font-size: 0.98rem;
+    }
+
+    .bm-pill-large-text-main {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    .bm-pill-large-text-sub {
+      font-size: 0.72rem;
+      color: var(--bm-text-soft);
+    }
+
+    .bm-input-inline {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 576px) {
+      .bm-topbar-center {
+        display: none;
+      }
+
+      .bm-content-wrapper {
+        padding-top: 0.4rem;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="bm-app-layout">
-    <!-- SIDEBAR -->
+    <!-- Sidebar -->
     <aside id="bm-sidebar" class="bm-sidebar">
       <div class="bm-sidebar-header">
-        <div class="bm-sidebar-brand">
-          <div class="bm-sidebar-logo">
-            <i class="bi bi-wrench-adjust"></i>
+        <div class="bm-sidebar-logo">
+          <div class="bm-sidebar-logo-icon">
+            <i class="bi bi-wrench-adjustable"></i>
           </div>
-          <div class="bm-sidebar-title-wrap">
-            <div class="bm-sidebar-title">BEN MOTOR POS</div>
-            <div class="bm-sidebar-subtitle">Workshop Dashboard</div>
+          <div>
+            <div class="bm-sidebar-logo-text">BEN MOTOR</div>
+            <div class="bm-sidebar-logo-sub">อู่ซ่อม + POS ส่วนตัว</div>
           </div>
         </div>
-        <button id="bm-sidebar-toggle" type="button" class="bm-sidebar-toggle-btn" aria-label="ย่อ/ขยายเมนูด้านข้าง">
+        <button id="bm-sidebar-toggle" class="btn bm-sidebar-toggle" type="button">
           <i class="bi bi-layout-sidebar-inset"></i>
         </button>
       </div>
 
+      <div class="bm-nav-section-label">เมนูหลัก</div>
       <nav class="bm-sidebar-nav" aria-label="เมนูหลัก">
-        <div class="bm-nav-section-label">ภาพรวม</div>
-        <ul class="bm-nav-list mb-1">
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link active" data-section="dashboard">
-              <span class="bm-nav-link-icon"><i class="bi bi-speedometer2"></i></span>
-              <span class="bm-nav-link-label">แดชบอร์ด</span>
-              <span class="bm-nav-link-badge">วันนี้</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="jobs">
-              <span class="bm-nav-link-icon"><i class="bi bi-kanban"></i></span>
-              <span class="bm-nav-link-label">งานซ่อม</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="pos">
-              <span class="bm-nav-link-icon"><i class="bi bi-receipt-cutoff"></i></span>
-              <span class="bm-nav-link-label">เปิดบิล / POS</span>
-            </a>
-          </li>
-        </ul>
+        <button
+          class="bm-nav-link bm-nav-link-active"
+          data-section-target="dashboard"
+          type="button"
+        >
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-grid-1x2"></i>
+          </span>
+          <span class="bm-nav-link-label">แดชบอร์ด</span>
+          <span class="bm-nav-pill">วันนี้</span>
+        </button>
 
-        <div class="bm-nav-section-label">ข้อมูลร้าน</div>
-        <ul class="bm-nav-list mb-1">
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="stock">
-              <span class="bm-nav-link-icon"><i class="bi bi-box-seam"></i></span>
-              <span class="bm-nav-link-label">สต็อก &amp; อะไหล่</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="customers">
-              <span class="bm-nav-link-icon"><i class="bi bi-people"></i></span>
-              <span class="bm-nav-link-label">ลูกค้า &amp; รถลูกค้า</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="repair-knowledge">
-              <span class="bm-nav-link-icon"><i class="bi bi-layers"></i></span>
-              <span class="bm-nav-link-label">แนะนำการซ่อม</span>
-            </a>
-          </li>
-        </ul>
+        <button class="bm-nav-link" data-section-target="jobs" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-clipboard-check"></i>
+          </span>
+          <span class="bm-nav-link-label">งานซ่อม</span>
+        </button>
 
-        <div class="bm-nav-section-label">วิเคราะห์ / ตั้งค่า</div>
-        <ul class="bm-nav-list">
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="reports">
-              <span class="bm-nav-link-icon"><i class="bi bi-graph-up-arrow"></i></span>
-              <span class="bm-nav-link-label">รายงาน &amp; สรุปยอด</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="tools">
-              <span class="bm-nav-link-icon"><i class="bi bi-tools"></i></span>
-              <span class="bm-nav-link-label">เครื่องมือช่าง</span>
-            </a>
-          </li>
-          <li class="bm-nav-item">
-            <a href="#" class="bm-nav-link" data-section="settings">
-              <span class="bm-nav-link-icon"><i class="bi bi-gear"></i></span>
-              <span class="bm-nav-link-label">ตั้งค่า / ระบบ</span>
-            </a>
-          </li>
-        </ul>
+        <button class="bm-nav-link" data-section-target="pos" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-receipt-cutoff"></i>
+          </span>
+          <span class="bm-nav-link-label">เปิดบิล / POS</span>
+          <span class="bm-nav-pill bm-nav-pill-soft">เร็ว ๆนี้</span>
+        </button>
+
+        <button class="bm-nav-link" data-section-target="stock" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-box-seam"></i>
+          </span>
+          <span class="bm-nav-link-label">สต็อก &amp; อะไหล่</span>
+        </button>
+
+        <button class="bm-nav-link" data-section-target="customers" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-people"></i>
+          </span>
+          <span class="bm-nav-link-label">ลูกค้า &amp; รถลูกค้า</span>
+        </button>
+
+        <button class="bm-nav-link" data-section-target="repair-knowledge" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-lightbulb"></i>
+          </span>
+          <span class="bm-nav-link-label">แนะนำการซ่อม</span>
+        </button>
+
+        <div class="bm-nav-section-label">รายงาน &amp; ระบบ</div>
+
+        <button class="bm-nav-link" data-section-target="reports" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-graph-up-arrow"></i>
+          </span>
+          <span class="bm-nav-link-label">รายงาน &amp; สรุปยอด</span>
+        </button>
+
+        <button class="bm-nav-link" data-section-target="settings" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-gear-wide-connected"></i>
+          </span>
+          <span class="bm-nav-link-label">ตั้งค่า / ระบบ</span>
+        </button>
+
+        <button class="bm-nav-link" data-section-target="tools" type="button">
+          <span class="bm-nav-link-icon">
+            <i class="bi bi-tools"></i>
+          </span>
+          <span class="bm-nav-link-label">เครื่องมือช่าง</span>
+        </button>
       </nav>
 
-      <div class="bm-sidebar-footer">
-        <div class="bm-user-mini">
-          <div class="bm-user-mini-left">
-            <div class="bm-user-avatar" id="bm-user-avatar">
-              <i class="bi bi-person-fill"></i>
-            </div>
-            <div class="bm-user-info">
-              <div class="bm-user-name" id="bm-user-name">ช่าง</div>
-              <div class="bm-user-email" id="bm-user-email">email@example.com</div>
-            </div>
+      <div class="bm-sidebar-footer mt-2">
+        <div class="bm-sidebar-user">
+          <div class="bm-sidebar-user-avatar">
+            <i class="bi bi-person"></i>
           </div>
-          <button type="button" id="bm-logout-btn" class="bm-logout-btn">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>ออก</span>
-          </button>
+          <div>
+            <div class="bm-sidebar-user-main" id="bm-user-name">ช่าง BEN</div>
+            <div class="bm-sidebar-user-sub" id="bm-user-email">demo@benmotor.local</div>
+          </div>
         </div>
-        <div class="bm-build-label">
-          <span class="bm-build-pill">เวอร์ชันอู่ : v0.1</span>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="bm-sidebar-footer-text">เวอร์ชันใช้งานส่วนตัว v0.1</span>
+          <button id="bm-logout-btn" class="bm-sidebar-logout-btn" type="button">
+            <i class="bi bi-box-arrow-right me-1"></i>
+            ออกจากระบบ
+          </button>
         </div>
       </div>
     </aside>
 
-    <!-- MAIN -->
-    <main class="bm-main">
-      <!-- TOPBAR -->
+    <!-- Main -->
+    <main id="bm-main" class="bm-main">
+      <!-- Topbar -->
       <header class="bm-topbar">
         <div class="bm-topbar-inner">
           <div class="bm-topbar-left">
             <button
-              id="bm-sidebar-toggle-mobile"
+              id="bm-topbar-hamburger"
+              class="btn btn-outline-secondary btn-sm rounded-circle bm-topbar-hamburger"
               type="button"
-              class="btn btn-light btn-sm d-inline-flex d-md-none align-items-center justify-content-center me-1"
-              style="border-radius:999px;border:1px solid #e5e7eb;background:#f9fafb;width:32px;height:32px;"
-              aria-label="เปิด/ปิดเมนูด้านข้าง"
             >
               <i class="bi bi-list"></i>
             </button>
-            <div>
+            <div class="bm-topbar-title-group">
               <div id="bm-topbar-title" class="bm-topbar-title">แดชบอร์ด BEN MOTOR</div>
               <div id="bm-topbar-subtitle" class="bm-topbar-subtitle">
-                ภาพรวมงานซ่อมวันนี้, เงินเข้า, รถยังค้างอู่
+                ดูภาพรวมงานซ่อม, งานค้าง, สต็อก และลูกค้าของวันนี้แบบรวดเดียว
               </div>
             </div>
           </div>
 
-          <div class="bm-topbar-center d-none d-sm-block">
-            <div class="bm-search-wrap">
-              <i class="bi bi-search bm-search-icon-left"></i>
+          <div class="bm-topbar-center">
+            <div class="bm-search-wrapper">
+              <i class="bi bi-search bm-search-icon"></i>
               <input
-                id="bm-global-search"
+                id="bm-search-input"
                 type="search"
-                class="bm-search-input"
-                placeholder="ค้นหาทะเบียน / ชื่อลูกค้า / เบอร์โทร / เลขบิล (กด Ctrl + K)"
+                class="form-control bm-search-input"
+                placeholder="ค้นหาทะเบียน / ชื่อลูกค้า / เบอร์โทร / เลขบิล (กด Ctrl + K ก็ได้)"
+                autocomplete="off"
               >
-              <span class="bm-search-kbd d-none d-md-inline-flex">Ctrl + K</span>
+              <span class="bm-search-kbd d-none d-md-inline-flex">
+                <span class="me-1">Ctrl</span>+
+                <span>K</span>
+              </span>
             </div>
           </div>
 
           <div class="bm-topbar-right">
-            <div class="bm-topbar-datetime">
-              <div id="bm-datetime-main" class="bm-topbar-datetime-main">--:--</div>
-              <div id="bm-datetime-sub" class="bm-topbar-datetime-sub">--</div>
+            <div class="bm-datetime text-end">
+              <div id="bm-datetime-main" class="bm-datetime-main">วันนี้</div>
+              <div id="bm-datetime-sub" class="bm-datetime-sub">--:-- น.</div>
             </div>
-            <div class="bm-topbar-avatar">
-              <i class="bi bi-person"></i>
+            <div class="bm-user-pill">
+              <div id="bm-user-avatar" class="bm-user-avatar">
+                <i class="bi bi-person"></i>
+              </div>
+              <div class="bm-user-meta d-none d-sm-flex">
+                <div id="bm-user-name-pill" class="bm-user-name">ช่าง BEN</div>
+                <div id="bm-user-email-pill" class="bm-user-email">demo@benmotor.local</div>
+              </div>
+              <button
+                id="bm-user-menu-btn"
+                class="bm-user-menu-btn"
+                type="button"
+                aria-label="เมนูผู้ใช้"
+              >
+                <i class="bi bi-chevron-down"></i>
+              </button>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- CONTENT -->
-      <section class="bm-content">
-        <!-- DASHBOARD -->
+      <!-- Content -->
+      <div class="bm-content-wrapper">
+        <!-- Dashboard -->
         <section id="section-dashboard" class="bm-section bm-section-active">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
-              <div class="bm-section-title">แดชบอร์ดภาพรวมอู่วันนี้</div>
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
+              <div class="bm-section-title">แดชบอร์ด BEN MOTOR</div>
               <div class="bm-section-subtitle">
-                ดูงานซ่อมที่ต้องลุย, งานค้าง, และเงินเข้าออกของวันนี้แบบรวดเดียว
+                ดูภาพรวมงานซ่อม, งานค้าง, สต็อก และลูกค้าของวันนี้แบบรวดเดียว
               </div>
             </div>
             <div class="bm-section-toolbar">
@@ -954,59 +1891,153 @@
           <div class="row g-2 g-md-3 bm-grid-gap mb-2">
             <div class="col-12 col-md-4">
               <div class="bm-card">
+                <div class="bm-card-header">
+                  <div class="bm-card-header-title-group">
+                    <div class="bm-card-title">ยอดวันนี้</div>
+                    <div class="bm-card-subtitle">ค่าแรง + อะไหล่ + รับซื้อ/ขายรถ</div>
+                  </div>
+                  <span class="bm-card-tag">ภาพรวมวันนี้</span>
+                </div>
                 <div class="bm-card-body">
-                  <div class="bm-card-title">ยอดวันนี้</div>
-                  <div class="bm-card-subtitle">ค่าแรง + อะไหล่ + รับซื้อ/ขายรถ</div>
-                  <div class="bm-stat-value" id="bm-stat-today-total">0 บาท</div>
-                  <div class="d-flex justify-content-between align-items-center mt-1">
-                    <div class="bm-stat-label">
-                      ค่าแรง: <span id="bm-stat-today-labor">0</span> บาท
+                  <div class="bm-stat-grid mb-1">
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">ยอดรวมวันนี้</div>
+                      <div id="bm-stat-today-total" class="bm-stat-value">0 บาท</div>
+                      <div class="bm-stat-sub">ทั้งค่าแรงและอะไหล่รวมกัน</div>
                     </div>
-                    <div class="bm-stat-label">
-                      อะไหล่: <span id="bm-stat-today-parts">0</span> บาท
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">ค่าแรงวันนี้</div>
+                      <div id="bm-stat-today-labor" class="bm-stat-value">0 บาท</div>
+                      <div class="bm-stat-sub">เฉพาะค่าแรงช่าง</div>
                     </div>
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">อะไหล่วันนี้</div>
+                      <div id="bm-stat-today-parts" class="bm-stat-value">0 บาท</div>
+                      <div class="bm-stat-sub">ยอดขายอะไหล่ทั้งหมด</div>
+                    </div>
+                  </div>
+                  <div class="bm-note-text">
+                    ข้อมูลนี้จะใช้จาก <strong>data-mock.js</strong> ก่อน แล้วค่อยต่อกับ Firestore ภายหลัง
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="col-12 col-md-4">
               <div class="bm-card">
+                <div class="bm-card-header">
+                  <div class="bm-card-header-title-group">
+                    <div class="bm-card-title">งานซ่อม</div>
+                    <div class="bm-card-subtitle">จำนวนงานแยกตามสถานะวันนี้</div>
+                  </div>
+                  <span class="bm-card-tag bm-card-tag-soft">
+                    <i class="bi bi-clipboard2-check me-1"></i>งานวันนี้
+                  </span>
+                </div>
                 <div class="bm-card-body">
-                  <div class="bm-card-title">งานซ่อม</div>
-                  <div class="bm-card-subtitle">จำนวนงานวันนี้แยกตามสถานะ</div>
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <div class="bm-stat-value" id="bm-stat-jobs-today">0</div>
-                      <div class="bm-stat-label">งานทั้งหมดวันนี้</div>
+                  <div class="bm-stat-grid mb-1">
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">งานทั้งหมด</div>
+                      <div id="bm-stat-jobs-total" class="bm-stat-value">0 งาน</div>
+                      <div class="bm-stat-sub">รวมทุกสถานะ</div>
                     </div>
-                    <div class="text-end">
-                      <div class="bm-stat-label mb-1">
-                        กำลังซ่อม: <span id="bm-stat-jobs-in-progress">0</span>
-                      </div>
-                      <div class="bm-stat-label mb-1">
-                        รออะไหล่: <span id="bm-stat-jobs-waiting-parts">0</span>
-                      </div>
-                      <div class="bm-stat-label">
-                        รอชำระเงิน: <span id="bm-stat-jobs-wait-pay">0</span>
-                      </div>
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">กำลังซ่อม</div>
+                      <div id="bm-stat-jobs-in-progress" class="bm-stat-value">0 งาน</div>
+                      <div class="bm-stat-sub">รถที่อยู่บนลิฟต์/กำลังทำ</div>
                     </div>
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">รออะไหล่/รอชำระ</div>
+                      <div id="bm-stat-jobs-waiting" class="bm-stat-value">0 งาน</div>
+                      <div class="bm-stat-sub">ยังปิดบิลไม่ได้</div>
+                    </div>
+                  </div>
+                  <div class="bm-note-text">
+                    ตัวเลขมาจาก <strong>demoJobs</strong> ใน <strong>data-mock.js</strong> ให้
+                    <strong>dashboard.js</strong> เป็นคนดึงมาแสดง
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="col-12 col-md-4">
               <div class="bm-card">
+                <div class="bm-card-header">
+                  <div class="bm-card-header-title-group">
+                    <div class="bm-card-title">สต็อก &amp; ลูกค้า</div>
+                    <div class="bm-card-subtitle">ของใกล้หมด + ลูกค้าประจำ</div>
+                  </div>
+                  <span class="bm-card-tag bm-card-tag-soft">
+                    <i class="bi bi-stars me-1"></i>ภาพรวมร้าน
+                  </span>
+                </div>
                 <div class="bm-card-body">
-                  <div class="bm-card-title">สต็อก &amp; ลูกค้า</div>
-                  <div class="bm-card-subtitle">ของใกล้หมด + ลูกค้าประจำ</div>
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <div class="bm-stat-value" id="bm-stat-stock-low">0</div>
+                  <div class="bm-stat-grid mb-1">
+                    <div class="bm-stat-card">
                       <div class="bm-stat-label">อะไหล่ใกล้หมด</div>
+                      <div id="bm-stat-stock-low" class="bm-stat-value">0 รายการ</div>
+                      <div class="bm-stat-sub">สต็อก &lt;= จุดสั่งซื้อซ้ำ</div>
                     </div>
-                    <div class="text-end">
-                      <div class="bm-stat-value" id="bm-stat-customers-regular">0</div>
+                    <div class="bm-stat-card">
                       <div class="bm-stat-label">ลูกค้าประจำ</div>
+                      <div id="bm-stat-regular-customers" class="bm-stat-value">0 คน</div>
+                      <div class="bm-stat-sub">มาจาก mock ใน demoCustomers</div>
+                    </div>
+                    <div class="bm-stat-card">
+                      <div class="bm-stat-label">รถรับซื้อค้างอยู่</div>
+                      <div id="bm-stat-pending-buy" class="bm-stat-value">0 คัน</div>
+                      <div class="bm-stat-sub">เตรียมต่อยอดเป็นเมนูซื้อ/ขายรถ</div>
+                    </div>
+                  </div>
+                  <div class="bm-note-text">
+                    ส่วนนี้ไว้ให้ <strong>stock.js</strong> และ <strong>customers.js</strong>
+                    ใช้ข้อมูลร่วมกันในอนาคต
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-2 g-md-3 bm-grid-gap mb-2">
+            <div class="col-12 col-lg-6">
+              <div class="bm-card">
+                <div class="bm-card-header">
+                  <div class="bm-card-header-title-group">
+                    <div class="bm-card-title">วันนี้ต้องโฟกัสอะไร</div>
+                    <div class="bm-card-subtitle">งานด่วน งานค้าง และสิ่งที่ต้องรีบเคลียร์</div>
+                  </div>
+                  <span class="bm-card-tag bm-card-tag-soft">
+                    <i class="bi bi-exclamation-triangle me-1"></i>โฟกัสวันนี้
+                  </span>
+                </div>
+                <div class="bm-card-body">
+                  <div id="bm-focus-list" class="bm-focus-list">
+                    <div class="bm-empty-state">
+                      ส่วนนี้ให้ <strong>dashboard.js</strong> ใช้ demoJobs
+                      เลือกงานที่สำคัญมาขึ้นรายการ (งานด่วน งานค้างข้ามวัน ฯลฯ)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+              <div class="bm-card">
+                <div class="bm-card-header">
+                  <div class="bm-card-header-title-group">
+                    <div class="bm-card-title">ไทม์ไลน์วันนี้</div>
+                    <div class="bm-card-subtitle">ตั้งแต่รับรถเข้า จนถึงปิดบิลงานแต่ละใบ</div>
+                  </div>
+                  <span class="bm-card-tag bm-card-tag-soft">
+                    <i class="bi bi-clock-history me-1"></i>Blackbox วันนี้
+                  </span>
+                </div>
+                <div class="bm-card-body">
+                  <div id="bm-timeline-today" class="bm-timeline">
+                    <div class="bm-empty-state">
+                      ส่วนนี้ให้ <strong>dashboard.js</strong> สร้างรายการไทม์ไลน์จาก demoJobs เช่น
+                      <em>09:15 รับรถ Wave 110i ทะเบียน xxx</em>, <em>10:30 เริ่มซ่อม</em>,
+                      <em>11:45 ปิดบิล</em> เป็นต้น
                     </div>
                   </div>
                 </div>
@@ -1014,169 +2045,170 @@
             </div>
           </div>
 
-          <div class="row g-2 g-md-3 bm-grid-gap">
-            <div class="col-12 col-lg-7">
-              <div class="bm-card">
-                <div class="bm-card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <div>
-                      <div class="bm-card-title">บอร์ดงานซ่อมวันนี้</div>
-                      <div class="bm-card-subtitle">
-                        ลิสต์งานแบบบอร์ด แยกตามสถานะ เพื่อเห็นภาพรวมทั้งวัน
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row g-2 bm-grid-gap bm-scroll-y-soft">
-                    <div class="col-12 col-md-6">
-                      <div class="bm-kanban-col-title">
-                        <span>รอรับเข้า</span>
-                        <span class="bm-kanban-col-count" id="bm-kanban-count-queue">0</span>
-                      </div>
-                      <div id="bm-kanban-col-queue" class="bm-kanban-col">
-                        <!-- jobs.js จะเติมข้อมูล -->
-                        <div class="bm-placeholder">ยังไม่มีงานรอรับเข้าซ่อม</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <div class="bm-kanban-col-title">
-                        <span>กำลังซ่อม</span>
-                        <span class="bm-kanban-col-count" id="bm-kanban-count-in-progress">0</span>
-                      </div>
-                      <div id="bm-kanban-col-in-progress" class="bm-kanban-col">
-                        <!-- jobs.js จะเติมข้อมูล -->
-                        <div class="bm-placeholder">ยังไม่มีงานกำลังซ่อมในขณะนี้</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <div class="bm-kanban-col-title">
-                        <span>รออะไหล่</span>
-                        <span class="bm-kanban-col-count" id="bm-kanban-count-waiting-parts">0</span>
-                      </div>
-                      <div id="bm-kanban-col-waiting-parts" class="bm-kanban-col">
-                        <!-- jobs.js จะเติมข้อมูล -->
-                        <div class="bm-placeholder">ใช้ดูงานที่ต้องรออะไหล่มาส่งก่อนซ่อมต่อ</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                      <div class="bm-kanban-col-title">
-                        <span>รอชำระเงิน</span>
-                        <span class="bm-kanban-col-count" id="bm-kanban-count-wait-pay">0</span>
-                      </div>
-                      <div id="bm-kanban-col-wait-pay" class="bm-kanban-col">
-                        <!-- jobs.js จะเติมข้อมูล -->
-                        <div class="bm-placeholder">งานที่ทำเสร็จแล้ว แต่ลูกค้ายังไม่ชำระ</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">บอร์ดงานซ่อมวันนี้</div>
+                <div class="bm-card-subtitle">ลากการ์ดเพื่อเปลี่ยนสถานะ (Kanban Board)</div>
               </div>
+              <span class="bm-card-tag bm-card-tag-soft">
+                <i class="bi bi-kanban me-1"></i>สถานะงานวันนี้
+              </span>
             </div>
-
-            <div class="col-12 col-lg-5">
-              <div class="bm-card mb-2">
-                <div class="bm-card-body">
-                  <div class="bm-card-title">วันนี้ต้องโฟกัสอะไร</div>
-                  <div class="bm-card-subtitle">
-                    งานด่วน, งานค้างข้ามวัน, รถที่ควรปิดงานให้จบ
-                  </div>
-                  <ul id="bm-focus-list" class="bm-timeline">
-                    <li class="bm-timeline-item">
-                      <div class="bm-timeline-dot"></div>
-                      <div class="bm-timeline-body">
-                        <strong>ยังไม่มีงานที่ถูกมาร์กเป็น &quot;ด่วน&quot; ในวันนี้</strong><br>
-                        คุณสามารถใช้ jobs.js มาตั้ง rule ให้ดึงงานด่วนมาแสดงตรงนี้ได้
+            <div class="bm-card-body">
+              <div class="row g-2 g-md-3 bm-grid-gap">
+                <div class="col-12 col-lg-5 col-xl-3">
+                  <div class="bm-kanban-column" data-kanban-status="queue">
+                    <div class="bm-kanban-column-header">
+                      <div class="bm-kanban-column-title">รอรับเข้า / รอตรวจเช็ค</div>
+                      <span class="bm-kanban-count-pill" id="bm-kanban-count-queue">0 งาน</span>
+                    </div>
+                    <div id="bm-kanban-queue" class="bm-kanban-list">
+                      <div class="bm-empty-state">
+                        ให้ <strong>dashboard.js</strong> ใช้ demoJobs ที่ status = QUEUE มาแสดงเป็นการ์ด
                       </div>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-5 col-xl-3">
+                  <div class="bm-kanban-column" data-kanban-status="in-progress">
+                    <div class="bm-kanban-column-header">
+                      <div class="bm-kanban-column-title">กำลังซ่อม</div>
+                      <span class="bm-kanban-count-pill" id="bm-kanban-count-in-progress">0 งาน</span>
+                    </div>
+                    <div id="bm-kanban-in-progress" class="bm-kanban-list">
+                      <div class="bm-empty-state">
+                        ให้ <strong>dashboard.js</strong> แปลง demoJobs status = IN_PROGRESS เป็นการ์ด
+                        พร้อมเวลาเริ่มซ่อม
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-5 col-xl-3">
+                  <div class="bm-kanban-column" data-kanban-status="waiting-parts">
+                    <div class="bm-kanban-column-header">
+                      <div class="bm-kanban-column-title">รออะไหล่</div>
+                      <span class="bm-kanban-count-pill" id="bm-kanban-count-waiting-parts">0 งาน</span>
+                    </div>
+                    <div id="bm-kanban-waiting-parts" class="bm-kanban-list">
+                      <div class="bm-empty-state">
+                        ให้ <strong>dashboard.js</strong> แสดงงานที่ status = WAITING_PARTS
+                        เพื่อเห็นงานที่ติดค้างเพราะอะไหล่
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-5 col-xl-3">
+                  <div class="bm-kanban-column" data-kanban-status="waiting-payment">
+                    <div class="bm-kanban-column-header">
+                      <div class="bm-kanban-column-title">รอชำระเงิน / รอรับรถ</div>
+                      <span class="bm-kanban-count-pill" id="bm-kanban-count-waiting-payment">0 งาน</span>
+                    </div>
+                    <div id="bm-kanban-waiting-payment" class="bm-kanban-list">
+                      <div class="bm-empty-state">
+                        ให้ <strong>dashboard.js</strong> แสดงงานที่ status = WAITING_PAYMENT
+                        พร้อมยอดที่ต้องเก็บเงินจากลูกค้า
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-5 col-xl-3">
+                  <div class="bm-kanban-column" data-kanban-status="done">
+                    <div class="bm-kanban-column-header">
+                      <div class="bm-kanban-column-title">เสร็จแล้ววันนี้</div>
+                      <span class="bm-kanban-count-pill" id="bm-kanban-count-done">0 งาน</span>
+                    </div>
+                    <div id="bm-kanban-done" class="bm-kanban-list">
+                      <div class="bm-empty-state">
+                        ให้ <strong>dashboard.js</strong> โชว์งานที่ปิดบิลแล้วของวันนี้
+                        เพื่อใช้ดูจำนวนงานที่จบจริง ๆ
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div class="bm-card">
-                <div class="bm-card-body">
-                  <div class="bm-card-title">ไทม์ไลน์วันนี้</div>
-                  <div class="bm-card-subtitle">
-                    บันทึกเหตุการณ์สำคัญ เช่น รับรถ, เริ่มซ่อม, ปิดบิล
-                  </div>
-                  <ul id="bm-timeline-today" class="bm-timeline">
-                    <li class="bm-timeline-item">
-                      <div class="bm-timeline-dot bm-timeline-dot-muted"></div>
-                      <div class="bm-timeline-body">
-                        <strong>ยังไม่มีข้อมูลจริง</strong><br>
-                        dashboard.js สามารถดึง history จากงานซ่อมทั้งหมดมาสร้างไทม์ไลน์ตรงนี้
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+              <div class="bm-note-text mt-2">
+                ในเวอร์ชันต่อไป สามารถลากการ์ดจากคอลัมน์หนึ่งไปอีกคอลัมน์เพื่อเปลี่ยนสถานะ แล้วให้
+                <strong>dashboard.js</strong> ส่งข้อมูลไป Firestore ได้
               </div>
             </div>
           </div>
         </section>
 
-        <!-- JOBS -->
+        <!-- Jobs -->
         <section id="section-jobs" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">งานซ่อมทั้งหมด</div>
               <div class="bm-section-subtitle">
                 ดูงานซ่อมวันนี้และย้อนหลัง แยกตามสถานะ/ประเภทงาน
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <button
-                type="button"
-                class="bm-chip-light"
-                id="bm-jobs-view-table-btn"
-              >
-                <i class="bi bi-table"></i>
-                มุมมองตาราง
-              </button>
-              <button
-                type="button"
-                class="bm-chip-light"
-                id="bm-jobs-view-card-btn"
-              >
-                <i class="bi bi-grid-3x3-gap"></i>
-                มุมมองการ์ด
-              </button>
+              <div class="bm-view-toggle">
+                <button
+                  id="bm-jobs-view-table-btn"
+                  class="bm-view-active"
+                  type="button"
+                >
+                  <i class="bi bi-table me-1"></i>มุมมองตาราง
+                </button>
+                <button
+                  id="bm-jobs-view-card-btn"
+                  type="button"
+                >
+                  <i class="bi bi-grid-3x3-gap me-1"></i>มุมมองการ์ด
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="bm-card mb-2">
+          <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">ค้นหางานซ่อม</div>
+                <div class="bm-card-subtitle">กรองจากทะเบียน, ชื่อลูกค้า, สถานะ และช่วงวันที่</div>
+              </div>
+            </div>
             <div class="bm-card-body">
-              <div class="row g-2 align-items-end">
-                <div class="col-12 col-md-3">
-                  <label class="form-label mb-1">ค้นหางานซ่อม</label>
+              <div class="row g-2">
+                <div class="col-12 col-md-4">
+                  <label for="bm-jobs-search" class="bm-form-label">ทะเบียน / ชื่อลูกค้า / เบอร์โทร</label>
                   <input
-                    type="text"
-                    class="form-control form-control-sm"
                     id="bm-jobs-search"
-                    placeholder="ทะเบียน / ชื่อลูกค้า / เบอร์โทร"
+                    type="search"
+                    class="form-control bm-input"
+                    placeholder="เช่น 1กก1234 / สมชาย / 08x-xxx-xxxx"
                   >
                 </div>
                 <div class="col-6 col-md-2">
-                  <label class="form-label mb-1">สถานะ</label>
-                  <select id="bm-jobs-status" class="form-select form-select-sm">
+                  <label for="bm-jobs-status" class="bm-form-label">สถานะ</label>
+                  <select id="bm-jobs-status" class="form-select bm-select">
                     <option value="all">ทั้งหมด</option>
                     <option value="queue">รอรับเข้า</option>
                     <option value="in-progress">กำลังซ่อม</option>
                     <option value="waiting-parts">รออะไหล่</option>
-                    <option value="wait-pay">รอชำระเงิน</option>
+                    <option value="waiting-payment">รอชำระเงิน</option>
                     <option value="done">เสร็จแล้ว</option>
                   </select>
                 </div>
                 <div class="col-6 col-md-2">
-                  <label class="form-label mb-1">วันที่เริ่ม (จาก)</label>
-                  <input type="date" id="bm-jobs-date-from" class="form-control form-control-sm">
+                  <label for="bm-jobs-date-from" class="bm-form-label">วันที่เริ่ม (จาก)</label>
+                  <input id="bm-jobs-date-from" type="date" class="form-control bm-input">
                 </div>
                 <div class="col-6 col-md-2">
-                  <label class="form-label mb-1">ถึงวันที่</label>
-                  <input type="date" id="bm-jobs-date-to" class="form-control form-control-sm">
+                  <label for="bm-jobs-date-to" class="bm-form-label">ถึงวันที่</label>
+                  <input id="bm-jobs-date-to" type="date" class="form-control bm-input">
                 </div>
-                <div class="col-6 col-md-3 text-md-end">
-                  <button type="button" class="btn btn-sm btn-outline-secondary me-1" id="bm-jobs-clear-filter">
+                <div class="col-6 col-md-2 d-flex align-items-end justify-content-end gap-1">
+                  <button id="bm-jobs-clear-filter" class="bm-btn-outline-soft" type="button">
                     ล้างตัวกรอง
                   </button>
-                  <button type="button" class="btn btn-sm btn-primary" id="bm-jobs-filter-apply">
+                  <button id="bm-jobs-filter-apply" class="bm-btn-primary" type="button">
                     ใช้ตัวกรอง
                   </button>
                 </div>
@@ -1184,13 +2216,64 @@
             </div>
           </div>
 
-          <div class="bm-card">
-            <div class="bm-card-body">
-              <div id="bm-jobs-view-table" class="bm-placeholder">
-                มุมมองตารางงานซ่อม – jobs.js จะมาเติมตารางจริง (หัวคอลัมน์ เช่น เวลา, ทะเบียน, ลูกค้า, ยอด, สถานะ)
+          <div class="bm-card mb-2">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">มุมมองตารางงานซ่อม</div>
+                <div class="bm-card-subtitle">
+                  <span class="me-1">jobs.js จะมาเติมตารางจริง (หัวคอลัมน์ เช่น เวลา, ทะเบียน, ลูกค้า, ยอด, สถานะ)</span>
+                </div>
               </div>
-              <div id="bm-jobs-view-card" class="bm-placeholder" style="display:none;">
-                มุมมองการ์ดงานซ่อม – jobs.js จะมาแสดงงานเป็นการ์ดทีละคัน เลือกดูละเอียดย่อยได้ง่าย ๆ
+            </div>
+            <div class="bm-card-body">
+              <div id="bm-jobs-table-wrapper" class="bm-table-wrapper">
+                <table class="bm-table">
+                  <thead>
+                    <tr>
+                      <th>เวลา</th>
+                      <th>ทะเบียน / รุ่นรถ</th>
+                      <th>ลูกค้า / เบอร์โทร</th>
+                      <th>ประเภทงาน</th>
+                      <th>ยอดสุทธิ</th>
+                      <th>สถานะ</th>
+                      <th>จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bm-jobs-table-body">
+                    <tr>
+                      <td colspan="7">
+                        <div class="bm-empty-state">
+                          ให้ <strong>jobs.js</strong> ใช้ข้อมูลจาก <strong>demoJobs</strong>
+                          มาแสดงตารางงานซ่อมจริง พร้อมปุ่มดูรายละเอียดแต่ละงาน
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="bm-jobs-card-list" class="bm-card-list mt-2" style="display: none;">
+                <div class="bm-empty-state">
+                  ส่วนมุมมองการ์ด ให้ <strong>jobs.js</strong> แปลง demoJobs เป็นการ์ดงานซ่อม
+                  เพื่อดูแบบภาพรวมได้ง่ายบนมือถือ
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">รายละเอียดงาน (Modal)</div>
+                <div class="bm-card-subtitle">
+                  ให้ <strong>jobs.js</strong> ใช้ modal นี้แสดงข้อมูลงานซ่อมแบบเต็ม
+                </div>
+              </div>
+            </div>
+            <div class="bm-card-body">
+              <div class="bm-section-notice">
+                modal จริงจะถูกสร้าง/ควบคุมโดย <strong>jobs.js</strong>
+                เพื่อแสดงรายละเอียดงาน (ลูกค้า, รถ, รายการซ่อม, ยอดเงิน, timeline งาน ฯลฯ)
               </div>
             </div>
           </div>
@@ -1198,210 +2281,401 @@
 
         <!-- POS -->
         <section id="section-pos" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">เปิดบิล / ใบรับรถ</div>
               <div class="bm-section-subtitle">
                 เปิดบิลเร็วด้วยสูตรซ่อม + เลือกอะไหล่จากสต็อก + คำนวณยอดอัตโนมัติ
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-lightning-charge"></i>
-                สูตรด่วน: น้ำมันเครื่อง / ผ้าเบรก / ยาง
+              <div class="bm-pill-group">
+                <button class="bm-pill">
+                  <span class="bm-pill-icon"><i class="bi bi-lightning-charge"></i></span>
+                  <span>สูตรด่วน: น้ำมันเครื่อง / ผ้าเบรก / ยาง</span>
+                </button>
               </div>
             </div>
           </div>
 
           <div class="bm-card">
-            <div class="bm-card-body">
-              <div class="bm-placeholder">
-                ส่วนนี้จะเป็นฟอร์ม POS เต็ม ๆ (ลูกค้า, รถ, รายการงาน, อะไหล่, ส่วนลด, ยอดสุทธิ, ข้อความส่งไลน์ลูกค้า)
-                ซึ่ง <strong>pos.js</strong> จะเป็นคนสร้าง element/logic จริงตามสเปกที่วางไว้
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">เปิดบิล / ใบรับรถ</div>
+                <div class="bm-card-subtitle">
+                  ส่วนนี้จะเป็นฟอร์ม POS เต็ม ๆ (ลูกค้า, รถ, รายการงาน, อะไหล่, ส่วนลด, ยอดสุทธิ, ข้อความส่งไลน์ลูกค้า)
+                </div>
               </div>
-              <div class="bm-quick-actions">
-                <button type="button" class="bm-quick-action-btn">
-                  <i class="bi bi-droplet-half"></i>
-                  เปลี่ยนน้ำมันเครื่อง
-                </button>
-                <button type="button" class="bm-quick-action-btn">
-                  <i class="bi bi-disc"></i>
-                  เปลี่ยนผ้าเบรก
-                </button>
-                <button type="button" class="bm-quick-action-btn">
-                  <i class="bi bi-tornado"></i>
-                  จัดเต็มเคลียร์ทั้งคัน
-                </button>
+            </div>
+            <div class="bm-card-body">
+              <div class="bm-section-notice">
+                ให้ <strong>pos.js</strong> มาสร้าง element/logic จริงตามสเปกที่วางไว้:
+                <ul class="mb-0 mt-1" style="padding-left: 1.1rem;">
+                  <li>ฟอร์มข้อมูลลูกค้า + รถ</li>
+                  <li>ตารางรายการค่าแรง/อะไหล่ (เพิ่ม/ลบแถว, เลือกจากสต็อก)</li>
+                  <li>คำนวณยอดรวม, ส่วนลด, เงินทอน</li>
+                  <li>ปุ่มเปิดบิลจากสูตรซ่อม (เชื่อมกับ repair-knowledge ภายหลัง)</li>
+                  <li>ปุ่มสร้างข้อความสรุปส่งให้ลูกค้าแล้วกดคัดลอกได้ทันที</li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- STOCK -->
+        <!-- Stock -->
         <section id="section-stock" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">สต็อก &amp; อะไหล่</div>
               <div class="bm-section-subtitle">
                 ดูของใกล้หมด, ตัวเดินเร็ว/ช้า, และรายละเอียดอะไหล่ทั้งหมด
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <span class="bm-chip-dot"></span>
-                <span>แจ้งเตือนของใกล้หมด</span>
-              </div>
+              <button class="bm-pill-large" type="button">
+                <span class="bm-pill-large-icon">
+                  <i class="bi bi-exclamation-circle"></i>
+                </span>
+                <span>
+                  <span class="bm-pill-large-text-main">แจ้งเตือนของใกล้หมด</span><br>
+                  <span class="bm-pill-large-text-sub">
+                    ให้ <strong>stock.js</strong> ใช้ข้อมูลจาก demoStock ตรวจจุดสั่งซื้อซ้ำ
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
 
           <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">สต็อก &amp; อะไหล่</div>
+                <div class="bm-card-subtitle">
+                  ตารางอะไหล่จะไล่ลงมาตรงนี้ (ชื่ออะไหล่, หมวด, ราคาทุน, ราคาขาย, จำนวนคงเหลือ, จุดสั่งซื้อซ้ำ ฯลฯ)
+                </div>
+              </div>
+            </div>
             <div class="bm-card-body">
-              <div class="bm-placeholder">
-                ตารางสต็อกอะไหล่จะอยู่ตรงนี้ (ชื่ออะไหล่, หมวด, ราคาทุน, ราคาขาย, จำนวนคงเหลือ, จุดสั่งซื้อซ้ำ)
-                ให้ <strong>stock.js</strong> มาสร้างตารางและเชื่อมกับ Firestore ในภายหลัง
+              <div class="bm-section-notice">
+                ส่วนนี้ให้ <strong>stock.js</strong> มาสร้างตาราง + ฟิลเตอร์ โดยใช้ข้อมูลจาก
+                <strong>demoStock</strong> ใน <strong>data-mock.js</strong> ก่อน
+                จากนั้นจึงย้ายไปใช้ Firestore ในเวอร์ชันถัดไป
               </div>
             </div>
           </div>
         </section>
 
-        <!-- CUSTOMERS -->
+        <!-- Customers -->
         <section id="section-customers" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">ลูกค้า &amp; รถลูกค้า</div>
               <div class="bm-section-subtitle">
                 ดูรายชื่อลูกค้าประจำ, รถที่ดูแลอยู่ และประวัติงานซ่อมแต่ละคัน
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-star-fill" style="color:#facc15;"></i>
-                ลูกค้าประจำ &amp; VIP
+              <div class="bm-pill-group">
+                <span class="bm-pill">
+                  <span class="bm-pill-icon"><i class="bi bi-star-fill"></i></span>
+                  ลูกค้าประจำ &amp; VIP
+                </span>
               </div>
             </div>
           </div>
 
           <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">ลูกค้า &amp; รถลูกค้า</div>
+                <div class="bm-card-subtitle">
+                  ตารางลูกค้า + รถลูกค้าจะอยู่ตรงนี้ ให้ <strong>customers.js</strong> มาสร้างตาราง
+                  + modal โปรไฟล์ลูกค้า
+                </div>
+              </div>
+            </div>
             <div class="bm-card-body">
-              <div class="bm-placeholder">
-                ตารางลูกค้า + รถลูกค้าจะอยู่ตรงนี้ ให้ <strong>customers.js</strong> มาสร้างตาราง + modal โปรไฟล์ลูกค้า
+              <div class="bm-section-notice">
+                ให้ <strong>customers.js</strong> ใช้ข้อมูลจาก demoCustomers เพื่อสร้าง:
+                <ul class="mb-0 mt-1" style="padding-left: 1.1rem;">
+                  <li>ตารางรายชื่อลูกค้า (ชื่อ, เบอร์, จำนวนรถ, จำนวนงานซ่อม, ยอดใช้จ่ายรวม)</li>
+                  <li>modal รายละเอียดลูกค้า + รถทั้งหมด + ประวัติงานซ่อมล่าสุด</li>
+                  <li>ระบบแท็กนิสัยลูกค้า เช่น เน้นของแท้, ชอบต่อราคา, คุยง่าย ฯลฯ</li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- REPAIR KNOWLEDGE -->
+        <!-- Repair Knowledge -->
         <section id="section-repair-knowledge" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">แนะนำการซ่อม</div>
               <div class="bm-section-subtitle">
                 เก็บสูตรซ่อมประจำตัวช่าง แยกตามอาการ/ระบบรถ และดึงมาเปิดบิลได้ทันที
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-file-earmark-text"></i>
-                สูตรซ่อมประจำอู่
+              <div class="bm-pill-tab-group">
+                <button class="bm-pill-tab bm-pill-tab-active" type="button" data-repair-tab="symptom">
+                  ตามอาการ
+                </button>
+                <button class="bm-pill-tab" type="button" data-repair-tab="system">
+                  ตามระบบ
+                </button>
+                <button class="bm-pill-tab" type="button" data-repair-tab="favorite">
+                  สูตรโปรด
+                </button>
               </div>
             </div>
           </div>
 
-          <div class="bm-card">
-            <div class="bm-card-body">
-              <div class="bm-placeholder">
-                ส่วนนี้จะมีแท็บ <strong>ตามอาการ / ตามระบบ / สูตรโปรด</strong> ให้
-                <strong>repair-knowledge.js</strong> มาสร้าง UI จริงและเชื่อมกับ POS
+          <div class="bm-section-group">
+            <div class="bm-card">
+              <div class="bm-card-header">
+                <div class="bm-card-header-title-group">
+                  <div class="bm-card-title">แนะนำการซ่อม</div>
+                  <div class="bm-card-subtitle">
+                    เก็บสูตรซ่อมประจำตัวช่าง แยกตามอาการ/ระบบรถ และดึงมาเปิดบิลได้ทันที
+                  </div>
+                </div>
+                <span class="bm-card-tag bm-card-tag-soft">สูตรซ่อมประจำอู่</span>
+              </div>
+              <div class="bm-card-body">
+                <div class="bm-section-notice">
+                  ส่วนนี้มีแท็บ <strong>ตามอาการ</strong> / <strong>ตามระบบ</strong> / <strong>สูตรโปรด</strong>
+                  ให้ <strong>repair-knowledge.js</strong> มาสร้าง UI จริงและเชื่อมกับ POS
+                  เพื่อเปิดบิลจากสูตรได้
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- REPORTS -->
+        <!-- Reports -->
         <section id="section-reports" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">รายงาน &amp; สรุปยอด</div>
               <div class="bm-section-subtitle">
-                ดูกำไรจริง, งานทำเงิน, งานแดกเวลา และ Heatmap งานซ่อมทั้งปี
+                ดูกำไรรวม, งานทำเงิน, งานแดกเวลา และ Heatmap งานซ่อมทั้งปี
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-cash-coin"></i>
-                กำไร/ชั่วโมงของช่าง
-              </div>
+              <button class="bm-pill-large" type="button">
+                <span class="bm-pill-large-icon">
+                  <i class="bi bi-activity"></i>
+                </span>
+                <span>
+                  <span class="bm-pill-large-text-main">กำไร/ชั่วโมงของช่าง</span><br>
+                  <span class="bm-pill-large-text-sub">
+                    ให้ <strong>reports.js</strong> สรุปกำไรต่อชั่วโมงจาก demoJobs ก่อน
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
 
           <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">รายงาน &amp; สรุปยอด</div>
+                <div class="bm-card-subtitle">
+                  รายงานกราฟ/ตารางจะมาจาก <strong>reports.js</strong> เช่น กำไรต่อวัน, top งานทำเงิน,
+                  top งานกินเวลานาน ฯลฯ
+                </div>
+              </div>
+            </div>
             <div class="bm-card-body">
-              <div class="bm-placeholder">
-                รายงานกราฟ/ตารางจะมาจาก <strong>reports.js</strong> เช่น กำไรต่อวัน, top งานทำเงิน, top งานแดกเวลา ฯลฯ
+              <div class="bm-section-notice">
+                ให้ <strong>reports.js</strong> สร้าง card รายงานต่าง ๆ โดยใช้ข้อมูลจาก demoJobs และ
+                demoSummary เช่น:
+                <ul class="mb-0 mt-1" style="padding-left: 1.1rem;">
+                  <li>รายงานยอดรายวัน/รายสัปดาห์/รายเดือน</li>
+                  <li>Top 10 งานกำไรดีสุด</li>
+                  <li>Top 10 งานกินเวลามากสุด</li>
+                  <li>Achievement เช่น ทำงานครบ 100 งาน, ลูกค้าประจำครบ 50 คน ฯลฯ</li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- TOOLS -->
-        <section id="section-tools" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
-              <div class="bm-section-title">เครื่องมือช่าง</div>
-              <div class="bm-section-subtitle">
-                ตัวช่วยคิดต้นทุน, กำไรงานซ่อม, อัตราทดสเตอร์ ฯลฯ
-              </div>
-            </div>
-            <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-calculator"></i>
-                คำนวณกำไรงานซ่อม
-              </div>
-            </div>
-          </div>
-
-          <div class="bm-card">
-            <div class="bm-card-body">
-              <div class="bm-placeholder">
-                ส่วนนี้ให้ <strong>tools.js</strong> มาสร้าง mini calculator ต่าง ๆ (กำไรงาน, อัตราทดสเตอร์, ค่าน้ำมัน/กม. ฯลฯ)
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- SETTINGS -->
+        <!-- Settings -->
         <section id="section-settings" class="bm-section">
-          <div class="bm-section-header">
-            <div class="bm-section-title-wrap">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
               <div class="bm-section-title">ตั้งค่า / ระบบ</div>
               <div class="bm-section-subtitle">
                 ตั้งค่าร้าน, ค่าแรงมาตรฐาน, Theme, Auto-lock และสำรองข้อมูล
               </div>
             </div>
             <div class="bm-section-toolbar">
-              <div class="bm-chip-light">
-                <i class="bi bi-shield-lock"></i>
-                ปรับสิทธิ์ &amp; การเข้าถึงในอนาคต
-              </div>
+              <button class="bm-pill-large" type="button">
+                <span class="bm-pill-large-icon">
+                  <i class="bi bi-shield-lock"></i>
+                </span>
+                <span>
+                  <span class="bm-pill-large-text-main">ปรับสิทธิ์ &amp; การเข้าถึงในอนาคต</span><br>
+                  <span class="bm-pill-large-text-sub">
+                    ให้ <strong>settings.js</strong> เผื่อ field สำหรับ RBAC และการล็อกระบบอัตโนมัติ
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
 
           <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">ตั้งค่า / ระบบ</div>
+                <div class="bm-card-subtitle">
+                  แบบฟอร์มตั้งค่าหลักของระบบจะอยู่ตรงนี้ ให้ <strong>settings.js</strong> มาสร้าง field
+                  จริง ๆ (ชื่อร้าน, ข้อความท้ายใบเสร็จ, theme, auto-lock, export/import ข้อมูล ฯลฯ)
+                </div>
+              </div>
+            </div>
             <div class="bm-card-body">
-              <div class="bm-placeholder">
-                แบบฟอร์มตั้งค่าหลักของระบบจะอยู่ตรงนี้ ให้ <strong>settings.js</strong> มาสร้าง field จริง ๆ
-                (ชื่อร้าน, ข้อความท้ายใบเสร็จ, theme, auto-lock, export/import ข้อมูล ฯลฯ)
+              <div class="bm-section-notice">
+                ตอนนี้เป็นโครงหน้าจอให้ <strong>settings.js</strong> ใช้สร้าง form จริง เช่น:
+                <ul class="mb-0 mt-1" style="padding-left: 1.1rem;">
+                  <li>ข้อมูลร้าน (ชื่อร้าน, ที่อยู่, โทรศัพท์, ข้อความท้ายใบเสร็จ)</li>
+                  <li>ค่าตั้งต้น POS (ค่าแรงเริ่มต้น, email ที่อนุญาตให้ใช้ระบบ)</li>
+                  <li>Theme (Light/Dark/Auto) และค่า Auto-lock (นาที)</li>
+                  <li>ปุ่ม Export ข้อมูลเป็น JSON/CSV (mock) และปุ่ม Import ที่เตรียมไว้สำหรับอนาคต</li>
+                </ul>
               </div>
             </div>
           </div>
         </section>
-      </section>
 
-      <!-- Floating Quick Action Button -->
-      <button id="bm-fab" type="button" class="bm-fab" aria-label="เปิดเมนูลัด">
+        <!-- Tools -->
+        <section id="section-tools" class="bm-section">
+          <div class="bm-section-header-row">
+            <div class="bm-section-title-group">
+              <div class="bm-section-title">เครื่องมือช่าง</div>
+              <div class="bm-section-subtitle">
+                ตัวช่วยคิดต้นทุน, กำไรงานซ่อม, อัตราทดสเตอร์ ฯลฯ
+              </div>
+            </div>
+            <div class="bm-section-toolbar">
+              <button class="bm-pill-large" type="button">
+                <span class="bm-pill-large-icon">
+                  <i class="bi bi-calculator"></i>
+                </span>
+                <span>
+                  <span class="bm-pill-large-text-main">คำนวณกำไรงานซ่อม</span><br>
+                  <span class="bm-pill-large-text-sub">
+                    ให้ <strong>tools.js</strong> มาสร้าง mini calculator สำหรับงานซ่อมแต่ละใบ
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bm-card">
+            <div class="bm-card-header">
+              <div class="bm-card-header-title-group">
+                <div class="bm-card-title">เครื่องมือช่าง</div>
+                <div class="bm-card-subtitle">
+                  ตัวอย่างเครื่องมือ เช่น คำนวณกำไรบิล, อัตราทดสเตอร์, ค่าใช้จ่ายต่อกิโลเมตร ฯลฯ
+                </div>
+              </div>
+            </div>
+            <div class="bm-card-body">
+              <div class="bm-section-notice">
+                ส่วนนี้ให้ <strong>tools.js</strong> มาสร้าง mini calculator ต่าง ๆ (กำไรงาน,
+                อัตราทดสเตอร์, ค่าน้ำมัน/กม. ฯลฯ) โดยใช้ layout card ย่อย ๆ และ field input ง่าย ๆ ตามที่สเปกไว้
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Quick Action FAB -->
+      <div id="bm-fab-menu" class="bm-fab-menu">
+        <button
+          type="button"
+          class="bm-fab-chip"
+          data-fab-action="pos"
+        >
+          <span class="bm-fab-chip-icon"><i class="bi bi-receipt"></i></span>
+          เปิดบิลใหม่
+        </button>
+        <button
+          type="button"
+          class="bm-fab-chip"
+          data-fab-action="jobs"
+        >
+          <span class="bm-fab-chip-icon"><i class="bi bi-clipboard-plus"></i></span>
+          รับรถเข้าซ่อม
+        </button>
+        <button
+          type="button"
+          class="bm-fab-chip"
+          data-fab-action="stock"
+        >
+          <span class="bm-fab-chip-icon"><i class="bi bi-box-arrow-in-down"></i></span>
+          เพิ่มอะไหล่ใหม่
+        </button>
+      </div>
+
+      <button id="bm-fab" class="bm-fab" type="button" aria-label="เมนูลัด">
         <i class="bi bi-plus-lg"></i>
       </button>
     </main>
+  </div>
+
+  <!-- Global Search Overlay -->
+  <div id="bm-overlay" class="bm-overlay"></div>
+  <div id="bm-global-search" class="bm-global-search-panel">
+    <div class="bm-global-search-inner">
+      <div class="bm-global-search-header">
+        <div class="bm-global-search-header-input-wrapper">
+          <i class="bi bi-search bm-global-search-icon-left"></i>
+          <input
+            id="bm-global-search-input"
+            type="search"
+            class="form-control bm-global-search-input"
+            placeholder="ค้นหาทะเบียน / ลูกค้า / เบอร์โทร / เลขบิล (Ctrl + K เพื่อเปิด/ปิด)"
+            autocomplete="off"
+          >
+          <span class="bm-global-search-icon-right">
+            <span class="bm-kbd me-1">Esc</span> ปิด
+          </span>
+        </div>
+      </div>
+      <div class="bm-global-search-body">
+        <div class="bm-search-section-label">ผลการค้นหา (เดโม่)</div>
+        <ul id="bm-global-search-results" class="bm-search-result-list">
+          <li class="bm-search-result-item">
+            <div class="bm-search-result-icon">
+              <i class="bi bi-info-circle"></i>
+            </div>
+            <div class="bm-search-result-main">
+              <div class="bm-search-result-title">
+                ส่วนนี้ให้ <strong>ui-shell.js</strong> + <strong>data-mock.js</strong>
+                มาช่วยค้นจาก demoJobs/demoCustomers
+              </div>
+              <div class="bm-search-result-sub">
+                แล้วสลับ section ไปหน้าที่เกี่ยวข้อง (jobs/customers) เมื่อคลิกผลลัพธ์
+              </div>
+            </div>
+            <div class="bm-search-result-pill">เดโม่</div>
+          </li>
+        </ul>
+      </div>
+      <div class="bm-global-search-footer">
+        <div>
+          <span class="bm-kbd">Enter</span> เปิดรายละเอียดงาน/ลูกค้าที่เลือก
+        </div>
+        <div>
+          <span class="bm-kbd">Esc</span> ปิด •
+          <span class="bm-kbd">↑</span>/<span class="bm-kbd">↓</span> เลื่อนเลือก
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Bootstrap JS -->
@@ -1413,5 +2687,17 @@
 
   <!-- App Shell Logic (จะไปเขียนในไฟล์ js/ui-shell.js) -->
   <script type="module" src="./js/ui-shell.js"></script>
+  <!-- Feature Modules -->
+  <script type="module" src="./js/data-mock.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
+  <script type="module" src="./js/jobs.js"></script>
+  <script type="module" src="./js/pos.js"></script>
+  <script type="module" src="./js/stock.js"></script>
+  <script type="module" src="./js/customers.js"></script>
+  <script type="module" src="./js/repair-knowledge.js"></script>
+  <script type="module" src="./js/reports.js"></script>
+  <script type="module" src="./js/settings.js"></script>
+  <script type="module" src="./js/tools.js"></script>
+
 </body>
 </html>
