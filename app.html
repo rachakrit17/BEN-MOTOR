@@ -41,11 +41,11 @@
           </div>
         </div>
 
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>
-  eruda.init();
-</script>
-        
+        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+        <script>
+          eruda.init();
+        </script>
+
         <div class="bm-sidebar-nav flex-grow-1">
           <button
             type="button"
@@ -120,7 +120,6 @@
         <header class="bm-topbar bm-topbar-gradient">
           <div class="container-fluid">
             <div class="d-flex align-items-center justify-content-between">
-
               <div class="d-flex align-items-center gap-2">
                 <button
                   type="button"
@@ -180,7 +179,6 @@
                   </ul>
                 </div>
               </div>
-
             </div>
           </div>
         </header>
@@ -250,7 +248,9 @@
                       </div>
                     </div>
 
-                    <div class="bm-divider mt-4 mb-3">สรุปยอดรถซื้อ–ขาย (รวมทั้งหมด)</div>
+                    <div class="bm-divider mt-4 mb-3">
+                      สรุปยอดรถซื้อ–ขาย (รวมทั้งหมด)
+                    </div>
 
                     <div class="row g-3 mt-1">
                       <div class="col-12 col-md-4">
@@ -533,8 +533,7 @@
                             <th style="width: 40px"></th>
                           </tr>
                         </thead>
-                        <tbody id="posItemsBody">
-                          </tbody>
+                        <tbody id="posItemsBody"></tbody>
                       </table>
                     </div>
                   </div>
@@ -589,7 +588,9 @@
                       <div class="bm-pos-summary">
                         <div class="bm-pos-summary-row">
                           <span>ยอดรวม (ยังไม่หักส่วนลด)</span>
-                          <span id="posSubtotalText" class="bm-pos-summary-value"
+                          <span
+                            id="posSubtotalText"
+                            class="bm-pos-summary-value"
                             >0 บาท</span
                           >
                         </div>
@@ -629,7 +630,9 @@
                         </div>
                         <div class="bm-pos-summary-row">
                           <span>เงินทอน</span>
-                          <span id="posChangeText" class="bm-pos-summary-value"
+                          <span
+                            id="posChangeText"
+                            class="bm-pos-summary-value"
                             >0 บาท</span
                           >
                         </div>
@@ -786,8 +789,7 @@
                         <th style="width: 80px" class="text-end"></th>
                       </tr>
                     </thead>
-                    <tbody id="jobsTableBody">
-                      </tbody>
+                    <tbody id="jobsTableBody"></tbody>
                   </table>
                 </div>
 
@@ -820,8 +822,7 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <div id="jobDetailContent">
-                      </div>
+                    <div id="jobDetailContent"></div>
                   </div>
                   <div class="modal-footer">
                     <div class="me-auto small text-muted">
@@ -1016,8 +1017,7 @@
                             <th style="width: 120px" class="text-end"></th>
                           </tr>
                         </thead>
-                        <tbody id="vehiclesStockBody">
-                          </tbody>
+                        <tbody id="vehiclesStockBody"></tbody>
                       </table>
                     </div>
                     <div
@@ -1053,8 +1053,7 @@
                             <th style="width: 160px">วันที่ขาย</th>
                           </tr>
                         </thead>
-                        <tbody id="vehiclesSoldBody">
-                          </tbody>
+                        <tbody id="vehiclesSoldBody"></tbody>
                       </table>
                     </div>
                     <div
@@ -1245,8 +1244,7 @@
                         <th style="width: 70px" class="text-end"></th>
                       </tr>
                     </thead>
-                    <tbody id="stockTableBody">
-                      </tbody>
+                    <tbody id="stockTableBody"></tbody>
                   </table>
                 </div>
 
@@ -1504,12 +1502,81 @@
                     <button
                       type="button"
                       id="settingsExportBtn"
-                      class="btn btn-outline-primary"
+                      class="btn btn-outline-primary me-md-2 mb-2 mb-md-0"
                     >
                       <i class="bi bi-download me-1"></i>Export JSON
                     </button>
+                    <button
+                      type="button"
+                      id="settingsResetBtn"
+                      class="btn btn-outline-danger mb-2 mb-md-0"
+                      data-bs-toggle="modal"
+                      data-bs-target="#settingsResetModal"
+                    >
+                      <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                      ล้างข้อมูลทั้งหมด (Reset POS)
+                    </button>
                   </div>
                 </form>
+
+                <!-- Modal ยืนยันการล้างข้อมูลทั้งหมด -->
+                <div
+                  class="modal fade"
+                  id="settingsResetModal"
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">
+                          ล้างข้อมูลทั้งหมด (Reset POS)
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <p class="small text-danger mb-2">
+                          คำเตือน: การล้างครั้งนี้จะลบข้อมูลทั้งหมดใน
+                          งานซ่อม, รถซื้อ–ขาย และสต็อก
+                          ไม่สามารถกู้คืนได้
+                        </p>
+                        <p class="small mb-2">
+                          หากต้องการดำเนินการต่อ กรุณาพิมพ์คำว่า
+                          <strong>RESET</strong> เพื่อยืนยัน
+                        </p>
+                        <input
+                          type="text"
+                          id="settingsResetConfirmInput"
+                          class="form-control"
+                          placeholder="พิมพ์: RESET"
+                        />
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          data-bs-dismiss="modal"
+                        >
+                          ยกเลิก
+                        </button>
+                        <button
+                          type="button"
+                          id="settingsResetConfirmBtn"
+                          class="btn btn-danger btn-sm"
+                          disabled
+                        >
+                          ล้างข้อมูลทั้งหมด
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Modal Reset -->
               </div>
             </div>
           </section>
@@ -1585,5 +1652,4 @@
     <script type="module" src="./js/settings.js"></script>
     <script type="module" src="./js/auth.js"></script>
   </body>
-
 </html>
