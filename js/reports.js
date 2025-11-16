@@ -1,5 +1,5 @@
 // ======================================================
-// BEN MOTOR – REPORT SYSTEM (REAL FIRESTORE VERSION)
+// BEN MOTOR – REPORT SYSTEM (FIXED VERSION)
 // ======================================================
 import {
   collection,
@@ -43,26 +43,56 @@ async function loadJobs(range) {
     if (!data.createdAt) return;
 
     const time = data.createdAt.toDate();
-
     if (range && (time < range.start || time > range.end)) return;
+
+    // เผื่อ pos ไม่ได้ตั้ง status → ตั้งค่า default
+    if (!data.status) data.status = "completed";
+
     list.push({ id: doc.id, ...data });
   });
   return list;
 }
 
+// =================== vehicles (fixed: buyDate fallback) ======================
 async function loadVehicles(range) {
   const col = collection(db, "vehicles");
-  let q = query(col, orderBy("buyDate", "desc"));
-  const snap = await getDocs(q);
+  const snap = await getDocs(col);
 
   const list = [];
   snap.forEach((doc) => {
     const data = doc.data();
-    const buy = data.buyDate ? data.buyDate.toDate() : null;
 
-    if (range && buy && (buy < range.start || buy > range.end)) return;
+    // buyDate ไม่มี → ใช้ createdAt แทน
+    const date = data.buyDate
+      ? data.buyDate.toDate()
+      : data.createdAt
+      ? data.createdAt.toDate()
+      : null;
+
+    if (range && date && (date < range.start || date > range.end)) return;
+
+    list.push({ id: doc.id, buyDate: date, ...data });
+  });
+  return list;
+}
+
+// =================== POS จาก jobs (createdSource = "pos") ====================
+async function loadPos(range) {
+  const col = collection(db, "jobs");
+  let q = query(col, where("createdSource", "==", "pos"));
+
+  const snap = await getDocs(q);
+  const list = [];
+
+  snap.forEach((doc) => {
+    const data = doc.data();
+    const time = data.createdAt?.toDate();
+
+    if (range && time && (time < range.start || time > range.end)) return;
+
     list.push({ id: doc.id, ...data });
   });
+
   return list;
 }
 
@@ -71,23 +101,6 @@ async function loadStock() {
   const snap = await getDocs(col);
   const list = [];
   snap.forEach((doc) => list.push(doc.data()));
-  return list;
-}
-
-async function loadPos(range) {
-  const col = collection(db, "pos");
-  const snap = await getDocs(col);
-
-  const list = [];
-  snap.forEach((doc) => {
-    const data = doc.data();
-    if (!data.createdAt) return;
-
-    const time = data.createdAt.toDate();
-
-    if (range && (time < range.start || time > range.end)) return;
-    list.push({ id: doc.id, ...data });
-  });
   return list;
 }
 
@@ -102,7 +115,7 @@ function updateSummary(jobs, vehicles, pos) {
 
   jobs.forEach((j) => {
     totalReceive += j.total || 0;
-    // cost = spare parts (items)
+
     if (j.items) {
       j.items.forEach((i) => {
         totalCost += (i.unitPrice || 0) * (i.qty || 0);
@@ -111,9 +124,11 @@ function updateSummary(jobs, vehicles, pos) {
   });
 
   vehicles.forEach((v) => {
-    if (v.status === "sold") vehiclesSold++;
-    totalReceive += v.sellPrice || 0;
     totalCost += v.buyPrice || 0;
+    if (v.status === "sold") {
+      vehiclesSold++;
+      totalReceive += v.sellPrice || 0;
+    }
   });
 
   pos.forEach((p) => {
@@ -181,11 +196,11 @@ function renderVehiclesTable(data) {
   data.forEach((v) => {
     body.innerHTML += `
       <tr>
-        <td>${d(v.buyDate?.toDate())}</td>
+        <td>${d(v.buyDate)}</td>
         <td>${v.model}<br>${v.plate}</td>
         <td class="text-end">${nf.format(v.buyPrice || 0)}฿</td>
         <td class="text-end">${nf.format(v.sellPrice || 0)}฿</td>
-        <td class="text-end">${nf.format(v.profit || 0)}฿</td>
+        <td class="text-end">${nf.format(v.profit || (v.sellPrice || 0) - (v.buyPrice || 0))}฿</td>
         <td>${v.status}</td>
       </tr>
     `;
@@ -207,7 +222,7 @@ function renderPosTable(data) {
     body.innerHTML += `
       <tr>
         <td>${d(p.createdAt?.toDate())}</td>
-        <td>${p.billNo}<br>${p.type}</td>
+        <td>${p.billNo || "-"}<br>${p.type || "-"}</td>
         <td>${p.customer || "-"}</td>
         <td class="text-end">${nf.format(p.total || 0)}฿</td>
         <td>${p.paymentMethod || "-"}</td>
@@ -247,16 +262,14 @@ document.addEventListener("DOMContentLoaded", () => {
       loadReport();
     });
 
-  // load default (30 days)
   const today = new Date();
   const past = new Date();
   past.setDate(today.getDate() - 30);
-  document.getElementById("filterDateFrom").value = past
-    .toISOString()
-    .split("T")[0];
-  document.getElementById("filterDateTo").value = today
-    .toISOString()
-    .split("T")[0];
+
+  document.getElementById("filterDateFrom").value =
+    past.toISOString().split("T")[0];
+  document.getElementById("filterDateTo").value =
+    today.toISOString().split("T")[0];
 
   loadReport();
 });
