@@ -93,36 +93,62 @@ function getAuthErrorMessage(error) {
   }
 }
 
-// อัปเดตข้อมูลผู้ใช้ใน app.html
-function updateUserInfo(user) {
-  const sidebarEmail = document.getElementById("sidebarUserEmail");
-  const shortEmail = document.getElementById("currentUserShortEmail");
-  const fullEmail = document.getElementById("currentUserFullEmail");
+// อัปเดตข้อมูลผู้ใช้ใน app.html (แก้ไขให้แสดง "Admin" แทนอีเมล)
+function updateAppUserInfo(user) {
+  const sidebarEmailEl = document.getElementById("sidebarUserEmail");
+  const shortEmailEl = document.getElementById("currentUserShortEmail");
+  const fullEmailEl = document.getElementById("currentUserFullEmail");
 
   // เปลี่ยนการแสดงอีเมลทั้งหมดเป็น "Admin" ตามที่ผู้ใช้ร้องขอ
   const displayName = "Admin";
-  const defaultText = "–";
+  // const email = user?.email || "–"; // โค้ดเดิมที่แสดงอีเมลจริง
 
-  if (user) {
-    if (sidebarEmail) sidebarEmail.textContent = displayName;
-    if (shortEmail) shortEmail.textContent = displayName;
-    if (fullEmail) fullEmail.textContent = displayName; 
-  } else {
-    // Clear display if not logged in
-    if (sidebarEmail) sidebarEmail.textContent = defaultText;
-    if (shortEmail) shortEmail.textContent = "ผู้ใช้";
-    if (fullEmail) fullEmail.textContent = defaultText; 
+  if (sidebarEmailEl) {
+    sidebarEmailEl.textContent = displayName;
+  }
+  if (shortEmailEl) {
+    shortEmailEl.textContent = displayName;
+  }
+  if (fullEmailEl) {
+    fullEmailEl.textContent = displayName;
   }
 }
 
-// -----------------------------\
-// Index Page Logic (index.html)
-// -----------------------------\
+// อัปเดตวันเวลาใน top bar (app.html)
+function startDateTimeTicker() {
+  const dateEl = document.getElementById("currentDateText");
+  const timeEl = document.getElementById("currentTimeText");
+  if (!dateEl || !timeEl) return;
+
+  const update = () => {
+    const now = new Date();
+    const dateFormatter = new Intl.DateTimeFormat("th-TH", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      weekday: "short"
+    });
+    const timeFormatter = new Intl.DateTimeFormat("th-TH", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    dateEl.textContent = dateFormatter.format(now);
+    timeEl.textContent = timeFormatter.format(now);
+  };
+
+  update();
+  setInterval(update, 60000);
+}
+
+// -----------------------------
+// Login Page Logic (index.html)
+// -----------------------------
 function initLoginPage() {
   const loginForm = document.getElementById("loginForm");
-  const emailInput = document.getElementById("emailInput");
-  const passwordInput = document.getElementById("passwordInput");
-  const rememberMeInput = document.getElementById("rememberMeInput");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const rememberMeInput = document.getElementById("rememberMe");
   const googleLoginBtn = document.getElementById("googleLoginBtn");
   const forgotPasswordLink = document.getElementById("forgotPasswordLink");
 
@@ -141,7 +167,6 @@ function initLoginPage() {
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
@@ -155,30 +180,26 @@ function initLoginPage() {
       if (btn) {
         btn.disabled = true;
       }
-      
-      const userCred = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
 
-      // บันทึก email ถ้าเลือก remember me
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+
       if (rememberMeInput && rememberMeInput.checked) {
         saveLastEmail(email);
       } else {
-        saveLastEmail(null);
+        saveLastEmail("");
       }
 
-      showToast("เข้าสู่ระบบสำเร็จ! กำลังไปที่แดชบอร์ด...", "success");
-      // ไม่ต้องเรียก redirectToApp() ตรงนี้ เพราะ onAuthStateChanged จะจัดการเอง
+      if (btn) {
+        btn.disabled = false;
+      }
+
+      redirectToApp();
     } catch (error) {
-      console.error("Login failed:", error);
-      showToast(getAuthErrorMessage(error), "error");
-    } finally {
       const btn = document.getElementById("emailLoginBtn");
       if (btn) {
         btn.disabled = false;
       }
+      showToast(getAuthErrorMessage(error), "error");
     }
   });
 
@@ -187,32 +208,36 @@ function initLoginPage() {
       try {
         googleLoginBtn.disabled = true;
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
-        // onAuthStateChanged จะจัดการการเปลี่ยนหน้าเอง
-      } catch (error) {
-        console.error("Google login failed:", error);
-        showToast(getAuthErrorMessage(error), "error");
-      } finally {
+        const result = await signInWithPopup(auth, provider);
+        const email = result.user?.email || "";
+        if (email) {
+          saveLastEmail(email);
+        }
         googleLoginBtn.disabled = false;
+        redirectToApp();
+      } catch (error) {
+        googleLoginBtn.disabled = false;
+        showToast(getAuthErrorMessage(error), "error");
       }
     });
   }
 
   if (forgotPasswordLink) {
-    forgotPasswordLink.addEventListener("click", (e) => {
-      e.preventDefault();
+    forgotPasswordLink.addEventListener("click", () => {
       showToast(
-        "สามารถรีเซ็ตรหัสผ่านผ่าน Firebase Console หรือใช้เข้าสู่ระบบด้วย Google",
+        "จัดการรีเซ็ตรหัสผ่านผ่าน Firebase Console หรือใช้เข้าสู่ระบบด้วย Google",
         "info"
       );
     });
   }
 }
 
-// -----------------------------\
+// -----------------------------
 // App Page Logic (app.html)
-// -----------------------------\
+// -----------------------------
 function initAppPage() {
+  startDateTimeTicker();
+
   const sidebarLogoutBtn = document.getElementById("sidebarLogoutBtn");
   const userLogoutBtn = document.getElementById("userLogoutBtn");
 
@@ -233,9 +258,9 @@ function initAppPage() {
   }
 }
 
-// -----------------------------\
+// -----------------------------
 // Global auth state handler
-// -----------------------------\
+// -----------------------------
 onAuthStateChanged(auth, (user) => {
   if (isLoginPage()) {
     if (user) {
@@ -250,12 +275,18 @@ onAuthStateChanged(auth, (user) => {
 
   if (isAppPage()) {
     if (!user) {
-      // ถ้ายังไม่ล็อกอิน ให้ส่งไปหน้า login
+      // ถ้าไม่มี user ให้บังคับกลับหน้า login
       redirectToLogin();
-    } else {
-      // ล็อกอินแล้ว อัปเดตข้อมูลผู้ใช้
-      updateUserInfo(user);
+      return;
+    }
+
+    // มี user แล้ว แสดงข้อมูลและเริ่มต้นส่วนของ app
+    updateAppUserInfo(user);
+    if (user.email) {
+      saveLastEmail(user.email);
     }
     initAppPage();
+    return;
   }
 });
+// (ไม่มีวงเล็บปีกกาปิดเกินมาแล้ว)
