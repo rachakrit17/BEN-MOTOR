@@ -41,10 +41,10 @@
           </div>
         </div>
 
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>
-  eruda.init();
-</script>
+        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+        <script>
+          eruda.init();
+        </script>
         
         <div class="bm-sidebar-nav flex-grow-1">
           <button
@@ -90,12 +90,12 @@
           <button
             type="button"
             class="bm-nav-item"
-            data-section-target="settings"
+            data-section-target="reports"
           >
-            <i class="bi bi-gear-wide-connected"></i>
-            <span>ตั้งค่า / เพิ่มเติม</span>
+            <i class="bi bi-bar-chart"></i>
+            <span>รายงาน / สถิติ</span>
           </button>
-        </div>
+          </div>
 
         <div class="bm-sidebar-footer">
           <div class="bm-user-mini">
@@ -168,6 +168,15 @@
                       <div id="currentUserFullEmail" class="fw-semibold">
                         –
                       </div>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        class="dropdown-item"
+                        data-section-target="settings"
+                      >
+                        <i class="bi bi-gear-wide me-2"></i>ตั้งค่า
+                      </button>
                     </li>
                     <li><hr class="dropdown-divider" /></li>
                     <li>
@@ -528,14 +537,17 @@
                           <tr>
                             <th style="width: 90px">ชนิด</th>
                             <th>รายการ</th>
-                            <th style="width: 90px">จำนวน</th>
-                            <th style="width: 120px">ราคา/หน่วย</th>
-                            <th style="width: 120px">รวม</th>
+                            <th style="width: 90px" class="text-center">
+                              จำนวน
+                            </th>
+                            <th style="width: 120px" class="text-end">
+                              ราคา/หน่วย
+                            </th>
+                            <th style="width: 120px" class="text-end">รวม</th>
                             <th style="width: 40px"></th>
                           </tr>
                         </thead>
-                        <tbody id="posItemsBody">
-                          </tbody>
+                        <tbody id="posItemsBody"></tbody>
                       </table>
                     </div>
                   </div>
@@ -555,151 +567,70 @@
                           placeholder="เช่น ลองขับแล้วปกติ, ผ้าเบรกหน้าเหลือน้อยแจ้งลูกค้าแล้ว"
                         ></textarea>
                       </div>
-
                       <div class="bm-pos-presets">
-                        <div class="bm-field-label mb-1">
-                          Preset งานซ่อมเร็ว
-                        </div>
+                        <div class="bm-field-label mb-1">Preset งานซ่อมเร็ว</div>
                         <div class="d-flex flex-wrap gap-2">
                           <button
                             type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            data-pos-preset="oil"
+                            class="btn btn-sm btn-outline-secondary"
+                            data-preset-action="add-oil"
                           >
-                            เปลี่ยนน้ำมันเครื่อง
+                            <i class="bi bi-plus me-1"></i>น้ำมันเครื่อง
                           </button>
                           <button
                             type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            data-pos-preset="brake"
+                            class="btn btn-sm btn-outline-secondary"
+                            data-preset-action="add-tyre"
                           >
-                            เปลี่ยนผ้าเบรก
+                            <i class="bi bi-plus me-1"></i>ยางใน/ยางนอก
                           </button>
                           <button
                             type="button"
-                            class="btn btn-outline-secondary btn-sm"
-                            data-pos-preset="tire"
+                            class="btn btn-sm btn-outline-secondary"
+                            data-preset-action="add-chain"
                           >
-                            เปลี่ยนยางหน้า/หลัง
+                            <i class="bi bi-plus me-1"></i>โซ่-สเตอร์
                           </button>
                         </div>
                       </div>
                     </div>
 
                     <div class="col-12 col-lg-5">
-                      <div class="bm-pos-summary">
-                        <div class="bm-pos-summary-row">
-                          <span>ยอดรวม (ยังไม่หักส่วนลด)</span>
-                          <span id="posSubtotalText" class="bm-pos-summary-value"
-                            >0 บาท</span
-                          >
-                        </div>
-                        <div class="bm-pos-summary-row">
-                          <span>ส่วนลด</span>
-                          <div class="bm-pos-summary-input">
-                            <input
-                              type="number"
-                              id="posDiscountInput"
-                              class="form-control form-control-sm text-end"
-                              value="0"
-                              min="0"
-                            />
-                            <span class="ms-1">บาท</span>
+                      <div class="bm-card bm-card-compact bg-light">
+                        <div class="bm-card-body p-3">
+                          <div class="d-flex justify-content-between mb-2">
+                            <span>ค่าแรงรวม</span>
+                            <span id="posTotalLabor" class="fw-semibold"
+                              >0 บาท</span
+                            >
                           </div>
-                        </div>
-                        <div class="bm-pos-summary-row bm-pos-summary-highlight">
-                          <span>ยอดสุทธิ</span>
-                          <span
-                            id="posNetTotalText"
-                            class="bm-pos-summary-value fw-bold"
-                            >0 บาท</span
-                          >
-                        </div>
-                        <div class="bm-pos-summary-row">
-                          <span>ลูกค้าจ่ายมา</span>
-                          <div class="bm-pos-summary-input">
-                            <input
-                              type="number"
-                              id="posCustomerPaidInput"
-                              class="form-control form-control-sm text-end"
-                              value="0"
-                              min="0"
-                            />
-                            <span class="ms-1">บาท</span>
+                          <div class="d-flex justify-content-between mb-2">
+                            <span>ค่าอะไหล่รวม</span>
+                            <span id="posTotalParts" class="fw-semibold"
+                              >0 บาท</span
+                            >
                           </div>
-                        </div>
-                        <div class="bm-pos-summary-row">
-                          <span>เงินทอน</span>
-                          <span id="posChangeText" class="bm-pos-summary-value"
-                            >0 บาท</span
-                          >
-                        </div>
-
-                        <div class="d-grid gap-2 mt-3">
-                          <button
-                            id="posSaveBtn"
-                            type="button"
-                            class="btn btn-success"
-                          >
-                            <i class="bi bi-check-circle me-1"></i>บันทึกบิล
-                          </button>
-                          <button
-                            id="posPrintBtn"
-                            type="button"
-                            class="btn btn-outline-secondary"
-                          >
-                            <i class="bi bi-printer me-1"></i>ปริ๊นท์ / ส่งต่อ
-                          </button>
+                          <div class="d-flex justify-content-between mb-2">
+                            <span>ยอดรวม</span>
+                            <span id="posTotalAmount" class="fw-bold fs-4"
+                              >0 บาท</span
+                            >
+                          </div>
+                          <div class="d-grid mt-3">
+                            <button
+                              id="posSaveJobBtn"
+                              type="submit"
+                              class="btn btn-primary btn-lg"
+                            >
+                              <i class="bi bi-floppy me-2"></i>บันทึกงานซ่อม
+                              <span id="posJobNumberText" class="ms-2"></span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </form>
-              </div>
-            </div>
-
-            <div
-              class="modal fade"
-              id="posCustomerMessageModal"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">ข้อความส่งให้ลูกค้า</h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <textarea
-                      id="posCustomerMessageText"
-                      class="form-control"
-                      rows="4"
-                      readonly
-                    ></textarea>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      id="posCopyCustomerMessageBtn"
-                      type="button"
-                      class="btn btn-success"
-                    >
-                      <i class="bi bi-clipboard-check me-1"></i>คัดลอกข้อความ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      ปิด
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -719,10 +650,7 @@
                 </div>
               </div>
               <div class="bm-card-body">
-                <form
-                  id="jobsFilterForm"
-                  class="row g-2 align-items-end mb-3"
-                >
+                <form id="jobsFilterForm" class="row g-2 align-items-end mb-3">
                   <div class="col-12 col-lg-4">
                     <label class="form-label small"
                       >ค้นหาทะเบียน / ลูกค้า / เบอร์</label
@@ -736,10 +664,7 @@
                   </div>
                   <div class="col-6 col-lg-3">
                     <label class="form-label small">สถานะ</label>
-                    <select
-                      id="jobsStatusFilter"
-                      class="form-select"
-                    >
+                    <select id="jobsStatusFilter" class="form-select">
                       <option value="all">ทุกสถานะ</option>
                       <option value="queue">รอรับเข้า</option>
                       <option value="in-progress">กำลังซ่อม</option>
@@ -750,10 +675,7 @@
                   </div>
                   <div class="col-6 col-lg-3">
                     <label class="form-label small">ช่วงวันที่</label>
-                    <select
-                      id="jobsDateRange"
-                      class="form-select"
-                    >
+                    <select id="jobsDateRange" class="form-select">
                       <option value="today">วันนี้</option>
                       <option value="7days">7 วันล่าสุด</option>
                       <option value="30days">30 วันล่าสุด</option>
@@ -761,10 +683,7 @@
                     </select>
                   </div>
                   <div class="col-12 col-lg-2 d-grid">
-                    <button
-                      type="submit"
-                      class="btn btn-outline-primary"
-                    >
+                    <button type="submit" class="btn btn-outline-primary">
                       ใช้ตัวกรอง
                     </button>
                   </div>
@@ -787,74 +706,14 @@
                         <th style="width: 80px" class="text-end"></th>
                       </tr>
                     </thead>
-                    <tbody id="jobsTableBody">
-                      </tbody>
+                    <tbody id="jobsTableBody"></tbody>
                   </table>
                 </div>
-
                 <div
                   id="jobsEmptyState"
                   class="bm-empty-state mt-3 d-none"
                 >
-                  ยังไม่พบงานซ่อมตามตัวกรองที่เลือก
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="modal fade"
-              id="jobDetailModal"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">
-                      รายละเอียดงานซ่อม
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <div id="jobDetailContent">
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <div class="me-auto small text-muted">
-                      <span>เปลี่ยนสถานะงาน:</span>
-                      <select
-                        id="jobDetailStatusSelect"
-                        class="form-select form-select-sm d-inline-block w-auto ms-1"
-                      >
-                        <option value="queue">รอรับเข้า</option>
-                        <option value="in-progress">กำลังซ่อม</option>
-                        <option value="waiting-parts">รออะไหล่</option>
-                        <option value="waiting-payment">
-                          รอชำระเงิน
-                        </option>
-                        <option value="done">ปิดงานแล้ว</option>
-                      </select>
-                    </div>
-                    <button
-                      type="button"
-                      id="jobDetailSaveStatusBtn"
-                      class="btn btn-success btn-sm"
-                    >
-                      บันทึกสถานะ
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-secondary btn-sm"
-                      data-bs-dismiss="modal"
-                    >
-                      ปิด
-                    </button>
-                  </div>
+                  ไม่พบรายการงานซ่อมในเงื่อนไขที่เลือก
                 </div>
               </div>
             </div>
@@ -868,33 +727,31 @@
             <div class="bm-card mb-3">
               <div class="bm-card-header">
                 <div>
-                  <h2 class="bm-card-title mb-0">
-                    รถซื้อ–ขาย BEN MOTOR
-                  </h2>
+                  <h2 class="bm-card-title mb-0">รถซื้อ–ขาย</h2>
                   <p class="bm-card-subtitle mb-0">
-                    บันทึกรถที่รับซื้อเข้า, รถค้างสต็อก และรถที่ขายแล้ว
+                    จัดการข้อมูลรถที่ซื้อเข้าเพื่อขายและบันทึกกำไร
                   </p>
                 </div>
               </div>
               <div class="bm-card-body">
-                <ul class="nav nav-pills mb-3" id="vehiclesTabs" role="tablist">
+                <ul class="nav nav-tabs" role="tablist">
                   <li class="nav-item" role="presentation">
                     <button
                       class="nav-link active"
                       id="vehicles-buy-tab"
-                      data-bs-toggle="pill"
+                      data-bs-toggle="tab"
                       data-bs-target="#vehicles-buy-pane"
                       type="button"
                       role="tab"
                     >
-                      รับซื้อรถ
+                      รับซื้อรถเข้า
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button
                       class="nav-link"
                       id="vehicles-stock-tab"
-                      data-bs-toggle="pill"
+                      data-bs-toggle="tab"
                       data-bs-target="#vehicles-stock-pane"
                       type="button"
                       role="tab"
@@ -906,17 +763,16 @@
                     <button
                       class="nav-link"
                       id="vehicles-sold-tab"
-                      data-bs-toggle="pill"
+                      data-bs-toggle="tab"
                       data-bs-target="#vehicles-sold-pane"
                       type="button"
                       role="tab"
                     >
-                      รถขายแล้ว
+                      รถที่ขายออกแล้ว
                     </button>
                   </li>
                 </ul>
-
-                <div class="tab-content">
+                <div class="tab-content pt-3">
                   <div
                     class="tab-pane fade show active"
                     id="vehicles-buy-pane"
@@ -980,28 +836,22 @@
                           placeholder="เช่น สภาพดี มีรอยถลอกเล็กน้อย"
                         />
                       </div>
-                      <div class="col-12 d-grid d-md-flex justify-content-md-end">
-                        <button
-                          type="submit"
-                          class="btn btn-success"
-                        >
-                          <i class="bi bi-plus-circle me-1"></i
-                          >บันทึกรับซื้อรถ
+                      <div
+                        class="col-12 d-grid d-md-flex justify-content-md-end"
+                      >
+                        <button type="submit" class="btn btn-success">
+                          <i class="bi bi-plus-circle me-1"></i>บันทึกรับซื้อรถ
                         </button>
                       </div>
                     </form>
                   </div>
-
                   <div
                     class="tab-pane fade"
                     id="vehicles-stock-pane"
                     role="tabpanel"
                   >
                     <div class="table-responsive">
-                      <table
-                        class="table align-middle"
-                        id="vehiclesStockTable"
-                      >
+                      <table class="table align-middle" id="vehiclesStockTable">
                         <thead>
                           <tr>
                             <th>รุ่น / ทะเบียน</th>
@@ -1017,8 +867,7 @@
                             <th style="width: 120px" class="text-end"></th>
                           </tr>
                         </thead>
-                        <tbody id="vehiclesStockBody">
-                          </tbody>
+                        <tbody id="vehiclesStockBody"></tbody>
                       </table>
                     </div>
                     <div
@@ -1028,22 +877,21 @@
                       ยังไม่มีรถค้างสต็อก
                     </div>
                   </div>
-
                   <div
                     class="tab-pane fade"
                     id="vehicles-sold-pane"
                     role="tabpanel"
                   >
                     <div class="table-responsive">
-                      <table
-                        class="table align-middle"
-                        id="vehiclesSoldTable"
-                      >
+                      <table class="table align-middle" id="vehiclesSoldTable">
                         <thead>
                           <tr>
                             <th>รุ่น / ทะเบียน</th>
                             <th style="width: 120px" class="text-end">
                               ราคาซื้อ
+                            </th>
+                            <th style="width: 140px" class="text-end">
+                              ค่าใช้จ่ายซ่อม
                             </th>
                             <th style="width: 120px" class="text-end">
                               ราคาขาย
@@ -1051,106 +899,20 @@
                             <th style="width: 120px" class="text-end">
                               กำไร
                             </th>
-                            <th style="width: 160px">วันที่ขาย</th>
+                            <th style="width: 130px" class="text-center">
+                              วันที่ขาย
+                            </th>
                           </tr>
                         </thead>
-                        <tbody id="vehiclesSoldBody">
-                          </tbody>
+                        <tbody id="vehiclesSoldBody"></tbody>
                       </table>
                     </div>
                     <div
                       id="vehiclesSoldEmpty"
                       class="bm-empty-state mt-3 d-none"
                     >
-                      ยังไม่มีประวัติขายรถ
+                      ยังไม่มีรายการรถที่ขายแล้ว
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="modal fade"
-              id="vehicleSellModal"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">
-                      บันทึกการขายรถ
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="vehicleSellForm" class="row g-3">
-                      <input
-                        type="hidden"
-                        id="vehicleSellId"
-                      />
-                      <div class="col-12">
-                        <label class="form-label small">รุ่น / ทะเบียน</label>
-                        <input
-                          type="text"
-                          id="vehicleSellLabel"
-                          class="form-control"
-                          readonly
-                        />
-                      </div>
-                      <div class="col-12 col-md-6">
-                        <label class="form-label small">ราคาซื้อ</label>
-                        <input
-                          type="number"
-                          id="vehicleSellBuyPrice"
-                          class="form-control"
-                          readonly
-                        />
-                      </div>
-                      <div class="col-12 col-md-6">
-                        <label class="form-label small">ราคาขาย</label>
-                        <input
-                          type="number"
-                          id="vehicleSellSalePrice"
-                          class="form-control"
-                          min="0"
-                          required
-                        />
-                      </div>
-                      <div class="col-12">
-                        <label class="form-label small"
-                          >ค่าใช้จ่ายซ่อม / ทำสภาพ (ถ้ามี)</label
-                        >
-                        <input
-                          type="number"
-                          id="vehicleSellRepairCost"
-                          class="form-control"
-                          min="0"
-                          value="0"
-                        />
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      id="vehicleSellSaveBtn"
-                      class="btn btn-success"
-                    >
-                      บันทึกการขาย
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      ยกเลิก
-                    </button>
                   </div>
                 </div>
               </div>
@@ -1165,19 +927,14 @@
             <div class="bm-card mb-3">
               <div class="bm-card-header">
                 <div>
-                  <h2 class="bm-card-title mb-0">
-                    สต็อก &amp; อะไหล่
-                  </h2>
+                  <h2 class="bm-card-title mb-0">สต็อก &amp; อะไหล่</h2>
                   <p class="bm-card-subtitle mb-0">
                     ดูของใกล้หมด, ความเคลื่อนไหว และข้อมูลต้นทุน/ขาย
                   </p>
                 </div>
               </div>
               <div class="bm-card-body">
-                <form
-                  id="stockFilterForm"
-                  class="row g-2 align-items-end mb-3"
-                >
+                <form id="stockFilterForm" class="row g-2 align-items-end mb-3">
                   <div class="col-12 col-lg-5">
                     <label class="form-label small"
                       >ค้นหาชื่ออะไหล่ / SKU</label
@@ -1191,10 +948,7 @@
                   </div>
                   <div class="col-6 col-lg-3">
                     <label class="form-label small">หมวด</label>
-                    <select
-                      id="stockCategoryFilter"
-                      class="form-select"
-                    >
+                    <select id="stockCategoryFilter" class="form-select">
                       <option value="all">ทุกหมวด</option>
                       <option value="brake">ระบบเบรก</option>
                       <option value="engine">เครื่องยนต์</option>
@@ -1205,10 +959,7 @@
                   </div>
                   <div class="col-6 col-lg-2">
                     <label class="form-label small">สถานะ</label>
-                    <select
-                      id="stockStatusFilter"
-                      class="form-select"
-                    >
+                    <select id="stockStatusFilter" class="form-select">
                       <option value="all">ทั้งหมด</option>
                       <option value="low">ใกล้หมด</option>
                       <option value="fast">ขายดี</option>
@@ -1227,10 +978,7 @@
                 </form>
 
                 <div class="table-responsive">
-                  <table
-                    class="table align-middle"
-                    id="stockTable"
-                  >
+                  <table class="table align-middle" id="stockTable">
                     <thead>
                       <tr>
                         <th>อะไหล่</th>
@@ -1240,17 +988,13 @@
                         <th style="width: 110px" class="text-center">
                           คงเหลือ
                         </th>
-                        <th style="width: 90px" class="text-center">
-                          min
-                        </th>
+                        <th style="width: 90px" class="text-center">min</th>
                         <th style="width: 70px" class="text-end"></th>
                       </tr>
                     </thead>
-                    <tbody id="stockTableBody">
-                      </tbody>
+                    <tbody id="stockTableBody"></tbody>
                   </table>
                 </div>
-
                 <div
                   id="stockEmptyState"
                   class="bm-empty-state mt-3 d-none"
@@ -1259,125 +1003,29 @@
                 </div>
               </div>
             </div>
+          </section>
 
-            <div
-              class="modal fade"
-              id="stockItemModal"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 id="stockItemModalTitle" class="modal-title">
-                      จัดการอะไหล่
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="stockItemForm" class="row g-3">
-                      <input
-                        type="hidden"
-                        id="stockItemId"
-                      />
-                      <div class="col-12">
-                        <label class="form-label small">ชื่ออะไหล่</label>
-                        <input
-                          type="text"
-                          id="stockItemName"
-                          class="form-control"
-                          required
-                        />
-                      </div>
-                      <div class="col-12">
-                        <label class="form-label small">SKU / รหัสสินค้า</label>
-                        <input
-                          type="text"
-                          id="stockItemSku"
-                          class="form-control"
-                        />
-                      </div>
-                      <div class="col-6">
-                        <label class="form-label small">หมวด</label>
-                        <select
-                          id="stockItemCategory"
-                          class="form-select"
-                        >
-                          <option value="brake">ระบบเบรก</option>
-                          <option value="engine">เครื่องยนต์</option>
-                          <option value="tire">ยาง / ล้อ</option>
-                          <option value="electric">ระบบไฟ</option>
-                          <option value="other" selected>อื่น ๆ</option>
-                        </select>
-                      </div>
-                      <div class="col-6">
-                        <label class="form-label small">minStock</label>
-                        <input
-                          type="number"
-                          id="stockItemMin"
-                          class="form-control"
-                          min="0"
-                          value="1"
-                        />
-                      </div>
-                      <div class="col-4">
-                        <label class="form-label small">ทุน</label>
-                        <input
-                          type="number"
-                          id="stockItemCost"
-                          class="form-control"
-                          min="0"
-                          required
-                        />
-                      </div>
-                      <div class="col-4">
-                        <label class="form-label small">ขาย</label>
-                        <input
-                          type="number"
-                          id="stockItemPrice"
-                          class="form-control"
-                          min="0"
-                          required
-                        />
-                      </div>
-                      <div class="col-4">
-                        <label class="form-label small">คงเหลือ</label>
-                        <input
-                          type="number"
-                          id="stockItemQty"
-                          class="form-control"
-                          min="0"
-                          value="0"
-                        />
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      id="stockItemSaveBtn"
-                      class="btn btn-success"
-                    >
-                      บันทึก
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      ยกเลิก
-                    </button>
-                  </div>
+          <section
+            id="section-reports"
+            class="bm-section"
+            data-section="reports"
+          >
+            <div class="bm-card mb-3">
+              <div class="bm-card-header">
+                <div>
+                  <h2 class="bm-card-title mb-0">รายงาน / สถิติ</h2>
+                  <p class="bm-card-subtitle mb-0">
+                    สรุปผลประกอบการรายวัน, รายเดือน, กำไร, และค่าใช้จ่าย
+                  </p>
+                </div>
+              </div>
+              <div class="bm-card-body">
+                <div class="bm-empty-state">
+                  ส่วนรายงานกำลังอยู่ระหว่างการพัฒนา...
                 </div>
               </div>
             </div>
           </section>
-
           <section
             id="section-settings"
             class="bm-section"
@@ -1386,137 +1034,660 @@
             <div class="bm-card mb-3">
               <div class="bm-card-header">
                 <div>
-                  <h2 class="bm-card-title mb-0">ตั้งค่าร้าน</h2>
+                  <h2 class="bm-card-title mb-0">ตั้งค่า / ข้อมูลร้าน</h2>
                   <p class="bm-card-subtitle mb-0">
-                    ข้อมูลร้าน, theme, auto-lock และ export ข้อมูล
+                    จัดการข้อมูลร้านและตั้งค่าระบบ
                   </p>
+                </div>
+                <div class="bm-card-header-meta">
+                  <span class="bm-badge-pill">
+                    อัปเดตล่าสุด:
+                    <span id="settingsLastUpdated">–</span>
+                  </span>
                 </div>
               </div>
               <div class="bm-card-body">
-                <form id="settingsForm" class="row g-3">
-                  <div class="col-12 col-lg-6">
-                    <div class="bm-field-group">
-                      <div class="bm-field-label">
-                        ข้อมูลร้าน
-                      </div>
-                      <div class="mb-2">
-                        <label class="form-label small">ชื่อร้าน</label>
-                        <input
-                          type="text"
-                          id="settingShopName"
-                          class="form-control"
-                          placeholder="เช่น BEN MOTOR"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label class="form-label small">ที่อยู่</label>
-                        <textarea
-                          id="settingShopAddress"
-                          class="form-control"
-                          rows="2"
-                          placeholder="ที่อยู่หน้าร้าน"
-                        ></textarea>
-                      </div>
-                      <div class="mb-2">
-                        <label class="form-label small">เบอร์โทร</label>
-                        <input
-                          type="tel"
-                          id="settingShopPhone"
-                          class="form-control"
-                          placeholder="เช่น 08x-xxx-xxxx"
-                        />
-                      </div>
-                      <div>
-                        <label class="form-label small"
-                          >ข้อความท้ายใบเสร็จ</label
-                        >
-                        <textarea
-                          id="settingReceiptFooter"
-                          class="form-control"
-                          rows="2"
-                          placeholder="เช่น ขอบคุณที่ใช้บริการ BEN MOTOR"
-                        ></textarea>
+                <form id="settingsForm">
+                  <div class="row g-4">
+                    <div class="col-12 col-lg-6">
+                      <div class="bm-field-group">
+                        <div class="bm-field-label">ข้อมูลร้าน</div>
+                        <div class="mb-2">
+                          <label class="form-label small">ชื่อร้าน</label>
+                          <input
+                            type="text"
+                            id="settingShopName"
+                            class="form-control"
+                            placeholder="เช่น BEN MOTOR"
+                          />
+                        </div>
+                        <div class="mb-2">
+                          <label class="form-label small">ที่อยู่</label>
+                          <textarea
+                            id="settingShopAddress"
+                            class="form-control"
+                            rows="2"
+                            placeholder="ที่อยู่หน้าร้าน"
+                          ></textarea>
+                        </div>
+                        <div class="mb-2">
+                          <label class="form-label small">เบอร์โทร</label>
+                          <input
+                            type="tel"
+                            id="settingShopPhone"
+                            class="form-control"
+                            placeholder="เช่น 08x-xxx-xxxx"
+                          />
+                        </div>
+                        <div>
+                          <label class="form-label small"
+                            >ข้อความท้ายใบเสร็จ</label
+                          >
+                          <textarea
+                            id="settingReceiptFooter"
+                            class="form-control"
+                            rows="2"
+                            placeholder="เช่น ขอบคุณที่ใช้บริการ BEN MOTOR"
+                          ></textarea>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="col-12 col-lg-6">
-                    <div class="bm-field-group">
-                      <div class="bm-field-label">
-                        การทำงานของระบบ
-                      </div>
-                      <div class="mb-2">
-                        <label class="form-label small"
-                          >ค่าแรงมาตรฐานเริ่มต้น</label
-                        >
-                        <input
-                          type="number"
-                          id="settingDefaultLabor"
-                          class="form-control"
-                          min="0"
-                          value="0"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label class="form-label small">Theme ระบบ</label>
-                        <select
-                          id="settingTheme"
-                          class="form-select"
-                        >
-                          <option value="light">โทนสว่าง (แนะนำ)</option>
-                          <option value="dark">โทนมืด</option>
-                          <option value="auto">ตามเครื่อง</option>
-                        </select>
-                      </div>
-                      <div class="row g-2 align-items-end">
-                        <div class="col-6">
-                          <label class="form-label small">Auto-lock</label>
-                          <select
-                            id="settingAutoLockEnabled"
-                            class="form-select"
-                          >
-                            <option value="off">ปิด</option>
-                            <option value="on">เปิด</option>
-                          </select>
-                        </div>
-                        <div class="col-6">
+                    <div class="col-12 col-lg-6">
+                      <div class="bm-field-group">
+                        <div class="bm-field-label">การทำงานของระบบ</div>
+                        <div class="mb-2">
                           <label class="form-label small"
-                            >เวลาล็อกอัตโนมัติ (นาที)</label
+                            >ค่าแรงมาตรฐานเริ่มต้น</label
                           >
                           <input
                             type="number"
-                            id="settingAutoLockMinutes"
+                            id="settingDefaultLabor"
                             class="form-control"
-                            min="1"
-                            value="10"
+                            placeholder="เช่น 150"
+                            min="0"
                           />
+                          <div class="form-text">
+                            ราคานี้จะถูกตั้งค่าอัตโนมัติเมื่อเพิ่มรายการค่าแรง
+                          </div>
+                        </div>
+
+                        <div class="mb-3">
+                          <div class="bm-field-label mt-3">Theme ระบบ</div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="settingsTheme"
+                              id="themeLight"
+                              value="light"
+                              checked
+                            />
+                            <label class="form-check-label" for="themeLight"
+                              >สว่าง (Light)</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="settingsTheme"
+                              id="themeDark"
+                              value="dark"
+                            />
+                            <label class="form-check-label" for="themeDark"
+                              >มืด (Dark)</label
+                            >
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="settingsTheme"
+                              id="themeAuto"
+                              value="auto"
+                            />
+                            <label class="form-check-label" for="themeAuto"
+                              >อัตโนมัติ (ตาม OS)</label
+                            >
+                          </div>
+                        </div>
+
+                        <div class="bm-field-label mt-3">ความปลอดภัย</div>
+                        <div class="form-check form-switch mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="autoLockEnabledCheckbox"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="autoLockEnabledCheckbox"
+                            >ล็อกหน้าจออัตโนมัติเมื่อไม่ใช้งาน</label
+                          >
+                        </div>
+                        <div class="input-group mb-3" style="max-width: 200px">
+                          <span class="input-group-text">หลัง</span>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="autoLockMinutesInput"
+                            value="5"
+                            min="1"
+                          />
+                          <span class="input-group-text">นาที</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-12 d-grid d-md-flex justify-content-md-end">
-                    <button
-                      type="submit"
-                      class="btn btn-success me-md-2 mb-2 mb-md-0"
-                    >
-                      <i class="bi bi-save2 me-1"></i>บันทึกการตั้งค่า
-                    </button>
+                  <hr class="my-4" />
+
+                  <div class="d-flex justify-content-between">
                     <button
                       type="button"
                       id="settingsExportBtn"
-                      class="btn btn-outline-primary"
+                      class="btn btn-outline-danger"
                     >
-                      <i class="bi bi-download me-1"></i>Export JSON
+                      <i class="bi bi-file-earmark-code me-1"></i>Export JSON
+                      (Backup)
+                    </button>
+                    <button
+                      type="submit"
+                      id="settingsSaveBtn"
+                      class="btn btn-primary"
+                    >
+                      <i class="bi bi-cloud-check me-1"></i>บันทึกการตั้งค่า
                     </button>
                   </div>
                 </form>
               </div>
             </div>
           </section>
-        </main>
 
-        <nav class="bm-bottom-nav d-md-none">
+          <div
+            class="modal fade"
+            id="vehicleSellModal"
+            tabindex="-1"
+            aria-labelledby="vehicleSellModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="vehicleSellModalLabel">
+                    บันทึกการขายรถออก
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <form id="vehicleSellForm" class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label small">รถ:</label>
+                    <div id="sellVehicleDisplay" class="fw-semibold">
+                      -
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small">ราคาซื้อเข้า (ต้นทุน)</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="sellBuyPrice"
+                      min="0"
+                      disabled
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small"
+                      >ค่าใช้จ่ายซ่อม/แต่ง/จิปาถะ</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="sellExtraCost"
+                      placeholder="0"
+                      value="0"
+                      min="0"
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small"
+                      >ราคาขายออก (ยอดรับเงิน)</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="sellSellPrice"
+                      min="0"
+                      required
+                    />
+                  </div>
+
+                  <div class="bm-mini-card">
+                    <div class="bm-mini-card-header">
+                      <span>สรุปกำไร (หลังหักต้นทุนและค่าใช้จ่าย)</span>
+                    </div>
+                    <div class="bm-mini-card-body p-2 text-center">
+                      <div
+                        id="sellProfitDisplay"
+                        class="fw-bold fs-3 text-success"
+                      >
+                        0 บาท
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    ยกเลิก
+                  </button>
+                  <button
+                    id="vehicleSellSaveBtn"
+                    type="submit"
+                    form="vehicleSellForm"
+                    class="btn btn-success"
+                  >
+                    <i class="bi bi-check-circle me-1"></i>บันทึกการขาย
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="stockItemModal"
+            tabindex="-1"
+            aria-labelledby="stockItemModalTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="stockItemModalTitle">
+                    เพิ่ม/แก้ไข อะไหล่ในสต็อก
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <form id="stockItemForm" class="modal-body">
+                  <input type="hidden" id="stockItemId" value="" />
+                  <div class="mb-3">
+                    <label class="form-label small">ชื่ออะไหล่/สินค้า</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="stockItemName"
+                      required
+                    />
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-6">
+                      <label class="form-label small">SKU / รหัสสินค้า</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="stockItemSku"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label small">หมวดหมู่</label>
+                      <select id="stockItemCategory" class="form-select">
+                        <option value="brake">ระบบเบรก</option>
+                        <option value="engine">เครื่องยนต์</option>
+                        <option value="tire">ยาง / ล้อ</option>
+                        <option value="electric">ระบบไฟ</option>
+                        <option value="other">อื่น ๆ</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row g-3 mb-3">
+                    <div class="col-4">
+                      <label class="form-label small">ต้นทุน/ซื้อเข้า</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="stockItemCost"
+                        min="0"
+                        value="0"
+                      />
+                    </div>
+                    <div class="col-4">
+                      <label class="form-label small">ราคาขาย</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="stockItemPrice"
+                        min="0"
+                        value="0"
+                        required
+                      />
+                    </div>
+                    <div class="col-4">
+                      <label class="form-label small">จำนวนคงเหลือ</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="stockItemQty"
+                        min="0"
+                        value="0"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-3" style="max-width: 50%">
+                    <label class="form-label small"
+                      >จำนวนคงเหลือต่ำสุด (Min Stock)</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="stockItemMin"
+                      min="0"
+                      value="1"
+                    />
+                    <div class="form-text">
+                      ถ้าน้อยกว่าค่านี้จะแสดงในแดชบอร์ด
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small"
+                      >โน้ต/รายละเอียด (ไม่แสดงในใบเสร็จ)</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="stockNotesInput"
+                      rows="2"
+                    ></textarea>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    ยกเลิก
+                  </button>
+                  <button
+                    id="stockItemSaveBtn"
+                    type="submit"
+                    form="stockItemForm"
+                    class="btn btn-primary"
+                  >
+                    <i class="bi bi-save me-1"></i>บันทึก
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="jobDetailModal"
+            tabindex="-1"
+            aria-labelledby="jobDetailModalTitle"
+            aria-hidden="true"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+          >
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="jobDetailModalTitle">
+                    รายละเอียดงานซ่อม
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="bm-job-detail-header mb-4">
+                    <div class="row g-3">
+                      <div class="col-12 col-md-6">
+                        <div class="bm-detail-card">
+                          <div class="bm-detail-label">ลูกค้า</div>
+                          <div id="jobDetailCustomerName" class="fw-semibold">
+                            -
+                          </div>
+                          <div id="jobDetailCustomerPhone" class="small text-muted">
+                            -
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <div class="bm-detail-card">
+                          <div class="bm-detail-label">รถ / ทะเบียน</div>
+                          <div id="jobDetailVehicleModel" class="fw-semibold">
+                            -
+                          </div>
+                          <div id="jobDetailVehiclePlate" class="small text-muted">
+                            -
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bm-detail-card mt-3">
+                      <div class="bm-detail-label">อาการที่ลูกค้าแจ้ง</div>
+                      <div id="jobDetailCustomerNote" class="small text-wrap">
+                        -
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row g-3">
+                    <div class="col-12 col-lg-8">
+                      <div class="bm-card bm-card-compact">
+                        <div class="bm-card-header">
+                          <h6 class="bm-card-title mb-0">รายการซ่อม</h6>
+                        </div>
+                        <div class="table-responsive">
+                          <table class="table align-middle mb-0 small">
+                            <thead>
+                              <tr>
+                                <th style="width: 100px">ชนิด</th>
+                                <th>รายการ</th>
+                                <th style="width: 80px" class="text-center">
+                                  จำนวน
+                                </th>
+                                <th style="width: 100px" class="text-end">
+                                  ราคา
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody id="jobDetailItemsBody"></tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="3" class="text-end fw-semibold">
+                                  ยอดรวมสุทธิ
+                                </td>
+                                <td id="jobDetailTotalAmount" class="text-end fw-semibold">
+                                  0 บาท
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+
+                      <div class="bm-card bm-card-compact mt-3">
+                        <div class="bm-card-header">
+                          <h6 class="bm-card-title mb-0">โน้ตภายใน</h6>
+                        </div>
+                        <div class="bm-card-body small">
+                          <div id="jobDetailInternalNote" class="text-wrap">
+                            -
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-12 col-lg-4">
+                      <div class="bm-card bm-card-compact">
+                        <div class="bm-card-header">
+                          <h6 class="bm-card-title mb-0">ข้อมูลงาน</h6>
+                        </div>
+                        <div class="bm-card-body small">
+                          <div class="mb-2">
+                            <span class="text-muted">เลขที่งาน:</span>
+                            <span id="jobDetailJobNumber" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted">วันที่รับ:</span>
+                            <span id="jobDetailCreatedAt" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted">สถานะ:</span>
+                            <span id="jobDetailStatusText" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted">ความเร่งด่วน:</span>
+                            <span id="jobDetailPriority" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted">เลขไมล์:</span>
+                            <span id="jobDetailOdo" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <div class="mb-2">
+                            <span class="text-muted">ประเภท:</span>
+                            <span id="jobDetailJobType" class="fw-semibold ms-2">-</span>
+                          </div>
+                          <hr />
+                          <div class="d-flex gap-2 flex-wrap">
+                            <button
+                              type="button"
+                              id="jobDetailEditBtn"
+                              class="btn btn-sm btn-outline-primary"
+                            >
+                              <i class="bi bi-pencil-square me-1"></i>แก้ไขงาน
+                            </button>
+                            <button
+                              type="button"
+                              id="jobDetailChangeStatusBtn"
+                              class="btn btn-sm btn-warning"
+                              data-bs-toggle="modal"
+                              data-bs-target="#jobStatusModal"
+                            >
+                              <i class="bi bi-repeat me-1"></i>เปลี่ยนสถานะ
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="bm-card bm-card-compact mt-3">
+                        <div class="bm-card-header">
+                          <h6 class="bm-card-title mb-0">เอกสาร</h6>
+                        </div>
+                        <div class="bm-card-body small">
+                          <div class="d-grid gap-2">
+                            <button
+                              type="button"
+                              id="jobDetailPrintBtn"
+                              class="btn btn-sm btn-outline-secondary"
+                            >
+                              <i class="bi bi-printer me-1"></i>พิมพ์ใบรับรถ/ใบเสร็จ
+                            </button>
+                            <button
+                              type="button"
+                              id="jobDetailCopyMessageBtn"
+                              class="btn btn-sm btn-outline-success"
+                            >
+                              <i class="bi bi-chat-text me-1"></i>คัดลอกข้อความแจ้งลูกค้า
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    ปิด
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="jobStatusModal"
+            tabindex="-1"
+            aria-labelledby="jobStatusModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="jobStatusModalLabel">
+                    เปลี่ยนสถานะงานซ่อม
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <form id="jobStatusForm" class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label">สถานะใหม่</label>
+                    <select id="jobStatusSelect" class="form-select" required>
+                      <option value="queue">รอรับเข้า</option>
+                      <option value="in-progress">กำลังซ่อม</option>
+                      <option value="waiting-parts">รออะไหล่</option>
+                      <option value="waiting-payment">รอชำระเงิน</option>
+                      <option value="done">ปิดงานแล้ว</option>
+                    </select>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    ยกเลิก
+                  </button>
+                  <button
+                    type="submit"
+                    form="jobStatusForm"
+                    class="btn btn-warning"
+                  >
+                    <i class="bi bi-check-circle me-1"></i>บันทึกสถานะ
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          </main>
+
+        <nav class="bm-bottom-nav d-block d-md-none">
           <button
             type="button"
             class="bm-bottom-nav-btn active"
@@ -1560,12 +1731,12 @@
           <button
             type="button"
             class="bm-bottom-nav-btn"
-            data-section-target="settings"
+            data-section-target="reports"
           >
-            <i class="bi bi-gear-wide-connected"></i>
-            <span>ตั้งค่า</span>
+            <i class="bi bi-bar-chart"></i>
+            <span>รายงาน</span>
           </button>
-        </nav>
+          </nav>
       </div>
     </div>
 
@@ -1586,5 +1757,4 @@
     <script type="module" src="./js/settings.js"></script>
     <script type="module" src="./js/auth.js"></script>
   </body>
-
 </html>
