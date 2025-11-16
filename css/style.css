@@ -1102,3 +1102,23 @@ h6 {
 #section-vehicles .bm-card-body {
   padding: 0.75rem 0 0;
 }
+
+/* เส้นคั่นหัวข้อในการ์ด (เช่น "สรุปยอดรถซื้อ–ขาย") */
+.bm-divider {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--bm-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bm-divider::before,
+.bm-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.5);
+}
