@@ -1077,3 +1077,55 @@ h6 {
   padding: 5px 10px;
   border-radius: 20px;
 }
+
+/* ---------------------------------
+   ปรับสีการ์ด รถค้างสต๊อก / รถขายแล้ว
+   วางต่อท้ายสุดของ style.css
+---------------------------------- */
+
+/* พื้นฐาน: ตัวหนังสือการ์ดให้เป็นสีดำอ่านชัด */
+.bm-vehicle-card {
+  color: #111827;
+}
+
+/* รถค้างสต๊อก – พื้นหลังขาว ขอบเทาอ่อน */
+.bm-vehicle-card.in-stock {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+
+/* รถขายแล้ว – การ์ดติดโทนเขียวอ่อนหน่อย */
+.bm-vehicle-card.sold {
+  background-color: #ecfdf3;
+  border-color: #4ade80;
+}
+
+/* badge สถานะ */
+.bm-vehicle-status-badge.in-stock {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+
+.bm-vehicle-status-badge.sold {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+/* สีตัวเลขราคาในบรรทัดเงินต่าง ๆ  */
+/* ราคาซื้อเข้า = ดำ */
+.bm-vehicle-price-buy .bm-vehicle-price-value {
+  color: #111827 !important;
+  font-weight: 600;
+}
+
+/* ราคาขาย = แดง */
+.bm-vehicle-price-sell .bm-vehicle-price-value {
+  color: #dc2626 !important;
+  font-weight: 700;
+}
+
+/* กำไร = เขียว */
+.bm-vehicle-price-profit .bm-vehicle-price-value {
+  color: #16a34a !important;
+  font-weight: 700;
+}
