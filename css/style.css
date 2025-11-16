@@ -959,3 +959,33 @@ h6 {
     font-size: 0.8rem;
   }
 }
+
+/* =========================
+   Vehicles – fix header & align
+   ========================= */
+
+/* ซ่อนหัวตารางของ รถค้างสต๊อก / รถขายแล้ว */
+#vehiclesStockTable thead,
+#vehiclesSoldTable thead {
+  display: none;
+}
+
+/* ให้ตัวหนังสือในการ์ดชิดซ้ายเป็นหลัก */
+#vehiclesStockTable tbody td,
+#vehiclesSoldTable tbody td {
+  text-align: left;
+}
+
+/* ช่องตัวเลขราคา ให้ชิดขวาอ่านง่าย */
+#vehiclesStockTable tbody td:nth-child(2),
+#vehiclesSoldTable tbody td:nth-child(2),
+#vehiclesSoldTable tbody td:nth-child(3),
+#vehiclesSoldTable tbody td:nth-child(4) {
+  text-align: right;
+}
+
+/* บีบระยะห่างการ์ดลงหน่อยไม่ให้ดูหลวมเกิน */
+#vehiclesStockTable,
+#vehiclesSoldTable {
+  border-spacing: 0 0.5rem;
+}
