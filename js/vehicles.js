@@ -1,4 +1,4 @@
-// BEN MOTOR POS – Vehicles (ซื้อ–ขายรถ)
+// vehicles.js – รถซื้อ–ขาย BEN MOTOR POS (เวอร์ชันตรงกับ app.html ปัจจุบัน)
 
 import {
   db,
@@ -12,47 +12,45 @@ import {
   orderBy,
   serverTimestamp
 } from "./firebase-init.js";
-
 import { formatCurrency, formatDateTime, showToast } from "./utils.js";
 
+// -----------------------------
+// Helpers
+// -----------------------------
 const vehiclesCol = collection(db, "vehicles");
 
-let inStockCache = [];
-let soldCache = [];
-let selectedVehicleForSale = null;
-
-// -----------------------------
-// Helpers – DOM
-// -----------------------------
 function $(id) {
   return document.getElementById(id);
 }
 
-function safeNumber(v, fallback = 0) {
-  const n = typeof v === "number" ? v : Number(v);
-  if (!Number.isFinite(n)) return fallback;
-  return n;
+function safeNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
 }
 
+let inStockCache = [];
+let soldCache = [];
+let selectedVehicle = null;
+
 // -----------------------------
-// Load vehicles
+// โหลดรายการรถจาก Firestore
 // -----------------------------
 async function loadVehiclesLists() {
-  const inStockBody = $("vehiclesInStockBody");
-  const soldBody = $("vehiclesSoldBody");
+  const stockTbody = $("vehiclesStockBody");
+  const soldTbody = $("vehiclesSoldBody");
 
-  if (inStockBody) {
-    inStockBody.innerHTML = `
+  if (stockTbody) {
+    stockTbody.innerHTML = `
       <tr>
         <td colspan="6" class="text-center py-3 text-muted">
-          กำลังโหลดรายการรถค้างสต็อกจากระบบ...
+          กำลังโหลดข้อมูลรถค้างสต็อกจากระบบ...
         </td>
       </tr>
     `;
   }
 
-  if (soldBody) {
-    soldBody.innerHTML = `
+  if (soldTbody) {
+    soldTbody.innerHTML = `
       <tr>
         <td colspan="6" class="text-center py-3 text-muted">
           กำลังโหลดประวัติขายรถจากระบบ...
@@ -121,11 +119,10 @@ async function loadVehiclesLists() {
 
     renderInStockTable();
     renderSoldTable();
-    updateSummary();
   } catch (error) {
     console.error("โหลดข้อมูลรถซื้อ–ขายไม่สำเร็จ:", error);
-    if (inStockBody) {
-      inStockBody.innerHTML = `
+    if (stockTbody) {
+      stockTbody.innerHTML = `
         <tr>
           <td colspan="6" class="text-center py-3 text-danger">
             โหลดข้อมูลรถค้างสต็อกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง
@@ -133,8 +130,8 @@ async function loadVehiclesLists() {
         </tr>
       `;
     }
-    if (soldBody) {
-      soldBody.innerHTML = `
+    if (soldTbody) {
+      soldTbody.innerHTML = `
         <tr>
           <td colspan="6" class="text-center py-3 text-danger">
             โหลดประวัติขายรถไม่สำเร็จ กรุณาลองใหม่อีกครั้ง
@@ -146,15 +143,11 @@ async function loadVehiclesLists() {
 }
 
 // -----------------------------
-// Render – In stock
+// Render – รถค้างสต็อก (ตารางซ้าย)
+// ใช้ tbody id="vehiclesStockBody"
 // -----------------------------
 function renderInStockTable() {
-  const tbody = $("vehiclesInStockBody");
-  const countEl = $("vehiclesInStockCount");
-  if (countEl) {
-    countEl.textContent = inStockCache.length.toString();
-  }
-
+  const tbody = $("vehiclesStockBody");
   if (!tbody) return;
 
   if (!inStockCache.length) {
@@ -169,15 +162,14 @@ function renderInStockTable() {
   }
 
   const rowsHtml = inStockCache.map((v) => {
-    const name = `${v.brand || v.make || ""} ${v.model || ""}`.trim() || "ไม่ระบุรุ่น";
+    const name = `${v.brand || v.make || ""} ${v.model || ""}`
+      .trim() || "ไม่ระบุรุ่น";
     const plate = v.plate || v.license || "-";
     const year = v.year || "";
     const mileage = v.mileage || v.odometer || "";
     const buyPrice = safeNumber(v.buyPrice ?? v.costPrice ?? 0);
 
-    const createdAtText = v.createdAt
-      ? formatDateTime(v.createdAt)
-      : "";
+    const createdAtText = v.createdAt ? formatDateTime(v.createdAt) : "";
 
     return `
       <tr data-vehicle-id="${v.id}">
@@ -212,6 +204,7 @@ function renderInStockTable() {
 
   tbody.innerHTML = rowsHtml.join("");
 
+  // click: บันทึกการขาย
   tbody.addEventListener(
     "click",
     (e) => {
@@ -235,15 +228,11 @@ function renderInStockTable() {
 }
 
 // -----------------------------
-// Render – Sold
+// Render – รถที่ขายแล้ว (ตารางขวา)
+// ใช้ tbody id="vehiclesSoldBody"
 // -----------------------------
 function renderSoldTable() {
   const tbody = $("vehiclesSoldBody");
-  const countEl = $("vehiclesSoldCount");
-  if (countEl) {
-    countEl.textContent = soldCache.length.toString();
-  }
-
   if (!tbody) return;
 
   if (!soldCache.length) {
@@ -258,7 +247,8 @@ function renderSoldTable() {
   }
 
   const rowsHtml = soldCache.map((v) => {
-    const name = `${v.brand || v.make || ""} ${v.model || ""}`.trim() || "ไม่ระบุรุ่น";
+    const name = `${v.brand || v.make || ""} ${v.model || ""}`
+      .trim() || "ไม่ระบุรุ่น";
     const plate = v.plate || v.license || "-";
     const year = v.year || "";
     const mileage = v.mileage || v.odometer || "";
@@ -291,11 +281,7 @@ function renderSoldTable() {
           ${sellPrice ? formatCurrency(sellPrice) + "฿" : "-"}
         </td>
         <td class="text-end small">
-          ${
-            extraCost
-              ? formatCurrency(extraCost) + "฿"
-              : "-"
-          }
+          ${extraCost ? formatCurrency(extraCost) + "฿" : "-"}
         </td>
         <td class="text-end">
           <div class="${profit >= 0 ? "text-success" : "text-danger"} fw-semibold">
@@ -313,68 +299,34 @@ function renderSoldTable() {
 }
 
 // -----------------------------
-// Summary (จำนวนค้าง + กำไรรวม)
-// -----------------------------
-function updateSummary() {
-  const inStockCountEl = $("vehiclesInStockCount");
-  const soldCountEl = $("vehiclesSoldCount");
-  const profitTextEl = $("vehiclesProfitSummaryText");
-
-  if (inStockCountEl) {
-    inStockCountEl.textContent = inStockCache.length.toString();
-  }
-  if (soldCountEl) {
-    soldCountEl.textContent = soldCache.length.toString();
-  }
-
-  if (profitTextEl) {
-    let totalProfit = 0;
-    soldCache.forEach((v) => {
-      const buyPrice = safeNumber(v.buyPrice ?? v.costPrice ?? 0);
-      const sellPrice = safeNumber(v.sellPrice ?? v.salePrice ?? 0);
-      const extraCost = safeNumber(v.extraCost ?? v.repairCost ?? 0);
-      const profit =
-        v.profit != null
-          ? safeNumber(v.profit)
-          : sellPrice - buyPrice - extraCost;
-      totalProfit += profit;
-    });
-
-    profitTextEl.textContent =
-      soldCache.length === 0
-        ? "ยังไม่มีข้อมูลกำไรจากการขายรถ"
-        : `กำไรรวมจากการขายรถ: ${formatCurrency(totalProfit)} บาท`;
-  }
-}
-
-// -----------------------------
-// Buy Form – รับซื้อรถเข้าระบบ
+// ฟอร์มรับซื้อรถ – ใช้ id จาก app.html ตอนนี้
+// form id="vehicleBuyForm"
+// input: vehicleModel, vehiclePlate, vehicleYear, vehicleOdo,
+//        vehicleBuyPrice, vehicleCondition
 // -----------------------------
 async function handleBuyFormSubmit(e) {
   e.preventDefault();
 
-  const brandInput = $("vehiclesBuyBrandInput");
-  const modelInput = $("vehiclesBuyModelInput");
-  const plateInput = $("vehiclesBuyPlateInput");
-  const yearInput = $("vehiclesBuyYearInput");
-  const mileageInput = $("vehiclesBuyMileageInput");
-  const priceInput = $("vehiclesBuyPriceInput");
-  const noteInput = $("vehiclesBuyNoteInput");
+  const modelInput = $("vehicleModel");
+  const plateInput = $("vehiclePlate");
+  const yearInput = $("vehicleYear");
+  const mileageInput = $("vehicleOdo");
+  const priceInput = $("vehicleBuyPrice");
+  const conditionInput = $("vehicleCondition");
 
-  if (!brandInput || !modelInput || !plateInput || !priceInput) {
+  if (!modelInput || !plateInput || !priceInput) {
     showToast("ฟอร์มรับซื้อรถยังไม่ครบในหน้าเว็บ", "error");
     return;
   }
 
-  const brand = brandInput.value.trim();
-  const model = modelInput.value.trim();
+  const modelText = modelInput.value.trim();
   const plate = plateInput.value.trim();
   const year = yearInput ? yearInput.value.trim() : "";
   const mileage = mileageInput ? mileageInput.value.trim() : "";
   const buyPrice = safeNumber(priceInput.value || 0);
-  const note = noteInput ? noteInput.value.trim() : "";
+  const conditionNote = conditionInput ? conditionInput.value.trim() : "";
 
-  if (!brand && !model && !plate) {
+  if (!modelText && !plate) {
     showToast("กรุณากรอกอย่างน้อย ยี่ห้อ/รุ่น หรือ ทะเบียนรถ", "error");
     return;
   }
@@ -384,8 +336,18 @@ async function handleBuyFormSubmit(e) {
     return;
   }
 
-  const buyBtn = $("vehiclesBuySubmitBtn");
-  if (buyBtn) buyBtn.disabled = true;
+  // แยก brand/model แบบง่าย ๆ: เอาคำหน้าเป็น brand ที่เหลือเป็น model
+  let brand = "";
+  let model = modelText;
+  const parts = modelText.split(" ");
+  if (parts.length > 1) {
+    brand = parts[0];
+    model = parts.slice(1).join(" ");
+  }
+
+  const form = e.target;
+  const submitBtn = form.querySelector("button[type='submit']");
+  if (submitBtn) submitBtn.disabled = true;
 
   try {
     const now = new Date();
@@ -396,195 +358,147 @@ async function handleBuyFormSubmit(e) {
       year,
       mileage,
       buyPrice,
-      note,
+      note: conditionNote,
       status: "in-stock",
       createdAt: serverTimestamp(),
       createdLocalAt: now
     };
 
     await addDoc(vehiclesCol, payload);
-    showToast("บันทึกรถที่รับซื้อเข้าระบบเรียบร้อย", "success");
 
-    if (brandInput) brandInput.value = "";
-    if (modelInput) modelInput.value = "";
-    if (plateInput) plateInput.value = "";
-    if (yearInput) yearInput.value = "";
-    if (mileageInput) mileageInput.value = "";
-    if (priceInput) priceInput.value = "";
-    if (noteInput) noteInput.value = "";
+    showToast("บันทึกการรับซื้อรถเรียบร้อย", "success");
 
-    loadVehiclesLists();
+    form.reset();
+    await loadVehiclesLists();
   } catch (error) {
-    console.error("บันทึกข้อมูลรับซื้อรถไม่สำเร็จ:", error);
-    showToast("บันทึกข้อมูลรับซื้อรถไม่สำเร็จ", "error");
+    console.error("บันทึกการรับซื้อรถไม่สำเร็จ:", error);
+    showToast("บันทึกรถไม่สำเร็จ กรุณาลองใหม่", "error");
   } finally {
-    if (buyBtn) buyBtn.disabled = false;
+    if (submitBtn) submitBtn.disabled = false;
   }
 }
 
 // -----------------------------
-// Sell Modal – เปิดเพื่อบันทึกขายรถ
+// Modal ขายรถ – ใช้ id จาก app.html ปัจจุบัน
+// modal id="vehicleSellModal"
+// label id="vehicleSellLabel"
+// buy price id="vehicleSellBuyPrice"
+// sale price id="vehicleSellSalePrice"
+// repair cost id="vehicleSellRepairCost"
+// ปุ่มบันทึก id="vehicleSellSaveBtn"
 // -----------------------------
 function openSellModal(vehicle) {
-  selectedVehicleForSale = vehicle;
+  selectedVehicle = vehicle || null;
 
-  const modalEl = $("vehiclesSellModal");
-  if (!modalEl) {
-    const name = `${vehicle.brand || vehicle.make || ""} ${
-      vehicle.model || ""
-    }`.trim();
-    const plate = vehicle.plate || vehicle.license || "-";
-    const msg = [
-      `รถค้างสต็อก: ${name || "ไม่ระบุรุ่น"} (ทะเบียน ${plate})`,
-      "",
-      "ยังไม่ได้สร้างหน้าต่างบันทึกการขายในหน้านี้",
-      "กรุณาเพิ่ม Modal id=\"vehiclesSellModal\" ตามที่ระบบคาดหวัง"
-    ].join("\n");
-    alert(msg);
-    return;
-  }
+  const modalEl = $("vehicleSellModal");
+  if (!modalEl || !window.bootstrap) return;
 
-  const infoEl = $("vehiclesSellInfo");
-  const sellPriceInput = $("vehiclesSellPriceInput");
-  const extraCostInput = $("vehiclesSellExtraCostInput");
-  const noteInput = $("vehiclesSellNoteInput");
+  const labelEl = $("vehicleSellLabel");
+  const buyPriceEl = $("vehicleSellBuyPrice");
+  const salePriceEl = $("vehicleSellSalePrice");
+  const repairCostEl = $("vehicleSellRepairCost");
 
   const name = `${vehicle.brand || vehicle.make || ""} ${
     vehicle.model || ""
-  }`.trim();
+  }`.trim() || "ไม่ระบุรุ่น";
   const plate = vehicle.plate || vehicle.license || "-";
-  const buyPrice = safeNumber(vehicle.buyPrice ?? vehicle.costPrice ?? 0);
 
-  if (infoEl) {
-    infoEl.innerHTML = `
-      <div class="fw-semibold">${name || "ไม่ระบุรุ่น"}</div>
-      <div class="small text-muted">ทะเบียน ${plate}</div>
-      ${
-        buyPrice
-          ? `<div class="small text-muted">ราคาซื้อเข้า ${formatCurrency(
-              buyPrice
-            )}฿</div>`
-          : ""
-      }
-    `;
+  if (labelEl) {
+    labelEl.textContent = `${name} • ทะเบียน ${plate}`;
+  }
+  if (buyPriceEl) {
+    buyPriceEl.value = vehicle.buyPrice ?? vehicle.costPrice ?? "";
+  }
+  if (salePriceEl) {
+    salePriceEl.value = vehicle.sellPrice ?? vehicle.salePrice ?? "";
+  }
+  if (repairCostEl) {
+    repairCostEl.value = vehicle.extraCost ?? vehicle.repairCost ?? "";
   }
 
-  if (sellPriceInput) {
-    sellPriceInput.value = "";
-  }
-  if (extraCostInput) {
-    extraCostInput.value = "";
-  }
-  if (noteInput) {
-    noteInput.value = "";
-  }
-
-  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  const modal = new window.bootstrap.Modal(modalEl);
   modal.show();
 }
 
-// -----------------------------
-// Sell – บันทึกการขายจริง
-// -----------------------------
 async function handleSellSave() {
-  if (!selectedVehicleForSale) {
-    showToast("ไม่พบข้อมูลรถที่จะบันทึกขาย", "error");
+  if (!selectedVehicle) {
+    showToast("ไม่พบข้อมูลรถที่ต้องการบันทึกการขาย", "error");
     return;
   }
 
-  const sellPriceInput = $("vehiclesSellPriceInput");
-  const extraCostInput = $("vehiclesSellExtraCostInput");
-  const noteInput = $("vehiclesSellNoteInput");
+  const modalEl = $("vehicleSellModal");
+  if (!modalEl || !window.bootstrap) return;
 
-  if (!sellPriceInput) {
-    showToast("ฟอร์มบันทึกการขายยังไม่ครบในหน้าเว็บ", "error");
-    return;
-  }
+  const buyPriceEl = $("vehicleSellBuyPrice");
+  const salePriceEl = $("vehicleSellSalePrice");
+  const repairCostEl = $("vehicleSellRepairCost");
 
-  const sellPrice = safeNumber(sellPriceInput.value || 0);
-  const extraCost = extraCostInput
-    ? safeNumber(extraCostInput.value || 0)
-    : 0;
-  const sellNote = noteInput ? noteInput.value.trim() : "";
+  const buyPrice = safeNumber(buyPriceEl?.value || selectedVehicle.buyPrice || 0);
+  const sellPrice = safeNumber(salePriceEl?.value || 0);
+  const extraCost = safeNumber(repairCostEl?.value || 0);
 
   if (!sellPrice) {
     showToast("กรุณากรอกราคาขาย", "error");
     return;
   }
 
-  const saveBtn = $("vehiclesSellSaveBtn");
+  const profit = sellPrice - buyPrice - extraCost;
+
+  const saveBtn = $("vehicleSellSaveBtn");
   if (saveBtn) saveBtn.disabled = true;
 
   try {
-    const buyPrice = safeNumber(
-      selectedVehicleForSale.buyPrice ??
-        selectedVehicleForSale.costPrice ??
-        0
-    );
-    const profit = sellPrice - buyPrice - extraCost;
-
-    const ref = doc(db, "vehicles", selectedVehicleForSale.id);
+    const ref = doc(db, "vehicles", selectedVehicle.id);
     await updateDoc(ref, {
+      buyPrice,
       sellPrice,
       extraCost,
-      sellNote,
       profit,
       status: "sold",
-      soldAt: serverTimestamp(),
-      soldLocalAt: new Date()
+      soldAt: serverTimestamp()
     });
 
     showToast("บันทึกการขายรถเรียบร้อย", "success");
 
-    const modalEl = $("vehiclesSellModal");
-    if (modalEl) {
-      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-      modal.hide();
-    }
+    const modal = window.bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
 
-    selectedVehicleForSale = null;
-    loadVehiclesLists();
+    selectedVehicle = null;
+    await loadVehiclesLists();
   } catch (error) {
     console.error("บันทึกการขายรถไม่สำเร็จ:", error);
-    showToast("บันทึกการขายรถไม่สำเร็จ", "error");
+    showToast("บันทึกการขายรถไม่สำเร็จ กรุณาลองใหม่", "error");
   } finally {
     if (saveBtn) saveBtn.disabled = false;
   }
 }
 
 // -----------------------------
-// Init – Vehicles section
+// init
 // -----------------------------
 function initVehicles() {
   const section = document.querySelector('[data-section="vehicles"]');
   if (!section) return;
 
-  const buyForm = $("vehiclesBuyForm");
-  const reloadBtn = $("vehiclesReloadBtn");
-  const sellSaveBtn = $("vehiclesSellSaveBtn");
-
+  const buyForm = $("vehicleBuyForm");
   if (buyForm) {
     buyForm.addEventListener("submit", handleBuyFormSubmit);
   }
 
-  if (reloadBtn) {
-    reloadBtn.addEventListener("click", () => {
-      loadVehiclesLists();
-    });
-  }
-
+  const sellSaveBtn = $("vehicleSellSaveBtn");
   if (sellSaveBtn) {
-    sellSaveBtn.addEventListener("click", () => {
-      handleSellSave();
-    });
+    sellSaveBtn.addEventListener("click", handleSellSave);
   }
 
-  loadVehiclesLists();
+  loadVehiclesLists().catch((err) =>
+    console.error("เกิดข้อผิดพลาดตอนโหลดรายการรถ:", err)
+  );
 }
 
-// -----------------------------
-// Bootstrap
-// -----------------------------
-document.addEventListener("DOMContentLoaded", () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initVehicles);
+} else {
   initVehicles();
-});
+}
+
+export { initVehicles };
