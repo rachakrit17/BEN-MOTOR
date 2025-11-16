@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR POS – แนะนำการซ่อม</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Fonts: Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- Main style -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-app theme-light">
+    <!-- Topbar แบบเดียวกับระบบหลัก แต่ simple -->
+    <header class="bm-topbar bm-topbar-gradient">
+      <div class="container-fluid d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <a
+            href="app.html"
+            class="btn btn-light btn-sm rounded-pill d-inline-flex align-items-center"
+          >
+            <i class="bi bi-arrow-left-short me-1"></i>
+            กลับไปหน้า POS
+          </a>
+          <div class="bm-topbar-title-group">
+            <h1 class="bm-topbar-title mb-0">
+              แนะนำการซ่อม BEN MOTOR
+            </h1>
+            <div class="bm-topbar-subtitle">
+              แนวทางซ่อมพื้นฐานที่ควรเช็ก / ควรเสนอให้ลูกค้า
+            </div>
+          </div>
+        </div>
+
+        <div class="bm-topbar-datetime-panel d-none d-md-block">
+          <div class="bm-date-text">
+            แนะนำช่าง – ใช้งานภายในอู่เท่านั้น
+          </div>
+          <div class="bm-time-text">
+            BEN MOTOR POS
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container my-3 my-md-4">
+      <!-- แถวบน: ปุ่มลัด -->
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-lg-8">
+          <div class="bm-card">
+            <div class="bm-card-header">
+              <div>
+                <h2 class="bm-card-title mb-0">
+                  แนวทางซ่อมหลักที่ควรเสนอประจำ
+                </h2>
+                <p class="bm-card-subtitle mb-0">
+                  เอาไว้เตือนตัวเองเวลาเปิดบิล / คุยกับลูกค้า
+                </p>
+              </div>
+            </div>
+            <div class="bm-card-body">
+              <div class="row g-3">
+                <div class="col-12 col-md-6">
+                  <div class="bm-field-group">
+                    <div class="bm-field-label">
+                      <i class="bi bi-droplet-half"></i>
+                      งานดูแลตามระยะ (Maintenance)
+                    </div>
+                    <ul class="mb-0 small bm-text-muted">
+                      <li>เปลี่ยนน้ำมันเครื่อง ทุก 1,500–2,000 กม. (รถใช้งานทั่วไป)</li>
+                      <li>เช็กกรองอากาศ – ถ้าใช้ในฝุ่นเยอะ แนะนำเปลี่ยนถี่ขึ้น</li>
+                      <li>เช็กโซ่/สเตอร์ – ตั้งโซ่ หล่อลื่น และดูการสึก</li>
+                      <li>เช็กผ้าเบรกหน้า/หลัง – แจ้งลูกค้าเมื่อใกล้หมด</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <div class="bm-field-group">
+                    <div class="bm-field-label">
+                      <i class="bi bi-exclamation-triangle"></i>
+                      อาการยอดฮิต – ควรเช็กอะไรบ้าง
+                    </div>
+                    <ul class="mb-0 small bm-text-muted">
+                      <li><strong>เร่งไม่ขึ้น / สะดุด:</strong> เช็กหัวเทียน, กรองอากาศ, คาร์บู/หัวฉีด</li>
+                      <li><strong>เบรกเสียงดัง:</strong> ผ้าเบรกแข็ง, จานเป็นรอย, ฝุ่น/ทราย</li>
+                      <li><strong>หน้าส่าย / หลังปัด:</strong> ลมยาง, ดอกยาง, ลูกปืนคอ/ล้อ</li>
+                      <li><strong>สตาร์ทยาก:</strong> แบตอ่อน, หัวเทียน, ระบบไฟชาร์จ</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bm-divider mt-3 mb-2">
+                เช็กลิสต์ที่ควรเสนอเพิ่มถ้าลูกค้ายอมทำ
+              </div>
+
+              <div class="row g-3">
+                <div class="col-12 col-md-4">
+                  <div class="bm-mini-card">
+                    <div class="bm-mini-card-header">
+                      <span class="fw-semibold">
+                        เพิ่มยอดง่าย – ปลอดภัยขึ้น
+                      </span>
+                    </div>
+                    <ul class="mb-0 small bm-text-muted">
+                      <li>เช็ก/ตั้งโซ่ + หล่อลื่น</li>
+                      <li>เช็กลมยาง + สภาพยาง</li>
+                      <li>เช็กผ้าเบรกหน้า/หลัง</li>
+                      <li>เช็กน้ำมันเบรก</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="bm-mini-card">
+                    <div class="bm-mini-card-header">
+                      <span class="fw-semibold">
+                        รถใช้งานหนัก / ส่งของ
+                      </span>
+                    </div>
+                    <ul class="mb-0 small bm-text-muted">
+                      <li>แนะนำเปลี่ยนน้ำมันเครื่องถี่ขึ้น</li>
+                      <li>เช็กโช้ค / ลูกปืนล้อบ่อยกว่าปกติ</li>
+                      <li>เช็กผ้าเบรกบ่อย (เบรกเยอะ)</li>
+                      <li>เน้นอธิบายเรื่องความปลอดภัย</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="bm-mini-card">
+                    <div class="bm-mini-card-header">
+                      <span class="fw-semibold">
+                        งานแต่งเบา ๆ ที่เสนอได้
+                      </span>
+                    </div>
+                    <ul class="mb-0 small bm-text-muted">
+                      <li>เปลี่ยนยางเกรดดีกว่าเดิม</li>
+                      <li>เปลี่ยนผ้าเบรกเกรดดี</li>
+                      <li>ใส่ไฟสว่างขึ้น (ไม่แยงตา)</li>
+                      <li>แนะนำของแต่งเล็ก ๆ ที่มีในสต็อก</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- กล่องโน้ตส่วนตัว -->
+        <div class="col-12 col-lg-4">
+          <div class="bm-card h-100">
+            <div class="bm-card-header">
+              <div>
+                <h2 class="bm-card-title mb-0">
+                  โน้ตส่วนตัว BEN MOTOR
+                </h2>
+                <p class="bm-card-subtitle mb-0">
+                  เอาไว้จดสไตล์การซ่อมหรือเซ็ตติ้งประจำร้าน
+                </p>
+              </div>
+            </div>
+            <div class="bm-card-body">
+              <div class="bm-field-group mb-2">
+                <div class="bm-field-label">
+                  แนวทาง/เซ็ตติ้งที่ใช้บ่อย
+                </div>
+                <ul class="mb-0 small bm-text-muted">
+                  <li>เช่น Kaze ZX130 – น้ำมันเครื่อง 10W-40, หัวเทียนเบอร์ ...</li>
+                  <li>ลูกค้าประจำชอบตั้งรอบเดินเบาแบบไหน</li>
+                  <li>เซ็ตติ้งคาร์บู/หัวฉีดที่ลองแล้วเวิร์ก</li>
+                </ul>
+              </div>
+              <div class="bm-field-group">
+                <div class="bm-field-label">
+                  ไอเดียที่อยากลองเพิ่มในอนาคต
+                </div>
+                <ul class="mb-0 small bm-text-muted">
+                  <li>เช่น ทำ Preset งานซ่อมเพิ่มใน POS</li>
+                  <li>เซ็ตแพ็กเกจเช็กระยะราคาพิเศษ</li>
+                  <li>โปรโมชันคู่กับการเปลี่ยนยาง / ผ้าเบรก</li>
+                </ul>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                <strong>หมายเหตุ:</strong> ตอนนี้หน้า “แนะนำการซ่อม” ยังเป็นข้อมูลคงที่
+                ถ้าอนาคตอยากเก็บใน Firestore เดี๋ยวค่อยต่อ JS/Firebase เพิ่มทีหลังได้
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- แถวล่าง: ตารางแนวคิดแนะนำตามระยะไมล์ -->
+      <div class="bm-card mb-4">
+        <div class="bm-card-header">
+          <div>
+            <h2 class="bm-card-title mb-0">
+              ไอเดียแนะนำงานซ่อมตามระยะทาง (ตัวอย่าง)
+            </h2>
+            <p class="bm-card-subtitle mb-0">
+              ใช้เป็นแนวทางจำง่าย ๆ เวลาเปิดบิล หรือคุยกับลูกค้า
+            </p>
+          </div>
+        </div>
+        <div class="bm-card-body">
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th style="width: 120px;">ระยะทาง (ประมาณ)</th>
+                  <th>ควรแนะนำ</th>
+                  <th style="width: 180px;">โน้ตคุยกับลูกค้า</th>
+                </tr>
+              </thead>
+              <tbody class="small">
+                <tr>
+                  <td>ทุก 1,500–2,000 กม.</td>
+                  <td>
+                    <ul class="mb-0 ps-3">
+                      <li>เปลี่ยนน้ำมันเครื่อง</li>
+                      <li>เช็กโซ่/สเตอร์ และหล่อลื่น</li>
+                      <li>เช็กผ้าเบรก และลมยาง</li>
+                    </ul>
+                  </td>
+                  <td>
+                    อธิบายว่า “ดูแลตามระยะ เครื่องยนต์ทนขึ้น ประหยัดซ่อมใหญ่”
+                  </td>
+                </tr>
+                <tr>
+                  <td>ทุก 5,000 กม.</td>
+                  <td>
+                    <ul class="mb-0 ps-3">
+                      <li>เช็กกรองอากาศ / เปลี่ยนถ้าสกปรกมาก</li>
+                      <li>เช็กโช้ค หน้า/หลัง – ดูน้ำมันรั่ว</li>
+                      <li>เช็กลูกปืนล้อ / คอ</li>
+                    </ul>
+                  </td>
+                  <td>
+                    เน้นความปลอดภัย และความนุ่มนวลเวลาใช้ทุกวัน
+                  </td>
+                </tr>
+                <tr>
+                  <td>ทุก 10,000 กม. ขึ้นไป</td>
+                  <td>
+                    <ul class="mb-0 ps-3">
+                      <li>แนะนำเช็ก/โอเวอร์ฮอลล์บางส่วน</li>
+                      <li>เช็กระบบไฟชาร์จ แบตเตอรี่</li>
+                      <li>เช็กลูกปืน/บูชต่าง ๆ ทั้งคัน</li>
+                    </ul>
+                  </td>
+                  <td>
+                    แจ้งลูกค้าว่า “ถึงระยะควรเช็กลึกนิดนึง ป้องกันเสียกลางทาง”
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
