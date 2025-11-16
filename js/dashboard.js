@@ -273,38 +273,68 @@ async function loadLowStockSummary() {
 }
 
 // -----------------------------
-// โหลดสรุปรถซื้อ–ขาย (รถยังอยู่ในสต็อก)
+// โหลดสรุปรถซื้อ–ขาย และสถิติรวม (รวมกำไร)
 // -----------------------------
 async function loadVehiclesSummary() {
+  // 💡 1. เพิ่มตัวแปรสำหรับ Element ID ของยอดรวมสถิติ
+  const buyTotalEl = $("dashTotalBuy");
+  const sellTotalEl = $("dashTotalSell");
+  const profitTotalEl = $("dashTotalProfit"); // <--- Element ID สำหรับแสดงกำไร
+  
   const listEl = $("dashVehiclesInStock");
-  if (!listEl) return;
+  
+  if (!listEl && !buyTotalEl && !sellTotalEl && !profitTotalEl) return;
 
   try {
     const snap = await getDocs(vehiclesCol);
 
     const inStock = [];
+    let totalBuy = 0;
+    let totalSell = 0;
+    let totalProfit = 0; // <--- ตัวแปรสำหรับรวมกำไร
+
     snap.forEach((docSnap) => {
       const data = docSnap.data() || {};
-      if (data.status !== "in-stock") return;
+      
+      const buyPrice = safeNumber(data.buyPrice ?? data.purchasePrice ?? data.priceBuy ?? 0, 0);
+      const sellPrice = safeNumber(data.sellPrice ?? data.priceSell ?? 0, 0);
+      const profit = safeNumber(data.profit ?? 0, 0); // <--- ดึงค่ากำไรที่บันทึกไว้
 
-      const createdAt = toJsDate(data.createdAt) || null;
+      totalBuy += buyPrice; // ยอดรวมซื้อจะนับรถทุกคันที่ซื้อเข้า
 
-      const model =
-        data.model || data.vehicleModel || data.name || "ไม่ระบุรุ่น";
-      const plate = data.plate || data.license || "";
-      const buyPrice = safeNumber(
-        data.buyPrice ?? data.purchasePrice ?? data.priceBuy ?? 0,
-        0
-      );
-
-      inStock.push({
-        id: docSnap.id,
-        model,
-        plate,
-        buyPrice,
-        createdAt
-      });
+      if (data.status === "sold") {
+        totalSell += sellPrice;
+        totalProfit += profit; // <--- จุดที่ต้องแก้ไข: รวมกำไรจากรถที่ "sold"
+      }
+      
+      // ส่วนการแสดงรายการรถที่ยังค้างสต็อก (logic เดิม)
+      if (data.status === "in-stock") {
+          const createdAt = toJsDate(data.createdAt) || null;
+          const model = data.model || data.vehicleModel || data.name || "ไม่ระบุรุ่น";
+          const plate = data.plate || data.license || "";
+          
+          inStock.push({
+            id: docSnap.id,
+            model,
+            plate,
+            buyPrice,
+            createdAt
+          });
+      }
     });
+
+    // 💡 2. แสดงผลยอดรวมสถิติใหม่
+    if (buyTotalEl) {
+        buyTotalEl.textContent = `${formatCurrency(totalBuy)} บาท`;
+    }
+    if (sellTotalEl) {
+        sellTotalEl.textContent = `${formatCurrency(totalSell)} บาท`;
+    }
+    if (profitTotalEl) {
+        profitTotalEl.textContent = `${formatCurrency(totalProfit)} บาท`;
+    }
+    
+    if (!listEl) return;
 
     if (!inStock.length) {
       listEl.innerHTML = `
