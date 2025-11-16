@@ -1122,3 +1122,24 @@ h6 {
   height: 1px;
   background: rgba(148, 163, 184, 0.5);
 }
+
+/* ============================================
+   GLOBAL REMOVE WHITE CARD BACKGROUND + BORDER
+   ให้ทุกหน้าไม่มีกรอบเหมือนหน้า "รับซื้อรถ"
+   ============================================ */
+
+.bm-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.bm-card-header {
+  border: none !important;
+  padding: 0 0 0.75rem 0 !important;
+}
+
+.bm-card-body {
+  padding: 0.75rem 0 0 !important;
+}
