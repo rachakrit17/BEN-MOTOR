@@ -7,8 +7,6 @@ import {
   addDoc,
   query,
   orderBy,
-  doc,
-  updateDoc,
   serverTimestamp
 } from "./firebase-init.js";
 
@@ -18,7 +16,6 @@ const jobsCol = collection(db, "jobs");
 const stockCol = collection(db, "stock");
 
 let posOpenedAt = new Date();
-let stockCache = []; // เพิ่ม stockCache เข้ามา
 let selectedRowForStock = null;
 
 // -----------------------------
@@ -48,217 +45,353 @@ function createItemRow(type) {
   const tbody = $("posItemsBody");
   if (!tbody) return;
 
-  const rowId = "row-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+  const rowId = "row-" + Date.now() + "-" + Math.floor(Math.random() * 99999);
+  const isLabor = type === "labor";
 
-  const isPart = type === "part";
-  const typeBadge = isPart 
-    ? `<span class="badge text-bg-success">อะไหล่</span>` 
-    : `<span class="badge text-bg-primary">ค่าแรง</span>`;
-  
-  const partInputHtml = isPart 
-    ? `<div class="input-group input-group-sm"><input type="text" class="form-control pos-item-desc" placeholder="ชื่ออะไหล่" required data-row-id="${rowId}"><button type="button" class="btn btn-outline-secondary pos-select-stock-btn" data-row-id="${rowId}"><i class="bi bi-box-seam"></i></button></div>`
-    : `<input type="text" class="form-control pos-item-desc" placeholder="เช่น ค่าแรงเปลี่ยนถ่ายน้ำมันเครื่อง" required data-row-id="${rowId}">`;
-
-  const html = `
-    <tr data-row-id="${rowId}" data-item-type="${type}">
-      <td>${typeBadge}</td>
-      <td>${partInputHtml}</td>
-      <td class="text-end">
-        <input type="number" class="form-control form-control-sm text-end pos-item-qty" value="1" min="1" required data-row-id="${rowId}">
-      </td>
-      <td class="text-end">
-        <input type="number" class="form-control form-control-sm text-end pos-item-price" value="0" min="0" required data-row-id="${rowId}">
-      </td>
-      <td class="text-end fw-semibold pos-item-total" data-row-id="${rowId}">0</td>
-      <td class="text-center">
-        <button type="button" class="btn btn-sm btn-outline-danger pos-item-remove-btn" data-row-id="${rowId}">
-          <i class="bi bi-trash"></i>
-        </button>
-      </td>
-    </tr>
+  const tr = document.createElement("tr");
+  tr.dataset.rowId = rowId;
+  tr.innerHTML = `
+    <td style="min-width: 80px;">
+      <span class="bm-pos-item-type-badge ${
+        isLabor ? "bm-pos-item-type-labor" : "bm-pos-item-type-part"
+      }">
+        ${isLabor ? "ค่าแรง" : "อะไหล่"}
+      </span>
+    </td>
+    <td style="min-width: 170px;">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" placeholder="${
+          isLabor ? "รายละเอียดงานซ่อม" : "ชื่ออะไหล่ / รายละเอียด"
+        }">
+        ${
+          !isLabor
+            ? `<button class="btn btn-outline-secondary pos-select-stock-btn" type="button">
+                 <i class="bi bi-box-seam"></i>
+               </button>`
+            : ""
+        }
+      </div>
+    </td>
+    <td style="width: 80px;">
+      <input type="number" class="form-control form-control-sm text-end" min="1" value="1">
+    </td>
+    <td style="width: 110px;">
+      <input type="number" class="form-control form-control-sm text-end" min="0" step="1" value="0">
+    </td>
+    <td style="width: 110px;">
+      <div class="text-end fw-semibold pos-line-total">0</div>
+    </td>
+    <td style="width: 50px;">
+      <button type="button" class="btn btn-sm btn-link text-danger pos-remove-row-btn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </td>
   `;
 
-  tbody.insertAdjacentHTML('beforeend', html);
+  tbody.appendChild(tr);
+  wireRowEvents(tr, type);
   recalcPosSummary();
 }
 
-function recalcPosSummary() {
-  const rows = document.querySelectorAll("#posItemsBody tr");
-  let subtotalLabor = 0;
-  let subtotalPart = 0;
-  let grandSubtotal = 0;
+function wireRowEvents(tr, type) {
+  const qtyInput = tr.querySelector('td:nth-child(3) input');
+  const priceInput = tr.querySelector('td:nth-child(4) input');
+  const removeBtn = tr.querySelector(".pos-remove-row-btn");
+  const selectStockBtn = tr.querySelector(".pos-select-stock-btn");
 
-  rows.forEach(row => {
-    const qtyInput = row.querySelector(".pos-item-qty");
-    const priceInput = row.querySelector(".pos-item-price");
-    const totalEl = row.querySelector(".pos-item-total");
-    const type = row.dataset.itemType;
+  const onChange = () => recalcPosSummary();
+
+  if (qtyInput) qtyInput.addEventListener("input", onChange);
+  if (priceInput) priceInput.addEventListener("input", onChange);
+
+  if (removeBtn) {
+    removeBtn.addEventListener("click", () => {
+      tr.remove();
+      recalcPosSummary();
+    });
+  }
+
+  if (!selectStockBtn) return;
+
+  selectStockBtn.addEventListener("click", async () => {
+    selectedRowForStock = tr;
+    await openStockPickerModal();
+  });
+}
+
+function getItemsFromTable() {
+  const tbody = $("posItemsBody");
+  if (!tbody) return [];
+
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const items = [];
+
+  rows.forEach((tr) => {
+    const typeBadge = tr.querySelector(".bm-pos-item-type-badge");
+    const descInput = tr.querySelector('td:nth-child(2) input');
+    const qtyInput = tr.querySelector('td:nth-child(3) input');
+    const priceInput = tr.querySelector('td:nth-child(4) input');
+
+    if (!typeBadge || !descInput) return;
+
+    const typeLabel = typeBadge.textContent.trim();
+    const type = typeLabel === "ค่าแรง" ? "labor" : "part";
+
+    const description = descInput.value.trim();
+    const qty = getNumberFromInput(qtyInput);
+    const unitPrice = getNumberFromInput(priceInput);
+    const lineTotal = qty * unitPrice;
+
+    if (!description && lineTotal === 0) return;
+
+    items.push({
+      type,
+      description,
+      qty,
+      unitPrice,
+      lineTotal
+    });
+  });
+
+  return items;
+}
+
+function recalcPosSummary() {
+  const items = getItemsFromTable();
+  let subtotal = 0;
+  items.forEach((item) => {
+    subtotal += item.lineTotal;
+  });
+
+  const discountInput = $("posDiscountInput");
+  const paidInput = $("posCustomerPaidInput");
+
+  const discount = getNumberFromInput(discountInput);
+  let net = subtotal - discount;
+  if (net < 0) net = 0;
+
+  const paid = getNumberFromInput(paidInput);
+  let change = paid - net;
+  if (change < 0) change = 0;
+
+  // อัปเดตตัวเลข
+  setText("posSubtotalText", formatCurrency(subtotal));
+  setText("posNetTotalText", formatCurrency(net));
+  setText("posChangeText", formatCurrency(change));
+
+  // ใส่ใน data attributes เผื่อใช้ตอนบันทึก
+  const form = $("posForm");
+  if (form) {
+    form.dataset.subtotal = String(subtotal);
+    form.dataset.discount = String(discount);
+    form.dataset.net = String(net);
+    form.dataset.paid = String(paid);
+    form.dataset.change = String(change);
+  }
+
+  // อัปเดตยอดในแต่ละบรรทัด
+  const tbody = $("posItemsBody");
+  if (!tbody) return;
+
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  rows.forEach((tr) => {
+    const qtyInput = tr.querySelector('td:nth-child(3) input');
+    const priceInput = tr.querySelector('td:nth-child(4) input');
+    const lineEl = tr.querySelector(".pos-line-total");
+
+    if (!lineEl) return;
 
     const qty = getNumberFromInput(qtyInput);
     const price = getNumberFromInput(priceInput);
     const total = qty * price;
-    
-    if (type === "labor") {
-      subtotalLabor += total;
-    } else if (type === "part") {
-      subtotalPart += total;
-    }
-    
-    if (totalEl) totalEl.textContent = formatCurrency(total);
-  });
-  
-  grandSubtotal = subtotalLabor + subtotalPart;
-  const discount = getNumberFromInput($("posDiscountInput"));
-  const paid = getNumberFromInput($("posCustomerPaidInput"));
-  
-  const grandTotal = grandSubtotal - discount;
-  const change = paid - grandTotal;
 
-  setText("posSubtotalLabor", formatCurrency(subtotalLabor) + " บาท");
-  setText("posSubtotalPart", formatCurrency(subtotalPart) + " บาท");
-  setText("posGrandSubtotal", formatCurrency(grandSubtotal) + " บาท");
-  setText("posDiscountText", formatCurrency(discount) + " บาท");
-  setText("posGrandTotal", formatCurrency(grandTotal) + " บาท");
-  setText("posChangeText", formatCurrency(change) + " บาท");
+    lineEl.textContent = formatCurrency(total);
+  });
 }
 
-function handleItemChange(e) {
-  const target = e.target;
-  if (!target.classList.contains("pos-item-qty") && !target.classList.contains("pos-item-price")) {
+// -----------------------------
+// Stock Picker Modal
+// -----------------------------
+async function openStockPickerModal() {
+  const modalEl = $("stockPickerModal");
+  const bodyEl = $("stockPickerBody");
+
+  if (!modalEl || !bodyEl) {
+    showToast("ยังไม่ได้สร้างหน้าต่างเลือกสต็อกในหน้านี้", "info");
     return;
   }
-  recalcPosSummary();
-}
 
-function handleItemRemove(e) {
-  const target = e.target;
-  const btn = target.closest(".pos-item-remove-btn");
-  if (!btn) return;
-  
-  const rowId = btn.getAttribute("data-row-id");
-  const row = document.querySelector(`tr[data-row-id="${rowId}"]`);
-  if (row) {
-    row.remove();
-    recalcPosSummary();
-  }
-}
+  bodyEl.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center py-3 text-muted">
+        กำลังโหลดรายการอะไหล่จากระบบ...
+      </td>
+    </tr>
+  `;
 
-// -----------------------------
-// Stock Modal Integration
-// -----------------------------
-async function loadStockCache() {
-  const stockTbody = $("stockSelectBody");
-  if (stockTbody) {
-    stockTbody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-muted">กำลังโหลดข้อมูลสต็อก...</td></tr>';
-  }
-  
   try {
-    const q = query(stockCol, orderBy("name", "asc"));
-    const snap = await getDocs(q);
+    const qStock = query(stockCol, orderBy("name", "asc"));
+    const snap = await getDocs(qStock);
 
-    stockCache = [];
-    snap.forEach((docSnap) => {
-      stockCache.push({
-        id: docSnap.id,
-        ...docSnap.data()
+    if (snap.empty) {
+      bodyEl.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-3 text-muted">
+            ยังไม่มีข้อมูลอะไหล่ในระบบ
+          </td>
+        </tr>
+      `;
+    } else {
+      const rowsHtml = [];
+      snap.forEach((docSnap) => {
+        const data = docSnap.data() || {};
+        const name = data.name || data.partName || "ไม่ระบุชื่ออะไหล่";
+        const sku = data.sku || "";
+        const category = data.category || "";
+        const price = data.salePrice ?? data.price ?? 0;
+        const qty = data.qty ?? data.quantity ?? data.stock ?? 0;
+
+        rowsHtml.push(`
+          <tr>
+            <td>${name}</td>
+            <td>${sku}</td>
+            <td>${category}</td>
+            <td class="text-end">${formatCurrency(price)}฿</td>
+            <td class="text-end">
+              <button type="button"
+                class="btn btn-sm btn-outline-success stock-pick-btn"
+                data-name="${name.replace(/"/g, "&quot;")}"
+                data-price="${price}">
+                เลือก
+              </button>
+            </td>
+          </tr>
+        `);
       });
-    });
-    
-    renderStockSelectTable(stockCache);
+      bodyEl.innerHTML = rowsHtml.join("");
+    }
   } catch (error) {
     console.error("โหลดข้อมูลสต็อกไม่สำเร็จ:", error);
-    if (stockTbody) {
-      stockTbody.innerHTML = ` <tr> <td colspan="5" class="text-center py-3 text-danger"> โหลดข้อมูลสต็อกไม่สำเร็จ </td> </tr> `;
-    }
-  }
-}
-
-function renderStockSelectTable(stockItems) {
-  const tbody = $("stockSelectBody");
-  if (!tbody) return;
-  
-  if (stockItems.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3 text-muted">ไม่มีรายการอะไหล่ในสต็อก</td></tr>';
-    return;
-  }
-  
-  const html = stockItems.map(item => {
-    const qty = item.qty || item.quantity || 0;
-    const price = item.salePrice || item.price || 0;
-    const lowStock = (item.minStock || 0) > 0 && qty <= (item.minStock || 0);
-
-    return `
-      <tr data-stock-id="${item.id}">
-        <td>${item.name || "-"}</td>
-        <td>${item.sku || "-"}</td>
-        <td class="text-end ${lowStock ? 'text-danger fw-semibold' : ''}">${qty}</td>
-        <td class="text-end">${formatCurrency(price)}</td>
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-success pos-select-item-btn" data-stock-id="${item.id}">
-            เลือก
-          </button>
+    bodyEl.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center py-3 text-danger">
+          โหลดข้อมูลสต็อกไม่สำเร็จ
         </td>
       </tr>
     `;
-  }).join("");
-  
-  tbody.innerHTML = html;
+  }
+
+  // ติด event ให้ปุ่มเลือก
+  bodyEl.addEventListener(
+    "click",
+    (e) => {
+      const target = e.target;
+      if (!(target instanceof Element)) return;
+      const btn = target.closest(".stock-pick-btn");
+      if (!btn || !selectedRowForStock) return;
+
+      const name = btn.getAttribute("data-name") || "";
+      const priceStr = btn.getAttribute("data-price") || "0";
+      const price = Number(priceStr) || 0;
+
+      const descInput = selectedRowForStock.querySelector(
+        'td:nth-child(2) input'
+      );
+      const priceInput = selectedRowForStock.querySelector(
+        'td:nth-child(4) input'
+      );
+
+      if (descInput) descInput.value = name;
+      if (priceInput) priceInput.value = String(price);
+
+      recalcPosSummary();
+
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.hide();
+    },
+    { once: true }
+  );
+
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
 }
 
-function handleSelectStock(e) {
-  const target = e.target;
-  const btn = target.closest(".pos-select-stock-btn");
-  if (!btn) return;
+// -----------------------------
+// Quick presets
+// -----------------------------
+function applyPreset(presetKey) {
+  const tbody = $("posItemsBody");
+  if (!tbody) return;
 
-  const rowId = btn.getAttribute("data-row-id");
-  selectedRowForStock = rowId;
-  
-  // Load cache before showing modal
-  loadStockCache(); 
-  
-  // Show modal
-  const modalEl = $("stockSelectModal");
-  if (modalEl) {
-    const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl);
-    modal.show();
-  }
-}
+  // ล้างของเดิมก่อน
+  tbody.innerHTML = "";
 
-function handleApplyStockSelection(e) {
-  const target = e.target;
-  const btn = target.closest(".pos-select-item-btn");
-  if (!btn || !selectedRowForStock) return;
-  
-  const stockId = btn.getAttribute("data-stock-id");
-  const selectedItem = stockCache.find(item => item.id === stockId);
-  
-  if (!selectedItem) {
-    showToast("ไม่พบข้อมูลอะไหล่", "error");
-    return;
+  if (presetKey === "front-tire") {
+    createItemRow("labor");
+    createItemRow("part");
+
+    const rows = tbody.querySelectorAll("tr");
+    if (rows[0]) {
+      const descInput = rows[0].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[0].querySelector('td:nth-child(3) input');
+      const priceInput = rows[0].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "ค่าแรงเปลี่ยนยางหน้า";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "80";
+    }
+    if (rows[1]) {
+      const descInput = rows[1].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[1].querySelector('td:nth-child(3) input');
+      const priceInput = rows[1].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "ยางหน้า มอเตอร์ไซค์";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "350";
+    }
+  } else if (presetKey === "oil-change") {
+    createItemRow("labor");
+    createItemRow("part");
+
+    const rows = tbody.querySelectorAll("tr");
+    if (rows[0]) {
+      const descInput = rows[0].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[0].querySelector('td:nth-child(3) input');
+      const priceInput = rows[0].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "ค่าแรงถ่ายน้ำมันเครื่อง";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "60";
+    }
+    if (rows[1]) {
+      const descInput = rows[1].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[1].querySelector('td:nth-child(3) input');
+      const priceInput = rows[1].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "น้ำมันเครื่อง";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "120";
+    }
+  } else if (presetKey === "brake-change") {
+    createItemRow("labor");
+    createItemRow("part");
+
+    const rows = tbody.querySelectorAll("tr");
+    if (rows[0]) {
+      const descInput = rows[0].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[0].querySelector('td:nth-child(3) input');
+      const priceInput = rows[0].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "ค่าแรงเปลี่ยนผ้าเบรกหน้า";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "80";
+    }
+    if (rows[1]) {
+      const descInput = rows[1].querySelector('td:nth-child(2) input');
+      const qtyInput = rows[1].querySelector('td:nth-child(3) input');
+      const priceInput = rows[1].querySelector('td:nth-child(4) input');
+      if (descInput) descInput.value = "ผ้าเบรกหน้า";
+      if (qtyInput) qtyInput.value = "1";
+      if (priceInput) priceInput.value = "150";
+    }
   }
-  
-  // Fill data into the designated row
-  const row = document.querySelector(`tr[data-row-id="${selectedRowForStock}"]`);
-  if (row) {
-    const descInput = row.querySelector(".pos-item-desc");
-    const priceInput = row.querySelector(".pos-item-price");
-    
-    if (descInput) descInput.value = selectedItem.name || selectedItem.partName || "";
-    if (priceInput) priceInput.value = String(selectedItem.salePrice || selectedItem.price || 0);
-    
-    // Set stock ID on the row for later inventory update
-    row.dataset.stockRefId = selectedItem.id;
-    
-    recalcPosSummary();
-  }
-  
-  // Hide modal
-  const modalEl = $("stockSelectModal");
-  if (modalEl) {
-    const modal = window.bootstrap.Modal.getInstance(modalEl);
-    if (modal) modal.hide();
-  }
-  selectedRowForStock = null;
+
+  recalcPosSummary();
 }
 
 // -----------------------------
@@ -266,225 +399,198 @@ function handleApplyStockSelection(e) {
 // -----------------------------
 function buildJobPayload() {
   const form = $("posForm");
-  const rows = document.querySelectorAll("#posItemsBody tr");
-  
-  const items = [];
-  let totalParts = 0;
-  
-  rows.forEach(row => {
-    const qtyInput = row.querySelector(".pos-item-qty");
-    const priceInput = row.querySelector(".pos-item-price");
-    const descInput = row.querySelector(".pos-item-desc");
-    
-    const type = row.dataset.itemType;
-    const description = descInput ? descInput.value.trim() : "-";
-    const quantity = getNumberFromInput(qtyInput);
-    const price = getNumberFromInput(priceInput);
-    const stockRefId = row.dataset.stockRefId || null;
-    
-    items.push({
-      type,
-      description,
-      quantity,
-      price,
-      stockRefId, // For stock update later
-      subtotal: quantity * price
-    });
-    
-    if (type === "part") {
-      totalParts += quantity * price;
-    }
-  });
+  if (!form) return null;
 
-  const grandSubtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-  const discount = getNumberFromInput($("posDiscountInput"));
-  const grandTotal = grandSubtotal - discount;
-  const paid = getNumberFromInput($("posCustomerPaidInput"));
+  const customerName = $("posCustomerName")?.value.trim() || "";
+  const customerPhone = $("posCustomerPhone")?.value.trim() || "";
+  const customerChannel = $("posCustomerChannel")?.value.trim() || "";
 
-  return {
-    customerName: $("posCustomerName").value.trim(),
-    customerPhone: $("posCustomerPhone").value.trim(),
-    vehicleModel: $("posVehicleModel").value.trim(),
-    vehiclePlate: $("posVehiclePlate").value.trim(),
-    vehicleMileage: getNumberFromInput($("posVehicleMileage")),
-    jobDescription: $("posJobDescription").value.trim(),
-    status: $("posJobStatus").value,
+  const vehicleModel = $("posVehicleModel")?.value.trim() || "";
+  const vehiclePlate = $("posVehiclePlate")?.value.trim() || "";
+  const vehicleMileage = $("posVehicleMileage")?.value.trim() || "";
+
+  const jobType = $("posJobType")?.value || "";
+  const jobUrgency = $("posJobUrgency")?.value || "";
+  const jobTags = $("posJobTags")?.value.trim() || "";
+
+  const customerNote = $("posCustomerNote")?.value.trim() || "";
+  const internalNote = $("posInternalNote")?.value.trim() || "";
+
+  const items = getItemsFromTable();
+  if (!items.length) {
+    showToast("กรุณาเพิ่มรายการในบิลอย่างน้อย 1 รายการ", "error");
+    return null;
+  }
+
+  const subtotal = Number(form.dataset.subtotal || "0");
+  const discount = Number(form.dataset.discount || "0");
+  const net = Number(form.dataset.net || "0");
+  const paid = Number(form.dataset.paid || "0");
+  const change = Number(form.dataset.change || "0");
+
+  if (!customerName && !vehiclePlate) {
+    showToast("กรุณากรอกชื่อลูกค้าหรือทะเบียนรถอย่างน้อย 1 ช่อง", "error");
+    return null;
+  }
+
+  const now = new Date();
+
+  const docData = {
+    customer: {
+      name: customerName,
+      phone: customerPhone,
+      channel: customerChannel
+    },
+    vehicle: {
+      model: vehicleModel,
+      plate: vehiclePlate,
+      mileage: vehicleMileage
+    },
+    jobType,
+    priority: jobUrgency,
+    tags: jobTags,
+    customerNote,
+    internalNote,
     items,
+    subtotal,
     discount,
+    totalNet: net,
+    total: net,
     paid,
-    total: grandTotal,
-    change: paid - grandTotal,
-    totalParts,
-    totalLabor: grandSubtotal - totalParts,
+    change,
+    status: "queue",
     createdAt: serverTimestamp(),
-    jobOpenedAt: posOpenedAt,
-    // Add doneAt only if status is done/canceled, which is not typical for POS open bill
-    // doneAt: jobStatus === 'done' || jobStatus === 'canceled' ? serverTimestamp() : null,
+    openedAt: posOpenedAt,
+    createdLocalAt: now,
+    createdSource: "pos"
   };
+
+  return docData;
 }
 
-function generateCustomerMessage(payload) {
-    const { customerName, vehicleModel, vehiclePlate, jobDescription, total, status } = payload;
-    const date = formatDateTime(payload.jobOpenedAt, true);
+function buildCustomerMessage(jobDoc) {
+  const name = jobDoc.customer?.name || "ลูกค้า";
+  const plate = jobDoc.vehicle?.plate || "";
+  const firstItems = (jobDoc.items || []).slice(0, 3);
+  const itemNames = firstItems.map((i) => i.description).filter(Boolean);
 
-    const plateText = vehiclePlate ? ` (ทะเบียน ${vehiclePlate})` : '';
-    let statusText = '';
-    if (status === 'pending') statusText = 'รอการตรวจเช็ค';
-    else if (status === 'in-progress') statusText = 'กำลังดำเนินการซ่อม';
-    else if (status === 'awaiting-part') statusText = 'รออะไหล่';
-    else if (status === 'ready') statusText = 'ซ่อมเสร็จ / พร้อมส่งมอบ';
-    else if (status === 'done') statusText = 'ปิดบิลเรียบร้อย';
-    else if (status === 'canceled') statusText = 'ยกเลิกงาน';
-    
-    const message = `
-งานซ่อม #JOB${Date.now()}
-เรียน คุณ${customerName}
-รถรุ่น ${vehicleModel}${plateText} เข้าซ่อมวันที่ ${date}
-อาการ: ${jobDescription}
-สถานะปัจจุบัน: ${statusText}
+  let jobDesc = "";
+  if (itemNames.length) {
+    jobDesc = itemNames.join(" + ");
+  } else {
+    jobDesc = jobDoc.jobType || "งานซ่อมรถมอเตอร์ไซค์";
+  }
 
-ยอดรวม (โดยประมาณ): ${formatCurrency(total)} บาท
-(ตรวจสอบยอดสุดท้ายกับทางร้านอีกครั้ง)
+  const netText = formatCurrency(jobDoc.totalNet || 0);
+  const paidText = formatCurrency(jobDoc.paid || 0);
+  const changeText = formatCurrency(jobDoc.change || 0);
 
-ขอบคุณที่ใช้บริการ BEN MOTOR
-`;
-    return message.trim();
-}
+  const parts = [];
+  parts.push(`เรียนคุณ${name}${plate ? ` (${plate})` : ""}`);
+  parts.push(`งานซ่อม: ${jobDesc}`);
+  parts.push(`ยอดรวม ${netText} บาท`);
+  if (jobDoc.paid > 0) {
+    parts.push(`รับเงิน ${paidText} บาท`);
+    parts.push(`เงินทอน ${changeText} บาท`);
+  }
+  parts.push("ขอบคุณที่ใช้บริการ BEN MOTOR");
 
-function handleCustomerMessage() {
-    const payload = buildJobPayload();
-    const msg = generateCustomerMessage(payload);
-
-    const msgTextarea = $("posCustomerMessageTextarea");
-    if (msgTextarea) msgTextarea.value = msg;
-
-    const copyBtn = $("posCustomerMessageCopyBtn");
-    if (copyBtn) {
-        copyBtn.onclick = () => {
-            navigator.clipboard.writeText(msg).then(() => {
-                showToast("คัดลอกข้อความสำหรับลูกค้าแล้ว", "success");
-            }).catch(err => {
-                showToast("คัดลอกไม่สำเร็จ: " + err.message, "error");
-            });
-        };
-    }
-
-    const msgModalEl = $("posCustomerMessageModal"); // ID ที่ถูกต้องใน app.html
-    if (msgModalEl) {
-        const modal = window.bootstrap.Modal.getOrCreateInstance(msgModalEl);
-        modal.show();
-    }
+  return parts.join("\n");
 }
 
 // -----------------------------
-// Save Bill (Job)
+// Save job
 // -----------------------------
 async function handleSaveBill() {
-  const payload = buildJobPayload();
-  const form = $("posForm");
-
-  // Basic validation (form required check should cover most)
-  if (!payload.customerName || !payload.vehicleModel || !payload.jobDescription || payload.total <= 0) {
-      showToast("กรุณากรอกข้อมูลลูกค้า, รถ, รายละเอียดงาน และยอดรวมให้ครบถ้วน (ยอดต้อง > 0)", "error");
-      return;
-  }
-  
   const saveBtn = $("posSaveBtn");
   if (saveBtn) saveBtn.disabled = true;
 
   try {
-    // 1. Save Job to Firestore
-    const newJobRef = await addDoc(jobsCol, payload);
+    const payload = buildJobPayload();
+    if (!payload) {
+      if (saveBtn) saveBtn.disabled = false;
+      return;
+    }
 
-    // 2. Update Stock (Decrement Qty)
-    const stockUpdates = payload.items
-      .filter(item => item.type === 'part' && item.stockRefId && item.quantity > 0)
-      .map(async item => {
-          const stockItem = stockCache.find(s => s.id === item.stockRefId);
-          if (stockItem) {
-              const currentQty = stockItem.qty || stockItem.quantity || 0;
-              const newQty = currentQty - item.quantity;
-              
-              const ref = doc(db, "stock", item.stockRefId);
-              await updateDoc(ref, {
-                  qty: Math.max(0, newQty), // Ensure quantity doesn't go below 0
-                  updatedAt: serverTimestamp()
-              });
-          }
-      });
-      
-    await Promise.all(stockUpdates);
+    const docRef = await addDoc(jobsCol, payload);
 
-    showToast(`บันทึกงานซ่อม #JOB${newJobRef.id.substring(0, 5)} เรียบร้อย`, "success");
+    const message = buildCustomerMessage(payload);
 
-    // Show customer message modal after successful save
-    handleCustomerMessage(payload);
+    showToast("บันทึกบิลเรียบร้อย", "success");
 
-    // Reset form after successful save
-    form.reset();
-    $("posDiscountInput").value = "0";
-    $("posCustomerPaidInput").value = "0";
-    $("#posItemsBody").innerHTML = ""; // Clear items
-    createItemRow("labor"); // Add a default labor row
-    recalcPosSummary();
-    posOpenedAt = new Date(); // Reset opened time
-    
+    const msgTextarea = $("posCustomerMessageText");
+    const msgModalEl = $("posCustomerMessageModal");
+    const copyBtn = $("posCopyCustomerMessageBtn");
+
+    if (msgTextarea) {
+      msgTextarea.value = message;
+    }
+
+    if (msgModalEl) {
+      const modal = bootstrap.Modal.getOrCreateInstance(msgModalEl);
+      modal.show();
+    } else {
+      if (navigator.clipboard && message) {
+        try {
+          await navigator.clipboard.writeText(message);
+          showToast("คัดลอกข้อความส่งลูกค้าให้แล้ว", "success");
+        } catch {
+          alert(message);
+        }
+      } else {
+        alert(message);
+      }
+    }
+
+    if (copyBtn) {
+      copyBtn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(message);
+          showToast("คัดลอกข้อความเรียบร้อย", "success");
+        } catch {
+          showToast("คัดลอกข้อความไม่สำเร็จ", "error");
+        }
+      };
+    }
+
+    // ไม่ล้างฟอร์มทั้งหมด เผื่อจะใช้อ้างอิงต่อ
+    console.log("สร้างใบงานใหม่ jobs/" + docRef.id);
   } catch (error) {
-    console.error("บันทึกงานซ่อมไม่สำเร็จ:", error);
-    showToast("บันทึกงานซ่อมไม่สำเร็จ กรุณาลองใหม่", "error");
+    console.error("บันทึกบิลไม่สำเร็จ:", error);
+    showToast("บันทึกบิลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
   } finally {
-    if (saveBtn) saveBtn.disabled = false;
+    const saveBtn2 = $("posSaveBtn");
+    if (saveBtn2) saveBtn2.disabled = false;
   }
 }
 
+// -----------------------------
+// Print (เดโม)
+// -----------------------------
 function handlePrintBill() {
-    showToast("ฟังก์ชันพิมพ์ใบแจ้งหนี้ยังไม่ถูกพัฒนา", "info");
-}
-
-function applyPreset(key) {
-    // This function will apply preset data based on key (e.g., 'car', 'bike')
-    // Placeholder logic for future development
-    showToast(`ใช้ Preset: ${key} (ยังไม่ถูกพัฒนา)`, "info");
+  showToast("โหมดปริ๊นท์สามารถใช้ฟังก์ชัน Print ของเบราว์เซอร์ได้เลย", "info");
+  window.print();
 }
 
 // -----------------------------
-// Init
+// Init POS
 // -----------------------------
-export function initPos() {
+function initPOS() {
   const section = document.querySelector('[data-section="pos"]');
   if (!section) return;
-  
-  // Load stock when the section is shown (for part selection)
-  section.addEventListener("data-loaded", loadStockCache);
-  
-  // Set default form values and initial row
-  const tbody = $("posItemsBody");
-  if (tbody && tbody.children.length === 0) {
-      createItemRow("labor"); // Start with one labor row
+
+  posOpenedAt = new Date();
+  const openedAtEl = $("posOpenedAtText");
+  if (openedAtEl) {
+    openedAtEl.textContent = formatDateTime(posOpenedAt);
   }
-  
-  // Form Events
+
   const addLaborBtn = $("addLaborItemBtn");
   const addPartBtn = $("addPartItemBtn");
   const discountInput = $("posDiscountInput");
   const paidInput = $("posCustomerPaidInput");
   const saveBtn = $("posSaveBtn");
   const printBtn = $("posPrintBtn");
-  const stockSelectBody = $("stockSelectBody");
-
-  // Global listener for dynamic rows in POS
-  const posItemsBody = $("posItemsBody");
-  if (posItemsBody) {
-    posItemsBody.addEventListener("input", handleItemChange);
-    posItemsBody.addEventListener("click", handleItemRemove);
-    posItemsBody.addEventListener("click", handleSelectStock);
-  }
-
-  // Stock Select Modal Events (Handles item selection)
-  if (stockSelectBody) {
-      stockSelectBody.addEventListener("click", handleApplyStockSelection);
-  }
-
 
   const presetButtons = document.querySelectorAll("[data-pos-preset]");
 
@@ -520,7 +626,21 @@ export function initPos() {
       applyPreset(key);
     });
   });
-  
-  // Initial calculation on load
+
+  // เริ่มต้นมีแถวว่างอย่างน้อย 1 ค่าแรง
+  const tbody = $("posItemsBody");
+  if (tbody && !tbody.querySelector("tr")) {
+    createItemRow("labor");
+  }
+
   recalcPosSummary();
 }
+
+// -----------------------------
+// Bootstrap
+// -----------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  initPOS();
+
+});
+console.log("pos.js loaded OK");

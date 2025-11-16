@@ -26,10 +26,6 @@ const SECTION_META = {
     title: "สต็อก & อะไหล่",
     subtitle: "คุมของในร้านให้ไม่ขาด ไม่ล้น"
   },
-  reports: { // NEW SECTION
-    title: "รายงาน / สถิติ",
-    subtitle: "สรุปยอดขาย กำไร และภาพรวมข้อมูลสำคัญ"
-  },
   settings: {
     title: "ตั้งค่าร้านและระบบ",
     subtitle: "ข้อมูลร้าน, theme, auto-lock และ export ข้อมูล"
@@ -43,122 +39,129 @@ const AUTO_LOCK_MINUTES_KEY = "bm_auto_lock_minutes";
 let autoLockTimerId = null;
 
 // -----------------------------
-// Helpers
+// Section Switching
 // -----------------------------
-function $(id) {
-  return document.getElementById(id);
-}
+export function showSection(sectionKey) {
+  const sections = document.querySelectorAll(".bm-section");
+  if (!sections.length) return;
 
-function getAutoLockConfig() {
-  let enabled = false;
-  let minutes = 5;
-  try {
-    enabled = localStorage.getItem(AUTO_LOCK_ENABLED_KEY) === "true";
-    minutes = Number(localStorage.getItem(AUTO_LOCK_MINUTES_KEY) || "5");
-    if (!Number.isFinite(minutes) || minutes <= 0) minutes = 5;
-  } catch (e) {
-    // ignore
+  let targetKey = sectionKey || "dashboard";
+
+  // ถ้า sectionKey ไม่ตรงกับที่มีอยู่ ให้ fallback เป็น dashboard
+  const exists = Array.from(sections).some(
+    (sec) => sec.dataset.section === targetKey
+  );
+  if (!exists) {
+    targetKey = "dashboard";
   }
-  return { enabled, minutes };
-}
 
-function redirectToLogin() {
-  window.location.href = "index.html";
-}
+  sections.forEach((sec) => {
+    if (sec.dataset.section === targetKey) {
+      sec.classList.add("active");
+    } else {
+      sec.classList.remove("active");
+    }
+  });
 
-// -----------------------------
-// Core Section Switching
-// -----------------------------
-function showSection(targetSection) {
-  const meta = SECTION_META[targetSection];
-  if (!meta) return;
-
-  // 1. Update title
-  const mainTitleEl = $("appTitleMain");
-  const subTitleEl = $("appTitleSub");
-  if (mainTitleEl) mainTitleEl.textContent = meta.title;
-  if (subTitleEl) subTitleEl.textContent = meta.subtitle;
-
-  // 2. Update active status on all nav buttons
-  const allNavButtons = document.querySelectorAll(
+  // อัปเดตปุ่มใน sidebar + bottom nav + ปุ่ม home
+  const navButtons = document.querySelectorAll(
     "[data-section-target]"
   );
-  allNavButtons.forEach((btn) => {
-    if (btn.dataset.sectionTarget === targetSection) {
+  navButtons.forEach((btn) => {
+    if (btn.dataset.sectionTarget === targetKey) {
       btn.classList.add("active");
     } else {
       btn.classList.remove("active");
     }
   });
 
-  // 3. Switch section content
-  const allSections = document.querySelectorAll(".bm-section");
-  allSections.forEach((section) => {
-    if (section.dataset.section === targetSection) {
-      section.classList.add("active");
-      // Trigger data load event for the active section
-      section.dispatchEvent(new Event("data-loaded"));
-    } else {
-      section.classList.remove("active");
-    }
-  });
+  // อัปเดต title / subtitle บน top bar
+  const titleEl = document.getElementById("currentSectionTitle");
+  const subtitleEl = document.querySelector(".bm-topbar-subtitle");
+  const meta = SECTION_META[targetKey] || SECTION_META.dashboard;
 
-  // 4. Save last active section
+  if (titleEl) {
+    titleEl.textContent = meta.title;
+  }
+  if (subtitleEl) {
+    subtitleEl.textContent = meta.subtitle;
+  }
+
+  // จำ section ล่าสุดไว้ใน localStorage
   try {
-    localStorage.setItem(LAST_SECTION_KEY, targetSection);
+    localStorage.setItem(LAST_SECTION_KEY, targetKey);
   } catch (e) {
     // ignore
   }
+
+  // เลื่อนขึ้นด้านบนเล็กน้อย (ให้รู้สึกว่ามีเปลี่ยนหน้า)
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+// เผื่อไว้ให้เรียกจาก console หรือไฟล์อื่นแบบไม่ import
+// (เช่น ในอนาคตจะเรียกจาก inline handler)
+if (typeof window !== "undefined") {
+  window.BMShowSection = showSection;
 }
 
 // -----------------------------
-// Auto-lock feature
+// Auto-lock (อ่านค่าจาก localStorage เท่านั้น)
+// settings.js จะเป็นตัวเขียนค่าให้
 // -----------------------------
-function lockScreen() {
-  if (!document.body.classList.contains("bm-app")) return; // Only lock app page
+function readAutoLockConfig() {
+  let enabled = false;
+  let minutes = 0;
 
-  // ใช้ Bootstrap Modal ใน app.html
-  const modalEl = $("autoLockModal");
-  if (!modalEl) {
-    // ถ้าไม่พบ modal ให้ล็อคแบบง่าย
-    redirectToLogin();
-    return;
+  try {
+    const rawEnabled = localStorage.getItem(AUTO_LOCK_ENABLED_KEY);
+    const rawMinutes = localStorage.getItem(AUTO_LOCK_MINUTES_KEY);
+
+    enabled = rawEnabled === "on";
+    minutes = rawMinutes ? parseInt(rawMinutes, 10) : 0;
+    if (!Number.isFinite(minutes) || minutes <= 0) {
+      minutes = 0;
+    }
+  } catch (e) {
+    enabled = false;
+    minutes = 0;
   }
 
-  const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl);
-  modal.show();
-  
-  // ให้ปุ่มใน modal ลิงค์ไปหน้า login
-  const loginBtn = $("autoLockLoginBtn");
-  if(loginBtn) {
-      loginBtn.onclick = redirectToLogin;
-  }
-  
-  // Clear any existing timer
+  return { enabled, minutes };
+}
+
+function clearAutoLockTimer() {
   if (autoLockTimerId) {
-    clearTimeout(autoLockTimerId);
+    window.clearTimeout(autoLockTimerId);
     autoLockTimerId = null;
   }
 }
 
 function scheduleAutoLock() {
-  // Clear previous timer
-  if (autoLockTimerId) {
-    clearTimeout(autoLockTimerId);
-  }
+  const { enabled, minutes } = readAutoLockConfig();
+  clearAutoLockTimer();
 
-  const { enabled, minutes } = getAutoLockConfig();
   if (!enabled || minutes <= 0) {
     return;
   }
 
-  // Set new timer
-  const delayMs = minutes * 60 * 1000;
-  autoLockTimerId = setTimeout(lockScreen, delayMs);
+  const ms = minutes * 60 * 1000;
+
+  autoLockTimerId = window.setTimeout(async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      // ignore error, บังคับออกจากหน้าอยู่ดี
+    }
+    alert("ระบบทำการล็อกอัตโนมัติแล้ว กรุณาเข้าสู่ระบบอีกครั้ง");
+    window.location.href = "index.html";
+  }, ms);
 }
 
-function initAutoLockMonitor() {
-  const { enabled, minutes } = getAutoLockConfig();
+function startAutoLockWatcher() {
+  const { enabled, minutes } = readAutoLockConfig();
   if (!enabled || minutes <= 0) {
     return;
   }
@@ -200,50 +203,21 @@ function initShell() {
   let initialSection = "dashboard";
   try {
     const stored = localStorage.getItem(LAST_SECTION_KEY);
-    // ตรวจสอบว่า section ที่เก็บไว้มีอยู่ใน SECTION_META หรือไม่ (ป้องกันบั๊กถ้า section ถูกลบ)
     if (stored && SECTION_META[stored]) {
       initialSection = stored;
     }
   } catch (e) {
-    // ignore
+    initialSection = "dashboard";
   }
-  
-  // Fix for old 'settings' section saved in local storage
-  if (initialSection === 'settings') {
-      initialSection = 'dashboard';
-  }
-
   showSection(initialSection);
-  initAutoLockMonitor();
+
+  // เริ่ม auto-lock watcher ตามค่าที่ตั้ง
+  startAutoLockWatcher();
 }
 
 // -----------------------------
-// Start Time Ticker
+// Bootstrap – รันเมื่อ DOM พร้อม
 // -----------------------------
-function startDateTimeTicker() {
-  const updateTime = () => {
-    const el = $("currentDateTime");
-    if (el) {
-      el.textContent = new Date().toLocaleString("th-TH", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      });
-    }
-  };
-
-  updateTime();
-  setInterval(updateTime, 1000);
-}
-
-// -----------------------------
-// Export (Called by auth.js after login check)
-// -----------------------------
-export function initAppShell() {
-    initShell();
-    startDateTimeTicker();
-}
+document.addEventListener("DOMContentLoaded", () => {
+  initShell();
+});
