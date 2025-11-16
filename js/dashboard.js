@@ -46,7 +46,13 @@ async function loadTodayJobsSummary() {
   const urgentListEl = $("dashUrgentJobsList");
   const pendingVehiclesEl = $("dashVehiclesPending");
 
-  if (!totalEl && !jobsTodayEl && !urgentCountEl && !urgentListEl && !pendingVehiclesEl) {
+  if (
+    !totalEl &&
+    !jobsTodayEl &&
+    !urgentCountEl &&
+    !urgentListEl &&
+    !pendingVehiclesEl
+  ) {
     return;
   }
 
@@ -97,7 +103,12 @@ async function loadTodayJobsSummary() {
       const vehicle = data.vehicle || {};
       const customer = data.customer || {};
 
-      const plate = vehicle.plate || vehicle.license || data.plate || data.license || "";
+      const plate =
+        vehicle.plate ||
+        vehicle.license ||
+        data.plate ||
+        data.license ||
+        "";
       const model = vehicle.model || vehicle.name || data.model || "";
       const customerName = customer.name || data.customerName || "";
       const customerPhone = customer.phone || data.customerPhone || "";
@@ -126,7 +137,7 @@ async function loadTodayJobsSummary() {
           customerName,
           customerPhone,
           net: safeNumber(net, 0),
-          createdAt
+          createdAt,
         });
       }
     });
@@ -172,17 +183,17 @@ async function loadTodayJobsSummary() {
             const moneyText = formatCurrency(job.net || 0);
 
             return `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div class="me-2">
-                <div class="fw-semibold">${title}</div>
-                <div class="text-muted small">${subtitle}</div>
-                <div class="text-muted small">${timeText}</div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="me-2">
+                  <div class="fw-semibold">${title}</div>
+                  <div class="text-muted small">${subtitle}</div>
+                  <div class="text-muted small">${timeText}</div>
+                </div>
+                <div class="text-end">
+                  <div class="fw-semibold">${moneyText} บาท</div>
+                </div>
               </div>
-              <div class="text-end">
-                <div class="fw-semibold">${moneyText} บาท</div>
-              </div>
-            </div>
-          `;
+            `;
           })
           .join("");
 
@@ -227,7 +238,7 @@ async function loadLowStockSummary() {
             `อะไหล่ไม่ระบุ (${docSnap.id.slice(-6)})`,
           category: data.category || "",
           qty,
-          minStock
+          minStock,
         });
       }
     });
@@ -245,24 +256,23 @@ async function loadLowStockSummary() {
         `;
       } else {
         const itemsHtml = lowItems
-          .slice(0, 5)
-          .map((item) => {
-            const categoryLabel = item.category ? ` • ${item.category}` : "";
-            return `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <div class="me-2">
-                <div class="fw-semibold">${item.name}</div>
-                <div class="text-muted small">
-                  คงเหลือ ${item.qty} ชิ้น${categoryLabel}
-                </div>
-              </div>
-              <span class="badge rounded-pill text-bg-danger">
-                ${item.qty} / ${item.minStock}
-              </span>
-            </div>
-          `;
-          })
-          .join("");
+  .slice(0, 5)
+  .map((item) => {
+    return `
+      <div class="bm-dash-vehicle-item d-flex justify-content-between align-items-center mb-2 p-2 rounded-3 border">
+        <div class="me-2">
+          <div class="fw-semibold text-danger">
+            <i class="bi bi-exclamation-octagon-fill me-1"></i>${item.name}
+          </div>
+          <div class="text-muted small">
+            คงเหลือ ${item.qty} ชิ้น • min ${item.minStock}
+          </div>
+        </div>
+        <span class="fw-bold text-danger">${item.qty}/${item.minStock}</span>
+      </div>
+    `;
+  })
+  .join("");
 
         listEl.innerHTML = itemsHtml;
       }
@@ -276,14 +286,20 @@ async function loadLowStockSummary() {
 // โหลดสรุปรถซื้อ–ขาย และสถิติรวม (รวมกำไร)
 // -----------------------------
 async function loadVehiclesSummary() {
-  // 💡 1. เพิ่มตัวแปรสำหรับ Element ID ของยอดรวมสถิติ
   const buyTotalEl = $("dashTotalBuy");
   const sellTotalEl = $("dashTotalSell");
-  const profitTotalEl = $("dashTotalProfit"); // <--- Element ID สำหรับแสดงกำไร
-  
+  const profitTotalEl = $("dashTotalProfit");
   const listEl = $("dashVehiclesInStock");
-  
-  if (!listEl && !buyTotalEl && !sellTotalEl && !profitTotalEl) return;
+  const inStockBadgeEl = $("dashVehiclesInStockBadge"); // optional badge
+
+  if (
+    !listEl &&
+    !buyTotalEl &&
+    !sellTotalEl &&
+    !profitTotalEl &&
+    !inStockBadgeEl
+  )
+    return;
 
   try {
     const snap = await getDocs(vehiclesCol);
@@ -291,49 +307,75 @@ async function loadVehiclesSummary() {
     const inStock = [];
     let totalBuy = 0;
     let totalSell = 0;
-    let totalProfit = 0; // <--- ตัวแปรสำหรับรวมกำไร
+    let totalProfit = 0;
 
     snap.forEach((docSnap) => {
       const data = docSnap.data() || {};
-      
-      const buyPrice = safeNumber(data.buyPrice ?? data.purchasePrice ?? data.priceBuy ?? 0, 0);
-      const sellPrice = safeNumber(data.sellPrice ?? data.priceSell ?? 0, 0);
-      const profit = safeNumber(data.profit ?? 0, 0); // <--- ดึงค่ากำไรที่บันทึกไว้
 
-      totalBuy += buyPrice; // ยอดรวมซื้อจะนับรถทุกคันที่ซื้อเข้า
+      const buyPrice = safeNumber(
+        data.buyPrice ?? data.purchasePrice ?? data.priceBuy ?? 0,
+        0
+      );
+      const sellPrice = safeNumber(
+        data.sellPrice ?? data.priceSell ?? 0,
+        0
+      );
+      const repairCost = safeNumber(
+        data.repairCost ?? data.repair ?? 0,
+        0
+      );
+
+      totalBuy += buyPrice;
 
       if (data.status === "sold") {
         totalSell += sellPrice;
-        totalProfit += profit; // <--- จุดที่ต้องแก้ไข: รวมกำไรจากรถที่ "sold"
+
+        const profit = safeNumber(
+          data.profit ?? sellPrice - buyPrice - repairCost,
+          0
+        );
+        totalProfit += profit;
       }
-      
-      // ส่วนการแสดงรายการรถที่ยังค้างสต็อก (logic เดิม)
-      if (data.status === "in-stock") {
-          const createdAt = toJsDate(data.createdAt) || null;
-          const model = data.model || data.vehicleModel || data.name || "ไม่ระบุรุ่น";
-          const plate = data.plate || data.license || "";
-          
-          inStock.push({
-            id: docSnap.id,
-            model,
-            plate,
-            buyPrice,
-            createdAt
-          });
+
+      // รถที่ยังค้างสต็อก
+      if (data.status === "in-stock" || data.status === "stock") {
+        const createdAt =
+          toJsDate(
+            data.createdAt ||
+              data.created_at ||
+              data.buyDate ||
+              data.createdOn
+          ) || null;
+
+        const model =
+          data.model || data.vehicleModel || data.name || "ไม่ระบุรุ่น";
+        const plate = data.plate || data.license || "";
+
+        inStock.push({
+          id: docSnap.id,
+          model,
+          plate,
+          buyPrice,
+          createdAt,
+        });
       }
     });
 
-    // 💡 2. แสดงผลยอดรวมสถิติใหม่
+    // อัปเดตยอดรวม
     if (buyTotalEl) {
-        buyTotalEl.textContent = `${formatCurrency(totalBuy)} บาท`;
+      buyTotalEl.textContent = `${formatCurrency(totalBuy)} บาท`;
     }
     if (sellTotalEl) {
-        sellTotalEl.textContent = `${formatCurrency(totalSell)} บาท`;
+      sellTotalEl.textContent = `${formatCurrency(totalSell)} บาท`;
     }
     if (profitTotalEl) {
-        profitTotalEl.textContent = `${formatCurrency(totalProfit)} บาท`;
+      profitTotalEl.textContent = `${formatCurrency(totalProfit)} บาท`;
     }
-    
+
+    if (inStockBadgeEl) {
+      inStockBadgeEl.textContent = `${inStock.length} คัน`;
+    }
+
     if (!listEl) return;
 
     if (!inStock.length) {
@@ -353,25 +395,27 @@ async function loadVehiclesSummary() {
     const itemsHtml = inStock
       .slice(0, 5)
       .map((v) => {
-        const title = v.plate || v.model || "รถไม่ระบุ";
+        const title = v.model || v.plate || "รถไม่ระบุ";
         const subtitleParts = [];
-        if (v.model) subtitleParts.push(v.model);
+        if (v.plate) subtitleParts.push(v.plate);
         if (v.createdAt) subtitleParts.push(formatDateTime(v.createdAt));
         const subtitle = subtitleParts.join(" • ");
         const buyText = formatCurrency(v.buyPrice || 0);
 
         return `
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="me-2">
-            <div class="fw-semibold">${title}</div>
-            <div class="text-muted small">${subtitle}</div>
-          </div>
-          <div class="text-end">
-            <div class="text-muted small">ราคาซื้อ</div>
-            <div class="fw-semibold">${buyText} บาท</div>
-          </div>
-        </div>
-      `;
+  <div class="bm-dash-vehicle-item d-flex justify-content-between align-items-center mb-2 p-2 rounded-3 border">
+    <div class="me-2">
+      <div class="bm-vehicle-title">
+        <i class="bi bi-scooter me-1"></i>${title}
+      </div>
+      <div class="bm-vehicle-date">${subtitle}</div>
+    </div>
+    <div class="text-end">
+      <div class="text-muted small">ราคาซื้อ</div>
+      <div class="bm-vehicle-buyprice">${buyText} บาท</div>
+    </div>
+  </div>
+        `;
       })
       .join("");
 
@@ -391,7 +435,7 @@ export async function initDashboard() {
   await Promise.all([
     loadTodayJobsSummary(),
     loadLowStockSummary(),
-    loadVehiclesSummary()
+    loadVehiclesSummary(),
   ]);
 }
 
