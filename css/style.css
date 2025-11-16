@@ -1181,3 +1181,117 @@ h6 {
   box-shadow: var(--bm-shadow-soft);
   padding: 16px;
 }
+
+/* ============================
+   DASHBOARD NEW UI
+   ============================ */
+
+.bm-dash-mini {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.bm-dash-mini .label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.bm-dash-mini .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.bm-dash-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.bm-dash-card .title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.bm-dash-card .item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.bm-dash-card .item .label {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.bm-dash-card .item .value {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.bm-dash-card .item.total {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 8px;
+  padding-top: 10px;
+}
+
+/* ---- การ์ดรถซื้อเข้า ---- */
+.bm-vehicle-item {
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+
+/* ชื่อรุ่นรถ (ให้เด่นขึ้น) */
+.bm-vehicle-item .title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #0CAF60; /* เขียว BEN MOTOR */
+}
+
+/* ข้อมูลทะเบียน + เวลา */
+.bm-vehicle-item .subtitle {
+  color: #6F6F6F; /* เทาอ่านง่าย */
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* ป้าย “ราคาซื้อ” */
+.bm-vehicle-item .price-label {
+  font-size: 12px;
+  color: #8f8f8f;
+  text-align: right;
+}
+
+/* ราคาจริง (เด่นขึ้น) */
+.bm-vehicle-item .price-value {
+  font-size: 17px;
+  font-weight: 800;
+  text-align: right;
+  color: #007AFF; /* น้ำเงินแบบ iOS */
+}
+
+/* ---- Dashboard Vehicle Colors ---- */
+.bm-vehicle-title {
+  color: #16a34a;  /* เขียว */
+  font-weight: 700;
+}
+
+.bm-vehicle-buyprice {
+  color: #dc2626;  /* แดง */
+  font-weight: 700;
+}
+
+.bm-vehicle-date {
+  color: #64748b;  /* เทา */
+  font-size: 0.8rem;
+}
