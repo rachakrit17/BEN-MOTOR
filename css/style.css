@@ -989,3 +989,91 @@ h6 {
 #vehiclesSoldTable {
   border-spacing: 0 0.5rem;
 }
+
+/* ============================================================
+   BEN MOTOR – VEHICLE CARD STYLES
+   ============================================================ */
+
+.bm-vehicle-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid #e1e1e1;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.bm-vehicle-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* header */
+.bm-vehicle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bm-vehicle-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #222;
+  display: flex;
+  align-items: center;
+}
+
+/* body */
+.bm-vehicle-body {
+  font-size: 0.95rem;
+  line-height: 1.45rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.bm-vehicle-body strong {
+  color: #222;
+}
+
+/* footer */
+.bm-vehicle-footer {
+  border-top: 1px solid #ececec;
+  padding-top: 10px;
+  text-align: right;
+}
+
+/* status card */
+.bm-vehicle-card.sold {
+  background: #f5fff6;
+  border-color: #b8eabf;
+}
+
+/* text colors */
+.bm-vehicle-price-buy {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.bm-vehicle-price-sell {
+  color: #198754;
+  font-weight: 700;
+}
+
+.bm-vehicle-profit-pos {
+  color: #198754;
+  font-weight: 700;
+}
+
+.bm-vehicle-profit-neg {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+/* badge fixes */
+.bm-vehicle-card .badge {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
