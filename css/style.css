@@ -1129,3 +1129,20 @@ h6 {
   color: #16a34a !important;
   font-weight: 700;
 }
+
+/* override สีราคาในการ์ดรถ */
+.bm-vehicle-price-buy {
+  color: #111827 !important;   /* ราคาซื้อ = ดำ */
+  font-weight: 600;
+}
+
+.bm-vehicle-price-sell {
+  color: #dc2626 !important;   /* ราคาขาย = แดง */
+  font-weight: 700;
+}
+
+.bm-vehicle-profit-pos,
+.bm-vehicle-price-profit {
+  color: #16a34a !important;   /* กำไร = เขียว */
+  font-weight: 700;
+}
