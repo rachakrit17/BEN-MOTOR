@@ -38,25 +38,22 @@ function safeNumber(v, fallback = 0) {
 function getFilterValues() {
   const searchInput = $("stockSearchInput");
   const categorySelect = $("stockCategoryFilter");
-  const lowOnlyCheckbox = $("stockLowOnlyToggle");
+  // เนื่องจากใน app.html ไม่มี lowOnlyCheckbox จึงคอมเมนต์ส่วนนี้
+  // const lowOnlyCheckbox = $("stockLowOnlyToggle"); 
 
   const search = searchInput ? searchInput.value.trim().toLowerCase() : "";
   const category = categorySelect ? categorySelect.value : "all";
-  const lowOnly = lowOnlyCheckbox ? lowOnlyCheckbox.checked : false;
+  // const lowOnly = lowOnlyCheckbox ? lowOnlyCheckbox.checked : false;
 
-  return { search, category, lowOnly };
+  return { search, category, lowOnly: false }; // ตั้งค่า lowOnly เป็น false ชั่วคราว
 }
 
 function applyStockFilters() {
-  const { search, category, lowOnly } = getFilterValues();
+  const { search, category } = getFilterValues();
   let filtered = [...stockCache];
-
-  if (category && category !== "all") {
-    filtered = filtered.filter(
-      (item) => (item.category || "").toLowerCase() === category.toLowerCase()
-    );
-  }
-
+  
+  // โค้ดส่วน lowOnly ถูกคอมเมนต์ออกไป เนื่องจากไม่มี Checkbox ใน app.html
+  /*
   if (lowOnly) {
     filtered = filtered.filter((item) => {
       const qty = safeNumber(
@@ -67,6 +64,14 @@ function applyStockFilters() {
       return minStock > 0 && qty <= minStock;
     });
   }
+  */
+
+  if (category && category !== "all") {
+    filtered = filtered.filter(
+      (item) => (item.category || "").toLowerCase() === category.toLowerCase()
+    );
+  }
+
 
   if (search) {
     filtered = filtered.filter((item) => {
@@ -89,7 +94,7 @@ async function loadStockList() {
   if (tbody) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" class="text-center py-3 text-muted">
+        <td colspan="7" class="text-center py-3 text-muted">
           กำลังโหลดข้อมูลสต็อกอะไหล่จากระบบ...
         </td>
       </tr>
@@ -116,7 +121,7 @@ async function loadStockList() {
     if (tbody) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="6" class="text-center py-3 text-danger">
+          <td colspan="7" class="text-center py-3 text-danger">
             โหลดข้อมูลสต็อกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง
           </td>
         </tr>
@@ -130,27 +135,25 @@ async function loadStockList() {
 // -----------------------------
 function renderStockTable(items) {
   const tbody = $("stockTableBody");
-  const countEl = $("stockCountText");
-  const lowCountEl = $("stockLowCountText");
+  // ส่วนแสดงยอดรวมถูกคอมเมนต์ออกไป เนื่องจากไม่มี Element ใน app.html
+  // const countEl = $("stockCountText");
+  // const lowCountEl = $("stockLowCountText");
 
+  /*
   if (countEl) {
     countEl.textContent = items.length.toString();
   }
+  */
 
   if (!tbody) return;
 
+  const emptyStateEl = $("stockEmptyState");
   if (!items.length) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center py-3 text-muted">
-          ยังไม่มีข้อมูลอะไหล่ตามเงื่อนไขที่เลือก
-        </td>
-      </tr>
-    `;
-    if (lowCountEl) {
-      lowCountEl.textContent = "0";
-    }
+    if(tbody) tbody.innerHTML = '';
+    if (emptyStateEl) emptyStateEl.classList.remove("d-none");
     return;
+  } else {
+    if (emptyStateEl) emptyStateEl.classList.add("d-none");
   }
 
   let lowCount = 0;
@@ -174,29 +177,37 @@ function renderStockTable(items) {
     const qtyBadge = isLow
       ? `<span class="badge rounded-pill text-bg-danger ms-2">ใกล้หมด</span>`
       : "";
+      
+    const categoryMap = {
+      'brake': 'ระบบเบรก',
+      'engine': 'เครื่องยนต์',
+      'tire': 'ยาง / ล้อ',
+      'electric': 'ระบบไฟ',
+      'other': 'อื่นๆ'
+    };
+
+    const categoryLabel = categoryMap[category.toLowerCase()] || category;
 
     return `
       <tr data-stock-id="${item.id}">
         <td>
           <div class="fw-semibold">${name}</div>
           <div class="small text-muted">
-            ${sku ? `SKU: ${sku} • ` : ""}${category}
+            ${sku ? `SKU: ${sku}` : ""}${sku && category ? ` • ` : ""}${categoryLabel}
           </div>
         </td>
+        <td>${categoryLabel}</td>
         <td class="text-end small">
-          ${costPrice ? formatCurrency(costPrice) + "฿" : "-"}
+          ${costPrice ? formatCurrency(costPrice) : "-"}
         </td>
         <td class="text-end small">
-          ${salePrice ? formatCurrency(salePrice) + "฿" : "-"}
+          ${salePrice ? formatCurrency(salePrice) : "-"}
         </td>
-        <td class="text-end small ${qtyClass}">
+        <td class="text-center small ${qtyClass}">
           ${qty}
-          ${
-            minStock
-              ? `<span class="small text-muted"> / ${minStock}</span>`
-              : ""
-          }
-          ${qtyBadge}
+        </td>
+        <td class="text-center small text-muted">
+          ${minStock}
         </td>
         <td class="text-end">
           <button type="button"
@@ -210,9 +221,11 @@ function renderStockTable(items) {
 
   tbody.innerHTML = rowsHtml.join("");
 
+  /*
   if (lowCountEl) {
     lowCountEl.textContent = String(lowCount);
   }
+  */
 }
 
 // -----------------------------
@@ -221,26 +234,28 @@ function renderStockTable(items) {
 function openStockEditModal(stockItem) {
   currentEditingStock = stockItem || null;
 
-  const modalEl = $("stockEditModal");
+  // 🔴 FIX 1: เปลี่ยน ID ของ Modal ให้ตรงกับ app.html
+  const modalEl = $("stockItemModal");
   if (!modalEl) {
     const msg = [
-      "ยังไม่ได้สร้างหน้าต่างแก้ไขสต็อก (Modal id=\"stockEditModal\") บนหน้าเว็บ",
+      "ยังไม่ได้สร้างหน้าต่างแก้ไขสต็อก (Modal id=\"stockItemModal\") บนหน้าเว็บ",
       "ระบบสามารถทำงานได้ แต่จะไม่สามารถเพิ่ม/แก้ไขอะไหล่ผ่าน UI นี้ได้"
     ].join("\n");
     alert(msg);
     return;
   }
 
-  const idInput = $("stockEditIdInput");
-  const nameInput = $("stockNameInput");
-  const skuInput = $("stockSkuInput");
-  const categoryInput = $("stockCategoryInput");
-  const costInput = $("stockCostPriceInput");
-  const saleInput = $("stockSalePriceInput");
-  const qtyInput = $("stockQtyInput");
-  const minStockInput = $("stockMinStockInput");
-  const notesInput = $("stockNotesInput");
-  const titleEl = $("stockEditModalTitle");
+  // 🔴 FIX 2: เปลี่ยน ID ของฟิลด์ให้ตรงกับ app.html
+  const idInput = $("stockItemId"); 
+  const nameInput = $("stockItemName"); 
+  const skuInput = $("stockItemSku"); 
+  const categoryInput = $("stockItemCategory"); 
+  const costInput = $("stockItemCost"); 
+  const saleInput = $("stockItemPrice"); 
+  const qtyInput = $("stockItemQty"); 
+  const minStockInput = $("stockItemMin"); 
+  // const notesInput = $("stockNotesInput"); // ไม่มีใน app.html
+  const titleEl = $("stockItemModalTitle"); // เปลี่ยน ID
 
   if (currentEditingStock) {
     if (titleEl) titleEl.textContent = "แก้ไขอะไหล่ในสต็อก";
@@ -264,21 +279,23 @@ function openStockEditModal(stockItem) {
       minStockInput.value = String(
         safeNumber(currentEditingStock.minStock ?? currentEditingStock.min ?? 0)
       );
-    if (notesInput) notesInput.value = currentEditingStock.notes || "";
+    // if (notesInput) notesInput.value = currentEditingStock.notes || "";
   } else {
     if (titleEl) titleEl.textContent = "เพิ่มอะไหล่ใหม่เข้าสต็อก";
     if (idInput) idInput.value = "";
     if (nameInput) nameInput.value = "";
     if (skuInput) skuInput.value = "";
-    if (categoryInput) categoryInput.value = "";
-    if (costInput) costInput.value = "";
-    if (saleInput) saleInput.value = "";
-    if (qtyInput) qtyInput.value = "";
-    if (minStockInput) minStockInput.value = "";
-    if (notesInput) notesInput.value = "";
+    // ตั้งค่า Category เป็น 'other' ตามค่าเริ่มต้นใน HTML
+    if (categoryInput) categoryInput.value = 'other'; 
+    if (costInput) costInput.value = "0";
+    if (saleInput) saleInput.value = "0";
+    if (qtyInput) qtyInput.value = "0";
+    if (minStockInput) minStockInput.value = "1";
+    // if (notesInput) notesInput.value = "";
   }
-
-  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  
+  // โหลด Modal จาก Bootstrap
+  const modal = new bootstrap.Modal(modalEl);
   modal.show();
 }
 
@@ -288,16 +305,17 @@ function openStockEditModal(stockItem) {
 async function handleStockSave(e) {
   if (e && e.preventDefault) e.preventDefault();
 
-  const idInput = $("stockEditIdInput");
-  const nameInput = $("stockNameInput");
-  const skuInput = $("stockSkuInput");
-  const categoryInput = $("stockCategoryInput");
-  const costInput = $("stockCostPriceInput");
-  const saleInput = $("stockSalePriceInput");
-  const qtyInput = $("stockQtyInput");
-  const minStockInput = $("stockMinStockInput");
-  const notesInput = $("stockNotesInput");
-  const saveBtn = $("stockSaveBtn");
+  // 🔴 FIX 3: เปลี่ยน ID ของฟิลด์และปุ่มให้ตรงกับ app.html
+  const idInput = $("stockItemId"); 
+  const nameInput = $("stockItemName"); 
+  const skuInput = $("stockItemSku"); 
+  const categoryInput = $("stockItemCategory"); 
+  const costInput = $("stockItemCost"); 
+  const saleInput = $("stockItemPrice"); 
+  const qtyInput = $("stockItemQty"); 
+  const minStockInput = $("stockItemMin"); 
+  // const notesInput = $("stockNotesInput"); // ไม่มีใน app.html
+  const saveBtn = $("stockItemSaveBtn"); // เปลี่ยน ID
 
   if (!nameInput || !qtyInput || !saleInput) {
     showToast("ฟอร์มแก้ไขสต็อกยังไม่ครบในหน้าเว็บ", "error");
@@ -311,14 +329,22 @@ async function handleStockSave(e) {
   const salePrice = safeNumber(saleInput.value || 0);
   const qty = safeNumber(qtyInput.value || 0);
   const minStock = safeNumber(minStockInput ? minStockInput.value || 0 : 0);
-  const notes = notesInput ? notesInput.value.trim() : "";
+  // const notes = notesInput ? notesInput.value.trim() : "";
+  const notes = ""; // ใช้ค่าว่าง เนื่องจากไม่มีฟิลด์โน้ต
 
   if (!name) {
     showToast("กรุณากรอกชื่ออะไหล่", "error");
+    nameInput.focus();
     return;
   }
   if (!salePrice) {
     showToast("กรุณากรอกราคาขาย", "error");
+    saleInput.focus();
+    return;
+  }
+  if (!qty) {
+    showToast("กรุณากรอกจำนวนคงเหลือ", "error");
+    qtyInput.focus();
     return;
   }
 
@@ -355,10 +381,12 @@ async function handleStockSave(e) {
       showToast("เพิ่มอะไหล่ใหม่เข้าสต็อกเรียบร้อย", "success");
     }
 
-    const modalEl = $("stockEditModal");
+    // 🔴 FIX 4: เปลี่ยน ID ของ Modal สำหรับปิด
+    const modalEl = $("stockItemModal");
     if (modalEl) {
-      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-      modal.hide();
+      // ใช้ getInstance เพื่อดึง instance ที่มีอยู่แล้ว
+      const modal = bootstrap.Modal.getInstance(modalEl); 
+      if (modal) modal.hide();
     }
 
     currentEditingStock = null;
@@ -380,11 +408,14 @@ function initStock() {
 
   const searchInput = $("stockSearchInput");
   const categorySelect = $("stockCategoryFilter");
-  const lowOnlyCheckbox = $("stockLowOnlyToggle");
-  const addNewBtn = $("stockAddNewBtn");
+  // const lowOnlyCheckbox = $("stockLowOnlyToggle"); // ไม่มีใน app.html
+
+  // 🔴 FIX 5: เปลี่ยน ID ของปุ่มเพิ่มใหม่
+  const addNewBtn = $("stockAddItemBtn"); 
   const reloadBtn = $("stockReloadBtn");
-  const saveBtn = $("stockSaveBtn");
-  const editForm = $("stockEditForm");
+  // 🔴 FIX 6 & 7: เปลี่ยน ID ของปุ่มบันทึกและฟอร์ม
+  const saveBtn = $("stockItemSaveBtn"); 
+  const editForm = $("stockItemForm"); 
   const tbody = $("stockTableBody");
 
   if (searchInput) {
@@ -399,11 +430,13 @@ function initStock() {
     });
   }
 
+  /*
   if (lowOnlyCheckbox) {
     lowOnlyCheckbox.addEventListener("change", () => {
       applyStockFilters();
     });
   }
+  */
 
   if (addNewBtn) {
     addNewBtn.addEventListener("click", () => {
