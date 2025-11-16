@@ -833,3 +833,7 @@ h6 {
     font-weight: 900;
     transform: scale(1.15);
 }
+/* force bottom nav icon visible */
+.bm-bottom-nav-btn i {
+    color: #ffffff !important;
+}
