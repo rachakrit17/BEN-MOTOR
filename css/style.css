@@ -731,4 +731,65 @@ h6 {
   .bm-card-body {
     padding-inline: 1.5rem;
   }
+
+}
+/* =========================
+   TOPBAR GRADIENT MODE
+   (Light / Dark auto)
+   ========================= */
+
+.bm-topbar-gradient {
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  border-bottom: none !important;
+  padding: 0.65rem 0;
+  color: #022c22;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Dark mode */
+.theme-dark .bm-topbar-gradient {
+  background: linear-gradient(135deg, #166534, #0ea5e9);
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+
+/* Title */
+.bm-topbar-gradient .bm-topbar-title {
+  color: inherit;
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+
+/* Subtitle */
+.bm-topbar-gradient .bm-topbar-subtitle {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.8rem;
+}
+
+/* DateTime Panel */
+.bm-topbar-datetime-panel {
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-align: right;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Dark mode datetime */
+.theme-dark .bm-topbar-datetime-panel {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bm-topbar-datetime-panel .bm-date-text {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.bm-topbar-datetime-panel .bm-time-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
 }
