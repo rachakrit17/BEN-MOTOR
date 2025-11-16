@@ -1001,28 +1001,10 @@
                     id="vehicles-stock-pane"
                     role="tabpanel"
                   >
-                    <div class="table-responsive">
-                      <table
-                        class="table align-middle"
-                        id="vehiclesStockTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th>รุ่น / ทะเบียน</th>
-                            <th style="width: 120px" class="text-end">
-                              ราคาซื้อ
-                            </th>
-                            <th style="width: 140px" class="text-end">
-                              ค่าใช้จ่ายซ่อม
-                            </th>
-                            <th style="width: 120px" class="text-center">
-                              สถานะ
-                            </th>
-                            <th style="width: 120px" class="text-end"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="vehiclesStockBody"></tbody>
-                      </table>
+                    <div
+                        id="vehiclesStockBody"
+                        class="row g-3"
+                    >
                     </div>
                     <div
                       id="vehiclesStockEmpty"
@@ -1037,28 +1019,10 @@
                     id="vehicles-sold-pane"
                     role="tabpanel"
                   >
-                    <div class="table-responsive">
-                      <table
-                        class="table align-middle"
-                        id="vehiclesSoldTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th>รุ่น / ทะเบียน</th>
-                            <th style="width: 120px" class="text-end">
-                              ราคาซื้อ
-                            </th>
-                            <th style="width: 120px" class="text-end">
-                              ราคาขาย
-                            </th>
-                            <th style="width: 120px" class="text-end">
-                              กำไร
-                            </th>
-                            <th style="width: 160px">วันที่ขาย</th>
-                          </tr>
-                        </thead>
-                        <tbody id="vehiclesSoldBody"></tbody>
-                      </table>
+                    <div
+                        id="vehiclesSoldBody"
+                        class="row g-3"
+                    >
                     </div>
                     <div
                       id="vehiclesSoldEmpty"
@@ -1523,7 +1487,6 @@
                   </div>
                 </form>
 
-                <!-- Modal ยืนยันการล้างข้อมูลทั้งหมด -->
                 <div
                   class="modal fade"
                   id="settingsResetModal"
@@ -1580,8 +1543,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- End Modal Reset -->
-              </div>
+                </div>
             </div>
           </section>
         </main>
@@ -1661,14 +1623,6 @@
     <script type="module" src="./js/vehicles.js"></script>
     <script type="module" src="./js/stock.js"></script>
     <script type="module" src="./js/settings.js"></script>
-    <script type="module" src="./js/auth.js"></script>
+    <script type="module" src="../js/auth.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
-
