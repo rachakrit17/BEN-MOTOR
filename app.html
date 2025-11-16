@@ -40,11 +40,6 @@
           </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-        <script>
-          eruda.init();
-        </script>
-
         <div class="bm-sidebar-nav flex-grow-1">
           <button
             type="button"
@@ -193,186 +188,125 @@
         </header>
 
         <main class="bm-main container-fluid">
-          <section
-            id="section-dashboard"
-            class="bm-section active"
-            data-section="dashboard"
-          >
-            <div class="row g-3 mb-3">
-              <div class="col-12 col-xl-8">
-                <div class="bm-card">
-                  <div class="bm-card-header">
-                    <div>
-                      <h2 class="bm-card-title mb-0">
-                        แดชบอร์ด BEN MOTOR
-                      </h2>
-                      <p class="bm-card-subtitle mb-0">
-                        สรุปยอดวันนี้จากงานซ่อม, รถซื้อ–ขาย และสต็อก
-                      </p>
-                    </div>
-                  </div>
-                  <div class="bm-card-body">
-                    <div class="row g-3">
-                      <div class="col-12 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">ยอดรวมวันนี้</div>
-                          <div
-                            id="dashTotalToday"
-                            class="bm-stat-value text-success"
-                          >
-                            0 บาท
-                          </div>
-                          <div class="bm-stat-desc">
-                            รวมค่าแรง + อะไหล่ + รถซื้อ–ขาย
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">จำนวนงานซ่อม</div>
-                          <div
-                            id="dashJobsToday"
-                            class="bm-stat-value text-primary"
-                          >
-                            0 งาน
-                          </div>
-                          <div class="bm-stat-desc">
-                            ทุกสถานะของงานที่สร้างวันนี้
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">รถค้างอยู่ในอู่</div>
-                          <div
-                            id="dashVehiclesPending"
-                            class="bm-stat-value text-warning"
-                          >
-                            0 คัน
-                          </div>
-                          <div class="bm-stat-desc">
-                            ยังไม่ได้ปิดงานหรือยังไม่ได้ขาย
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+<section
+  id="section-dashboard"
+  class="bm-section active"
+  data-section="dashboard"
+>
+  <!-- Header -->
+  <div class="mb-3">
+    <h4 class="fw-bold">แดชบอร์ด BEN MOTOR</h4>
+    <div class="text-muted small">
+      ภาพรวมวันนี้ทั้งหมดของงานซ่อม / ซื้อ–ขาย / สต๊อก
+    </div>
+  </div>
 
-                    <div class="bm-divider mt-4 mb-3">
-                      สรุปยอดรถซื้อ–ขาย (รวมทั้งหมด)
-                    </div>
+  <!-- Summary Today (3 mini cards) -->
+  <div class="row g-3 mb-3">
+    <div class="col-4">
+      <div class="bm-dash-mini">
+        <div class="label">ยอดวันนี้</div>
+        <!-- ใช้ id ที่ dashboard.js อัปเดต -->
+        <div class="value text-success" id="dashTotalToday">0 บาท</div>
+      </div>
+    </div>
 
-                    <div class="row g-3 mt-1">
-                      <div class="col-12 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">ยอดซื้อรถเข้า</div>
-                          <div
-                            id="dashTotalBuy"
-                            class="bm-stat-value text-info"
-                          >
-                            0 บาท
-                          </div>
-                          <div class="bm-stat-desc">
-                            ราคารวมของรถที่ซื้อเข้าทั้งหมด
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-6 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">ยอดขายรถออก</div>
-                          <div
-                            id="dashTotalSell"
-                            class="bm-stat-value text-primary"
-                          >
-                            0 บาท
-                          </div>
-                          <div class="bm-stat-desc">
-                            ราคารวมของรถที่ขายออกทั้งหมด
-                          </div>
-                        </div>
-                      </div>
-                      <div class="6 col-md-4">
-                        <div class="bm-stat-card">
-                          <div class="bm-stat-label">กำไรจากการขายรถ</div>
-                          <div
-                            id="dashTotalProfit"
-                            class="bm-stat-value text-success"
-                          >
-                            0 บาท
-                          </div>
-                          <div class="bm-stat-desc">
-                            รวมกำไรหลังหักค่าใช้จ่ายซ่อม
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row g-3 mt-1">
-                      <div class="col-12 col-md-6">
-                        <div class="bm-mini-card">
-                          <div class="bm-mini-card-header">
-                            <span class="fw-semibold">งานด่วนวันนี้</span>
-                            <span
-                              id="dashUrgentJobsCount"
-                              class="badge rounded-pill text-bg-success"
-                              >0 งาน</span
-                            >
-                          </div>
-                          <div
-                            id="dashUrgentJobsList"
-                            class="bm-mini-card-body"
-                          >
-                            <div class="bm-empty-state">
-                              ยังไม่มีงานด่วนวันนี้
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-md-6">
-                        <div class="bm-mini-card">
-                          <div class="bm-mini-card-header">
-                            <span class="fw-semibold">อะไหล่ใกล้หมด</span>
-                            <span
-                              id="dashLowStockCount"
-                              class="badge rounded-pill text-bg-danger"
-                              >0 รายการ</span
-                            >
-                          </div>
-                          <div
-                            id="dashLowStockList"
-                            class="bm-mini-card-body"
-                          >
-                            <div class="bm-empty-state">
-                              ยังไม่มีอะไหล่ใกล้หมด
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div class="col-4">
+      <div class="bm-dash-mini">
+        <div class="label">งานวันนี้</div>
+        <!-- ใช้ id ที่ dashboard.js อัปเดต -->
+        <div class="value" id="dashJobsToday">0 งาน</div>
+      </div>
+    </div>
 
-              <div class="col-12 col-xl-4">
-                <div class="bm-card h-100">
-                  <div class="bm-card-header">
-                    <h2 class="bm-card-title mb-0">
-                      รถซื้อเข้าแล้วยังไม่ขาย
-                    </h2>
-                    <p class="bm-card-subtitle mb-0">
-                      ดูรถที่ยังอยู่ในสต็อกและยังไม่ตัดกำไร
-                    </p>
-                  </div>
-                  <div
-                    id="dashVehiclesInStock"
-                    class="bm-card-body bm-scroll-y"
-                  >
-                    <div class="bm-empty-state">
-                      ยังไม่มีรถซื้อเข้าในระบบ
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+    <div class="col-4">
+      <div class="bm-dash-mini">
+        <div class="label">รถค้างสต๊อก</div>
+        <!-- ใช้ id ที่ dashboard.js ใช้ (นับงานที่ยังไม่ done) -->
+        <div class="value text-warning" id="dashVehiclesPending">0 คัน</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy/Sell Cards -->
+  <div class="bm-dash-card mb-3">
+    <div class="title">สรุป ซื้อ–ขาย รถทั้งหมด</div>
+
+    <div class="item">
+      <div class="label">ยอดซื้อสะสม</div>
+      <!-- map จาก dbTotalBuy -> dashTotalBuy -->
+      <div class="value text-primary" id="dashTotalBuy">0 บาท</div>
+    </div>
+
+    <div class="item">
+      <div class="label">ยอดขายสะสม</div>
+      <!-- map จาก dbTotalSell -> dashTotalSell -->
+      <div class="value text-success" id="dashTotalSell">0 บาท</div>
+    </div>
+
+    <div class="item total">
+      <div class="label">กำไรรถทั้งหมด</div>
+      <!-- map จาก dbTotalProfit -> dashTotalProfit -->
+      <div class="value text-success fw-bold" id="dashTotalProfit">
+        0 บาท
+      </div>
+    </div>
+  </div>
+
+  <!-- Jobs Today (โชว์ข้อความ/ลิสต์เองได้ภายหลัง ถ้าอยากต่อยอด JS) -->
+  <div class="bm-dash-card mb-3">
+    <div class="title d-flex justify-content-between">
+      <span>งานซ่อมวันนี้</span>
+      <!-- ใช้ตัวเลขจากการ์ดด้านบนแทน (dashJobsToday) -->
+      <span class="badge bg-success">
+        <span id="dashJobsTodayBadgeText">รวมจากด้านบน</span>
+      </span>
+    </div>
+
+    <div id="dbTodayJobsList" class="text-muted small">
+      ยังไม่มีงานซ่อมวันนี้
+    </div>
+  </div>
+
+  <!-- Low Stock (ผูกกับ loadLowStockSummary) -->
+  <div class="bm-dash-card mb-3">
+    <div class="title d-flex justify-content-between">
+      <span>อะไหล่ใกล้หมด</span>
+      <!-- ใช้ id ตาม dashboard.js -->
+      <span class="badge bg-danger" id="dashLowStockCount">0 รายการ</span>
+    </div>
+
+    <!-- ใช้ id ตาม dashboard.js -->
+    <div id="dashLowStockList" class="text-muted small">
+      ยังไม่มีอะไหล่ใกล้หมด
+    </div>
+  </div>
+
+ <!-- Vehicles not sold yet (เชื่อมกับ dashVehiclesInStock) -->
+<div class="bm-dash-card mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <div class="fw-semibold">รถซื้อเข้าแล้วยังไม่ขาย</div>
+      <div class="text-muted small">
+        ยังไม่ขายออก / ยังไม่ตัดกำไร
+      </div>
+    </div>
+    <span
+      id="dashVehiclesInStockBadge"
+      class="badge rounded-pill text-bg-warning"
+    >
+      0 คัน
+    </span>
+  </div>
+
+  <!-- JS จะเติมลิสต์รถตรงนี้ -->
+  <div id="dashVehiclesInStock" class="bm-dash-vehicle-list text-muted small">
+    กำลังโหลดข้อมูล...
+  </div>
+</div>
+
+  <div style="height: 90px"></div>
+</section>
 
           <section
             id="section-pos"
@@ -1679,5 +1613,3 @@
     <script type="module" src="./js/auth.js"></script>
   </body>
 </html>
-
-
