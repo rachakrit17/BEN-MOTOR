@@ -1,4 +1,4 @@
-// BEN MOTOR POS – Settings (แก้เวอร์ชันตรงกับ app.html)
+// BEN MOTOR POS – Settings (แก้เวอร์ชันตรงกับ app.html + Reset POS)
 
 import {
   db,
@@ -6,7 +6,8 @@ import {
   getDoc,
   setDoc,
   collection,
-  getDocs
+  getDocs,
+  deleteDoc
 } from "./firebase-init.js";
 
 import { showToast, formatDateTime } from "./utils.js";
@@ -258,6 +259,71 @@ async function handleExportJson() {
 }
 
 // -----------------------------
+// Reset POS data (แบบ A)
+// ล้าง jobs, stock, vehicles, settings (ยกเว้น settings/pos-main)
+// -----------------------------
+async function resetPosData() {
+  const collectionsToClear = ["jobs", "stock", "vehicles", "settings"];
+
+  for (const colName of collectionsToClear) {
+    try {
+      const snap = await getDocs(collection(db, colName));
+      const deletes = [];
+
+      snap.forEach((d) => {
+        // แบบ A: settings ให้ข้าม doc pos-main
+        if (colName === "settings" && d.id === SETTINGS_DOC_ID) {
+          return;
+        }
+        deletes.push(deleteDoc(doc(db, colName, d.id)));
+      });
+
+      if (deletes.length > 0) {
+        await Promise.all(deletes);
+      }
+    } catch (e) {
+      console.error(`ลบข้อมูลคอลเลกชัน ${colName} ไม่สำเร็จ:`, e);
+      throw e;
+    }
+  }
+}
+
+// -----------------------------
+// Handle Reset POS (จาก modal)
+// -----------------------------
+async function handleResetPos() {
+  const confirmBtn = $("settingsResetConfirmBtn");
+  const input = $("settingsResetConfirmInput");
+
+  if (!confirmBtn || !input) return;
+
+  const modalEl = document.getElementById("settingsResetModal");
+
+  confirmBtn.disabled = true;
+  input.disabled = true;
+
+  try {
+    await resetPosData();
+    showToast("ล้างข้อมูลทั้งหมดเรียบร้อย", "success");
+
+    input.value = "";
+    confirmBtn.disabled = true;
+
+    if (modalEl && window.bootstrap) {
+      const modalInstance =
+        window.bootstrap.Modal.getInstance(modalEl) ||
+        new window.bootstrap.Modal(modalEl);
+      modalInstance.hide();
+    }
+  } catch (error) {
+    console.error("Reset POS ไม่สำเร็จ:", error);
+    showToast("ล้างข้อมูลไม่สำเร็จ", "error");
+  } finally {
+    input.disabled = false;
+  }
+}
+
+// -----------------------------
 // Init
 // -----------------------------
 function initSettings() {
@@ -299,6 +365,22 @@ function initSettings() {
       const enabled = autoLockEnabledSelect?.value === "on";
       const minutes = Number(autoLockMinutesInput.value || "10") || 10;
       persistAutoLock(enabled, minutes);
+    });
+  }
+
+  // Reset POS modal: enable/disable ปุ่มตามข้อความ
+  const resetInput = $("settingsResetConfirmInput");
+  const resetConfirmBtn = $("settingsResetConfirmBtn");
+
+  if (resetInput && resetConfirmBtn) {
+    resetInput.addEventListener("input", () => {
+      const ok = resetInput.value.trim().toUpperCase() === "RESET";
+      resetConfirmBtn.disabled = !ok;
+    });
+
+    resetConfirmBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      handleResetPos();
     });
   }
 
