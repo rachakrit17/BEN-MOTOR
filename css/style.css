@@ -833,3 +833,129 @@ h6 {
     font-weight: 900;
     transform: scale(1.15);
 }
+
+/* =========================
+   Vehicles – Card style (Stock & Sold)
+   ========================= */
+
+#vehicles-stock-pane .table-responsive,
+#vehicles-sold-pane .table-responsive {
+  border: none;
+}
+
+#vehiclesStockTable,
+#vehiclesSoldTable {
+  border-collapse: separate;
+  border-spacing: 0 0.8rem; /* ระยะห่างระหว่างการ์ด */
+}
+
+/* หัวตาราง – ให้ตัวเล็กลงหน่อย */
+#vehiclesStockTable thead tr th,
+#vehiclesSoldTable thead tr th {
+  border: none;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bm-text-muted);
+}
+
+/* แถวข้อมูล = ลักษณะเป็นการ์ด */
+#vehiclesStockTable tbody tr,
+#vehiclesSoldTable tbody tr {
+  background: var(--bm-card);
+  box-shadow: var(--bm-shadow-soft);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+#vehiclesStockTable tbody tr td,
+#vehiclesSoldTable tbody tr td {
+  border-top: none;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+#vehiclesStockTable tbody tr td:first-child,
+#vehiclesSoldTable tbody tr td:first-child {
+  padding-left: 1.1rem;
+}
+
+#vehiclesStockTable tbody tr td:last-child,
+#vehiclesSoldTable tbody tr td:last-child {
+  padding-right: 1.1rem;
+}
+
+/* ช่อง 1: รุ่น / ทะเบียน ให้เด่นหน่อย */
+#vehiclesStockTable tbody td:nth-child(1),
+#vehiclesSoldTable tbody td:nth-child(1) {
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: pre-line; /* เผื่อขึ้นบรรทัดแบบ
+                            รุ่นรถ: ...
+                            ทะเบียน: ... */
+}
+
+/* ช่องราคาซื้อ – โทนเทาอ่อน */
+#vehiclesStockTable tbody td:nth-child(2),
+#vehiclesSoldTable tbody td:nth-child(2) {
+  font-size: 0.85rem;
+  color: var(--bm-text-muted);
+}
+
+/* รถขายแล้ว: ราคาขาย = เขียวเด่น */
+#vehiclesSoldTable tbody td:nth-child(3) {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+/* รถขายแล้ว: กำไร = เขียวเข้ม (ถ้าจะให้ติดลบเป็นแดง ต้องไปเช็กค่าใน JS เอาเอง) */
+#vehiclesSoldTable tbody td:nth-child(4) {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+/* วันที่ขาย / สถานะ – ตัวเล็กสีเทา */
+#vehiclesSoldTable tbody td:nth-child(5),
+#vehiclesStockTable tbody td:nth-child(4) {
+  font-size: 0.8rem;
+  color: var(--bm-text-muted);
+}
+
+/* ช่องปุ่มขายรถ / ปุ่มจัดการ ชิดขวา */
+#vehiclesStockTable tbody td:last-child,
+#vehiclesSoldTable tbody td:last-child {
+  text-align: right;
+}
+
+/* =========================
+   Vehicles – Card layout on mobile
+   ========================= */
+
+@media (max-width: 767.98px) {
+  #vehiclesStockTable,
+  #vehiclesSoldTable {
+    border-spacing: 0 0.6rem;
+  }
+
+  #vehiclesStockTable tbody tr td,
+  #vehiclesSoldTable tbody tr td {
+    display: block;
+    width: 100%;
+  }
+
+  #vehiclesStockTable tbody tr td:last-child,
+  #vehiclesSoldTable tbody tr td:last-child {
+    text-align: left;
+    margin-top: 0.35rem;
+  }
+
+  #vehiclesStockTable tbody td:nth-child(2),
+  #vehiclesSoldTable tbody td:nth-child(2),
+  #vehiclesSoldTable tbody td:nth-child(3),
+  #vehiclesSoldTable tbody td:nth-child(4),
+  #vehiclesSoldTable tbody td:nth-child(5) {
+    font-size: 0.8rem;
+  }
+}
