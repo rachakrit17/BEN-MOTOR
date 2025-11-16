@@ -622,118 +622,6 @@ h6 {
 }
 
 /* =========================
-   Bottom Navigation (Mobile)
-   ========================= */
-
-.bm-bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--bm-bottom-nav-height);
-  background: #020617;
-  border-top: 1px solid rgba(148, 163, 184, 0.35);
-  display: flex;
-  align-items: stretch;
-  justify-content: space-around;
-  padding: 0 0.15rem;
-  z-index: 1030;
-}
-
-.bm-bottom-nav-btn {
-  flex: 1;
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  font-size: 0.7rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.1rem;
-}
-
-.bm-bottom-nav-btn i {
-  font-size: 1.1rem;
-}
-
-.bm-bottom-nav-btn.active {
-  color: #e5e7eb;
-}
-
-.bm-bottom-nav-btn.active::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 26px;
-  height: 3px;
-  border-radius: 999px;
-  background-image: linear-gradient(
-    135deg,
-    var(--bm-primary),
-    var(--bm-primary-strong)
-  );
-}
-
-/*ให้ bottom nav ไม่ซ้อน main content */
-@media (max-width: 767.98px) {
-  .bm-main {
-    padding-bottom: calc(var(--bm-bottom-nav-height) + 0.75rem);
-  }
-}
-
-/* =========================
-   Responsive
-   ========================= */
-
-/* Mobile: ซ่อน sidebar, ใช้ bottom nav */
-@media (max-width: 767.98px) {
-  .bm-sidebar {
-    display: none !important;
-  }
-
-  .bm-main {
-    padding: 0.75rem 0.75rem 0.75rem;
-  }
-
-  .bm-card-header {
-    padding-inline: 0.9rem;
-  }
-
-  .bm-card-body {
-    padding-inline: 0.9rem;
-  }
-}
-
-/* Tablet/desktop: ซ่อน bottom nav */
-@media (min-width: 768px) {
-  .bm-bottom-nav {
-    display: none;
-  }
-
-  .bm-topbar .container-fluid {
-    padding-inline: 1.4rem;
-  }
-
-  .bm-main {
-    padding-inline: 1.4rem;
-    padding-bottom: 1.4rem;
-  }
-}
-
-/* Large screen adjustments */
-@media (min-width: 1200px) {
-  .bm-main {
-    padding-inline: 2rem;
-  }
-
-  .bm-card-header,
-  .bm-card-body {
-    padding-inline: 1.5rem;
-  }
-
-}
-/* =========================
    TOPBAR GRADIENT MODE
    (Light / Dark auto)
    ========================= */
@@ -793,13 +681,60 @@ h6 {
   font-weight: 600;
   color: #ffffff;
 }
+
 /* =========================
-   Bottom Navigation – Gradient Bubble (Style A)
+   Responsive – Desktop / Large
    ========================= */
-@media (max-width: 767.98px) {
+
+/* Tablet/desktop: ซ่อน bottom nav */
+@media (min-width: 768px) {
+  .bm-bottom-nav {
+    display: none;
+  }
+
+  .bm-topbar .container-fluid {
+    padding-inline: 1.4rem;
+  }
+
   .bm-main {
-    /* เผื่อพื้นที่ให้ bottom nav ไม่บังเนื้อหา */
-    padding-bottom: calc(var(--bm-bottom-nav-height) + 1.5rem);
+    padding-inline: 1.4rem;
+    padding-bottom: 1.4rem;
+  }
+}
+
+/* Large screen adjustments */
+@media (min-width: 1200px) {
+  .bm-main {
+    padding-inline: 2rem;
+  }
+
+  .bm-card-header,
+  .bm-card-body {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* =========================
+   Bottom Navigation – Gradient Bubble (Style A, Icon Only)
+   ========================= */
+
+@media (max-width: 767.98px) {
+  /* layout / main padding (เผื่อพื้นที่ bottom nav) */
+  .bm-sidebar {
+    display: none !important;
+  }
+
+  .bm-main {
+    padding: 0.75rem 0.75rem
+      calc(var(--bm-bottom-nav-height) + 1.5rem);
+  }
+
+  .bm-card-header {
+    padding-inline: 0.9rem;
+  }
+
+  .bm-card-body {
+    padding-inline: 0.9rem;
   }
 
   .bm-bottom-nav {
@@ -841,26 +776,20 @@ h6 {
     position: relative;
     border: none;
     background: transparent;
-    color: rgba(15, 23, 42, 0.8);
+    color: rgba(15, 23, 42, 0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.05rem;
-    padding: 0.25rem 0.2rem 0.15rem;
+    padding: 0.3rem 0.2rem 0.2rem;
     border-radius: 999px;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     overflow: hidden;
   }
 
-  .bm-bottom-nav-btn::before {
-    content: "";
-    position: absolute;
-    inset: 3px 5px 6px 5px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.18);
-    opacity: 0.45;
-    transition: all 0.2s ease;
+  /* ไอคอนล้วน – ซ่อนตัวหนังสือ */
+  .bm-bottom-nav-btn span {
+    display: none;
   }
 
   .bm-bottom-nav-btn i,
@@ -870,12 +799,22 @@ h6 {
   }
 
   .bm-bottom-nav-btn i {
-    font-size: 1.15rem;
+    font-size: 1.5rem;
+  }
+
+  .bm-bottom-nav-btn::before {
+    content: "";
+    position: absolute;
+    inset: 3px 5px 6px 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    opacity: 0.25;
+    transition: all 0.2s ease;
   }
 
   .bm-bottom-nav-btn.active {
     color: #022c22;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .bm-bottom-nav-btn.active::before {
