@@ -2,10 +2,13 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>BEN MOTOR POS – แนะนำการซ่อม</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>แนะนำการซ่อม BEN MOTOR</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-    <!-- Google Fonts: Kanit -->
+    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -27,259 +30,235 @@
 
     <!-- Main style -->
     <link rel="stylesheet" href="css/style.css" />
-
-    <style>
-      /* หน้า tips ปรับให้เข้ากับธีมเดิมนิดหน่อย */
-
-      body {
-        background: radial-gradient(
-          circle at top left,
-          var(--bm-secondary-soft) 0,
-          var(--bm-bg) 45%,
-          var(--bm-bg) 100%
-        );
-      }
-
-      .bm-tips-header-card {
-        border-radius: 18px;
-        background: linear-gradient(
-          135deg,
-          rgba(34, 197, 94, 0.12),
-          rgba(56, 189, 248, 0.08)
-        );
-        border: 1px solid rgba(148, 163, 184, 0.5);
-        padding: 1.25rem 1.4rem;
-        box-shadow: var(--bm-shadow-soft);
-      }
-
-      .bm-tips-search-input {
-        border-radius: 999px;
-        padding-left: 2.7rem;
-      }
-
-      .bm-tips-search-icon {
-        position: absolute;
-        left: 0.95rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--bm-text-muted);
-      }
-
-      .bm-tips-tag-pill {
-        border-radius: 999px;
-        font-size: 0.78rem;
-        padding: 0.25rem 0.7rem;
-        border: 1px solid rgba(148, 163, 184, 0.7);
-        color: var(--bm-text-muted);
-        background: rgba(248, 250, 252, 0.9);
-        cursor: pointer;
-      }
-
-      .bm-tips-tag-pill.active {
-        background: linear-gradient(
-          135deg,
-          var(--bm-primary),
-          var(--bm-primary-strong)
-        );
-        color: #022c22;
-        border-color: transparent;
-        font-weight: 600;
-      }
-
-      .bm-tip-card {
-        border-radius: 16px;
-        background: var(--bm-card);
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        box-shadow: var(--bm-shadow-soft);
-        padding: 1rem 1.1rem 0.9rem;
-        margin-bottom: 0.9rem;
-      }
-
-      .bm-tip-title {
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 0.1rem;
-      }
-
-      .bm-tip-subtitle {
-        font-size: 0.82rem;
-        color: var(--bm-text-muted);
-      }
-
-      .bm-tip-badges .badge {
-        font-size: 0.7rem;
-        border-radius: 999px;
-        padding-inline: 0.6rem;
-      }
-
-      .bm-tip-section-title {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--bm-text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        margin-bottom: 0.25rem;
-      }
-
-      .bm-tip-section {
-        font-size: 0.86rem;
-        margin-bottom: 0.4rem;
-      }
-
-      .bm-tip-section ul {
-        padding-left: 1.1rem;
-        margin-bottom: 0;
-      }
-
-      .bm-tip-section li {
-        margin-bottom: 0.15rem;
-      }
-
-      .bm-tip-danger {
-        border-left: 3px solid #f97373;
-        padding-left: 0.6rem;
-      }
-
-      .bm-tip-footer {
-        font-size: 0.75rem;
-        color: var(--bm-text-muted);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 0.4rem;
-      }
-
-      .bm-tip-engine-label {
-        font-size: 0.75rem;
-        color: var(--bm-text-muted);
-      }
-
-      @media (max-width: 575.98px) {
-        .bm-tips-header-card {
-          padding: 0.9rem 0.9rem 1.1rem;
-        }
-      }
-    </style>
   </head>
-  <body>
-    <!-- Topbar (ใช้สไตล์เดียวกับระบบหลัก) -->
-    <header class="bm-topbar bm-topbar-gradient">
-      <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center gap-2">
-            <a
-              href="app.html"
-              class="bm-topbar-home d-inline-flex align-items-center justify-content-center text-decoration-none"
-            >
-              <i class="bi bi-arrow-left-short"></i>
-            </a>
-            <div class="bm-topbar-title-group">
-              <h1 class="bm-topbar-title mb-0">แนะนำการซ่อม BEN MOTOR</h1>
-              <div class="bm-topbar-subtitle">
-                รวมอาการเสียยอดฮิต ทั้งออโต้ / 4T / 2T พร้อมแนวทางเช็กแบบช่าง
-              </div>
+  <body class="bm-app theme-light">
+    <!-- Top gradient bar -->
+    <header class="bm-topbar-gradient">
+      <div class="container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-light btn-sm rounded-circle px-2 me-1"
+            onclick="history.back()"
+            aria-label="ย้อนกลับ"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <div>
+            <h1 class="bm-topbar-title mb-0">
+              แนะนำการซ่อม BEN MOTOR
+            </h1>
+            <div class="bm-topbar-subtitle">
+              รวมอาการเสียยอดฮิต ทั้งออโต้ / 4T / 2T พร้อมแนวทางเช็กแบบช่าง
             </div>
           </div>
-          <div class="d-none d-md-flex align-items-center gap-2">
-            <span class="small text-light opacity-75">
-              คู่มือช่วยคิดหน้างาน – ใช้ประกอบการวิเคราะห์จริง
-            </span>
-          </div>
+        </div>
+
+        <div class="d-none d-md-flex flex-column text-end small">
+          <span>คู่มือภายในอู่ BEN MOTOR</span>
+          <span class="text-light opacity-75">
+            ใช้เป็นแนวทางเบื้องต้น – ต้องอาศัยประสบการณ์ร่วมด้วย
+          </span>
         </div>
       </div>
     </header>
 
     <main class="container py-3 py-md-4">
-      <!-- แถบค้นหา + filter -->
-      <div class="bm-tips-header-card mb-3 mb-md-4">
-        <div class="row g-3 align-items-center">
-          <div class="col-12 col-lg-6">
-            <label class="form-label small mb-1">
-              ค้นหาอาการเสีย
-              <span class="text-muted">(พิมพ์คำบางคำก็เจอ เช่น “เร่งไม่ขึ้น”, “ควันขาว”)</span>
+      <!-- Search + filter card -->
+      <div class="bm-card mb-3">
+        <div class="bm-card-body">
+          <div class="mb-3">
+            <label for="repairSearchInput" class="form-label small mb-1">
+              ค้นหาอาการ (พิมพ์คำไหนก็ได้ เช่น “ควันขาว”, “เร่งไม่ขึ้น”, “เบรกหอน”)
             </label>
-            <div class="position-relative">
-              <i class="bi bi-search bm-tips-search-icon"></i>
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
               <input
                 type="search"
-                id="tipSearchInput"
-                class="form-control bm-tips-search-input"
-                placeholder="เช่น เร่งไม่ขึ้น, สตาร์ทยาก, เบรกแล้วมีเสียง, รอบเดินเบาไม่นิ่ง"
+                id="repairSearchInput"
+                class="form-control"
+                placeholder="ค้นหาจากชื่ออาการ, คำที่ลูกค้าพูด, ระบบที่เสีย"
                 autocomplete="off"
               />
             </div>
           </div>
 
-          <div class="col-12 col-lg-6">
-            <label class="form-label small mb-1">กรองตามประเภทเครื่อง / ระบบ</label>
-            <div class="d-flex flex-wrap gap-2">
+          <div>
+            <div class="bm-field-label mb-1">
+              เลือกหมวดอาการ
+            </div>
+            <div id="repairCategoryChips" class="d-flex flex-wrap gap-1">
               <button
                 type="button"
-                class="bm-tips-tag-pill active"
-                data-engine-filter="all"
+                class="btn btn-sm btn-outline-secondary rounded-pill active"
+                data-category="all"
               >
                 ทั้งหมด
               </button>
               <button
                 type="button"
-                class="bm-tips-tag-pill"
-                data-engine-filter="auto"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="ไฟฟ้า"
               >
-                ออโต้ / AT
+                ระบบไฟ / สตาร์ต
               </button>
               <button
                 type="button"
-                class="bm-tips-tag-pill"
-                data-engine-filter="4t"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="เชื้อเพลิง"
               >
-                4 จังหวะ
+                น้ำมันเชื้อเพลิง / หัวฉีด / คาร์บู
               </button>
               <button
                 type="button"
-                class="bm-tips-tag-pill"
-                data-engine-filter="2t"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="เครื่อง4T"
               >
-                2 จังหวะ
+                เครื่องยนต์ 4 จังหวะ
               </button>
               <button
                 type="button"
-                class="bm-tips-tag-pill"
-                data-engine-filter="electric"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="เครื่อง2T"
               >
-                ระบบไฟ / สตาร์ต / ชาร์จไฟ
+                เครื่องยนต์ 2 จังหวะ
               </button>
               <button
                 type="button"
-                class="bm-tips-tag-pill"
-                data-engine-filter="chassis"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="ออโต้"
+              >
+                ออโต้ / สายพาน / CVT
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="ช่วงล่างเบรก"
               >
                 ช่วงล่าง / เบรก / ยาง
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="ส่งกำลัง"
+              >
+                คลัทช์ / เกียร์ / โซ่สเตอร์
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary rounded-pill"
+                data-category="อื่นๆ"
+              >
+                อื่น ๆ / รวมอาการ
               </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div class="small text-muted">
-            พิมพ์ทีละคำก็ได้ เช่น
-            <span class="fw-semibold">“ควันขาว”</span>,
-            <span class="fw-semibold">“กินน้ำมันผิดปกติ”</span>,
-            <span class="fw-semibold">“เบรกหอน”</span>
-          </div>
-          <div class="small text-muted d-none d-sm-block">
-            พบ <span id="tipCount">0</span> หัวข้อ จากทั้งหมด
-            <span id="tipTotal">0</span>
-          </div>
+      <!-- Summary -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="small text-muted">
+          ผลลัพธ์ทั้งหมด:
+          <span id="repairTotalCount" class="fw-semibold">0</span>
+          รายการ
+        </div>
+        <div class="small text-muted">
+          แตะ “ดูรายละเอียด” เพื่ออ่านขั้นตอนตรวจเช็กทีละข้อ
         </div>
       </div>
 
-      <!-- รายการ tips -->
-      <div id="tipsList"></div>
+      <!-- Tips list -->
+      <div id="repairTipsList" class="row g-3 mb-4"></div>
 
-      <div id="tipsEmpty" class="bm-empty-state d-none">
-        ยังไม่พบหัวข้อที่ตรงกับคำค้น / ตัวกรองที่เลือก
+      <div
+        id="repairNoResult"
+        class="bm-empty-state mt-3 d-none"
+      >
+        ยังไม่พบอาการที่ตรงกับคำค้น ลองพิมพ์คำอื่น เช่น
+        “ไม่ติด”, “เร่งไม่ขึ้น”, “เบรกหอน”, “ควันขาว”
       </div>
     </main>
+
+    <!-- Detail modal -->
+    <div
+      class="modal fade"
+      id="repairTipDetailModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div>
+              <h5 class="modal-title" id="repairDetailTitle">
+                รายละเอียดอาการ
+              </h5>
+              <div
+                id="repairDetailMeta"
+                class="small text-muted mt-1"
+              ></div>
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <h6 class="fw-semibold mb-1">อาการโดยสรุป</h6>
+              <p id="repairDetailSymptom" class="mb-0"></p>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-semibold mb-1">สาเหตุที่เป็นไปได้</h6>
+              <ul
+                id="repairDetailCauses"
+                class="mb-0 ps-3"
+              ></ul>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-semibold mb-1">
+                ขั้นตอนตรวจเช็กที่แนะนำ
+              </h6>
+              <ol
+                id="repairDetailChecks"
+                class="mb-0 ps-3"
+              ></ol>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-semibold mb-1">
+                แนวทางแก้ไข / งานที่ควรทำ
+              </h6>
+              <ul
+                id="repairDetailFixes"
+                class="mb-0 ps-3"
+              ></ul>
+            </div>
+
+            <div class="small text-muted" id="repairDetailNotes"></div>
+          </div>
+          <div class="modal-footer">
+            <div class="me-auto small text-muted">
+              * ใช้เป็นแนวทางเท่านั้น – การซ่อมจริงต้องดูสภาพรถและประวัติการใช้งานร่วมด้วย
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script
@@ -288,718 +267,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <script>
-      // ============================================
-      // ฐานข้อมูลอาการเสียแบบย่อ (client-side)
-      // ครอบคลุมออโต้, 4T, 2T, ระบบไฟ, ช่วงล่าง
-      // ============================================
-
-      const tipsData = [
-        // ================== สตาร์ตไม่ติด / สตาร์ตยาก ==================
-        {
-          id: "no-start-general",
-          title: "สตาร์ตไม่ติดเลย",
-          subtitle: "บิดสตาร์ต / กดสตาร์ตแล้วไม่ติดทั้งเครื่องออโต้ / 4T / 2T",
-          engines: ["auto", "4t", "2t", "electric"],
-          category: "engine_start",
-          difficulty: "กลาง",
-          causes: [
-            "แบตอ่อน / แบตเสีย – สตาร์ตไฟฟ้าไม่มีกำลังพอ",
-            "น้ำมันเชื้อเพลิงไม่เข้า – ถังน้ำมันแห้ง, ก๊อกปิด, ก๊อกสุญญากาศเสีย",
-            "หัวเทียนไม่จ่ายไฟ – หัวเทียนเสีย, จานไฟ/คอยล์จุดระเบิดมีปัญหา",
-            "สวิตช์สตาร์ต, สวิตช์สแตนด์, สวิตช์เบรก ขัดข้อง (โดยเฉพาะรถออโต้)",
-            "สายดินหลวม / ฟิวส์ขาด / รีเลย์สตาร์ตเสีย",
-            "เครื่องยนต์มีปัญหาใหญ่ เช่น ก้านสูบติด, ลูกสูบติด (สตาร์ตแล้วฝืดมาก)"
-          ],
-          checks: [
-            "เช็กเสียงมอเตอร์สตาร์ต: มีเสียงหมุนไหม ถ้าเงียบสนิทให้ไล่จากแบต ฟิวส์ สวิตช์สตาร์ตก่อน",
-            "วัดแบตด้วยมัลติมิเตอร์ – ต่ำกว่า ~12V ให้ลองชาร์จหรือลองด้วยแบตลูกอื่นเปรียบเทียบ",
-            "ถอดหัวเทียนออกมาเช็กสี / เช็กไฟ: แตะตัวหัวเทียนกับเสื้อสูบแล้วกดสตาร์ต ดูว่ามีไฟกระโดดหรือไม่",
-            "เปิดก๊อกน้ำมัน / เช็กสายท่อน้ำมัน ว่ามีน้ำมันไหลมาถึงคาร์บู / หัวฉีดไหม",
-            "ตรวจสวิตช์ขาตั้ง / สวิตช์เบรกที่ตัดวงจรสตาร์ต ว่ายังทำงาน / ต่อสายแน่น",
-            "หมุนเครื่องด้วยคันสตาร์ต (ถ้ามี): ถ้าฝืดผิดปกติ อาจมีการติดขัดภายในเครื่อง (ต้องรื้อ)"
-          ],
-          recommends: [
-            "เสนอเปลี่ยนแบตเตอรี่ใหม่ถ้าอายุมากกว่า 2–3 ปี หรือ CCA ตก",
-            "แนะนำเปลี่ยนหัวเทียนใหม่ พร้อมเช็กจานไฟ / คอยล์ถ้าพบว่าไฟอ่อน",
-            "เช็กสายไฟหลักทั้งชุด ถ้ารถเก่าหลายปี สายเริ่มกรอบ แนะนำเดินสายบางจุดใหม่",
-            "ลูกค้าบางคนไม่เคยเปลี่ยนน้ำมันเครื่องตามระยะ ให้ตรวจสภาพเครื่องเพิ่มเติม"
-          ],
-          warnings: [
-            "ห้ามจั๊มแบตแบบมั่ว ๆ โดยไม่รู้ขั้ว อาจทำให้กล่อง CDI / ECU พังได้",
-            "ถ้าพบว่ามอเตอร์สตาร์ตร้อนจัด / มีกลิ่นไหม้ให้หยุดทันที ไม่ฝืนกดต่อ",
-            "ถ้าสตาร์ตไม่ติดแล้วมีเสียงโลหะดังผิดปกติ ให้สงสัยปัญหาภายในเครื่องระดับหนัก"
-          ],
-          keywords: [
-            "สตาร์ตไม่ติด",
-            "สตาร์ทยาก",
-            "กดสตาร์ตไม่มีอะไรเกิดขึ้น",
-            "no start",
-            "ไม่ติดเลย"
-          ]
-        },
-        {
-          id: "hard-start-cold",
-          title: "ตอนเช้าสตาร์ตยาก (ตอนเครื่องเย็น)",
-          subtitle: "จอดข้ามคืน เช้า ๆ ต้องติดยาก / ต้องเล่นคันเร่งเยอะ",
-          engines: ["auto", "4t", "2t"],
-          category: "engine_start",
-          difficulty: "กลาง",
-          causes: [
-            "จูนคาร์บูเบาไป / น้ำมันบางไป ทำให้ตอนเครื่องเย็นติดยาก",
-            "ระบบโช้คออโต้ (auto choke) / โช้คมือไม่ทำงาน",
-            "แรงอัดต่ำ – แหวนลูกสูบหลวม, กระบอกสูบสึก",
-            "หัวเทียนเสื่อม ทำให้การจุดระเบิดตอนเครื่องเย็นไม่ดี",
-            "น้ำมันเก่าค้างถังนาน, ระบบเชื้อเพลิงสกปรก"
-          ],
-          checks: [
-            "เช็กแรงอัดด้วยเกจวัด (compression gauge) เปรียบเทียบกับค่าปกติของรุ่นนั้น ๆ",
-            "ดูสภาพหัวเทียน: มีคราบเขม่า / คราบน้ำมันหนามากไหม",
-            "ตรวจระบบโช้ค: รถหัวฉีดให้ดูเซ็นเซอร์อุณหภูมิ / รถคาร์บูดูกลไกโช้คออโต้",
-            "ลองจูนคาร์บูให้หนาขึ้นเล็กน้อย แล้วทดสอบตอนเครื่องเย็นวันถัดไป",
-            "เช็กน้ำมันเครื่องและระยะเปลี่ยน ถ้าเลยระยะนานแล้วให้เสนอเปลี่ยน"
-          ],
-          recommends: [
-            "ตั้งคาร์บูใหม่ / รีเซ็ตค่า idling สำหรับรถหัวฉีด ตามคู่มือหรือสเปกจากโรงงาน",
-            "เปลี่ยนหัวเทียน พร้อมแนะนำลูกค้าเรื่องการอุ่นเครื่องก่อนขี่",
-            "ถ้าค่าแรงอัดต่ำมาก ให้เสนอทำเครื่อง (ขัดกระบอก / เปลี่ยนลูก แหวน)",
-            "ล้างระบบเชื้อเพลิง (ล้างถัง / ล้างคาร์บู) ถ้าน้ำมันเก่าหรือมีคราบสนิม"
-          ],
-          warnings: [
-            "อย่าจูนคาร์บูหนาเกินไป จะทำให้กินน้ำมันและควันดำ",
-            "ห้ามเร่งเครื่องแรง ๆ นาน ๆ ตอนเครื่องยังเย็นจัด เสี่ยงสึกหรอเร็ว"
-          ],
-          keywords: [
-            "เช้าสตาร์ตยาก",
-            "ตอนเช้าไม่ติด",
-            "เครื่องเย็นไม่ติด",
-            "hard start cold"
-          ]
-        },
-
-        // ================== เร่งไม่ขึ้น / ไม่มีแรง ==================
-        {
-          id: "low-power-general",
-          title: "เร่งไม่ขึ้น / ไม่มีแรง",
-          subtitle: "บิดแล้วไม่พุ่ง เหมือนรถอืด วิ่งไม่ออก ทุกช่วงรอบ",
-          engines: ["auto", "4t", "2t"],
-          category: "power",
-          difficulty: "กลาง",
-          causes: [
-            "กรองอากาศอุดตัน – อากาศเข้าไม่พอ",
-            "กรองน้ำมัน / ท่อน้ำมันตัน น้ำมันมาไม่ทัน",
-            "คาร์บูจูนบาง/หนาเกินไป หรือหัวฉีดสกปรก",
-            "คลัตช์ลื่น (ทั้งออโต้และครัชมือ) – ผ้าคลัตช์บาง, สปริงล้า",
-            "โซ่ / สเตอร์หลวมผิดระยะ หรือไซซ์ไม่เหมาะ",
-            "แรงอัดต่ำ – ลูกสูบ/แหวน/กระบอกสึก",
-            "ยางลมอ่อนมาก หรือเบรกค้างทำให้รถฝืด"
-          ],
-          checks: [
-            "ถอดกรองอากาศออกมาเช็ก ถ้าดำ/สกปรกมากให้เปลี่ยน",
-            "เช็กท่อน้ำมันว่าพับ หัก หรือมีสิ่งอุดตันหรือไม่",
-            "สำหรับรถหัวฉีด เช็กหัวฉีดด้วยการล้างหัวฉีด/ทดสอบการพ่น",
-            "สำหรับรถออโต้ เช็กชุด CVT – สายพาน, ลูกมิก, ผ้าคลัตช์, จานกด",
-            "ดูโซ่/สเตอร์: ความตึง, ฟันสเตอร์หัก/แหลมเกินไปหรือไม่",
-            "วัดแรงอัดเครื่อง ถ้าต่ำผิดปกติให้เสนอทำเครื่อง",
-            "ลองหมุนล้อหน้า/หลังบนแสตนด์ ดูว่ามีอาการติด/เบรกค้างหรือไม่"
-          ],
-          recommends: [
-            "ล้าง/เปลี่ยนกรองอากาศ + ล้างคาร์บู / หัวฉีด ตามความเหมาะสม",
-            "เช็กและตั้งระยะโซ่ใหม่ ถ้าสึกมากแนะนำเปลี่ยนยกชุด (โซ่+สเตอร์)",
-            "เปลี่ยนผ้าคลัตช์ / สายพาน / ลูกมิก สำหรับรถออโต้ที่วิ่งเยอะ",
-            "เสนอแพ็กเกจ ‘Full Tune’ – ตั้งวาล์ว, เช็กไฟ, เปลี่ยนน้ำมันเครื่อง, เช็กยาง+เบรก"
-          ],
-          warnings: [
-            "อย่าปรับคาร์บูแบบเดาสุ่มโดยไม่จดสภาพเดิมไว้ อาจทำให้รถวิ่งแย่ลง",
-            "ถ้าเบรกค้างมากอย่าฝืนขับ อาจทำให้จานเบรกคด/ร้อนจัดจนแผ่นผ้าไหม้"
-          ],
-          keywords: [
-            "เร่งไม่ขึ้น",
-            "รถอืด",
-            "ไม่มีแรง",
-            "แรงตก",
-            "บิดแล้วไม่ไป",
-            "power loss"
-          ]
-        },
-
-        // ================== รอบเดินเบา / ดับ ==================
-        {
-          id: "idle-unstable",
-          title: "รอบเดินเบาไม่นิ่ง / เครื่องสั่นจะดับ",
-          subtitle: "จอดติดไฟแดงแล้วรอบตก ๆ ขึ้น ๆ หรือดับเอง",
-          engines: ["auto", "4t", "2t"],
-          category: "idle",
-          difficulty: "ง่าย",
-          causes: [
-            "ตั้งรอบเดินเบาต่ำเกินไป",
-            "คาร์บู / ลิ้นเร่งสกปรก, เข็มน้ำมันตัน",
-            "มีลมรั่วเข้าไอดี (รอยต่อท่อไอดี, ซีลยาง, ปากคาร์บูร้าว)",
-            "หัวเทียนเสื่อม / จานไฟเริ่มเพี้ยน ทำให้ไฟจุดระเบิดไม่สม่ำเสมอ",
-            "ตั้งวาล์วไม่ตรงระยะ ทำให้รอบเดินเบาไม่นิ่ง"
-          ],
-          checks: [
-            "เช็กรอบเดินเบาตามสเปก (~1,300–1,600 rpm แล้วแต่รุ่น)",
-            "ล้างคาร์บู หรือล้างลิ้นเร่ง / Throttle body รถหัวฉีด",
-            "พ่นน้ำสบู่รอบท่อไอดี / ข้อต่อ ถ้ามีลมรั่วรอบจะเปลี่ยน",
-            "ดูหัวเทียน – สี/ระยะเขี้ยว",
-            "ตั้งวาล์วใหม่ตามสเปก แล้วทดสอบอีกครั้ง"
-          ],
-          recommends: [
-            "เสนอแพ็กเกจล้างลิ้นเร่ง / ล้างคาร์บู + ตั้งรอบ / ตั้งวาล์ว",
-            "เปลี่ยนหัวเทียน พร้อมอธิบายลูกค้าเรื่องการใช้น้ำมันคุณภาพดี",
-            "ตรวจกรองอากาศและเปลี่ยนถ้าจำเป็น"
-          ],
-          warnings: [
-            "ห้ามตั้งรอบเดินเบาสูงเกินไปเพื่อแก้ปัญหาชั่วคราว จะทำให้กินน้ำมันและผ้าคลัตช์สึกเร็ว",
-            "ลมรั่วที่ท่อไอดีถ้าปล่อยไว้นาน จะทำให้เครื่องร้อนจัดและสึกหรอเร็วขึ้น"
-          ],
-          keywords: [
-            "รอบไม่นิ่ง",
-            "เดินเบาไม่นิ่ง",
-            "จอดแล้วดับ",
-            "idle",
-            "ดับตอนติดไฟแดง"
-          ]
-        },
-
-        // ================== ควัน / เผาไหม้ผิดปกติ ==================
-        {
-          id: "smoke-blue",
-          title: "ควันฟ้าหรือน้ำเงิน – กินน้ำมันเครื่อง",
-          subtitle: "เร่งแล้วมีควันฟ้าชัด กลิ่นน้ำมันเครื่องไหม้",
-          engines: ["4t"],
-          category: "smoke",
-          difficulty: "ยาก",
-          causes: [
-            "แหวนลูกสูบสึก / กระบอกสูบเป็นรอย ทำให้น้ำมันเครื่องเล็ดเข้าห้องเผาไหม้",
-            "ก้านวาล์ว / ซีลวาล์วสึก น้ำมันไหลลงห้องเผาไหม้",
-            "ใช้น้ำมันเครื่องไม่ตรงสเปกหรือคุณภาพต่ำ",
-            "เติมน้ำมันเครื่องเกินระดับ ทำให้ถูกดูดเข้าท่อไอดี"
-          ],
-          checks: [
-            "เช็กระดับน้ำมันเครื่อง ว่ามากหรือน้อยกว่าปกติ",
-            "วัดแรงอัดทั้งแบบแห้งและเปียก (dry/wet compression test)",
-            "ดูปลายท่อไอเสีย – มีคราบน้ำมันข้นไหม",
-            "รื้อฝาสูบเพื่อตรวจซีลวาล์ว (ถ้าจำเป็นและลูกค้าตกลง)"
-          ],
-          recommends: [
-            "เสนอทำเครื่องบน–ล่าง (เปลี่ยนลูก แหวน ขัด/เปลี่ยนกระบอก, เช็กก้านสูบ)",
-            "เปลี่ยนซีลวาล์ว และตั้งวาล์วใหม่",
-            "ใช้โอกาสนี้ล้างห้องเครื่อง / ช่องทางเดินน้ำมันเครื่อง",
-            "อธิบายลูกค้าเรื่องการเช็กระดับน้ำมันเครื่องประจำ"
-          ],
-          warnings: [
-            "ห้ามปล่อยให้รถกินน้ำมันเครื่องแล้ววิ่งต่อยาว ๆ เพราะเสี่ยงเครื่องพังยก",
-            "ระวังเรื่องงบลูกค้า – แจ้งค่าใช้จ่ายคร่าว ๆ ก่อนรื้อให้ชัดเจน"
-          ],
-          keywords: [
-            "ควันฟ้า",
-            "ควันน้ำเงิน",
-            "กินน้ำมันเครื่อง",
-            "oil burning",
-            "ควันออกท่อ"
-          ]
-        },
-        {
-          id: "smoke-white-2t",
-          title: "ควันขาวเยอะมาก (2 จังหวะ)",
-          subtitle: "รถ 2T ควันขาวหนา กลิ่นน้ำมัน 2T ชัดเกินปกติ",
-          engines: ["2t"],
-          category: "smoke",
-          difficulty: "กลาง",
-          causes: [
-            "ปั๊มออโต้ลูปจ่ายน้ำมัน 2T มากเกินไป หรือตั้งสายไม่ตรง",
-            "คนใช้ผสมน้ำมัน 2T เพิ่มในถัง ทั้งที่ยังใช้ออโต้ลูปอยู่",
-            "หัวเทียนบอด / หัวเทียนเย็นเกินไป ทำให้ไหม้ไม่หมด",
-            "คาร์บูจูนหนามาก น้ำมันเยอะเกิน"
-          ],
-          checks: [
-            "เช็กระบบออโต้ลูป – ปริมาณ การตั้งสาย ระดับน้ำมัน 2T ในถัง",
-            "ถามลูกค้าว่ามีผสม 2T ลงถังเพิ่มไหม",
-            "ดูหัวเทียน – มีคราบน้ำมัน 2T เกาะหนาหรือไม่",
-            "จูนคาร์บูให้เหมาะสมแล้วลองทดสอบวิ่ง"
-          ],
-          recommends: [
-            "ตั้งออโต้ลูปใหม่ตามสเปก และอธิบายลูกค้าว่าไม่ต้องผสมน้ำมันเพิ่ม",
-            "เปลี่ยนหัวเทียนเบอร์ที่เหมาะสมกับสไตล์การขี่",
-            "ถ้าลูกค้าเน้นใช้งานประจำวัน แนะนำจูนให้เน้นประหยัด ไม่ต้องเน้นแรงจัด"
-          ],
-          warnings: [
-            "ควันเยอะมาก ๆ อาจสร้างปัญหาให้เพื่อนบ้าน/ตำรวจ แนะนำลูกค้าให้รู้ความเสี่ยง",
-            "อย่าปิดออโต้ลูปโดยไม่แก้ระบบหล่อลื่นอื่น ๆ เสี่ยงลูกติดอย่างหนัก"
-          ],
-          keywords: [
-            "ควันขาว",
-            "2t ควันเยอะ",
-            "ออโต้ลูป",
-            "2จังหวะควัน",
-            "smoke 2t"
-          ]
-        },
-        {
-          id: "smoke-black",
-          title: "ควันดำ / กลิ่นน้ำมันดิบ",
-          subtitle: "เร่งแล้วควันดำออกท่อ กินน้ำมันมาก",
-          engines: ["auto", "4t", "2t"],
-          category: "smoke",
-          difficulty: "กลาง",
-          causes: [
-            "จูนคาร์บูหนาเกินไป / หัวฉีดพ่นน้ำมันมากเกิน",
-            "กรองอากาศตัน ทำให้อากาศเข้าน้อย",
-            "หัวเทียนเย็นเกินไป / เสื่อม ทำให้จุดระเบิดไม่สมบูรณ์",
-            "เซ็นเซอร์อุณหภูมิ / เซ็นเซอร์ O2 (รถหัวฉีด) ทำงานผิดพลาด"
-          ],
-          checks: [
-            "ตรวจกรองอากาศ ถ้าดำมากให้เปลี่ยน",
-            "เช็กตำแหน่งเข็มคาร์บู / main jet และตั้งใหม่ให้เหมาะสม",
-            "สำหรับรถหัวฉีด ใช้เครื่องสแกนเช็กค่าระบบ และลองรีเซ็ต",
-            "ดูหัวเทียน – ถ้าดำแฉะ แสดงว่าน้ำมันหนาเกินไปชัดเจน"
-          ],
-          recommends: [
-            "ล้าง/เปลี่ยนกรองอากาศ + จูนคาร์บูใหม่",
-            "เปลี่ยนหัวเทียนให้ตรงเบอร์ / heat range",
-            "แนะนำลูกค้าอย่าเปิดโช้ค / ช็อกมือไว้ตลอดเวลา",
-            "สำหรับรถหัวฉีด อาจเสนอให้ล้างหัวฉีดด้วยเครื่อง"
-          ],
-          warnings: [
-            "ควันดำมากอาจไม่ผ่านตรวจสภาพ / โดนจับควันดำ",
-            "ห้ามอุดหรือดัดแปลงท่อไอเสียแบบผิดวิธี อาจกระทบการทำงานของเครื่อง"
-          ],
-          keywords: [
-            "ควันดำ",
-            "กินน้ำมัน",
-            "กลิ่นน้ำมันดิบ",
-            "ดำตอนเร่ง",
-            "black smoke"
-          ]
-        },
-
-        // ================== ระบบไฟ / แบต / ชาร์จ ==================
-        {
-          id: "battery-drain",
-          title: "แบตหมดบ่อย / จอดข้ามคืนสตาร์ตไม่ติด",
-          subtitle: "จอด 1–2 คืนแล้วไฟไม่พอ, วิ่งใกล้ ๆ แบตก็ไม่เต็ม",
-          engines: ["electric", "auto", "4t", "2t"],
-          category: "electric",
-          difficulty: "กลาง",
-          causes: [
-            "ไดชาร์จจ่ายไฟไม่พอ – แม่เหล็ก, สเตเตอร์, เร็กกูเลเตอร์เสีย",
-            "มีไฟรั่ว – อุปกรณ์เสริมดึงไฟตอนจอด เช่น ชาร์จมือถือ, กล่องแต่ง",
-            "แบตอายุเกิน 2–3 ปี ความจุจริงต่ำกว่าระบุ",
-            "สายดินไม่แน่น ทำให้ชาร์จไม่เต็ม"
-          ],
-          checks: [
-            "วัดแรงดันที่แบตตอนเครื่องไม่ติด (ควร ~12.5V ถ้าเต็ม)",
-            "วัดแรงดันตอนบิดรอบ (~13.5–14.5V ถ้าชาร์จปกติ)",
-            "ถอดขั้วแบตแล้ววัดการกินกระแสตอนจอด (ไฟรั่วหรือไม่)",
-            "เช็กสายดินทุกจุด, จุดต่อเร็กกูเลเตอร์, ฟิวส์หลัก",
-            "ตรวจสายไฟที่ไปยังอุปกรณ์เสริม (กล่องไฟ, ไฟแต่ง, ชาร์จมือถือ)"
-          ],
-          recommends: [
-            "เปลี่ยนแบตใหม่ ถ้าทดสอบแล้วแน่ใจว่าแบตเสื่อมจริง",
-            "เสนอเช็ก/เปลี่ยนเร็กกูเลเตอร์ หรือชุดไดชาร์จถ้าชาร์จไม่เข้า",
-            "จัดระเบียบสายไฟเสริม, ใส่ฟิวส์ป้องกัน, อธิบายลูกค้าเรื่องไม่ควรต่ออุปกรณ์มั่ว ๆ",
-            "แนบสติ๊กเกอร์เตือนลูกค้าตรวจแบตทุก 6 เดือน"
-          ],
-          warnings: [
-            "ห้ามใช้สายจัมป์แบตเล็กเกินไป อาจร้อนจนละลาย/ไหม้ได้",
-            "ไฟรั่วรุนแรงต้องรีบแก้ไข เพราะเสี่ยงสายไฟไหม้เวลาจอด"
-          ],
-          keywords: [
-            "แบตหมดบ่อย",
-            "จอดคืนเดียวแบตหมด",
-            "ไฟรั่ว",
-            "ชาร์จไม่เข้า",
-            "battery drain"
-          ]
-        },
-        {
-          id: "no-lights",
-          title: "ไฟหน้า / ไฟเลี้ยว / แตร ไม่ทำงานบางส่วน",
-          subtitle: "บางดวงดับ บางดวงติด, กดแตรแล้วแผ่ว",
-          engines: ["electric", "auto", "4t", "2t"],
-          category: "electric",
-          difficulty: "ง่าย",
-          causes: [
-            "หลอดขาดตามอายุการใช้งาน",
-            "ขั้วหลอดหลวม / มีสนิม / น้ำเข้าโคม",
-            "สวิตช์คอมบิ (คอนโทรลแฮนด์) สกปรกหรือขัดข้อง",
-            "สายดินหลวม ทำให้ไฟบางจุดไม่ครบวงจร",
-            "ฟิวส์บางช่องขาด"
-          ],
-          checks: [
-            "เช็กฟิวส์ก่อนว่าไม่มีอันไหนขาด",
-            "ถอดหลอด/ปลั๊กไฟออกมาเช็กขั้วและลองเปลี่ยนหลอดทดสอบ",
-            "ใช้มัลติมิเตอร์เช็กว่ามีไฟมาถึงปลั๊กหรือไม่",
-            "เปิดคอนแทคแล้วขยับสวิตช์/สายไปมา ดูว่ามีไฟติด/ดับแสดงว่าสัมผัสไม่ดี",
-            "ดูสายดินที่เฟรม ว่าแน่นและไม่เป็นสนิม"
-          ],
-          recommends: [
-            "เปลี่ยนหลอดใหม่เป็นแบบคุณภาพดี (แจ้งลูกค้าเรื่องความสว่าง)",
-            "ล้างขั้ว ปรับปรุงสายดิน และพ่นสเปรย์ไล่ความชื้น",
-            "แนะนำไม่ให้ล้างรถฉีดน้ำแรง ๆ เข้าหน้าไฟ/สวิตช์โดยตรง"
-          ],
-          warnings: [
-            "อย่าต่อไฟ 'โดยเดา' โยงเข้ากันมั่ว ๆ เสี่ยงฟิวส์ขาดและกล่องไฟเสีย",
-            "สายไฟที่กรอบ/ฉีกง่ายควรหุ้มใหม่ ไม่ปล่อยไว้ให้โดนน้ำ"
-          ],
-          keywords: [
-            "ไฟไม่ติด",
-            "ไฟหน้าไม่ติด",
-            "ไฟเลี้ยวเสีย",
-            "แตรไม่ดัง",
-            "ไฟรถมีปัญหา"
-          ]
-        },
-
-        // ================== ช่วงล่าง / เบรก / ยาง ==================
-        {
-          id: "brake-squeal",
-          title: "เบรกมีเสียงหอน / เสียดสี",
-          subtitle: "เบรกแล้วมีเสียงดังจี๊ด ๆ หรือแกรก ๆ",
-          engines: ["chassis", "auto", "4t", "2t"],
-          category: "brake",
-          difficulty: "ง่าย",
-          causes: [
-            "ผ้าเบรกหมด / ใกล้หมดจนโลหะเสียดสีกับจาน",
-            "ผ้าเบรกแข็งเกินไป หรือเป็นผ้าคุณภาพต่ำ",
-            "จานเบรกเป็นคลื่น / เป็นร่อง / มีสนิม",
-            "ฝุ่นผง / ทราย เข้าไปในคาลิปเปอร์หรือดรัมเบรก"
-          ],
-          checks: [
-            "ดูลายผ้าเบรก และความหนาผ้าเบรกว่าต่ำกว่าค่าปลอดภัยหรือไม่",
-            "เช็กสภาพจานเบรก – ใช้นิ้วลูบดูความเรียบ และวัดความหนาถ้าเป็นไปได้",
-            "ถอดผ้าออกมาทำความสะอาด และเป่าฝุ่นในคาลิปเปอร์",
-            "ลองหมุนล้อแล้วจับเบรก ฟังเสียงว่าดังจากจุดไหน"
-          ],
-          recommends: [
-            "เปลี่ยนผ้าเบรกใหม่คุณภาพดี พร้อมขัดจานเบรกเล็กน้อย",
-            "เสนอเช็คทั้งหน้า–หลัง ให้เบรกบาลานซ์กัน",
-            "อธิบายลูกค้าเรื่องการเบรกที่ถูกต้อง และการเช็กผ้าเบรกทุกระยะ"
-          ],
-          warnings: [
-            "ถ้าผ้าเบรกโลหะเสียดสีกับจานจนเป็นร่องลึก ต้องแจ้งลูกค้าเปลี่ยนจานด้วย",
-            "ห้ามใช้จารบีผิดชนิดแตะโดนหน้าผ้าเบรก / จานเบรก"
-          ],
-          keywords: [
-            "เบรกหอน",
-            "เบรกมีเสียง",
-            "เบรกดัง",
-            "จานเบรก",
-            "เบรคดัง"
-          ]
-        },
-        {
-          id: "front-wobble",
-          title: "รถส่าย / แฮนด์สั่นตอนวิ่งเร็ว",
-          subtitle: "ขี่เร็ว ๆ แล้วมีอาการส่าย หรือแฮนด์เต้น",
-          engines: ["chassis", "auto", "4t", "2t"],
-          category: "chassis",
-          difficulty: "กลาง",
-          causes: [
-            "ลมยางไม่เท่ากัน / ยางบวม / ยางสึกไม่เท่ากัน",
-            "ล้อคด / ซี่ล้อหย่อน / ลูกปืนคอคลอน",
-            "ลูกปืนล้อหลวม / แตก / แห้ง",
-            "โช้คหน้า/หลังหมดสภาพ ทำให้รถยวบเกินไป"
-          ],
-          checks: [
-            "เช็กลมยางให้ตรงสเปก และตรวจดอกยางรอบเส้น",
-            "ยกหน้ารถขึ้น หมุนล้อดูว่ามีคดหรือไม่ และเช็กซี่ล้อทีละเส้น",
-            "จับแฮนด์แล้วโยกหน้ารถหน้า–หลัง เพื่อตรวจลูกปืนคอ",
-            "ลองขยับล้อในแนวขวางเช็กลูกปืนล้อหลวมไหม",
-            "ดูโช้คว่ามีรอยน้ำมันซึมหรือไม่ และกดดูการคืนตัว"
-          ],
-          recommends: [
-            "ตั้งศูนย์ล้อ / ขันซี่ล้อ หรือเปลี่ยนวงล้อถ้าคดมาก",
-            "เปลี่ยนลูกปืนคอ / ลูกปืนล้อตามความจำเป็น",
-            "แนะนำเปลี่ยนโช้คใหม่ถ้าหมดสภาพ และอธิบายผลเรื่องความปลอดภัย",
-            "เช็กผ้าเบรกและระบบเบรกให้ครบเซ็ต"
-          ],
-          warnings: [
-            "แนะนำลูกค้าว่าอาการส่าย/แฮนด์สั่นเป็นเรื่องความปลอดภัยสูง อย่าปล่อยไว้นาน",
-            "ห้ามขี่ความเร็วสูงจนกว่าจะแก้ไขปัญหาเรียบร้อย"
-          ],
-          keywords: [
-            "รถส่าย",
-            "แฮนด์สั่น",
-            "วิ่งแล้วโคลง",
-            "หน้าส่าย",
-            "wobble"
-          ]
-        },
-        {
-          id: "tire-wear",
-          title: "ยางสึกผิดปกติ / ดอกสึกด้านเดียว",
-          subtitle: "ดูดอกยางแล้วสึกด้านเดียว หรือเป็นคลื่น ๆ",
-          engines: ["chassis", "auto", "4t", "2t"],
-          category: "chassis",
-          difficulty: "ง่าย",
-          causes: [
-            "ลมยางไม่ถูกต้อง – อ่อน/แข็งเกินไป",
-            "ล้อหน้าหรือหลังเอียง – สวิงอาร์ม, เพลาล้อ ตั้งไม่ตรง",
-            "โช้คหน้า/หลังทำงานไม่เท่ากัน",
-            "โหลดของหนักประจำ หรือมีของผูกท้ายเยอะด้านเดียว"
-          ],
-          checks: [
-            "วัดลมยาง และสอบถามรูปแบบการใช้งานของลูกค้า (นั่งสอง, บรรทุกของ ฯลฯ)",
-            "เช็กว่าล้ออยู่กึ่งกลางหรือไม่, เช็กตัวปรับโซ่ด้านซ้าย–ขวา",
-            "ลองกด/โยกโช้คหน้า–หลังดูว่าทำงานเท่ากันหรือเปล่า",
-            "เช็กสวิงอาร์มว่าบิด/เคยชนแรง ๆ หรือไม่"
-          ],
-          recommends: [
-            "แนะนำเปลี่ยนยางใหม่ พร้อมตั้งลมยางให้เหมาะกับการใช้งานจริงของลูกค้า",
-            "ตั้งล้อ/เพลาล้อใหม่ให้ตรง, เช็กสวิงอาร์ม",
-            "เสนอเปลี่ยนโช้คหากเจอว่ารั่ว/ตาย",
-            "ให้คำแนะนำเรื่องการเช็กลมยางทุกสัปดาห์"
-          ],
-          warnings: [
-            "ยางสึกผิดปกติทำให้เกาะถนนไม่ดี เสี่ยงล้มสูง โดยเฉพาะตอนฝนตก",
-            "ห้ามปล่อยให้ยางใกล้หมดดอกจนเห็นเส้นผ้าใบ"
-          ],
-          keywords: [
-            "ยางสึก",
-            "ดอกยาง",
-            "ยางด้านเดียว",
-            "กินยาง",
-            "tire wear"
-          ]
-        },
-
-        // ================== ออโต้ / CVT ==================
-        {
-          id: "cvt-belt-slip",
-          title: "ออโต้ขึ้นรอบแต่รถไม่ออก / สายพานลื่น",
-          subtitle: "เร่งแล้วรอบขึ้นแต่รถไม่ค่อยไป มีกลิ่นไหม้บางที",
-          engines: ["auto"],
-          category: "cvt",
-          difficulty: "กลาง",
-          causes: [
-            "สายพาน CVT สึก / แคบ / แตกร้าว",
-            "ผ้าคลัตช์ลื่น / จานคลัตช์เป็นคราบน้ำมันหรือเงา",
-            "ลูกมิกสึก / น้ำหนักไม่เท่ากัน",
-            "จานหน้า–หลังสึก / มีร่อง ทำให้สายพานจับไม่สนิท"
-          ],
-          checks: [
-            "เปิดฝาครอบ CVT ดูสภาพสายพาน – ความกว้าง, รอยแตก, รอยไหม้",
-            "เช็กผ้าคลัตช์ – หนา/บาง, มีคราบไหม้หรือไม่",
-            "เปิดดูลูกมิก – ผิวสึกเป็นเหลี่ยมหรือไม่, น้ำหนักเท่ากันไหม",
-            "ดูจานหน้า–หลังว่ามีร่องลึกหรือไม่"
-          ],
-          recommends: [
-            "เปลี่ยนสายพาน + ลูกมิก + ผ้าคลัตช์ เป็นชุด (ตามงบลูกค้า)",
-            "ทำความสะอาดชุดคลัตช์–จาน–ฝา CVT เป่าเศษผงทั้งหมด",
-            "อธิบายลูกค้าเรื่องการไม่ลากรอบนาน ๆ และการล้างรถไม่ให้น้ำเข้าชุด CVT"
-          ],
-          warnings: [
-            "ห้ามฉีดน้ำ/ลมแรง ๆ เข้าชุด CVT โดยตรง เสี่ยงให้ฝุ่นรวมเป็นก้อน",
-            "สายพานแตกตอนขี่ความเร็วสูงมีโอกาสหมดแรงทันทีและเกิดอุบัติเหตุ"
-          ],
-          keywords: [
-            "สายพานลื่น",
-            "ออโต้ไม่ออกตัว",
-            "ขึ้นรอบแต่ไม่ไป",
-            "cvt",
-            "บิดแล้วไม่ออกตัว"
-          ]
-        },
-
-        // ================== เสียงเครื่อง ==================
-        {
-          id: "engine-knock",
-          title: "มีเสียงเขก / กุก ๆ ในเครื่อง",
-          subtitle: "ได้ยินเสียงดังจากเสื้อสูบ / ฝาสูบ ตอนเร่งหรือตอนร้อน",
-          engines: ["4t", "2t"],
-          category: "engine_noise",
-          difficulty: "ยาก",
-          causes: [
-            "วาล์วหลวม / ตั้งวาล์วไม่ได้ระยะ",
-            "ก้านสูบหลวม / ลูกปืนก้านมีปัญหา",
-            "แหวนลูกสูบสึกมาก ทำให้เครื่องเคาะตอนรับโหลด",
-            "ใช้เชื้อเพลิงออกเทนต่ำเกินไปในเครื่องที่อัดสูง"
-          ],
-          checks: [
-            "ตั้งวาล์วตามสเปก แล้วทดสอบฟังเสียงใหม่",
-            "ใช้สเต็ทโทสโคป (ท่อฟังเสียง) ฟังจุดที่ดังชัด",
-            "วัดแรงอัดเทียบสเปก และพิจารณารื้อเครื่องถ้าเสียงดังมาก",
-            "สอบถามประเภทน้ำมันที่ลูกค้าใช้ ว่าตรงกับสเปกเครื่องไหม"
-          ],
-          recommends: [
-            "ตั้งวาล์วใหม่ / เปลี่ยนชุดวาล์วถ้าสึกมาก",
-            "เสนอทำเครื่อง (ลูก/แหวน/ก้าน/ลูกปืน) ถ้าพบว่าหลวมทั้งชุด",
-            "แนะนำลูกค้าให้ใช้น้ำมันออกเทนที่เหมาะสม และไม่เปิดไฟจูนเกิน",
-            "อธิบายให้ลูกค้าเข้าใจว่าเสียงเขกถ้าปล่อยไว้ เครื่องจะสึกไวมาก"
-          ],
-          warnings: [
-            "ห้ามเร่งเครื่องหนัก ๆ ขณะเครื่องมีเสียงเขกชัด เสี่ยงเครื่องแตก",
-            "แจ้งลูกค้าเรื่องงบประมาณให้ชัดเจนก่อนเริ่มรื้อใหญ่"
-          ],
-          keywords: [
-            "เสียงเขก",
-            "เครื่องเขก",
-            "เสียงกุกๆ",
-            "เคาะเครื่อง",
-            "knocking"
-          ]
-        }
-      ];
-
-      const tipTotalSpan = document.getElementById("tipTotal");
-      const tipCountSpan = document.getElementById("tipCount");
-      const tipsListEl = document.getElementById("tipsList");
-      const tipsEmptyEl = document.getElementById("tipsEmpty");
-      const searchInput = document.getElementById("tipSearchInput");
-      const filterButtons = document.querySelectorAll("[data-engine-filter]");
-
-      let currentEngineFilter = "all";
-      let currentSearch = "";
-
-      tipTotalSpan.textContent = tipsData.length.toString();
-
-      function normalizeText(str) {
-        if (!str) return "";
-        return str.toString().toLowerCase().trim();
-      }
-
-      function matchesSearch(tip, search) {
-        if (!search) return true;
-
-        const tokens = normalizeText(search)
-          .split(/\s+/)
-          .filter(Boolean);
-
-        if (tokens.length === 0) return true;
-
-        const textParts = [
-          tip.title,
-          tip.subtitle,
-          ...(tip.causes || []),
-          ...(tip.checks || []),
-          ...(tip.recommends || []),
-          ...(tip.warnings || []),
-          ...(tip.keywords || [])
-        ];
-        const full = normalizeText(textParts.join(" "));
-
-        return tokens.every((tk) => full.includes(tk));
-      }
-
-      function matchesEngine(tip, filter) {
-        if (!filter || filter === "all") return true;
-        return tip.engines.includes(filter);
-      }
-
-      function renderTips() {
-        tipsListEl.innerHTML = "";
-        let count = 0;
-
-        tipsData.forEach((tip) => {
-          if (!matchesEngine(tip, currentEngineFilter)) return;
-          if (!matchesSearch(tip, currentSearch)) return;
-
-          count++;
-
-          const engineBadgeText = tip.engines
-            .map((e) => {
-              if (e === "auto") return "ออโต้ / AT";
-              if (e === "4t") return "4 จังหวะ";
-              if (e === "2t") return "2 จังหวะ";
-              if (e === "electric") return "ระบบไฟ / ชาร์จ / สตาร์ต";
-              if (e === "chassis") return "ช่วงล่าง / เบรก / ยาง";
-              return e;
-            })
-            .join(" · ");
-
-          let diffClass = "bg-secondary";
-          if (tip.difficulty === "ง่าย") diffClass = "bg-success";
-          if (tip.difficulty === "กลาง") diffClass = "bg-primary";
-          if (tip.difficulty === "ยาก") diffClass = "bg-danger";
-
-          const causesHtml = (tip.causes || [])
-            .map((c) => `<li>${c}</li>`)
-            .join("");
-          const checksHtml = (tip.checks || [])
-            .map((c) => `<li>${c}</li>`)
-            .join("");
-          const recHtml = (tip.recommends || [])
-            .map((c) => `<li>${c}</li>`)
-            .join("");
-          const warnHtml = (tip.warnings || [])
-            .map((c) => `<li>${c}</li>`)
-            .join("");
-
-          const card = document.createElement("article");
-          card.className = "bm-tip-card";
-
-          card.innerHTML = `
-            <div class="d-flex justify-content-between align-items-start mb-1">
-              <div>
-                <div class="bm-tip-title">${tip.title}</div>
-                <div class="bm-tip-subtitle">${tip.subtitle}</div>
-              </div>
-              <div class="bm-tip-badges text-end">
-                <span class="badge text-bg-light mb-1">
-                  <i class="bi bi-gear-wide-connected me-1"></i>${engineBadgeText}
-                </span>
-                <br />
-                <span class="badge ${diffClass}">
-                  ระดับงาน: ${tip.difficulty}
-                </span>
-              </div>
-            </div>
-
-            <div class="bm-tip-section">
-              <div class="bm-tip-section-title">สาเหตุที่เป็นไปได้</div>
-              <ul>${causesHtml}</ul>
-            </div>
-
-            <div class="bm-tip-section">
-              <div class="bm-tip-section-title">สิ่งที่ควรเช็กทีละขั้น</div>
-              <ul>${checksHtml}</ul>
-            </div>
-
-            <div class="bm-tip-section">
-              <div class="bm-tip-section-title">สิ่งที่ควรเสนอเพิ่มให้ลูกค้า</div>
-              <ul>${recHtml}</ul>
-            </div>
-
-            <div class="bm-tip-section bm-tip-danger">
-              <div class="bm-tip-section-title">ข้อควรระวัง / ห้ามทำ</div>
-              <ul>${warnHtml}</ul>
-            </div>
-
-            <div class="bm-tip-footer">
-              <span class="bm-tip-engine-label">
-                หมวด: ${tip.category}
-              </span>
-              <span class="text-muted">
-                #${tip.id}
-              </span>
-            </div>
-          `;
-
-          tipsListEl.appendChild(card);
-        });
-
-        tipCountSpan.textContent = count.toString();
-        tipsEmptyEl.classList.toggle("d-none", count > 0);
-      }
-
-      searchInput.addEventListener("input", (e) => {
-        currentSearch = e.target.value || "";
-        renderTips();
-      });
-
-      filterButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          filterButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          currentEngineFilter = btn.getAttribute("data-engine-filter") || "all";
-          renderTips();
-        });
-      });
-
-      renderTips();
-    </script>
+    <!-- Repair tips logic -->
+    <script src="js/repair-tips.js"></script>
   </body>
 </html>
