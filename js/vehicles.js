@@ -1,5 +1,5 @@
 // ============================================================
-// vehicles.js – BEN MOTOR POS (Card Version)
+// vehicles.js – BEN MOTOR POS (Card Version, สีตรงตามที่ต้องการ)
 // ============================================================
 
 import {
@@ -15,7 +15,7 @@ import {
   orderBy
 } from "./firebase-init.js";
 
-import { formatCurrency, formatDate, formatDateTime, showToast } from "./utils.js";
+import { formatCurrency, formatDateTime, showToast } from "./utils.js";
 
 // ------------------------------------------------------------
 // Helper
@@ -42,8 +42,14 @@ async function loadVehicleLists() {
   const stockBox = $("vehiclesStockBody");
   const soldBox = $("vehiclesSoldBody");
 
-  if (stockBox) stockBox.innerHTML = `<div class="text-center py-3 text-muted">กำลังโหลด...</div>`;
-  if (soldBox) soldBox.innerHTML = `<div class="text-center py-3 text-muted">กำลังโหลด...</div>`;
+  if (stockBox) {
+    stockBox.innerHTML =
+      `<div class="text-center py-3 text-muted">กำลังโหลด...</div>`;
+  }
+  if (soldBox) {
+    soldBox.innerHTML =
+      `<div class="text-center py-3 text-muted">กำลังโหลด...</div>`;
+  }
 
   try {
     const qStock = query(
@@ -58,13 +64,16 @@ async function loadVehicleLists() {
       orderBy("soldAt", "desc")
     );
 
-    const [stockSnap, soldSnap] = await Promise.all([getDocs(qStock), getDocs(qSold)]);
+    const [stockSnap, soldSnap] = await Promise.all([
+      getDocs(qStock),
+      getDocs(qSold)
+    ]);
 
     inStockCache = [];
     soldCache = [];
 
-    stockSnap.forEach(docSnap => {
-      const d = docSnap.data();
+    stockSnap.forEach((docSnap) => {
+      const d = docSnap.data() || {};
       inStockCache.push({
         id: docSnap.id,
         ...d,
@@ -72,8 +81,8 @@ async function loadVehicleLists() {
       });
     });
 
-    soldSnap.forEach(docSnap => {
-      const d = docSnap.data();
+    soldSnap.forEach((docSnap) => {
+      const d = docSnap.data() || {};
       soldCache.push({
         id: docSnap.id,
         ...d,
@@ -86,8 +95,14 @@ async function loadVehicleLists() {
     renderSoldCards();
   } catch (err) {
     console.error("โหลดรถไม่สำเร็จ:", err);
-    if (stockBox) stockBox.innerHTML = `<div class="text-center text-danger py-3">โหลดรถค้างสต็อกไม่สำเร็จ</div>`;
-    if (soldBox) soldBox.innerHTML = `<div class="text-center text-danger py-3">โหลดรถขายแล้วไม่สำเร็จ</div>`;
+    if (stockBox) {
+      stockBox.innerHTML =
+        `<div class="text-center text-danger py-3">โหลดรถค้างสต็อกไม่สำเร็จ</div>`;
+    }
+    if (soldBox) {
+      soldBox.innerHTML =
+        `<div class="text-center text-danger py-3">โหลดรถขายแล้วไม่สำเร็จ</div>`;
+    }
   }
 }
 
@@ -105,22 +120,36 @@ function renderStockCards() {
 
   let html = ``;
 
-  inStockCache.forEach(v => {
+  inStockCache.forEach((v) => {
+    const modelText = v.model || "-";
+    const plateText = v.plate || "-";
+    const provinceText = v.vehicleProvince || "ไม่ระบุจังหวัด";
+    const yearText = v.year || "-";
+    const mileageText = v.mileage || "-";
+    const buyPrice = safeNumber(v.buyPrice);
+
     html += `
-      <div class="bm-vehicle-card">
+      <div class="bm-vehicle-card in-stock">
         <div class="bm-vehicle-header">
           <div class="bm-vehicle-title">
             <i class="bi bi-motorbike me-1"></i>
-            ${v.model || "-"}
+            ${modelText}
           </div>
-          <span class="badge text-bg-secondary">ค้างสต็อก</span>
+          <span class="badge bm-vehicle-status-badge in-stock">ค้างสต็อก</span>
         </div>
 
         <div class="bm-vehicle-body">
-          <div><strong>ทะเบียน:</strong> ${v.plate || "-"} (${v.vehicleProvince || "ไม่ระบุจังหวัด"})</div>
-          <div><strong>ปี:</strong> ${v.year || "-"}</div>
-          <div><strong>เลขไมล์:</strong> ${v.mileage || "-"} กม.</div>
-          <div><strong>ราคาซื้อเข้า:</strong> <span class="text-info fw-bold">${formatCurrency(v.buyPrice || 0)}฿</span></div>
+          <div><strong>ทะเบียน:</strong> ${plateText} (${provinceText})</div>
+          <div><strong>ปี:</strong> ${yearText}</div>
+          <div><strong>เลขไมล์:</strong> ${mileageText} กม.</div>
+
+          <div class="mt-1">
+            <strong>ราคาซื้อเข้า:</strong>
+            <span class="text-dark fw-bold">
+              ${formatCurrency(buyPrice || 0)}฿
+            </span>
+          </div>
+
           <div><strong>วันที่ซื้อ:</strong> ${v.createdAt ? formatDateTime(v.createdAt) : "-"}</div>
           <div><strong>โน้ตสภาพ:</strong> ${v.note || "-"}</div>
         </div>
@@ -138,11 +167,11 @@ function renderStockCards() {
 
   box.innerHTML = html;
 
-  // event: sell
-  box.querySelectorAll("[data-sell-id]").forEach(btn => {
+  // event: กดปุ่มบันทึกการขาย
+  box.querySelectorAll("[data-sell-id]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-sell-id");
-      const vehicle = inStockCache.find(v => v.id === id);
+      const vehicle = inStockCache.find((v) => v.id === id);
       if (vehicle) openSellModal(vehicle);
     });
   });
@@ -162,30 +191,56 @@ function renderSoldCards() {
 
   let html = ``;
 
-  soldCache.forEach(v => {
-    const profit = safeNumber(v.profit ?? (v.sellPrice - v.buyPrice - (v.extraCost || 0)));
+  soldCache.forEach((v) => {
+    const modelText = v.model || "-";
+    const plateText = v.plate || "-";
+    const provinceText = v.vehicleProvince || "ไม่ระบุจังหวัด";
+    const yearText = v.year || "-";
+    const mileageText = v.mileage || "-";
+
+    const buyPrice = safeNumber(v.buyPrice);
+    const sellPrice = safeNumber(v.sellPrice);
+    const extraCost = safeNumber(v.extraCost || v.repairCost || 0);
+    const profit = safeNumber(
+      v.profit != null ? v.profit : sellPrice - buyPrice - extraCost
+    );
 
     html += `
       <div class="bm-vehicle-card sold">
         <div class="bm-vehicle-header">
           <div class="bm-vehicle-title">
             <i class="bi bi-check-circle text-success me-1"></i>
-            ${v.model || "-"}
+            ${modelText}
           </div>
-          <span class="badge text-bg-success">ขายแล้ว</span>
+          <span class="badge bm-vehicle-status-badge sold">ขายแล้ว</span>
         </div>
 
         <div class="bm-vehicle-body">
-          <div><strong>ทะเบียน:</strong> ${v.plate || "-"} (${v.vehicleProvince || "ไม่ระบุจังหวัด"})</div>
-          <div><strong>ปี:</strong> ${v.year || "-"}</div>
-          <div><strong>เลขไมล์:</strong> ${v.mileage || "-"} กม.</div>
-          <div><strong>ราคาซื้อ:</strong> <span class="text-info">${formatCurrency(v.buyPrice || 0)}฿</span></div>
-          <div><strong>ราคาขาย:</strong> <span class="text-success fw-bold">${formatCurrency(v.sellPrice || 0)}฿</span></div>
-          <div><strong>กำไร:</strong> 
-            <span class="${profit >= 0 ? "text-success" : "text-danger"} fw-bold">
+          <div><strong>ทะเบียน:</strong> ${plateText} (${provinceText})</div>
+          <div><strong>ปี:</strong> ${yearText}</div>
+          <div><strong>เลขไมล์:</strong> ${mileageText} กม.</div>
+
+          <div class="mt-1">
+            <strong>ราคาซื้อ:</strong>
+            <span class="text-dark fw-semibold">
+              ${formatCurrency(buyPrice || 0)}฿
+            </span>
+          </div>
+
+          <div>
+            <strong>ราคาขาย:</strong>
+            <span class="text-danger fw-bold">
+              ${formatCurrency(sellPrice || 0)}฿
+            </span>
+          </div>
+
+          <div>
+            <strong>กำไร:</strong>
+            <span class="text-success fw-bold">
               ${formatCurrency(profit)}฿
             </span>
           </div>
+
           <div><strong>วันที่ขาย:</strong> ${v.soldAt ? formatDateTime(v.soldAt) : "-"}</div>
           <div><strong>โน้ตสภาพ:</strong> ${v.note || "-"}</div>
         </div>
@@ -202,13 +257,21 @@ function renderSoldCards() {
 async function handleBuyFormSubmit(e) {
   e.preventDefault();
 
-  const model = $("vehicleModel").value.trim();
-  const plate = $("vehiclePlate").value.trim();
-  const year = $("vehicleYear").value.trim();
-  const mileage = $("vehicleOdo").value.trim();
-  const price = safeNumber($("vehicleBuyPrice").value);
-  const province = $("vehicleProvince")?.value.trim() || "";
-  const condition = $("vehicleCondition").value.trim();
+  const modelEl = $("vehicleModel");
+  const plateEl = $("vehiclePlate");
+  const yearEl = $("vehicleYear");
+  const odoEl = $("vehicleOdo");
+  const priceEl = $("vehicleBuyPrice");
+  const provinceEl = $("vehicleProvince");
+  const conditionEl = $("vehicleCondition");
+
+  const model = modelEl?.value.trim() || "";
+  const plate = plateEl?.value.trim() || "";
+  const year = yearEl?.value.trim() || "";
+  const mileage = odoEl?.value.trim() || "";
+  const price = safeNumber(priceEl?.value || 0);
+  const province = provinceEl?.value.trim() || "";
+  const condition = conditionEl?.value.trim() || "";
 
   if (!model || !price) {
     showToast("กรุณากรอก รุ่นรถ และ ราคาซื้อ", "error");
@@ -236,6 +299,7 @@ async function handleBuyFormSubmit(e) {
     e.target.reset();
     loadVehicleLists();
   } catch (err) {
+    console.error("บันทึกรถไม่สำเร็จ:", err);
     showToast("บันทึกรถไม่สำเร็จ", "error");
   }
 }
@@ -246,14 +310,22 @@ async function handleBuyFormSubmit(e) {
 function openSellModal(v) {
   selectedVehicle = v;
 
-  $("vehicleSellLabel").value =
-    `${v.model} • ทะเบียน ${v.plate} (${v.vehicleProvince || "-"})`;
+  const labelInput = $("vehicleSellLabel");
+  const buyInput = $("vehicleSellBuyPrice");
+  const saleInput = $("vehicleSellSalePrice");
+  const repairInput = $("vehicleSellRepairCost");
+  const modalEl = $("vehicleSellModal");
 
-  $("vehicleSellBuyPrice").value = v.buyPrice || 0;
-  $("vehicleSellSalePrice").value = v.sellPrice || "";
-  $("vehicleSellRepairCost").value = v.extraCost || 0;
+  if (!modalEl || !window.bootstrap) return;
 
-  new bootstrap.Modal($("vehicleSellModal")).show();
+  labelInput.value =
+    `${v.model || "-"} • ทะเบียน ${v.plate || "-"} (${v.vehicleProvince || "-"})`;
+  buyInput.value = safeNumber(v.buyPrice || 0);
+  saleInput.value = v.sellPrice != null ? v.sellPrice : "";
+  repairInput.value = safeNumber(v.extraCost || v.repairCost || 0);
+
+  const modal = new window.bootstrap.Modal(modalEl);
+  modal.show();
 }
 
 async function handleSellSave() {
@@ -283,9 +355,15 @@ async function handleSellSave() {
     showToast("บันทึกการขายเรียบร้อย", "success");
     selectedVehicle = null;
 
-    bootstrap.Modal.getInstance($("vehicleSellModal")).hide();
+    const modalEl = $("vehicleSellModal");
+    if (modalEl && window.bootstrap) {
+      const instance = window.bootstrap.Modal.getInstance(modalEl);
+      if (instance) instance.hide();
+    }
+
     loadVehicleLists();
   } catch (err) {
+    console.error("บันทึกการขายรถไม่สำเร็จ:", err);
     showToast("บันทึกการขายรถไม่สำเร็จ", "error");
   }
 }
@@ -294,14 +372,23 @@ async function handleSellSave() {
 // Init
 // ------------------------------------------------------------
 function initVehicles() {
-  if (!$("vehicleBuyForm")) return;
+  const buyForm = $("vehicleBuyForm");
+  if (!buyForm) return;
 
-  $("vehicleBuyForm").addEventListener("submit", handleBuyFormSubmit);
-  $("vehicleSellSaveBtn").addEventListener("click", handleSellSave);
+  buyForm.addEventListener("submit", handleBuyFormSubmit);
+
+  const sellBtn = $("vehicleSellSaveBtn");
+  if (sellBtn) {
+    sellBtn.addEventListener("click", handleSellSave);
+  }
 
   loadVehicleLists();
 }
 
-document.addEventListener("DOMContentLoaded", initVehicles);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initVehicles);
+} else {
+  initVehicles();
+}
 
 export { initVehicles };
