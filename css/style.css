@@ -824,3 +824,12 @@ h6 {
     transform: translateY(-1px);
   }
 }
+/* bottom nav: icon only mode */
+.bm-bottom-nav-btn span {
+    display: none !important;
+}
+
+.bm-bottom-nav-btn.active i {
+    font-weight: 900;
+    transform: scale(1.15);
+}
