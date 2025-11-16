@@ -1,711 +1,776 @@
-// js/reports.js
-(function () {
-  // ---------------------------
-  // Helpers
-  // ---------------------------
-  function safeParseJSON(str, fallback) {
+// BEN MOTOR POS – Reports (รายงานทั้งหมด)
+// ดึงข้อมูลจาก Firestore แล้วสรุป / กรองตามช่วงเวลา
+
+import { db, collection, getDocs } from "./firebase-init.js";
+import { formatCurrency, formatDateTime } from "./utils.js";
+
+// -----------------------------
+// Helpers
+// -----------------------------
+const $ = (id) => document.getElementById(id);
+
+function toJsDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  if (typeof value.toDate === "function") {
     try {
-      if (!str) return fallback;
-      const v = JSON.parse(str);
-      return Array.isArray(v) ? v : fallback;
+      return value.toDate();
     } catch (e) {
-      return fallback;
+      // ignore
+    }
+  }
+  const parsed = Date.parse(value);
+  if (!Number.isNaN(parsed)) return new Date(parsed);
+  return null;
+}
+
+function safeNumber(v, fallback = 0) {
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n)) return fallback;
+  return n;
+}
+
+// Firestore collections
+const jobsCol = collection(db, "jobs");
+const vehiclesCol = collection(db, "vehicles");
+const stockCol = collection(db, "stock");
+
+// state ล่าสุด (ใช้สำหรับ export)
+let lastReportState = null;
+
+// -----------------------------
+// Map data จาก Firestore
+// -----------------------------
+
+function mapJob(docSnap) {
+  const raw = docSnap.data() || {};
+  const id = docSnap.id;
+
+  const createdRaw =
+    raw.createdAt ||
+    raw.created_at ||
+    raw.createdDate ||
+    raw.created_on ||
+    raw.openedAt ||
+    null;
+
+  const createdAt = toJsDate(createdRaw) || new Date();
+  const customer = raw.customer || {};
+  const vehicle = raw.vehicle || {};
+  const totals = raw.totals || {};
+
+  const customerName = customer.name || raw.customerName || "-";
+  const customerPhone = customer.phone || raw.customerPhone || "";
+  const plate = vehicle.plate || vehicle.license || raw.plate || raw.license || "";
+  const model = vehicle.model || vehicle.name || raw.model || "";
+
+  const status = raw.status || "queue";
+
+  let net = 0;
+  if (typeof totals.net === "number") net = totals.net;
+  else if (typeof raw.totalNet === "number") net = raw.totalNet;
+  else if (typeof raw.total === "number") net = raw.total;
+
+  const note =
+    raw.note ||
+    raw.remark ||
+    raw.description ||
+    (Array.isArray(raw.tags) ? raw.tags.join(", ") : "");
+
+  return {
+    id,
+    type: "job",
+    createdAt,
+    createdLabel: formatDateTime(createdAt),
+    plate,
+    model,
+    customerName,
+    customerPhone,
+    netTotal: safeNumber(net, 0),
+    status,
+    note
+  };
+}
+
+function mapVehicle(docSnap) {
+  const raw = docSnap.data() || {};
+  const id = docSnap.id;
+
+  const buyRaw =
+    raw.buyDate ||
+    raw.createdAt ||
+    raw.created_at ||
+    raw.openedAt ||
+    null;
+  const soldRaw = raw.soldAt || raw.soldDate || null;
+
+  const buyAt = toJsDate(buyRaw) || null;
+  const soldAt = toJsDate(soldRaw);
+
+  const brand = raw.brand || "";
+  const model = raw.model || raw.name || "";
+  const plate = raw.plate || raw.license || "";
+
+  const buyPrice = safeNumber(
+    raw.buyPrice ?? raw.costPrice ?? raw.purchasePrice,
+    0
+  );
+  const sellPrice = safeNumber(
+    raw.sellPrice ?? raw.salePrice ?? raw.price,
+    0
+  );
+  const extraCost = safeNumber(
+    raw.extraCost ?? raw.repairCost ?? raw.prepareCost,
+    0
+  );
+
+  const profit =
+    typeof raw.profit === "number"
+      ? raw.profit
+      : sellPrice - (buyPrice + extraCost);
+
+  const status = raw.status || "stock"; // stock / sold / reserve ฯลฯ
+
+  return {
+    id,
+    type: "vehicle",
+    buyAt,
+    soldAt,
+    buyLabel: buyAt ? formatDateTime(buyAt) : "-",
+    soldLabel: soldAt ? formatDateTime(soldAt) : "-",
+    brand,
+    model,
+    plate,
+    buyPrice,
+    sellPrice,
+    extraCost,
+    profit,
+    status
+  };
+}
+
+function mapStock(docSnap) {
+  const raw = docSnap.data() || {};
+  const id = docSnap.id;
+
+  const name = raw.name || raw.partName || "-";
+  const category = raw.category || raw.group || "";
+  const costPerUnit = safeNumber(
+    raw.costPerUnit ?? raw.cost ?? raw.buyPrice,
+    0
+  );
+  const sellPerUnit = safeNumber(
+    raw.sellPerUnit ?? raw.pricePerUnit ?? raw.price,
+    0
+  );
+  const qty = safeNumber(
+    raw.qty ?? raw.quantity ?? raw.stock ?? raw.inStock,
+    0
+  );
+
+  const value = costPerUnit * qty;
+
+  return {
+    id,
+    type: "stock",
+    name,
+    category,
+    costPerUnit,
+    sellPerUnit,
+    qty,
+    value
+  };
+}
+
+// -----------------------------
+// อ่านค่า filter จากฟอร์ม
+// -----------------------------
+function getFilterFromForm() {
+  const fromStr = $("#filterDateFrom")?.value || "";
+  const toStr = $("#filterDateTo")?.value || "";
+
+  let dateFrom = null;
+  let dateTo = null;
+  let dateToEnd = null; // ใช้เปรียบเทียบแบบ <= (เพิ่ม 1 วัน)
+
+  if (fromStr) {
+    const d = new Date(fromStr + "T00:00:00");
+    if (!Number.isNaN(d.getTime())) dateFrom = d;
+  }
+
+  if (toStr) {
+    const d = new Date(toStr + "T00:00:00");
+    if (!Number.isNaN(d.getTime())) {
+      dateTo = d;
+      dateToEnd = new Date(d);
+      dateToEnd.setDate(dateToEnd.getDate() + 1);
     }
   }
 
-  function parseDateLike(val) {
-    if (!val && val !== 0) return null;
-    if (val instanceof Date) return val;
+  const groupBy = $("#filterGroupBy")?.value || "day";
+  const dataType = $("#filterDataType")?.value || "all";
 
-    if (typeof val === "number") {
-      // assume timestamp (ms or s)
-      if (String(val).length <= 10) {
-        return new Date(val * 1000);
-      }
-      return new Date(val);
+  return {
+    dateFrom,
+    dateTo,
+    dateToEnd,
+    groupBy,
+    dataType,
+    rawFrom: fromStr,
+    rawTo: toStr
+  };
+}
+
+function isInRange(date, filter) {
+  if (!date) return false;
+  if (filter.dateFrom && date < filter.dateFrom) return false;
+  if (filter.dateToEnd && date >= filter.dateToEnd) return false;
+  return true;
+}
+
+function getGroupKey(date, groupBy) {
+  if (!date) return "ไม่ทราบวันที่";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+
+  if (groupBy === "year") return `${y}`;
+  if (groupBy === "month") return `${y}-${m}`;
+  return `${y}-${m}-${d}`;
+}
+
+// -----------------------------
+// โหลดข้อมูลทั้งหมดจาก Firestore
+// -----------------------------
+async function loadAllData(filter) {
+  const [jobsSnap, vehiclesSnap, stockSnap] = await Promise.all([
+    getDocs(jobsCol),
+    getDocs(vehiclesCol),
+    getDocs(stockCol)
+  ]);
+
+  let jobs = [];
+  let vehicles = [];
+  let stock = [];
+
+  jobsSnap.forEach((docSnap) => {
+    jobs.push(mapJob(docSnap));
+  });
+
+  vehiclesSnap.forEach((docSnap) => {
+    vehicles.push(mapVehicle(docSnap));
+  });
+
+  stockSnap.forEach((docSnap) => {
+    stock.push(mapStock(docSnap));
+  });
+
+  // apply type filter + date filter
+  if (filter.dataType === "jobs") {
+    vehicles = [];
+    stock = [];
+  } else if (filter.dataType === "vehicles") {
+    jobs = [];
+    stock = [];
+  } else if (filter.dataType === "stock") {
+    jobs = [];
+    vehicles = [];
+  }
+
+  const jobsFiltered = filter.dateFrom || filter.dateTo
+    ? jobs.filter((j) => isInRange(j.createdAt, filter))
+    : jobs;
+
+  const vehiclesForSummary = filter.dateFrom || filter.dateTo
+    ? vehicles.filter((v) => isInRange(v.soldAt || v.buyAt, filter))
+    : vehicles;
+
+  const stockFiltered = stock; // สต็อกใช้ดูภาพรวมทั้งคลัง
+
+  return {
+    jobs: jobsFiltered,
+    vehicles: vehiclesForSummary,
+    stock: stockFiltered
+  };
+}
+
+// -----------------------------
+// คำนวณ summary
+// -----------------------------
+function buildSummary(filter, data) {
+  const { jobs, vehicles } = data;
+
+  let totalRecords = jobs.length + vehicles.length;
+  let totalIncome = 0;
+  let totalCost = 0;
+  let netProfit = 0;
+  let jobsCount = jobs.length;
+  let vehiclesSold = 0;
+
+  jobs.forEach((job) => {
+    totalIncome += job.netTotal;
+  });
+
+  vehicles.forEach((v) => {
+    if (v.status === "sold" || v.sellPrice > 0) {
+      vehiclesSold += 1;
     }
 
-    if (typeof val === "string") {
-      const trimmed = val.trim();
-      if (!trimmed) return null;
-      // numeric string timestamp
-      if (/^\d+$/.test(trimmed)) {
-        if (trimmed.length <= 10) {
-          return new Date(parseInt(trimmed, 10) * 1000);
-        }
-        return new Date(parseInt(trimmed, 10));
-      }
-      const d = new Date(trimmed);
-      if (!isNaN(d.getTime())) return d;
-    }
+    const income = v.sellPrice;
+    const cost = v.buyPrice + v.extraCost;
 
-    return null;
-  }
+    totalIncome += income;
+    totalCost += cost;
+  });
 
-  function pickFirstDate(obj, keys) {
-    for (const k of keys) {
-      if (Object.prototype.hasOwnProperty.call(obj, k)) {
-        const d = parseDateLike(obj[k]);
-        if (d) return d;
-      }
-    }
-    return null;
-  }
+  netProfit = totalIncome - totalCost;
 
-  function pickNumber(obj, keys, defaultValue) {
-    for (const k of keys) {
-      if (Object.prototype.hasOwnProperty.call(obj, k)) {
-        const v = obj[k];
-        if (typeof v === "number" && !isNaN(v)) return v;
-        if (typeof v === "string") {
-          const n = Number(v.replace(/,/g, ""));
-          if (!isNaN(n)) return n;
-        }
-      }
-    }
-    return defaultValue;
-  }
+  return {
+    totalRecords,
+    totalIncome,
+    totalCost,
+    netProfit,
+    jobsCount,
+    vehiclesSold
+  };
+}
 
-  function inRange(date, fromDate, toDate) {
-    if (!date) return false;
-    const t = date.getTime();
-    if (fromDate && t < fromDate.setHours(0, 0, 0, 0)) return false;
-    if (toDate && t > toDate.setHours(23, 59, 59, 999)) return false;
-    return true;
-  }
+// -----------------------------
+// สรุปตามช่วงเวลา
+// -----------------------------
+function buildGroupedRows(filter, data) {
+  const map = new Map(); // key => row
 
-  function formatMoney(num) {
-    const n = Number(num) || 0;
-    return n.toLocaleString("th-TH", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }) + " บาท";
-  }
-
-  function formatInt(num, suffix) {
-    const n = Number(num) || 0;
-    return (
-      n.toLocaleString("th-TH", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }) + (suffix || "")
-    );
-  }
-
-  function formatDateTimeTH(d) {
-    if (!(d instanceof Date) || isNaN(d.getTime())) return "-";
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mi = String(d.getMinutes()).padStart(2, "0");
-    return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
-  }
-
-  function formatDateInput(d) {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
-
-  function getGroupKey(date, groupBy) {
-    if (!(date instanceof Date) || isNaN(date.getTime())) return "ไม่ทราบวันที่";
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-
-    if (groupBy === "year") return `${yyyy}`;
-    if (groupBy === "month") return `${yyyy}-${mm}`;
-    // day
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
-  // ---------------------------
-  // Load data from localStorage
-  // (โครงสร้างฟิลด์ยืดหยุ่น อ่านแบบ defensive)
-  // ---------------------------
-  function loadAllRawData() {
-    const jobs = safeParseJSON(localStorage.getItem("bm_jobs"), []);
-    const vehicles = safeParseJSON(localStorage.getItem("bm_vehicles"), []);
-    const stock = safeParseJSON(localStorage.getItem("bm_stockItems"), []);
-    const pos = safeParseJSON(localStorage.getItem("bm_posReceipts"), []);
-    return { jobs, vehicles, stock, pos };
-  }
-
-  // ---------------------------
-  // Filtering + Aggregation
-  // ---------------------------
-  function buildFilteredData(allData, filters) {
-    const { fromDate, toDate, dataType, groupBy } = filters;
-
-    const result = {
-      jobs: [],
-      vehicles: [],
-      stock: [],
-      pos: [],
-      summaryRows: [],
-      summaryTotals: {
-        totalRecords: 0,
+  const ensureRow = (key) => {
+    if (!map.has(key)) {
+      map.set(key, {
+        key,
         income: 0,
         cost: 0,
-        netProfit: 0,
+        net: 0,
         jobsCount: 0,
-        vehiclesSold: 0,
-      },
-    };
-
-    const groupMap = new Map(); // key -> aggregate
-
-    function ensureGroup(date) {
-      const key = getGroupKey(date, groupBy);
-      if (!groupMap.has(key)) {
-        groupMap.set(key, {
-          key,
-          income: 0,
-          cost: 0,
-          netProfit: 0,
-          jobsCount: 0,
-          vehiclesSold: 0,
-        });
-      }
-      return groupMap.get(key);
+        vehiclesSold: 0
+      });
     }
+    return map.get(key);
+  };
 
-    // Jobs
-    if (dataType === "all" || dataType === "jobs") {
-      for (const job of allData.jobs) {
-        const d = pickFirstDate(job, [
-          "createdAt",
-          "openedAt",
-          "dateTime",
-          "date",
-          "timestamp",
-        ]);
-        if (!inRange(d, fromDate, toDate)) continue;
+  data.jobs.forEach((job) => {
+    const key = getGroupKey(job.createdAt, filter.groupBy);
+    const row = ensureRow(key);
+    row.income += job.netTotal;
+    row.net = row.income - row.cost;
+    row.jobsCount += 1;
+  });
 
-        const income = pickNumber(job, ["netTotal", "totalNet", "net", "total"], 0);
-        const cost = pickNumber(job, ["costTotal", "totalCost", "partsCost"], 0);
+  data.vehicles.forEach((v) => {
+    const dateBase = v.soldAt || v.buyAt;
+    const key = getGroupKey(dateBase, filter.groupBy);
+    const row = ensureRow(key);
 
-        result.jobs.push({
-          raw: job,
-          date: d,
-          income,
-          cost,
-        });
+    const income = v.sellPrice;
+    const cost = v.buyPrice + v.extraCost;
 
-        const g = ensureGroup(d || fromDate || toDate || new Date());
-        g.income += income;
-        g.cost += cost;
-        g.netProfit = g.income - g.cost;
-        g.jobsCount += 1;
+    row.income += income;
+    row.cost += cost;
+    row.net = row.income - row.cost;
 
-        result.summaryTotals.totalRecords += 1;
-        result.summaryTotals.income += income;
-        result.summaryTotals.cost += cost;
-        result.summaryTotals.jobsCount += 1;
-      }
+    if (v.status === "sold" || v.sellPrice > 0) {
+      row.vehiclesSold += 1;
     }
+  });
 
-    // Vehicles
-    if (dataType === "all" || dataType === "vehicles") {
-      for (const v of allData.vehicles) {
-        const buyDate = pickFirstDate(v, ["buyDate", "createdAt", "date"]);
-        const sellDate = pickFirstDate(v, ["soldAt", "saleDate", "closedAt"]);
-        const mainDate = sellDate || buyDate;
-        if (!inRange(mainDate, fromDate, toDate)) continue;
+  const rows = Array.from(map.values()).sort((a, b) =>
+    a.key.localeCompare(b.key)
+  );
 
-        const buyPrice = pickNumber(v, ["buyPrice", "purchasePrice"], 0);
-        const salePrice = pickNumber(v, ["salePrice", "sellPrice"], 0);
-        const repairCost = pickNumber(v, ["repairCost", "fixCost"], 0);
-        const cost = buyPrice + repairCost;
-        const profit = salePrice - cost;
+  return rows;
+}
 
-        result.vehicles.push({
-          raw: v,
-          buyDate,
-          sellDate,
-          income: salePrice,
-          cost,
-          profit,
-        });
+// -----------------------------
+// Render UI ส่วนต่าง ๆ
+// -----------------------------
+function renderSummaryCards(summary) {
+  const totalRecordsEl = $("#summaryTotalRecords");
+  const totalIncomeEl = $("#summaryTotalIncome");
+  const totalCostEl = $("#summaryTotalCost");
+  const netProfitEl = $("#summaryNetProfit");
+  const jobsCountEl = $("#summaryJobsCount");
+  const vehiclesSoldEl = $("#summaryVehiclesSold");
 
-        const g = ensureGroup(mainDate || fromDate || toDate || new Date());
-        g.income += salePrice;
-        g.cost += cost;
-        g.netProfit = g.income - g.cost;
-        if (salePrice > 0) {
-          g.vehiclesSold += 1;
-          result.summaryTotals.vehiclesSold += 1;
-        }
+  if (totalRecordsEl)
+    totalRecordsEl.textContent = `${summary.totalRecords} รายการ`;
 
-        result.summaryTotals.totalRecords += 1;
-        result.summaryTotals.income += salePrice;
-        result.summaryTotals.cost += cost;
-      }
-    }
+  if (totalIncomeEl)
+    totalIncomeEl.textContent = formatCurrency(summary.totalIncome) + " บาท";
 
-    // POS receipts
-    if (dataType === "all" || dataType === "pos") {
-      for (const r of allData.pos) {
-        const d = pickFirstDate(r, ["createdAt", "dateTime", "date", "timestamp"]);
-        if (!inRange(d, fromDate, toDate)) continue;
+  if (totalCostEl)
+    totalCostEl.textContent = formatCurrency(summary.totalCost) + " บาท";
 
-        const income = pickNumber(r, ["netTotal", "total", "grandTotal"], 0);
-        result.pos.push({
-          raw: r,
-          date: d,
-          income,
-        });
+  if (netProfitEl)
+    netProfitEl.textContent = formatCurrency(summary.netProfit) + " บาท";
 
-        const g = ensureGroup(d || fromDate || toDate || new Date());
-        g.income += income;
-        g.netProfit = g.income - g.cost;
+  if (jobsCountEl)
+    jobsCountEl.textContent = `${summary.jobsCount} งาน`;
 
-        result.summaryTotals.totalRecords += 1;
-        result.summaryTotals.income += income;
-      }
-    }
+  if (vehiclesSoldEl)
+    vehiclesSoldEl.textContent = `${summary.vehiclesSold} คัน`;
+}
 
-    // Stock (มูลค่าคงเหลือ ใช้ข้อมูลล่าสุด ไม่เน้นช่วงเวลา)
-    if (dataType === "all" || dataType === "stock") {
-      for (const s of allData.stock) {
-        const qty = pickNumber(s, ["qty", "quantity", "stockQty"], 0);
-        const cost = pickNumber(s, ["cost", "costPrice"], 0);
-        const value = qty * cost;
-        result.stock.push({
-          raw: s,
-          qty,
-          cost,
-          value,
-        });
-        // ไม่ดันเข้า summaryTotals.income/cost เพราะเป็นมูลค่าคงเหลือ
-      }
-    }
+function renderSummaryTable(rows) {
+  const tbody = $("#summaryTableBody");
+  const emptyState = $("#summaryTableEmpty");
+  if (!tbody || !emptyState) return;
 
-    // สรุปแต่ละช่วงเวลา
-    result.summaryRows = Array.from(groupMap.values()).sort((a, b) =>
-      a.key.localeCompare(b.key)
-    );
-    result.summaryTotals.netProfit =
-      result.summaryTotals.income - result.summaryTotals.cost;
-
-    return result;
-  }
-
-  // ---------------------------
-  // Rendering
-  // ---------------------------
-  function clearTbody(id) {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
-  }
-
-  function renderSummaryCards(agg) {
-    const t = agg.summaryTotals;
-
-    const elTotalRecords = document.getElementById("summaryTotalRecords");
-    const elTotalIncome = document.getElementById("summaryTotalIncome");
-    const elTotalCost = document.getElementById("summaryTotalCost");
-    const elNetProfit = document.getElementById("summaryNetProfit");
-    const elJobsCount = document.getElementById("summaryJobsCount");
-    const elVehiclesSold = document.getElementById("summaryVehiclesSold");
-
-    if (elTotalRecords)
-      elTotalRecords.textContent = formatInt(t.totalRecords, " รายการ");
-    if (elTotalIncome) elTotalIncome.textContent = formatMoney(t.income);
-    if (elTotalCost) elTotalCost.textContent = formatMoney(t.cost);
-    if (elNetProfit) elNetProfit.textContent = formatMoney(t.netProfit);
-    if (elJobsCount) elJobsCount.textContent = formatInt(t.jobsCount, " งาน");
-    if (elVehiclesSold)
-      elVehiclesSold.textContent = formatInt(t.vehiclesSold, " คัน");
-  }
-
-  function renderSummaryTable(agg) {
-    const tbody = document.getElementById("summaryTableBody");
-    const emptyState = document.getElementById("summaryTableEmpty");
-    if (!tbody) return;
+  if (!rows.length) {
     tbody.innerHTML = "";
+    emptyState.classList.remove("d-none");
+    return;
+  }
 
-    if (!agg.summaryRows.length) {
-      if (emptyState) emptyState.classList.remove("d-none");
-      return;
-    }
-    if (emptyState) emptyState.classList.add("d-none");
+  emptyState.classList.add("d-none");
 
-    for (const row of agg.summaryRows) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
+  const html = rows
+    .map(
+      (row) => `
+      <tr>
         <td>${row.key}</td>
-        <td class="text-end">${formatMoney(row.income)}</td>
-        <td class="text-end">${formatMoney(row.cost)}</td>
-        <td class="text-end">${formatMoney(row.netProfit)}</td>
-        <td class="text-end">${formatInt(row.jobsCount, "")}</td>
-        <td class="text-end">${formatInt(row.vehiclesSold, "")}</td>
-      `;
-      tbody.appendChild(tr);
-    }
-  }
+        <td class="text-end">${formatCurrency(row.income)}</td>
+        <td class="text-end">${formatCurrency(row.cost)}</td>
+        <td class="text-end">${formatCurrency(row.net)}</td>
+        <td class="text-end">${row.jobsCount}</td>
+        <td class="text-end">${row.vehiclesSold}</td>
+      </tr>
+    `
+    )
+    .join("");
 
-  function renderJobsTable(agg) {
-    const tbody = document.getElementById("jobsReportBody");
-    const emptyState = document.getElementById("jobsReportEmpty");
-    if (!tbody) return;
+  tbody.innerHTML = html;
+}
+
+function renderJobsTable(jobs) {
+  const tbody = $("#jobsReportTable")?.querySelector("tbody") || $("#jobsReportBody");
+  const emptyState = $("#jobsReportEmpty");
+  if (!tbody || !emptyState) return;
+
+  if (!jobs.length) {
     tbody.innerHTML = "";
-
-    if (!agg.jobs.length) {
-      if (emptyState) emptyState.classList.remove("d-none");
-      return;
-    }
-    if (emptyState) emptyState.classList.add("d-none");
-
-    for (const j of agg.jobs) {
-      const job = j.raw || {};
-      const tr = document.createElement("tr");
-      const vehicleLabel =
-        (job.vehiclePlate || "") +
-        (job.vehicleModel ? " / " + job.vehicleModel : "");
-      const customerLabel =
-        (job.customerName || "") +
-        (job.customerPhone ? " / " + job.customerPhone : "");
-      const status = job.statusLabel || job.status || "-";
-      const note = job.note || job.customerNote || "";
-
-      tr.innerHTML = `
-        <td>${formatDateTimeTH(j.date)}</td>
-        <td>${vehicleLabel || "-"}</td>
-        <td>${customerLabel || "-"}</td>
-        <td class="text-end">${formatMoney(j.income)}</td>
-        <td class="text-center">${status}</td>
-        <td>${note}</td>
-      `;
-      tbody.appendChild(tr);
-    }
+    emptyState.classList.remove("d-none");
+    return;
   }
 
-  function renderVehiclesTable(agg) {
-    const tbody = document.getElementById("vehiclesReportBody");
-    const emptyState = document.getElementById("vehiclesReportEmpty");
-    if (!tbody) return;
+  emptyState.classList.add("d-none");
+
+  const html = jobs
+    .map(
+      (job) => `
+      <tr>
+        <td>${job.createdLabel}</td>
+        <td>${job.plate || "-"} / ${job.model || "-"}</td>
+        <td>${job.customerName || "-"}<br><small class="text-muted">${
+        job.customerPhone || ""
+      }</small></td>
+        <td class="text-end">${formatCurrency(job.netTotal)}</td>
+        <td class="text-center">
+          <span class="badge bg-light text-dark">${job.status}</span>
+        </td>
+        <td>${job.note || ""}</td>
+      </tr>
+    `
+    )
+    .join("");
+
+  tbody.innerHTML = html;
+}
+
+function renderVehiclesTable(vehicles) {
+  const tbody =
+    $("#vehiclesReportTable")?.querySelector("tbody") || $("#vehiclesReportBody");
+  const emptyState = $("#vehiclesReportEmpty");
+  if (!tbody || !emptyState) return;
+
+  if (!vehicles.length) {
     tbody.innerHTML = "";
-
-    if (!agg.vehicles.length) {
-      if (emptyState) emptyState.classList.remove("d-none");
-      return;
-    }
-    if (emptyState) emptyState.classList.add("d-none");
-
-    for (const v of agg.vehicles) {
-      const raw = v.raw || {};
-      const modelPlate =
-        (raw.model || raw.vehicleModel || "") +
-        (raw.plate || raw.vehiclePlate
-          ? " / " + (raw.plate || raw.vehiclePlate)
-          : "");
-      const status = raw.statusLabel || raw.status || "-";
-      const buyDateText = formatDateTimeTH(v.buyDate || v.sellDate);
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${buyDateText}</td>
-        <td>${modelPlate || "-"}</td>
-        <td class="text-end">${formatMoney(v.cost - pickNumber(raw, ["repairCost", "fixCost"], 0))}</td>
-        <td class="text-end">${formatMoney(v.income)}</td>
-        <td class="text-end">${formatMoney(v.profit)}</td>
-        <td>${status}</td>
-      `;
-      tbody.appendChild(tr);
-    }
+    emptyState.classList.remove("d-none");
+    return;
   }
 
-  function renderStockTable(agg) {
-    const tbody = document.getElementById("stockReportBody");
-    const emptyState = document.getElementById("stockReportEmpty");
-    if (!tbody) return;
+  emptyState.classList.add("d-none");
+
+  const html = vehicles
+    .map(
+      (v) => `
+      <tr>
+        <td>${v.buyLabel}</td>
+        <td>${v.model || "-"} / ${v.plate || ""}</td>
+        <td class="text-end">${formatCurrency(v.buyPrice)}</td>
+        <td class="text-end">${formatCurrency(v.sellPrice)}</td>
+        <td class="text-end">${formatCurrency(v.profit)}</td>
+        <td>${v.status}</td>
+      </tr>
+    `
+    )
+    .join("");
+
+  tbody.innerHTML = html;
+}
+
+function renderStockTable(stock) {
+  const tbody =
+    $("#stockReportTable")?.querySelector("tbody") || $("#stockReportBody");
+  const emptyState = $("#stockReportEmpty");
+  if (!tbody || !emptyState) return;
+
+  if (!stock.length) {
     tbody.innerHTML = "";
-
-    if (!agg.stock.length) {
-      if (emptyState) emptyState.classList.remove("d-none");
-      return;
-    }
-    if (emptyState) emptyState.classList.add("d-none");
-
-    for (const s of agg.stock) {
-      const raw = s.raw || {};
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${raw.name || raw.itemName || "-"}</td>
-        <td>${raw.category || "-"}</td>
-        <td class="text-end">${formatMoney(s.cost)}</td>
-        <td class="text-end">${formatMoney(pickNumber(raw, ["price", "sellPrice"], 0))}</td>
-        <td class="text-center">${formatInt(s.qty, "")}</td>
-        <td class="text-end">${formatMoney(s.value)}</td>
-      `;
-      tbody.appendChild(tr);
-    }
+    emptyState.classList.remove("d-none");
+    return;
   }
 
-  function renderPosTable(agg) {
-    const tbody = document.getElementById("posReportBody");
-    const emptyState = document.getElementById("posReportEmpty");
-    if (!tbody) return;
-    tbody.innerHTML = "";
+  emptyState.classList.add("d-none");
 
-    if (!agg.pos.length) {
-      if (emptyState) emptyState.classList.remove("d-none");
-      return;
-    }
-    if (emptyState) emptyState.classList.add("d-none");
+  const html = stock
+    .map(
+      (s) => `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.category || "-"}</td>
+        <td class="text-end">${formatCurrency(s.costPerUnit)}</td>
+        <td class="text-end">${formatCurrency(s.sellPerUnit)}</td>
+        <td class="text-center">${s.qty}</td>
+        <td class="text-end">${formatCurrency(s.value)}</td>
+      </tr>
+    `
+    )
+    .join("");
 
-    for (const p of agg.pos) {
-      const raw = p.raw || {};
-      const tr = document.createElement("tr");
-      const billLabel =
-        (raw.billNo || raw.invoiceNo || "-") +
-        (raw.typeLabel || raw.type ? " / " + (raw.typeLabel || raw.type) : "");
-      tr.innerHTML = `
-        <td>${formatDateTimeTH(p.date)}</td>
-        <td>${billLabel}</td>
-        <td>${raw.customerName || "-"}</td>
-        <td class="text-end">${formatMoney(p.income)}</td>
-        <td>${raw.paymentMethod || "-"}</td>
-        <td>${raw.note || ""}</td>
-      `;
-      tbody.appendChild(tr);
-    }
+  tbody.innerHTML = html;
+}
+
+function renderPosTable() {
+  // ตอนนี้ยังไม่มี collection POS แยกต่างหาก
+  const tbody =
+    $("#posReportTable")?.querySelector("tbody") || $("#posReportBody");
+  const emptyState = $("#posReportEmpty");
+  if (!tbody || !emptyState) return;
+
+  tbody.innerHTML = "";
+  emptyState.classList.remove("d-none");
+}
+
+// -----------------------------
+// Date range label & generated at
+// -----------------------------
+function updateDateRangeLabel(filter) {
+  const label = $("#reportDateRangeLabel");
+  if (!label) return;
+
+  if (!filter.rawFrom && !filter.rawTo) {
+    label.textContent = "ยังไม่ได้เลือกช่วงเวลา";
+    return;
   }
 
-  // ---------------------------
-  // Export helpers
-  // ---------------------------
-  function downloadFile(filename, mime, content) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+  if (filter.rawFrom && filter.rawTo) {
+    label.textContent = `ช่วงวันที่ ${filter.rawFrom} ถึง ${filter.rawTo}`;
+  } else if (filter.rawFrom && !filter.rawTo) {
+    label.textContent = `ตั้งแต่วันที่ ${filter.rawFrom}`;
+  } else if (!filter.rawFrom && filter.rawTo) {
+    label.textContent = `ถึงวันที่ ${filter.rawTo}`;
+  }
+}
+
+function updateGeneratedAtLabel() {
+  const el = $("#reportGeneratedAt");
+  if (!el) return;
+  const now = new Date();
+  el.textContent = formatDateTime(now);
+}
+
+// quick range helper (ปุ่ม วันนี้ / 7 วัน / 30 วัน / เดือนนี้)
+function applyQuickRange(type) {
+  const today = new Date();
+  let from = new Date(today);
+
+  if (type === "today") {
+    // from = today (ค่า default)
+  } else if (type === "7") {
+    from.setDate(today.getDate() - 6);
+  } else if (type === "30") {
+    from.setDate(today.getDate() - 29);
+  } else if (type === "month") {
+    from = new Date(today.getFullYear(), today.getMonth(), 1);
   }
 
-  function exportJSON(agg, filters) {
-    const payload = {
-      generatedAt: new Date().toISOString(),
-      filters,
-      summaryTotals: agg.summaryTotals,
-      summaryRows: agg.summaryRows,
-      jobs: agg.jobs.map((j) => j.raw),
-      vehicles: agg.vehicles.map((v) => v.raw),
-      stock: agg.stock.map((s) => s.raw),
-      pos: agg.pos.map((p) => p.raw),
-    };
-    downloadFile(
-      "ben-motor-report.json",
-      "application/json",
-      JSON.stringify(payload, null, 2)
+  const fromInput = $("#filterDateFrom");
+  const toInput = $("#filterDateTo");
+
+  if (fromInput) fromInput.value = from.toISOString().slice(0, 10);
+  if (toInput) toInput.value = today.toISOString().slice(0, 10);
+}
+
+// -----------------------------
+// Export CSV / JSON
+// -----------------------------
+function handleExportJson() {
+  if (!lastReportState) {
+    alert("ยังไม่มีข้อมูลรายงานให้ Export");
+    return;
+  }
+  const blob = new Blob([JSON.stringify(lastReportState, null, 2)], {
+    type: "application/json"
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ben-motor-reports.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function handleExportCsv() {
+  if (!lastReportState) {
+    alert("ยังไม่มีข้อมูลรายงานให้ Export");
+    return;
+  }
+
+  const rows = lastReportState.groupedRows || [];
+  if (!rows.length) {
+    alert("ยังไม่มีข้อมูลในตารางสรุปตามช่วงเวลา");
+    return;
+  }
+
+  const header = [
+    "ช่วงเวลา",
+    "รายรับ",
+    "ต้นทุน",
+    "กำไรสุทธิ",
+    "จำนวนงานซ่อม",
+    "จำนวนรถขายแล้ว"
+  ];
+  const lines = [header.join(",")];
+
+  rows.forEach((r) => {
+    lines.push(
+      [
+        r.key,
+        r.income,
+        r.cost,
+        r.net,
+        r.jobsCount,
+        r.vehiclesSold
+      ].join(",")
     );
+  });
+
+  const blob = new Blob([lines.join("\n")], {
+    type: "text/csv;charset=utf-8;"
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ben-motor-reports.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// -----------------------------
+// Main – ประมวลผลรายงานตาม filter
+// -----------------------------
+async function runReport() {
+  const filter = getFilterFromForm();
+  updateDateRangeLabel(filter);
+
+  const mainCard = document.querySelector(".bm-main");
+  if (mainCard) {
+    // optional: ใส่ cursor รอโหลด
+    document.body.style.cursor = "wait";
   }
 
-  function exportCSV(agg) {
-    const header = [
-      "ช่วงเวลา",
-      "รายรับ",
-      "ต้นทุน",
-      "กำไรสุทธิ",
-      "จำนวนงานซ่อม",
-      "จำนวนรถขายแล้ว",
-    ];
-    const lines = [header.join(",")];
+  try {
+    const data = await loadAllData(filter);
+    const summary = buildSummary(filter, data);
+    const groupedRows = buildGroupedRows(filter, data);
 
-    for (const row of agg.summaryRows) {
-      lines.push(
-        [
-          `"${row.key}"`,
-          row.income,
-          row.cost,
-          row.netProfit,
-          row.jobsCount,
-          row.vehiclesSold,
-        ].join(",")
-      );
-    }
+    renderSummaryCards(summary);
+    renderSummaryTable(groupedRows);
+    renderJobsTable(data.jobs);
+    renderVehiclesTable(data.vehicles);
+    renderStockTable(data.stock);
+    renderPosTable();
 
-    const csv = lines.join("\n");
-    downloadFile(
-      "ben-motor-report-summary.csv",
-      "text/csv;charset=utf-8;",
-      csv
-    );
-  }
-
-  // ---------------------------
-  // Date range label & time label
-  // ---------------------------
-  function updateDateRangeLabel() {
-    const from = document.getElementById("filterDateFrom")?.value || "";
-    const to = document.getElementById("filterDateTo")?.value || "";
-    const label = document.getElementById("reportDateRangeLabel");
-    if (!label) return;
-
-    if (!from && !to) {
-      label.textContent = "ยังไม่ได้เลือกช่วงเวลา";
-    } else if (from && to) {
-      label.textContent = "ช่วงวันที่ " + from + " ถึง " + to;
-    } else if (from && !to) {
-      label.textContent = "ตั้งแต่วันที่ " + from;
-    } else if (!from && to) {
-      label.textContent = "ถึงวันที่ " + to;
-    }
-  }
-
-  function updateGeneratedAtLabel() {
-    const el = document.getElementById("reportGeneratedAt");
-    if (!el) return;
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const ss = String(now.getSeconds()).padStart(2, "0");
-    el.textContent = `${hh}:${mm}:${ss}`;
-  }
-
-  function setQuickRange(type) {
-    const today = new Date();
-    let from = new Date(today);
-
-    if (type === "today") {
-      // from = today
-    } else if (type === "7") {
-      from.setDate(today.getDate() - 6);
-    } else if (type === "30") {
-      from.setDate(today.getDate() - 29);
-    } else if (type === "month") {
-      from = new Date(today.getFullYear(), today.getMonth(), 1);
-    }
-
-    const fromInput = document.getElementById("filterDateFrom");
-    const toInput = document.getElementById("filterDateTo");
-    if (fromInput && toInput) {
-      fromInput.value = formatDateInput(from);
-      toInput.value = formatDateInput(today);
-      updateDateRangeLabel();
-    }
-  }
-
-  // ---------------------------
-  // Main report runner
-  // ---------------------------
-  function runReport(allData) {
-    const fromVal = document.getElementById("filterDateFrom")?.value || "";
-    const toVal = document.getElementById("filterDateTo")?.value || "";
-    const groupBy =
-      document.getElementById("filterGroupBy")?.value || "day";
-    const dataType =
-      document.getElementById("filterDataType")?.value || "all";
-
-    const fromDate = fromVal ? new Date(fromVal + "T00:00:00") : null;
-    const toDate = toVal ? new Date(toVal + "T23:59:59") : null;
-
-    const filters = { fromDate, toDate, groupBy, dataType };
-
-    const agg = buildFilteredData(allData, filters);
-    renderSummaryCards(agg);
-    renderSummaryTable(agg);
-    renderJobsTable(agg);
-    renderVehiclesTable(agg);
-    renderStockTable(agg);
-    renderPosTable(agg);
-    updateDateRangeLabel();
     updateGeneratedAtLabel();
 
-    return { agg, filters };
+    lastReportState = {
+      filter,
+      summary,
+      groupedRows,
+      jobs: data.jobs,
+      vehicles: data.vehicles,
+      stock: data.stock
+    };
+  } catch (err) {
+    console.error("โหลดรายงานไม่สำเร็จ:", err);
+    alert("โหลดข้อมูลรายงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+  } finally {
+    document.body.style.cursor = "default";
+  }
+}
+
+// -----------------------------
+// Init
+// -----------------------------
+function initReportsPage() {
+  const filterForm = $("#reportFilterForm");
+  if (filterForm) {
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      runReport();
+    });
   }
 
-  // ---------------------------
-  // Init
-  // ---------------------------
-  document.addEventListener("DOMContentLoaded", function () {
-    const allData = loadAllRawData();
+  const resetBtn = $("#resetFilterBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (filterForm) filterForm.reset();
+      setTimeout(() => {
+        applyQuickRange("30");
+        runReport();
+      }, 0);
+    });
+  }
 
-    // quick range buttons
-    document
-      .querySelectorAll("[data-quick-range]")
-      .forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          const type = this.getAttribute("data-quick-range");
-          setQuickRange(type);
-        });
-      });
-
-    const fromInput = document.getElementById("filterDateFrom");
-    const toInput = document.getElementById("filterDateTo");
-    if (fromInput)
-      fromInput.addEventListener("change", updateDateRangeLabel);
-    if (toInput)
-      toInput.addEventListener("change", updateDateRangeLabel);
-
-    const filterForm = document.getElementById("reportFilterForm");
-    let lastAgg = null;
-    let lastFilters = null;
-
-    if (filterForm) {
-      filterForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const r = runReport(allData);
-        lastAgg = r.agg;
-        lastFilters = r.filters;
-      });
-    }
-
-    const resetBtn = document.getElementById("resetFilterBtn");
-    if (resetBtn) {
-      resetBtn.addEventListener("click", function () {
-        setTimeout(function () {
-          updateDateRangeLabel();
-          const r = runReport(allData);
-          lastAgg = r.agg;
-          lastFilters = r.filters;
-        }, 0);
-      });
-    }
-
-    // Export buttons
-    const exportJsonBtn = document.getElementById("exportJsonBtn");
-    if (exportJsonBtn) {
-      exportJsonBtn.addEventListener("click", function () {
-        if (!lastAgg || !lastFilters) {
-          const r = runReport(allData);
-          lastAgg = r.agg;
-          lastFilters = r.filters;
-        }
-        exportJSON(lastAgg, lastFilters);
-      });
-    }
-
-    const exportCsvBtn = document.getElementById("exportCsvBtn");
-    if (exportCsvBtn) {
-      exportCsvBtn.addEventListener("click", function () {
-        if (!lastAgg) {
-          const r = runReport(allData);
-          lastAgg = r.agg;
-          lastFilters = r.filters;
-        }
-        exportCSV(lastAgg);
-      });
-    }
-
-    const printBtn = document.getElementById("printReportBtn");
-    if (printBtn) {
-      printBtn.addEventListener("click", function () {
-        window.print();
-      });
-    }
-
-    // ตั้งค่าเริ่มต้น: quick range = 30 วันล่าสุด
-    setQuickRange("30");
-    const r = runReport(allData);
-    lastAgg = r.agg;
-    lastFilters = r.filters;
+  document.querySelectorAll("[data-quick-range]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-quick-range");
+      applyQuickRange(type);
+      runReport();
+    });
   });
-})();
+
+  const exportJsonBtn = $("#exportJsonBtn");
+  if (exportJsonBtn) {
+    exportJsonBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      handleExportJson();
+    });
+  }
+
+  const exportCsvBtn = $("#exportCsvBtn");
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      handleExportCsv();
+    });
+  }
+
+  // โหลดค่าเริ่มต้น: 30 วันล่าสุด
+  applyQuickRange("30");
+  runReport();
+}
+
+document.addEventListener("DOMContentLoaded", initReportsPage);
