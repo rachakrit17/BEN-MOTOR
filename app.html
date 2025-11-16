@@ -128,63 +128,65 @@
                 >
                   <i class="bi bi-house-door"></i>
                 </button>
-                <div class="bm-topbar-title-group">
-                  <h1 id="currentSectionTitle" class="bm-topbar-title">
-                    แดชบอร์ด BEN MOTOR
-                  </h1>
-                  <div class="bm-topbar-subtitle">
-                    ภาพรวมวันนี้จากข้อมูลในระบบ
-                  </div>
-                </div>
-              </div>
+<header class="bm-topbar bm-topbar-gradient">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between">
 
-              <div class="d-flex align-items-center gap-3">
-                <div class="bm-topbar-datetime text-end">
-                  <div id="currentDateText" class="bm-date-text">
-                    –
-                  </div>
-                  <div id="currentTimeText" class="bm-time-text">
-                    –
-                  </div>
-                </div>
+      <div class="d-flex align-items-center gap-2">
+        <button
+          type="button"
+          class="bm-topbar-home d-inline-flex d-md-none align-items-center justify-content-center"
+          data-section-target="dashboard"
+        >
+          <i class="bi bi-house-door"></i>
+        </button>
 
-                <div class="dropdown">
-                  <button
-                    class="bm-user-btn btn btn-light btn-sm dropdown-toggle"
-                    type="button"
-                    id="userMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <i class="bi bi-person-circle me-1"></i>
-                    <span id="currentUserShortEmail">ผู้ใช้</span>
-                  </button>
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userMenuButton"
-                  >
-                    <li class="px-3 py-2 small text-muted">
-                      <div>เข้าสู่ระบบด้วย</div>
-                      <div id="currentUserFullEmail" class="fw-semibold">
-                        –
-                      </div>
-                    </li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li>
-                      <button
-                        id="userLogoutBtn"
-                        class="dropdown-item text-danger"
-                        type="button"
-                      >
-                        <i class="bi bi-box-arrow-right me-2"></i>ออกจากระบบ
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+        <div class="bm-topbar-title-group">
+          <h1 id="currentSectionTitle" class="bm-topbar-title">
+            แดชบอร์ด BEN MOTOR
+          </h1>
+          <div class="bm-topbar-subtitle">
+            ภาพรวมวันนี้จากข้อมูลในระบบ
           </div>
-        </header>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+
+        <div class="bm-topbar-datetime-panel">
+          <div id="currentDateText" class="bm-date-text">–</div>
+          <div id="currentTimeText" class="bm-time-text">–</div>
+        </div>
+
+        <div class="dropdown">
+          <button
+            class="bm-user-btn btn btn-light btn-sm dropdown-toggle"
+            type="button"
+            id="userMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-circle me-1"></i>
+            <span id="currentUserShortEmail">ผู้ใช้</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+            <li class="px-3 py-2 small text-muted">
+              <div>เข้าสู่ระบบด้วย</div>
+              <div id="currentUserFullEmail" class="fw-semibold">–</div>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button id="userLogoutBtn" class="dropdown-item text-danger" type="button">
+                <i class="bi bi-box-arrow-right me-2"></i>ออกจากระบบ
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
 
         <main class="bm-main container-fluid">
           <section
@@ -1588,3 +1590,4 @@
   </body>
 
 </html>
+
