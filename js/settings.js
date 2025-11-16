@@ -6,7 +6,8 @@ import {
   getDoc,
   setDoc,
   collection,
-  getDocs
+  getDocs,
+  serverTimestamp // <--- แก้ไขจุดที่ 1: เพิ่ม serverTimestamp
 } from "./firebase-init.js";
 
 import { showToast, formatDateTime } from "./utils.js";
@@ -266,7 +267,7 @@ async function handleSettingsSave(e) {
       theme,
       autoLockEnabled,
       autoLockMinutes,
-      updatedAt: new Date()
+      updatedAt: serverTimestamp() // <--- แก้ไขจุดที่ 2: ใช้ serverTimestamp()
     };
 
     const docRef = doc(db, "settings", SETTINGS_DOC_ID);
