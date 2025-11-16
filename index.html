@@ -34,18 +34,33 @@
   <body class="bm-login-page">
     <div class="min-vh-100 d-flex align-items-center justify-content-center">
       <div class="container" style="max-width: 480px;">
-        
         <!-- Login Card -->
-        <div class="card shadow-sm bm-login-card">
+        <div class="card shadow-sm bm-login-card border-0">
           <div class="card-body p-4 p-md-4">
-            <h2 class="h5 fw-semibold mb-3 text-center">
-              BEN MOTOR POS
-            </h2>
+            <!-- Logo + Title -->
+            <div class="text-center mb-4">
+              <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <div class="bm-logo-icon">
+                  <i class="bi bi-wrench-adjustable"></i>
+                </div>
+                <div class="text-start">
+                  <div class="small text-muted text-uppercase">
+                    ระบบจัดการอู่มอเตอร์ไซค์
+                  </div>
+                  <div class="fw-semibold" style="letter-spacing:0.03em;">
+                    BEN MOTOR POS
+                  </div>
+                </div>
+              </div>
+              <div class="small text-muted">
+                เข้าสู่ระบบเพื่อใช้งานแดชบอร์ด, งานซ่อม, รถซื้อ–ขาย และสต็อก
+              </div>
+            </div>
 
-            <form id="loginForm" class="mb-3" autocomplete="on">
+            <form id="loginForm" class="mb-2" autocomplete="on">
               <!-- Email -->
               <div class="mb-3">
-                <label for="email" class="form-label fw-semibold">
+                <label for="email" class="form-label fw-semibold small">
                   อีเมลที่ใช้เข้าสู่ระบบ
                 </label>
                 <div class="input-group">
@@ -57,7 +72,7 @@
                     class="form-control"
                     id="email"
                     name="email"
-                    placeholder="you@example.com"
+                    placeholder="คุณ@example.com"
                     required
                   />
                 </div>
@@ -65,7 +80,7 @@
 
               <!-- Password -->
               <div class="mb-3">
-                <label for="password" class="form-label fw-semibold">
+                <label for="password" class="form-label fw-semibold small">
                   รหัสผ่าน
                 </label>
                 <div class="input-group">
@@ -83,7 +98,7 @@
                 </div>
               </div>
 
-              <!-- Remember + Forgot -->
+              <!-- Remember -->
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="form-check">
                   <input
@@ -91,14 +106,16 @@
                     type="checkbox"
                     value="1"
                     id="rememberMe"
+                    checked
                   />
-                  <label class="form-check-label" for="rememberMe">
+                  <label class="form-check-label small" for="rememberMe">
                     จำเครื่องนี้
                   </label>
                 </div>
+                <!-- ปล่อย id ไว้ให้ JS ใช้ แต่ซ่อนปุ่มลืมรหัส -->
                 <button
                   type="button"
-                  class="btn btn-link btn-sm p-0"
+                  class="btn btn-link btn-sm p-0 d-none"
                   id="forgotPasswordLink"
                 >
                   ลืมรหัสผ่าน?
@@ -106,7 +123,7 @@
               </div>
 
               <!-- Submit -->
-              <div class="d-grid mb-3">
+              <div class="d-grid mb-2">
                 <button
                   type="submit"
                   class="btn bm-btn-primary fw-semibold"
@@ -117,42 +134,36 @@
               </div>
             </form>
 
-            <!-- Divider -->
-            <div class="d-flex align-items-center my-3">
-              <div class="flex-grow-1 border-top"></div>
-              <span class="mx-2 text-muted small">หรือ</span>
-              <div class="flex-grow-1 border-top"></div>
-            </div>
-
-            <!-- Google Login -->
-            <div class="d-grid mb-2">
-              <button
-                type="button"
-                class="btn btn-outline-dark d-flex align-items-center justify-content-center gap-2"
-                id="googleLoginBtn"
-              >
-                <i class="bi bi-google"></i>
-                เข้าสู่ระบบด้วย Google
-              </button>
-            </div>
-
             <p class="text-center text-muted small mb-0 mt-2">
               ระบบนี้ใช้สำหรับเจ้าของอู่ BEN MOTOR เพียงคนเดียว
             </p>
           </div>
         </div>
+      </div>
+    </div>
 
-    <!-- Toast container (for auth.js ใช้งาน) -->
-    <div class="position-fixed bottom-0 start-50 translate-middle-x p-3"
-         style="z-index: 1200;">
-      <div id="globalToast" class="toast align-items-center text-bg-danger border-0" role="alert"
-           aria-live="assertive" aria-atomic="true">
+    <!-- Toast container (for auth.js) -->
+    <div
+      class="position-fixed bottom-0 start-50 translate-middle-x p-3"
+      style="z-index: 1200;"
+    >
+      <div
+        id="globalToast"
+        class="toast align-items-center text-bg-danger border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
         <div class="d-flex">
           <div class="toast-body" id="globalToastMessage">
             ข้อความแจ้งเตือน
           </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                  data-bs-dismiss="toast" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
         </div>
       </div>
     </div>
@@ -164,7 +175,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- Auth logic (ใช้ Firebase + redirect ไป app.html) -->
+    <!-- Auth logic -->
     <script type="module" src="js/auth.js"></script>
   </body>
 </html>
