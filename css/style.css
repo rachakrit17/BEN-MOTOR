@@ -1,6 +1,7 @@
-/* =========================
+/* ============================================================
+   /css/style.css – ใช้ไฟล์นี้แทนของเดิมทั้งไฟล์
    BEN MOTOR POS – Global Theme
-   ========================= */
+   ============================================================ */
 
 :root {
   --bm-primary: #9ae6b4;            /* เขียวอ่อนพาสเทล */
@@ -61,10 +62,6 @@ body {
     var(--bm-bg) 100%
   );
   color: var(--bm-text);
-}
-
-/* ป้องกันแนวนอนเกิน */
-body {
   overflow-x: hidden;
 }
 
@@ -623,7 +620,6 @@ h6 {
 
 /* =========================
    TOPBAR GRADIENT MODE
-   (Light / Dark auto)
    ========================= */
 
 .bm-topbar-gradient {
@@ -715,11 +711,10 @@ h6 {
 }
 
 /* =========================
-   Bottom Navigation – Gradient Bubble (Style A, Icon Only)
+   Bottom Navigation – Gradient Bubble (icon only)
    ========================= */
 
 @media (max-width: 767.98px) {
-  /* layout / main padding (เผื่อพื้นที่ bottom nav) */
   .bm-sidebar {
     display: none !important;
   }
@@ -750,7 +745,7 @@ h6 {
     align-items: flex-end;
     padding: 0.35rem 0.9rem 0.7rem;
     z-index: 1030;
-    pointer-events: none; /* กันไม่ให้คลิกทะลุด้านหลัง แต่ยังคลิกปุ่มได้ */
+    pointer-events: none;
   }
 
   .bm-bottom-nav-inner {
@@ -787,7 +782,6 @@ h6 {
     overflow: hidden;
   }
 
-  /* ไอคอนล้วน – ซ่อนตัวหนังสือ */
   .bm-bottom-nav-btn span {
     display: none;
   }
@@ -824,18 +818,19 @@ h6 {
     transform: translateY(-1px);
   }
 }
+
 /* bottom nav: icon only mode */
 .bm-bottom-nav-btn span {
-    display: none !important;
+  display: none !important;
 }
 
 .bm-bottom-nav-btn.active i {
-    font-weight: 900;
-    transform: scale(1.15);
+  font-weight: 900;
+  transform: scale(1.15);
 }
 
 /* =========================
-   Vehicles – Card style (Stock & Sold)
+   Vehicles – Table / Card style
    ========================= */
 
 #vehicles-stock-pane .table-responsive,
@@ -846,10 +841,9 @@ h6 {
 #vehiclesStockTable,
 #vehiclesSoldTable {
   border-collapse: separate;
-  border-spacing: 0 0.8rem; /* ระยะห่างระหว่างการ์ด */
+  border-spacing: 0 0.8rem;
 }
 
-/* หัวตาราง – ให้ตัวเล็กลงหน่อย */
 #vehiclesStockTable thead tr th,
 #vehiclesSoldTable thead tr th {
   border: none;
@@ -859,7 +853,6 @@ h6 {
   color: var(--bm-text-muted);
 }
 
-/* แถวข้อมูล = ลักษณะเป็นการ์ด */
 #vehiclesStockTable tbody tr,
 #vehiclesSoldTable tbody tr {
   background: var(--bm-card);
@@ -885,17 +878,15 @@ h6 {
   padding-right: 1.1rem;
 }
 
-/* ช่อง 1: รุ่น / ทะเบียน ให้เด่นหน่อย */
+/* ช่อง 1: รุ่น / ทะเบียน */
 #vehiclesStockTable tbody td:nth-child(1),
 #vehiclesSoldTable tbody td:nth-child(1) {
   font-size: 0.95rem;
   font-weight: 600;
-  white-space: pre-line; /* เผื่อขึ้นบรรทัดแบบ
-                            รุ่นรถ: ...
-                            ทะเบียน: ... */
+  white-space: pre-line;
 }
 
-/* ช่องราคาซื้อ – โทนเทาอ่อน */
+/* ราคาซื้อ – เทาอ่อน */
 #vehiclesStockTable tbody td:nth-child(2),
 #vehiclesSoldTable tbody td:nth-child(2) {
   font-size: 0.85rem;
@@ -909,30 +900,27 @@ h6 {
   color: #16a34a;
 }
 
-/* รถขายแล้ว: กำไร = เขียวเข้ม (ถ้าจะให้ติดลบเป็นแดง ต้องไปเช็กค่าใน JS เอาเอง) */
+/* รถขายแล้ว: กำไร */
 #vehiclesSoldTable tbody td:nth-child(4) {
   font-size: 0.9rem;
   font-weight: 600;
   color: #16a34a;
 }
 
-/* วันที่ขาย / สถานะ – ตัวเล็กสีเทา */
+/* วันที่ขาย / สถานะ – เทาเล็ก */
 #vehiclesSoldTable tbody td:nth-child(5),
 #vehiclesStockTable tbody td:nth-child(4) {
   font-size: 0.8rem;
   color: var(--bm-text-muted);
 }
 
-/* ช่องปุ่มขายรถ / ปุ่มจัดการ ชิดขวา */
+/* ปุ่มขายรถ / ปุ่มจัดการ ชิดขวา */
 #vehiclesStockTable tbody td:last-child,
 #vehiclesSoldTable tbody td:last-child {
   text-align: right;
 }
 
-/* =========================
-   Vehicles – Card layout on mobile
-   ========================= */
-
+/* mobile: การ์ดแนวตั้ง */
 @media (max-width: 767.98px) {
   #vehiclesStockTable,
   #vehiclesSoldTable {
@@ -960,23 +948,19 @@ h6 {
   }
 }
 
-/* =========================
-   Vehicles – fix header & align
-   ========================= */
-
-/* ซ่อนหัวตารางของ รถค้างสต๊อก / รถขายแล้ว */
+/* ซ่อนหัวตารางรถค้างสต็อก / รถขายแล้ว */
 #vehiclesStockTable thead,
 #vehiclesSoldTable thead {
   display: none;
 }
 
-/* ให้ตัวหนังสือในการ์ดชิดซ้ายเป็นหลัก */
+/* alignment */
 #vehiclesStockTable tbody td,
 #vehiclesSoldTable tbody td {
   text-align: left;
 }
 
-/* ช่องตัวเลขราคา ให้ชิดขวาอ่านง่าย */
+/* ช่องราคา ชิดขวา */
 #vehiclesStockTable tbody td:nth-child(2),
 #vehiclesSoldTable tbody td:nth-child(2),
 #vehiclesSoldTable tbody td:nth-child(3),
@@ -984,14 +968,14 @@ h6 {
   text-align: right;
 }
 
-/* บีบระยะห่างการ์ดลงหน่อยไม่ให้ดูหลวมเกิน */
+/* ระยะห่างการ์ด */
 #vehiclesStockTable,
 #vehiclesSoldTable {
   border-spacing: 0 0.5rem;
 }
 
 /* ============================================================
-   BEN MOTOR – VEHICLE CARD STYLES
+   BEN MOTOR – VEHICLE CARD STYLES (ใช้สำหรับ render แบบการ์ด)
    ============================================================ */
 
 .bm-vehicle-card {
@@ -1002,6 +986,7 @@ h6 {
   border: 1px solid #e1e1e1;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   transition: 0.2s;
+  color: #111827;
 }
 
 .bm-vehicle-card:hover {
@@ -1045,56 +1030,11 @@ h6 {
 }
 
 /* status card */
-.bm-vehicle-card.sold {
-  background: #f5fff6;
-  border-color: #b8eabf;
-}
-
-/* text colors */
-.bm-vehicle-price-buy {
-  color: #0d6efd;
-  font-weight: 600;
-}
-
-.bm-vehicle-price-sell {
-  color: #198754;
-  font-weight: 700;
-}
-
-.bm-vehicle-profit-pos {
-  color: #198754;
-  font-weight: 700;
-}
-
-.bm-vehicle-profit-neg {
-  color: #dc3545;
-  font-weight: 700;
-}
-
-/* badge fixes */
-.bm-vehicle-card .badge {
-  font-size: 0.75rem;
-  padding: 5px 10px;
-  border-radius: 20px;
-}
-
-/* ---------------------------------
-   ปรับสีการ์ด รถค้างสต๊อก / รถขายแล้ว
-   วางต่อท้ายสุดของ style.css
----------------------------------- */
-
-/* พื้นฐาน: ตัวหนังสือการ์ดให้เป็นสีดำอ่านชัด */
-.bm-vehicle-card {
-  color: #111827;
-}
-
-/* รถค้างสต๊อก – พื้นหลังขาว ขอบเทาอ่อน */
 .bm-vehicle-card.in-stock {
   background-color: #ffffff;
   border-color: #e5e7eb;
 }
 
-/* รถขายแล้ว – การ์ดติดโทนเขียวอ่อนหน่อย */
 .bm-vehicle-card.sold {
   background-color: #ecfdf3;
   border-color: #4ade80;
@@ -1111,51 +1051,54 @@ h6 {
   color: #ffffff;
 }
 
-/* สีตัวเลขราคาในบรรทัดเงินต่าง ๆ  */
-/* ราคาซื้อเข้า = ดำ */
-.bm-vehicle-price-buy .bm-vehicle-price-value {
+/* text colors */
+.bm-vehicle-price-buy {
   color: #111827 !important;
   font-weight: 600;
 }
 
-/* ราคาขาย = แดง */
-.bm-vehicle-price-sell .bm-vehicle-price-value {
-  color: #dc2626 !important;
-  font-weight: 700;
-}
-
-/* กำไร = เขียว */
-.bm-vehicle-price-profit .bm-vehicle-price-value {
-  color: #16a34a !important;
-  font-weight: 700;
-}
-
-/* override สีราคาในการ์ดรถ */
-.bm-vehicle-price-buy {
-  color: #111827 !important;   /* ราคาซื้อ = ดำ */
-  font-weight: 600;
-}
-
 .bm-vehicle-price-sell {
-  color: #dc2626 !important;   /* ราคาขาย = แดง */
+  color: #dc2626 !important;
   font-weight: 700;
 }
 
 .bm-vehicle-profit-pos,
 .bm-vehicle-price-profit {
-  color: #16a34a !important;   /* กำไร = เขียว */
+  color: #16a34a !important;
   font-weight: 700;
 }
 
-/* FORCE: รถขายแล้ว การ์ดพื้นหลังเขียวทั้งใบ */
-#vehiclesSoldBody .bm-vehicle-card {
-  background-color: #ecfdf3 !important;  /* เขียวอ่อน */
-  border-color: #4ade80 !important;      /* ขอบเขียว */
+.bm-vehicle-profit-neg {
+  color: #dc3545;
+  font-weight: 700;
 }
 
-/* ลบพื้นหลังขาวของการ์ดใหญ่ในหน้า รถซื้อ–ขาย */
+/* badge in card */
+.bm-vehicle-card .badge {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+/* ============================================================
+   FIX: ตัดพื้นหลังแผ่นขาวของหน้า "รถซื้อ–ขาย"
+   ============================================================ */
+
+/* การ์ด wrapper ใหญ่ของ section รถซื้อ–ขาย
+   ใช้พื้นหลังโปร่งใส ไม่เอาแผ่นขาวคลุมทั้งหน้า */
 #section-vehicles .bm-card {
   background: transparent;
   border: none;
   box-shadow: none;
+  padding: 0;
+}
+
+/* header / body ข้างในให้มี padding เอง */
+#section-vehicles .bm-card-header {
+  padding: 0 0 0.75rem;
+  border: none;
+}
+
+#section-vehicles .bm-card-body {
+  padding: 0.75rem 0 0;
 }
