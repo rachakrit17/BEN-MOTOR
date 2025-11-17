@@ -201,12 +201,11 @@
     </div>
   </div>
 
-  <!-- Summary Today (3 mini cards) -->
+  <!-- Summary Today (3 mini cards แถวแรก) -->
   <div class="row g-3 mb-3">
     <div class="col-4">
       <div class="bm-dash-mini">
         <div class="label">ยอดวันนี้</div>
-        <!-- ใช้ id ที่ dashboard.js อัปเดต -->
         <div class="value text-success" id="dashTotalToday">0 บาท</div>
       </div>
     </div>
@@ -214,39 +213,54 @@
     <div class="col-4">
       <div class="bm-dash-mini">
         <div class="label">งานวันนี้</div>
-        <!-- ใช้ id ที่ dashboard.js อัปเดต -->
-        <div class="value" id="dashJobsToday">0 งาน</div>
+        <div class="value text-primary" id="dashJobsToday">0 งาน</div>
       </div>
     </div>
 
     <div class="col-4">
       <div class="bm-dash-mini">
-        <div class="label">รถค้างสต๊อก</div>
-        <!-- ใช้ id ที่ dashboard.js ใช้ (นับงานที่ยังไม่ done) -->
+        <div class="label">รถค้างในอู่</div>
         <div class="value text-warning" id="dashVehiclesPending">0 คัน</div>
       </div>
     </div>
   </div>
 
-  <!-- Buy/Sell Cards -->
+  <!-- Summary Today (แถวใหม่: ซื้อรถ / ซื้ออะไหล่) -->
+  <div class="row g-3 mb-4">
+    <div class="col-4">
+      <div class="bm-dash-mini">
+        <div class="label">ซื้อรถวันนี้</div>
+        <div class="value text-dark" id="dashVehiclesBuyToday">0 คัน</div>
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div class="bm-dash-mini">
+        <div class="label">สต๊อกทั้งหมด</div>
+        <div class="value text-info" id="dashPartsBuyQtyToday">0 ชิ้น</div>
+      </div>
+    </div>
+
+    <div class="col-4">
+  <div class="bm-dash-mini">
+    <div class="label">อะไหล่ใกล้หมด</div>
+    <div class="value text-danger" id="dashLowStockCount">0 รายการ</div>
+  </div>
+</div>
+
+  <!-- Buy/Sell Cards เดิมต่อเลย -->
   <div class="bm-dash-card mb-3">
     <div class="title">สรุป ซื้อ–ขาย รถทั้งหมด</div>
-
     <div class="item">
       <div class="label">ยอดซื้อสะสม</div>
-      <!-- map จาก dbTotalBuy -> dashTotalBuy -->
       <div class="value text-primary" id="dashTotalBuy">0 บาท</div>
     </div>
-
     <div class="item">
       <div class="label">ยอดขายสะสม</div>
-      <!-- map จาก dbTotalSell -> dashTotalSell -->
       <div class="value text-success" id="dashTotalSell">0 บาท</div>
     </div>
-
     <div class="item total">
       <div class="label">กำไรรถทั้งหมด</div>
-      <!-- map จาก dbTotalProfit -> dashTotalProfit -->
       <div class="value text-success fw-bold" id="dashTotalProfit">
         0 บาท
       </div>
@@ -584,7 +598,7 @@
                           <button
                             id="posSaveBtn"
                             type="button"
-                            class="btn btn-success"
+                            class="btn btn-bm-primary"
                           >
                             <i class="bi bi-check-circle me-1"></i>บันทึกบิล
                           </button>
@@ -708,7 +722,7 @@
                   <div class="col-12 col-lg-2 d-grid">
                     <button
                       type="submit"
-                      class="btn btn-outline-primary"
+                      class="btn btn-bm-primary"
                     >
                       ใช้ตัวกรอง
                     </button>
@@ -823,7 +837,7 @@
                 <ul class="nav nav-pills mb-3" id="vehiclesTabs" role="tablist">
                   <li class="nav-item" role="presentation">
                     <button
-                      class="nav-link active"
+                      class="nav-link active bm-tab-primary"
                       id="vehicles-buy-tab"
                       data-bs-toggle="pill"
                       data-bs-target="#vehicles-buy-pane"
@@ -835,19 +849,19 @@
                   </li>
                   <li class="nav-item" role="presentation">
                     <button
-                      class="nav-link"
+                      class="nav-link bm-tab-primary"
                       id="vehicles-stock-tab"
                       data-bs-toggle="pill"
                       data-bs-target="#vehicles-stock-pane"
                       type="button"
                       role="tab"
                     >
-                      รถค้างสต็อก
+                      รถค้างสต๊อก
                     </button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button
-                      class="nav-link"
+                      class="nav-link bm-tab-primary"
                       id="vehicles-sold-tab"
                       data-bs-toggle="pill"
                       data-bs-target="#vehicles-sold-pane"
@@ -936,7 +950,7 @@
                       <div class="col-12 d-grid d-md-flex justify-content-md-end">
                         <button
                           type="submit"
-                          class="btn btn-success"
+                          class="btn btn-bm-primary"
                         >
                           <i class="bi bi-plus-circle me-1"></i
                           >บันทึกรับซื้อรถ
@@ -1170,7 +1184,7 @@
                     <button
                       type="button"
                       id="stockAddItemBtn"
-                      class="btn btn-success"
+                      class="btn btn-bm-primary"
                     >
                       <i class="bi bi-plus-circle me-1"></i>เพิ่มอะไหล่
                     </button>
@@ -1183,21 +1197,20 @@
                     id="stockTable"
                   >
                     <thead>
-                      <tr>
-                        <th>อะไหล่</th>
-                        <th>หมวด</th>
-                        <th style="width: 110px" class="text-end">ทุน</th>
-                        <th style="width: 110px" class="text-end">ขาย</th>
-                        <th style="width: 110px" class="text-center">
-                          คงเหลือ
-                        </th>
-                        <th style="width: 90px" class="text-center">
-                          min
-                        </th>
-                        <th style="width: 70px" class="text-end"></th>
-                      </tr>
-                    </thead>
-                    <tbody id="stockTableBody"></tbody>
+  <tr>
+    <th>อะไหล่</th>
+    <th>หมวด</th>
+    <th style="width: 110px" class="text-end">ทุน</th>
+    <th style="width: 110px" class="text-end">ขาย</th>
+    <th style="width: 110px" class="text-center">คงเหลือ</th>
+    <th style="width: 90px" class="text-center">min</th>
+    <th>SKU</th>
+    <th>วันที่รับเข้า</th>
+    <th>หมายเหตุ</th>
+    <th style="width: 70px" class="text-end"></th>
+  </tr>
+</thead>
+<tbody id="stockTableBody"></tbody>
                   </table>
                 </div>
 
@@ -1305,6 +1318,23 @@
                           value="0"
                         />
                       </div>
+                      <div class="col-12">
+  <label class="form-label small">วันที่รับเข้า</label>
+  <input
+    type="date"
+    id="stockItemReceivedAt"
+    class="form-control"
+  />
+</div>
+
+<div class="col-12">
+  <label class="form-label small">หมายเหตุ</label>
+  <textarea
+    id="stockItemNote"
+    class="form-control"
+    rows="2"
+  ></textarea>
+</div>
                     </form>
                   </div>
                   <div class="modal-footer">
@@ -1448,14 +1478,14 @@
                   <div class="col-12 d-grid d-md-flex justify-content-md-end">
                     <button
                       type="submit"
-                      class="btn btn-success me-md-2 mb-2 mb-md-0"
+                      class="btn btn-bm-primary me-md-2 mb-2 mb-md-0"
                     >
                       <i class="bi bi-save2 me-1"></i>บันทึกการตั้งค่า
                     </button>
                     <button
                       type="button"
                       id="settingsExportBtn"
-                      class="btn btn-outline-primary me-md-2 mb-2 mb-md-0"
+                      class="btn btn-bm-primary me-md-2 mb-2 mb-md-0"
                     >
                       <i class="bi bi-download me-1"></i>Export JSON
                     </button>

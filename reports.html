@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
-    <meta charset="utf-8" />
-    <title>รายงานทั้งหมด – BEN MOTOR POS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – รายงานทั้งหมด</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -27,691 +28,202 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- Main Theme -->
-    <link rel="stylesheet" href="./css/style.css" />
+    <!-- Main style -->
+    <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="bm-app theme-light">
-    <div class="bm-layout">
-      <!-- ไม่มี sidebar ใช้ topbar + main อย่างเดียว -->
-      <div class="bm-main-column w-100">
-        <!-- Topbar -->
-        <header class="bm-topbar bm-topbar-gradient">
-          <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-2">
-                <a
-                  href="./app.html"
-                  class="bm-topbar-home d-inline-flex align-items-center justify-content-center text-decoration-none"
-                >
-                  <i class="bi bi-arrow-left-short"></i>
-                </a>
-                <div class="bm-topbar-title-group">
-                  <h1 class="bm-topbar-title mb-0">
-                    รายงานทั้งหมด BEN MOTOR
-                  </h1>
-                  <div class="bm-topbar-subtitle">
-                    สรุปยอดแบบละเอียดจาก งานซ่อม, รถซื้อ–ขาย, สต็อก และ POS
-                  </div>
-                </div>
-              </div>
 
-              <div class="d-none d-sm-flex align-items-center gap-2">
-                <div class="bm-topbar-datetime-panel">
-                  <div id="reportDateRangeLabel" class="bm-date-text">
-                    ยังไม่ได้เลือกช่วงเวลา
-                  </div>
-                  <div id="reportGeneratedAt" class="bm-time-text">
-                    –
-                  </div>
-                </div>
-              </div>
+  <body class="bm-app theme-light">
+    <!-- Top gradient bar (เหมือน repair-tips) -->
+    <header class="bm-topbar-gradient">
+      <div class="container d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-light btn-sm rounded-circle px-2 me-1"
+            onclick="history.back()"
+            aria-label="ย้อนกลับ"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <div>
+            <h1 class="bm-topbar-title mb-0">
+              รายงานทั้งหมด BEN MOTOR
+            </h1>
+            <div class="bm-topbar-subtitle">
+              ดูสรุปรายได้จากงานซ่อม + ขายรถ ตามช่วงวันที่เลือก
             </div>
           </div>
-        </header>
+        </div>
 
-        <!-- Main -->
-        <main class="bm-main container-fluid">
-          <!-- ฟิลเตอร์หลัก -->
-          <section class="mb-3">
-            <div class="bm-card">
-              <div class="bm-card-header">
-                <div>
-                  <h2 class="bm-card-title mb-0">ตัวกรองรายงาน</h2>
-                  <p class="bm-card-subtitle mb-0">
-                    เลือกช่วงวันที่ ประเภทข้อมูล และรูปแบบสรุปที่ต้องการ
-                  </p>
-                </div>
-              </div>
-              <div class="bm-card-body">
-                <form id="reportFilterForm" class="row g-3 align-items-end">
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">วันที่เริ่มต้น</label>
-                    <input
-                      type="date"
-                      id="filterDateFrom"
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">วันที่สิ้นสุด</label>
-                    <input
-                      type="date"
-                      id="filterDateTo"
-                      class="form-control"
-                    />
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">รูปแบบสรุป</label>
-                    <select id="filterGroupBy" class="form-select">
-                      <option value="day">สรุปรายวัน</option>
-                      <option value="month">สรุปรายเดือน</option>
-                      <option value="year">สรุปรายปี</option>
-                    </select>
-                  </div>
-
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">ประเภทข้อมูล</label>
-                    <select id="filterDataType" class="form-select">
-                      <option value="all">ทั้งหมด</option>
-                      <option value="jobs">งานซ่อม / ใบรับรถ</option>
-                      <option value="vehicles">รถซื้อ–ขาย</option>
-                      <option value="stock">สต็อก &amp; อะไหล่</option>
-                      <option value="pos">ใบเสร็จ POS</option>
-                    </select>
-                  </div>
-
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">ช่วงวันที่ลัด</label>
-                    <div class="d-flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm flex-fill"
-                        data-quick-range="today"
-                      >
-                        วันนี้
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm flex-fill"
-                        data-quick-range="7"
-                      >
-                        7 วันล่าสุด
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm flex-fill"
-                        data-quick-range="30"
-                      >
-                        30 วันล่าสุด
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-outline-secondary btn-sm flex-fill"
-                        data-quick-range="month"
-                      >
-                        เดือนนี้
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-md-4">
-                    <label class="form-label small">การส่งออกไฟล์</label>
-                    <div class="d-flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        id="exportCsvBtn"
-                        class="btn btn-outline-primary btn-sm flex-fill"
-                      >
-                        <i class="bi bi-filetype-csv me-1"></i>Export CSV
-                      </button>
-                      <button
-                        type="button"
-                        id="exportJsonBtn"
-                        class="btn btn-outline-primary btn-sm flex-fill"
-                      >
-                        <i class="bi bi-filetype-json me-1"></i>Export JSON
-                      </button>
-                      <button
-                        type="button"
-                        id="printReportBtn"
-                        class="btn btn-outline-secondary btn-sm flex-fill"
-                      >
-                        <i class="bi bi-printer me-1"></i>พิมพ์
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="col-12 d-grid d-md-flex justify-content-md-end">
-                    <button
-                      type="submit"
-                      class="btn btn-success me-md-2 mb-2 mb-md-0"
-                    >
-                      <i class="bi bi-search me-1"></i>ประมวลผลรายงาน
-                    </button>
-                    <button
-                      type="reset"
-                      id="resetFilterBtn"
-                      class="btn btn-outline-secondary mb-2 mb-md-0"
-                    >
-                      ล้างตัวกรอง
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </section>
-
-          <!-- สรุปตัวเลขรวม -->
-          <section class="mb-3">
-            <div class="bm-card">
-              <div class="bm-card-header">
-                <div>
-                  <h2 class="bm-card-title mb-0">สรุปยอดรวม</h2>
-                  <p class="bm-card-subtitle mb-0">
-                    ตัวเลขรวมจากตัวกรองปัจจุบัน
-                  </p>
-                </div>
-              </div>
-              <div class="bm-card-body">
-                <div class="row g-3">
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">จำนวนรายการทั้งหมด</div>
-                      <div
-                        id="summaryTotalRecords"
-                        class="bm-stat-value text-primary"
-                      >
-                        0 รายการ
-                      </div>
-                      <div class="bm-stat-desc">
-                        รวมทุกประเภทข้อมูล
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">ยอดรายรับรวม</div>
-                      <div
-                        id="summaryTotalIncome"
-                        class="bm-stat-value text-success"
-                      >
-                        0 บาท
-                      </div>
-                      <div class="bm-stat-desc">
-                        รวมยอดจากงานซ่อม + ขายรถ + POS
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">ยอดต้นทุน / ค่าใช้จ่าย</div>
-                      <div
-                        id="summaryTotalCost"
-                        class="bm-stat-value text-warning"
-                      >
-                        0 บาท
-                      </div>
-                      <div class="bm-stat-desc">
-                        ต้นทุนอะไหล่ + ราคาซื้อรถ + ค่าใช้จ่ายอื่น
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">กำไรสุทธิรวม</div>
-                      <div
-                        id="summaryNetProfit"
-                        class="bm-stat-value text-success"
-                      >
-                        0 บาท
-                      </div>
-                      <div class="bm-stat-desc">
-                        รายรับ – ต้นทุนทั้งหมด
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">จำนวนงานซ่อม</div>
-                      <div
-                        id="summaryJobsCount"
-                        class="bm-stat-value text-primary"
-                      >
-                        0 งาน
-                      </div>
-                      <div class="bm-stat-desc">
-                        งานที่อยู่ในช่วงวันที่ที่เลือก
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 col-xl-2">
-                    <div class="bm-stat-card">
-                      <div class="bm-stat-label">จำนวนรถขายแล้ว</div>
-                      <div
-                        id="summaryVehiclesSold"
-                        class="bm-stat-value text-info"
-                      >
-                        0 คัน
-                      </div>
-                      <div class="bm-stat-desc">
-                        รถที่ปิดการขายแล้วในช่วงวันที่ที่เลือก
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- รายละเอียดรายงานแบบแท็บ -->
-          <section class="mb-3">
-            <div class="bm-card">
-              <div class="bm-card-header">
-                <div>
-                  <h2 class="bm-card-title mb-0">รายละเอียดรายงาน</h2>
-                  <p class="bm-card-subtitle mb-0">
-                    เลือกดูตามประเภทข้อมูลที่ต้องการ
-                  </p>
-                </div>
-              </div>
-              <div class="bm-card-body">
-                <ul
-                  class="nav nav-pills mb-3"
-                  id="reportDetailTabs"
-                  role="tablist"
-                >
-                  <li class="nav-item" role="presentation">
-                    <button
-                      class="nav-link active"
-                      id="tab-summary-table"
-                      data-bs-toggle="pill"
-                      data-bs-target="#pane-summary-table"
-                      type="button"
-                      role="tab"
-                    >
-                      สรุปตามช่วงเวลา
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button
-                      class="nav-link"
-                      id="tab-jobs"
-                      data-bs-toggle="pill"
-                      data-bs-target="#pane-jobs"
-                      type="button"
-                      role="tab"
-                    >
-                      งานซ่อม / ใบรับรถ
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button
-                      class="nav-link"
-                      id="tab-vehicles"
-                      data-bs-toggle="pill"
-                      data-bs-target="#pane-vehicles"
-                      type="button"
-                      role="tab"
-                    >
-                      รถซื้อ–ขาย
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button
-                      class="nav-link"
-                      id="tab-stock"
-                      data-bs-toggle="pill"
-                      data-bs-target="#pane-stock"
-                      type="button"
-                      role="tab"
-                    >
-                      สต็อก &amp; อะไหล่
-                    </button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button
-                      class="nav-link"
-                      id="tab-pos"
-                      data-bs-toggle="pill"
-                      data-bs-target="#pane-pos"
-                      type="button"
-                      role="tab"
-                    >
-                      ใบเสร็จ POS
-                    </button>
-                  </li>
-                </ul>
-
-                <div class="tab-content">
-                  <!-- สรุปตามช่วงเวลา -->
-                  <div
-                    class="tab-pane fade show active"
-                    id="pane-summary-table"
-                    role="tabpanel"
-                  >
-                    <div class="table-responsive">
-                      <table
-                        class="table table-hover align-middle mb-0"
-                        id="summaryTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th>ช่วงเวลา</th>
-                            <th class="text-end">รายรับ</th>
-                            <th class="text-end">ต้นทุน</th>
-                            <th class="text-end">กำไรสุทธิ</th>
-                            <th class="text-end">จำนวนงานซ่อม</th>
-                            <th class="text-end">จำนวนรถขายแล้ว</th>
-                          </tr>
-                        </thead>
-                        <tbody id="summaryTableBody"></tbody>
-                      </table>
-                    </div>
-                    <div
-                      id="summaryTableEmpty"
-                      class="bm-empty-state mt-3 d-none"
-                    >
-                      ยังไม่มีข้อมูลในช่วงวันที่ที่เลือก
-                    </div>
-                  </div>
-
-                  <!-- งานซ่อม -->
-                  <div
-                    class="tab-pane fade"
-                    id="pane-jobs"
-                    role="tabpanel"
-                  >
-                    <div class="table-responsive">
-                      <table
-                        class="table table-hover align-middle mb-0"
-                        id="jobsReportTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th style="width: 130px">วันที่/เวลา</th>
-                            <th>ทะเบียน / รุ่น</th>
-                            <th>ลูกค้า / เบอร์</th>
-                            <th style="width: 120px" class="text-end">
-                              ยอดสุทธิ
-                            </th>
-                            <th style="width: 140px" class="text-center">
-                              สถานะงาน
-                            </th>
-                            <th style="width: 180px">หมายเหตุ</th>
-                          </tr>
-                        </thead>
-                        <tbody id="jobsReportBody"></tbody>
-                      </table>
-                    </div>
-                    <div
-                      id="jobsReportEmpty"
-                      class="bm-empty-state mt-3 d-none"
-                    >
-                      ยังไม่พบงานซ่อมในช่วงวันที่ที่เลือก
-                    </div>
-                  </div>
-
-                  <!-- รถซื้อ–ขาย -->
-                  <div
-                    class="tab-pane fade"
-                    id="pane-vehicles"
-                    role="tabpanel"
-                  >
-                    <div class="table-responsive">
-                      <table
-                        class="table table-hover align-middle mb-0"
-                        id="vehiclesReportTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th style="width: 130px">วันที่ซื้อ</th>
-                            <th>รุ่น / ทะเบียน</th>
-                            <th style="width: 120px" class="text-end">
-                              ราคาซื้อ
-                            </th>
-                            <th style="width: 140px" class="text-end">
-                              ราคาขาย
-                            </th>
-                            <th style="width: 120px" class="text-end">
-                              กำไร
-                            </th>
-                            <th style="width: 150px">สถานะ</th>
-                          </tr>
-                        </thead>
-                        <tbody id="vehiclesReportBody"></tbody>
-                      </table>
-                    </div>
-                    <div
-                      id="vehiclesReportEmpty"
-                      class="bm-empty-state mt-3 d-none"
-                    >
-                      ยังไม่พบข้อมูลรถซื้อ–ขายในช่วงวันที่ที่เลือก
-                    </div>
-                  </div>
-
-                  <!-- สต็อก & อะไหล่ -->
-                  <div
-                    class="tab-pane fade"
-                    id="pane-stock"
-                    role="tabpanel"
-                  >
-                    <div class="table-responsive">
-                      <table
-                        class="table table-hover align-middle mb-0"
-                        id="stockReportTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th>ชื่ออะไหล่</th>
-                            <th>หมวด</th>
-                            <th style="width: 110px" class="text-end">
-                              ทุน/หน่วย
-                            </th>
-                            <th style="width: 110px" class="text-end">
-                              ขาย/หน่วย
-                            </th>
-                            <th style="width: 110px" class="text-center">
-                              คงเหลือ
-                            </th>
-                            <th style="width: 140px" class="text-end">
-                              มูลค่าคงเหลือ
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody id="stockReportBody"></tbody>
-                      </table>
-                    </div>
-                    <div
-                      id="stockReportEmpty"
-                      class="bm-empty-state mt-3 d-none"
-                    >
-                      ยังไม่พบข้อมูลสต็อกในช่วงวันที่ที่เลือก
-                    </div>
-                  </div>
-
-                  <!-- ใบเสร็จ POS -->
-                  <div
-                    class="tab-pane fade"
-                    id="pane-pos"
-                    role="tabpanel"
-                  >
-                    <div class="table-responsive">
-                      <table
-                        class="table table-hover align-middle mb-0"
-                        id="posReportTable"
-                      >
-                        <thead>
-                          <tr>
-                            <th style="width: 130px">วันที่/เวลา</th>
-                            <th>เลขที่บิล / ประเภท</th>
-                            <th>ลูกค้า</th>
-                            <th style="width: 120px" class="text-end">
-                              ยอดสุทธิ
-                            </th>
-                            <th style="width: 130px">ช่องทางรับเงิน</th>
-                            <th style="width: 160px">หมายเหตุ</th>
-                          </tr>
-                        </thead>
-                        <tbody id="posReportBody"></tbody>
-                      </table>
-                    </div>
-                    <div
-                      id="posReportEmpty"
-                      class="bm-empty-state mt-3 d-none"
-                    >
-                      ยังไม่พบใบเสร็จ POS ในช่วงวันที่ที่เลือก
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- พื้นที่สำหรับกราฟ (ต่อยอดภายหลังได้) -->
-          <section class="mb-3">
-            <div class="bm-card">
-              <div class="bm-card-header">
-                <div>
-                  <h2 class="bm-card-title mb-0">
-                    พื้นที่แสดงกราฟสรุปรายงาน (ต่อยอดภายหลัง)
-                  </h2>
-                  <p class="bm-card-subtitle mb-0">
-                    ใช้ Canvas หรือไลบรารีกราฟอื่น ๆ ต่อเชื่อม Javascript
-                    ภายหลังได้
-                  </p>
-                </div>
-              </div>
-              <div class="bm-card-body">
-                <div
-                  class="border rounded-4 p-3"
-                  style="min-height: 220px; background-color: #f9fafb;"
-                >
-                  <div class="bm-empty-state mb-0">
-                    ยังไม่ได้วาดกราฟ – สามารถเชื่อมต่อข้อมูลจาก Firestore
-                    แล้ว plot กราฟในส่วนนี้ได้ภายหลัง
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </main>
+        <div class="d-none d-sm-block">
+          <a href="app.html" class="btn btn-light btn-sm">
+            <i class="bi bi-speedometer2 me-1"></i>กลับหน้า POS
+          </a>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- Bootstrap Bundle -->
+    <!-- Main content -->
+    <main class="container py-3">
+      <!-- ฟิลเตอร์ช่วงวันที่ -->
+      <div class="bm-field-group mb-3">
+        <div class="row g-2 align-items-end">
+          <div class="col-12 col-md-4">
+            <label class="form-label small">ตั้งแต่วันที่</label>
+            <input
+              type="date"
+              id="reportDateFrom"
+              class="form-control"
+            />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label small">ถึงวันที่</label>
+            <input
+              type="date"
+              id="reportDateTo"
+              class="form-control"
+            />
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label small">ช่วงด่วน</label>
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                id="reportRangeTodayBtn"
+                class="btn btn-outline-secondary btn-sm"
+              >
+                วันนี้
+              </button>
+              <button
+                type="button"
+                id="reportRange7Btn"
+                class="btn btn-outline-secondary btn-sm"
+              >
+                7 วันล่าสุด
+              </button>
+              <button
+                type="button"
+                id="reportRange30Btn"
+                class="btn btn-outline-secondary btn-sm"
+              >
+                30 วันล่าสุด
+              </button>
+              <button
+                type="button"
+                id="reportRefreshBtn"
+                class="btn btn-success btn-sm ms-auto"
+              >
+                <i class="bi bi-arrow-repeat me-1"></i>โหลดรายงาน
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- สรุปบนสุด -->
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-4">
+          <div class="bm-dash-mini">
+            <div class="label">รายได้รวมช่วงนี้</div>
+            <div class="value text-success" id="reportTotalRevenue">
+              0 บาท
+            </div>
+            <div class="small text-muted">
+              = งานซ่อม (ปิดบิลแล้ว) + ขายรถ
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-4">
+          <div class="bm-dash-mini">
+            <div class="label">งานซ่อม (ปิดบิลแล้ว)</div>
+            <div class="value text-primary" id="reportJobsCount">
+              0 งาน
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-4">
+          <div class="bm-dash-mini">
+            <div class="label">รถขายแล้ว</div>
+            <div class="value text-warning" id="reportVehiclesSoldCount">
+              0 คัน
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ตารางงานซ่อม -->
+      <div class="bm-dash-card bm-report-card mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="bm-report-section-title mb-0">
+            งานซ่อม (เฉพาะสถานะ: ปิดงานแล้ว)
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm align-middle bm-report-table">
+            <thead>
+              <tr>
+                <th style="width: 150px">วันที่</th>
+                <th>ทะเบียน / รุ่น</th>
+                <th>ลูกค้า</th>
+                <th style="width: 120px" class="text-end">ยอดสุทธิ</th>
+              </tr>
+            </thead>
+            <tbody id="reportJobsTableBody"></tbody>
+          </table>
+        </div>
+
+        <div
+          id="reportJobsEmpty"
+          class="bm-empty-state mt-2 d-none"
+        >
+          ยังไม่มีงานซ่อมที่ปิดบิลในช่วงวันที่นี้
+        </div>
+      </div>
+
+      <!-- ตารางรถซื้อ–ขาย -->
+      <div class="bm-dash-card bm-report-card mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="bm-report-section-title mb-0">
+            รถขายแล้ว ในช่วงวันที่นี้
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm align-middle bm-report-table">
+            <thead>
+              <tr>
+                <th>รุ่น / ทะเบียน</th>
+                <th style="width: 120px" class="text-end">ราคาซื้อ</th>
+                <th style="width: 120px" class="text-end">ราคาขาย</th>
+                <th style="width: 120px" class="text-end">กำไร</th>
+                <th style="width: 150px">วันที่ขาย</th>
+              </tr>
+            </thead>
+            <tbody id="reportVehiclesTableBody"></tbody>
+          </table>
+        </div>
+
+        <div
+          id="reportVehiclesEmpty"
+          class="bm-empty-state mt-2 d-none"
+        >
+          ยังไม่มีการขายรถในช่วงวันที่นี้
+        </div>
+      </div>
+    </main>
+
+    <!-- Scripts -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
 
-    <!-- Inline script เบา ๆ สำหรับ quick-range + label เวลา (ไม่พึ่งไฟล์อื่น) -->
-    <script>
-      (function () {
-        function formatDateInput(d) {
-          const year = d.getFullYear();
-          const month = String(d.getMonth() + 1).padStart(2, "0");
-          const day = String(d.getDate()).padStart(2, "0");
-          return year + "-" + month + "-" + day;
-        }
-
-        function setQuickRange(type) {
-          const today = new Date();
-          let from = new Date(today);
-
-          if (type === "today") {
-            // from = today
-          } else if (type === "7") {
-            from.setDate(today.getDate() - 6);
-          } else if (type === "30") {
-            from.setDate(today.getDate() - 29);
-          } else if (type === "month") {
-            from = new Date(today.getFullYear(), today.getMonth(), 1);
-          }
-
-          const fromInput = document.getElementById("filterDateFrom");
-          const toInput = document.getElementById("filterDateTo");
-
-          if (fromInput && toInput) {
-            fromInput.value = formatDateInput(from);
-            toInput.value = formatDateInput(today);
-            updateDateRangeLabel();
-          }
-        }
-
-        function updateDateRangeLabel() {
-          const from = document.getElementById("filterDateFrom").value;
-          const to = document.getElementById("filterDateTo").value;
-          const label = document.getElementById("reportDateRangeLabel");
-
-          if (!label) return;
-
-          if (!from && !to) {
-            label.textContent = "ยังไม่ได้เลือกช่วงเวลา";
-            return;
-          }
-
-          if (from && to) {
-            label.textContent = "ช่วงวันที่ " + from + " ถึง " + to;
-          } else if (from && !to) {
-            label.textContent = "ตั้งแต่วันที่ " + from;
-          } else if (!from && to) {
-            label.textContent = "ถึงวันที่ " + to;
-          }
-        }
-
-        function updateGeneratedAtLabel() {
-          const el = document.getElementById("reportGeneratedAt");
-          if (!el) return;
-          const now = new Date();
-          const hh = String(now.getHours()).padStart(2, "0");
-          const mm = String(now.getMinutes()).padStart(2, "0");
-          const ss = String(now.getSeconds()).padStart(2, "0");
-          el.textContent = hh + ":" + mm + ":" + ss;
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-          // quick range buttons
-          document
-            .querySelectorAll("[data-quick-range]")
-            .forEach(function (btn) {
-              btn.addEventListener("click", function () {
-                const type = this.getAttribute("data-quick-range");
-                setQuickRange(type);
-              });
-            });
-
-          const fromInput = document.getElementById("filterDateFrom");
-          const toInput = document.getElementById("filterDateTo");
-          if (fromInput) fromInput.addEventListener("change", updateDateRangeLabel);
-          if (toInput) toInput.addEventListener("change", updateDateRangeLabel);
-
-          const filterForm = document.getElementById("reportFilterForm");
-          if (filterForm) {
-            filterForm.addEventListener("submit", function (e) {
-              e.preventDefault();
-              updateDateRangeLabel();
-              updateGeneratedAtLabel();
-              // จุดต่อยอด: ดึงข้อมูลจริงจาก Firestore
-              // แล้วเติมลงตารางผ่าน JS ภายหลัง
-            });
-          }
-
-          const resetBtn = document.getElementById("resetFilterBtn");
-          if (resetBtn) {
-            resetBtn.addEventListener("click", function () {
-              setTimeout(updateDateRangeLabel, 0);
-            });
-          }
-
-          // ตั้งค่าเริ่มต้น: quick range = 30 วันล่าสุด
-          setQuickRange("30");
-          updateGeneratedAtLabel();
-        });
-      })();
-    </script>
+    <script type="module" src="./js/firebase-init.js"></script>
+    <script type="module" src="./js/utils.js"></script>
     <script type="module" src="./js/reports.js"></script>
   </body>
-
 </html>
-
