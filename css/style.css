@@ -1295,3 +1295,102 @@ h6 {
   color: #64748b;  /* เทา */
   font-size: 0.8rem;
 }
+
+.bm-stock-row {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+}
+
+.bm-stock-row td {
+  border: none !important;
+  padding: 6px 4px !important;
+}
+
+.bm-stock-row .danger {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+/* ปุ่มแก้ไขในหน้าสต็อก */
+.stock-edit-btn {
+  border-color: #dc3545 !important;  /* เส้นแดง */
+  color: #dc3545 !important;         /* ตัวหนังสือแดง */
+  font-weight: 600;
+}
+
+.stock-edit-btn:hover {
+  background-color: #dc3545 !important; /* พื้นหลังแดงตอน hover */
+  color: #ffffff !important;            /* ตัวหนังสือขาว */
+}
+
+#vehiclesTabs {
+  display: flex;
+  flex-wrap: nowrap;    /* ❗ ไม่ให้ตัดบรรทัด */
+  overflow-x: auto;      /* ❗ เลื่อนได้ถ้ายาวเกิน */
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+#vehiclesTabs .nav-link {
+  white-space: nowrap;   /* ❗ ไม่ให้ตัดคำลงบรรทัดใหม่ */
+  flex-shrink: 0;        /* ❗ ห้ามปุ่มถูกบีบเล็ก */
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--bm-primary), var(--bm-primary-strong));
+  color: #022c22 !important;
+  border: none;
+}
+
+/* Active */
+#vehiclesTabs .nav-link.active {
+  background: linear-gradient(135deg, var(--bm-primary-strong), #16a34a);
+  color: #022c22 !important;
+}
+
+#vehiclesTabs {
+  display: flex;
+  gap: 8px;
+}
+
+#vehiclesTabs .nav-item {
+  flex: 1;
+}
+
+#vehiclesTabs .nav-link {
+  width: 100%;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 14px;
+  white-space: nowrap;
+  font-size: clamp(12px, 3.8vw, 16px);
+}
+
+/* ===== Reports – สีหัวการ์ด + ตาราง ===== */
+
+.bm-report-section-title {
+  font-weight: 700;
+  color: var(--bm-primary-strong); /* เขียวเข้มตามระบบ */
+}
+
+.bm-report-card {
+  border-radius: 18px;
+  border: none;
+  box-shadow: 0 16px 35px rgba(15, 118, 110, 0.12);
+}
+
+/* หัวตารางให้มีพื้นจาง ๆ เขียวตามระบบ */
+.bm-report-table thead th {
+  background: rgba(16, 185, 129, 0.08);  /* เขียวจาง */
+  color: #022c22;                         /* เขียวเข้มอ่านง่าย */
+  border-bottom: none;
+}
+
+/* แถวสลับสีอ่อน ๆ */
+.bm-report-table tbody tr:nth-child(even) {
+  background: rgba(15, 118, 110, 0.02);
+}
