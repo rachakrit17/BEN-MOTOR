@@ -32,12 +32,27 @@ function safeNumber(v, fallback = 0) {
   return n;
 }
 
+// คืน Date 00:00 ของวันนี้
+function getStartOfToday() {
+  const now = new Date();
+  return new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
+}
+
 const jobsCol = collection(db, "jobs");
 const stockCol = collection(db, "stock");
 const vehiclesCol = collection(db, "vehicles");
 
 // -----------------------------
 // โหลดสรุปงานซ่อมวันนี้ + งานด่วน + รถค้างในอู่
+// + รวม "ยอดขายรถวันนี้" เข้าไปในยอดวันนี้ด้วย
 // -----------------------------
 async function loadTodayJobsSummary() {
   const totalEl = $("dashTotalToday");
@@ -56,26 +71,25 @@ async function loadTodayJobsSummary() {
     return;
   }
 
+  // ยอดวันนี้ = งานซ่อมที่ปิดบิลแล้ว + ยอดขายรถวันนี้
   let totalToday = 0;
+  // จำนวนงานซ่อมวันนี้
   let jobsToday = 0;
+  // รถค้างในอู่ (งานที่ยังไม่ done)
   let pendingJobsCount = 0;
   const urgentJobs = [];
 
-  const now = new Date();
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0,
-    0
-  );
+  const startOfToday = getStartOfToday();
 
   try {
-    const snap = await getDocs(jobsCol);
+    // ดึง jobs + vehicles มาพร้อมกัน
+    const [jobsSnap, vehiclesSnap] = await Promise.all([
+      getDocs(jobsCol),
+      getDocs(vehiclesCol),
+    ]);
 
-    snap.forEach((docSnap) => {
+    // ---------- งานซ่อม ----------
+    jobsSnap.forEach((docSnap) => {
       const data = docSnap.data() || {};
 
       const createdAt =
@@ -113,17 +127,19 @@ async function loadTodayJobsSummary() {
       const customerName = customer.name || data.customerName || "";
       const customerPhone = customer.phone || data.customerPhone || "";
 
-      // นับรถที่ยังค้างในอู่ = งานที่ยังไม่ปิดสถานะ
+      // รถค้างในอู่ = ทุกงานที่ยังไม่ done
       if (status !== "done") {
         pendingJobsCount += 1;
       }
 
+      // งานที่ไม่ใช่วันนี้ ตัดออก
       if (!createdAt || createdAt < startOfToday) {
         return;
       }
 
       jobsToday += 1;
 
+      // นับยอดเฉพาะงานที่ปิดบิลแล้ว
       if (status === "done") {
         totalToday += safeNumber(net, 0);
       }
@@ -142,6 +158,38 @@ async function loadTodayJobsSummary() {
       }
     });
 
+    // ---------- ยอดขายรถวันนี้ ----------
+    vehiclesSnap.forEach((docSnap) => {
+      const data = docSnap.data() || {};
+
+      const status = data.status || "";
+      if (status !== "sold") return; // นับเฉพาะรถที่ขายแล้ว
+
+      const soldAt =
+        toJsDate(
+          data.soldAt ||
+            data.sellDate ||
+            data.sold_on ||
+            data.updatedAt ||
+            data.createdAt
+        ) || null;
+
+      if (!soldAt || soldAt < startOfToday) return; // ไม่ใช่วันนี้ ตัดออก
+
+      const sellPrice = safeNumber(
+        data.sellPrice ??
+          data.priceSell ??
+          data.totalSell ??
+          data.salePrice ??
+          0,
+        0
+      );
+
+      // เพิ่มยอดขายรถวันนี้เข้าไปในยอดรวม
+      totalToday += sellPrice;
+    });
+
+    // ---------- อัปเดต UI ----------
     if (totalEl) {
       totalEl.textContent = `${formatCurrency(totalToday)} บาท`;
     }
@@ -206,6 +254,87 @@ async function loadTodayJobsSummary() {
 }
 
 // -----------------------------
+// โหลดสรุป "ซื้อรถวันนี้ / ซื้ออะไหล่วันนี้"
+// -----------------------------
+async function loadTodayBuySummary() {
+  const vehiclesTodayEl = $("dashVehiclesBuyToday");
+  const partsQtyTodayEl = $("dashPartsBuyQtyToday");
+  const partsAmountTodayEl = $("dashPartsBuyAmountToday");
+
+  // ถ้าไม่ได้วางการ์ด 3 ใบนี้ไว้ ก็ไม่ต้องทำอะไร
+  if (!vehiclesTodayEl && !partsQtyTodayEl && !partsAmountTodayEl) {
+    return;
+  }
+
+  const startOfToday = getStartOfToday();
+
+  let vehiclesToday = 0;
+  let partsQtyToday = 0;
+  let partsAmountToday = 0;
+
+  try {
+    // 1) ซื้อรถวันนี้ = vehicles ที่ createdAt / buyDate เป็นวันนี้
+    const vehiclesSnap = await getDocs(vehiclesCol);
+    vehiclesSnap.forEach((docSnap) => {
+      const data = docSnap.data() || {};
+      const createdAt =
+        toJsDate(
+          data.buyDate ||
+            data.createdAt ||
+            data.created_at ||
+            data.createdOn
+        ) || null;
+
+      if (!createdAt || createdAt < startOfToday) return;
+      vehiclesToday += 1;
+    });
+
+    // 2) ซื้ออะไหล่วันนี้ = stock ที่มีวันที่รับเข้าเป็นวันนี้
+    //    (เดาว่า field จะประมาณ receivedAt / receivedDate / createdAt)
+    const stockSnap = await getDocs(stockCol);
+    stockSnap.forEach((docSnap) => {
+      const data = docSnap.data() || {};
+
+      const receivedAt =
+        toJsDate(
+          data.receivedAt ||
+            data.receivedDate ||
+            data.importDate ||
+            data.createdAt ||
+            data.created_at
+        ) || null;
+
+      if (!receivedAt || receivedAt < startOfToday) return;
+
+      const qty = safeNumber(
+        data.qty ?? data.quantity ?? data.stock ?? 0,
+        0
+      );
+      const costPerUnit = safeNumber(
+        data.cost ?? data.costPerUnit ?? data.priceCost ?? data.priceBuy ?? 0,
+        0
+      );
+
+      partsQtyToday += qty;
+      partsAmountToday += qty * costPerUnit;
+    });
+
+    if (vehiclesTodayEl) {
+      vehiclesTodayEl.textContent = `${vehiclesToday} คัน`;
+    }
+    if (partsQtyTodayEl) {
+      partsQtyTodayEl.textContent = `${partsQtyToday} ชิ้น`;
+    }
+    if (partsAmountTodayEl) {
+      partsAmountTodayEl.textContent =
+        `${formatCurrency(partsAmountToday)} บาท`;
+    }
+  } catch (error) {
+    console.error("โหลดสรุปซื้อรถ/อะไหล่วันนี้ไม่สำเร็จ:", error);
+  }
+}
+
+// -----------------------------
 // โหลดสรุปอะไหล่ใกล้หมด
 // -----------------------------
 async function loadLowStockSummary() {
@@ -256,9 +385,9 @@ async function loadLowStockSummary() {
         `;
       } else {
         const itemsHtml = lowItems
-  .slice(0, 5)
-  .map((item) => {
-    return `
+          .slice(0, 5)
+          .map((item) => {
+            return `
       <div class="bm-dash-vehicle-item d-flex justify-content-between align-items-center mb-2 p-2 rounded-3 border">
         <div class="me-2">
           <div class="fw-semibold text-danger">
@@ -271,8 +400,8 @@ async function loadLowStockSummary() {
         <span class="fw-bold text-danger">${item.qty}/${item.minStock}</span>
       </div>
     `;
-  })
-  .join("");
+          })
+          .join("");
 
         listEl.innerHTML = itemsHtml;
       }
@@ -434,6 +563,7 @@ export async function initDashboard() {
 
   await Promise.all([
     loadTodayJobsSummary(),
+    loadTodayBuySummary(), // ✅ สรุปซื้อรถ/อะไหล่วันนี้
     loadLowStockSummary(),
     loadVehiclesSummary(),
   ]);

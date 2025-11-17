@@ -399,20 +399,28 @@ function openJobDetail(job) {
   const totalText = formatCurrency(job.netTotal || 0);
 
   contentEl.innerHTML = `
-    <div class="mb-3">
-      <div class="fw-semibold">ข้อมูลลูกค้า</div>
-      <div class="text-muted small">
-        ชื่อ: ${job.customerName || "-"}<br />
-        เบอร์โทร: ${job.customerPhone || "-"}
-      </div>
+  <div class="mb-3">
+    <div class="fw-semibold">ข้อมูลลูกค้า</div>
+    <div class="text-muted small">
+      ชื่อ: ${job.customerName || "-"}<br />
+      เบอร์โทร: ${job.customerPhone || "-"}
     </div>
-    <div class="mb-3">
-      <div class="fw-semibold">ข้อมูลรถ</div>
-      <div class="text-muted small">
-        ทะเบียน: ${job.plate || "-"}<br />
-        รุ่น/ยี่ห้อ: ${job.model || "-"}
-      </div>
+  </div>
+
+  <div class="mb-3">
+    <div class="fw-semibold">อาการที่ลูกค้าแจ้ง</div>
+    <div class="text-muted small">
+      ${job.raw.customerNote || "-"}
     </div>
+  </div>
+
+  <div class="mb-3">
+    <div class="fw-semibold">ข้อมูลรถ</div>
+    <div class="text-muted small">
+      ทะเบียน: ${job.plate || "-"}<br />
+      รุ่น/ยี่ห้อ: ${job.model || "-"}
+    </div>
+  </div>
     <div class="mb-3">
       <div class="fw-semibold d-flex justify-content-between align-items-center">
         <span>รายการซ่อม / อะไหล่</span>

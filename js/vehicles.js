@@ -227,6 +227,13 @@ function renderSoldCards() {
             </span>
           </div>
 
+<div>
+  <strong>ค่าใช้จ่ายซ่อม / ทำสภาพ:</strong>
+  <span class="text-primary fw-semibold">
+    ${formatCurrency(extraCost)}฿
+  </span>
+</div>
+
           <div>
             <strong>ราคาขาย:</strong>
             <span class="text-danger fw-bold">
