@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้าเปิดบิลซ่อม -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – เปิดบิลซ่อมใหม่</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้าเปิดบิลซ่อม
+         มีฟอร์มข้อมูลหลัก, รายการอะไหล่, รายการค่าแรง, และสรุปยอด
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">เปิดบิลซ่อมใหม่</h1>
+            <p class="small text-muted mb-0">
+              บันทึกข้อมูลลูกค้า รถ รายการอะไหล่ ค่าแรง และสรุปยอดบิลซ่อม
+            </p>
+          </div>
+          <span class="badge text-bg-secondary" id="openBillTodayLabel">
+            วันนี้
+          </span>
+        </div>
+
+        <!-- ฟอร์มหลักสำหรับเปิดบิลซ่อม -->
+        <!-- ใช้ novalidate และจัดการ validate ด้วย JS -->
+        <form id="openBillForm" novalidate>
+          <!-- ================= ข้อมูลหลักของบิลซ่อม ================= -->
+          <section class="mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="h6 fw-semibold mb-3">ข้อมูลหลักของบิลซ่อม</h2>
+                <div class="row g-2">
+                  <div class="col-12 col-md-4">
+                    <label for="jobDate" class="form-label small mb-1">วันที่</label>
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="jobDate"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      กรุณาเลือกวันที่เปิดบิล
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <label for="customerName" class="form-label small mb-1">
+                      ชื่อลูกค้า
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="customerName"
+                      placeholder="กรอกชื่อหรือลูกค้าใหม่"
+                      list="customerNameDatalist"
+                      required
+                    />
+                    <datalist id="customerNameDatalist"></datalist>
+                    <div class="invalid-feedback">
+                      กรุณากรอกชื่อลูกค้า
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <label for="customerPhone" class="form-label small mb-1">
+                      เบอร์โทรลูกค้า
+                    </label>
+                    <input
+                      type="tel"
+                      class="form-control form-control-sm"
+                      id="customerPhone"
+                      placeholder="เช่น 0812345678"
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <label for="plate" class="form-label small mb-1">
+                      ทะเบียนรถ
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="plate"
+                      placeholder="ทะเบียนรถ"
+                      list="plateDatalist"
+                      required
+                    />
+                    <datalist id="plateDatalist"></datalist>
+                    <div class="invalid-feedback">
+                      กรุณากรอกทะเบียนรถ
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <label for="brand" class="form-label small mb-1">
+                      ยี่ห้อ
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="brand"
+                      placeholder="เช่น Honda, Yamaha"
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <label for="model" class="form-label small mb-1">
+                      รุ่น
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="model"
+                      placeholder="เช่น Click, Wave"
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <label for="mileage" class="form-label small mb-1">
+                      เลขไมล์ (กม.)</label
+                    >
+                    <input
+                      type="number"
+                      min="0"
+                      class="form-control form-control-sm"
+                      id="mileage"
+                      placeholder="กรอกเลขไมล์โดยประมาณ"
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-8">
+                    <label for="problem" class="form-label small mb-1">
+                      อาการ/ปัญหาที่ลูกค้าแจ้ง
+                    </label>
+                    <textarea
+                      id="problem"
+                      class="form-control form-control-sm"
+                      rows="2"
+                      placeholder="อธิบายอาการที่ลูกค้าแจ้งหรือสิ่งที่ตรวจพบคร่าว ๆ"
+                      required
+                    ></textarea>
+                    <div class="invalid-feedback">
+                      กรุณากรอกอาการหรือปัญหาของรถ
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <label for="priority" class="form-label small mb-1">
+                      ระดับความด่วน
+                    </label>
+                    <select
+                      id="priority"
+                      class="form-select form-select-sm"
+                      required
+                    >
+                      <option value="normal" selected>ปกติ</option>
+                      <option value="high">ด่วนมาก</option>
+                      <option value="low">ไม่ด่วน</option>
+                    </select>
+                  </div>
+                </div>
+
+                <p class="small text-muted mt-3 mb-0">
+                  ระบบจะพยายามดึงข้อมูลลูกค้าและรถจากประวัติงานซ่อมหรือรถที่เคยซื้อขาย
+                  เพื่อช่วยเติมข้อมูลให้อัตโนมัติเมื่อพิมพ์ชื่อหรือทะเบียน
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= รายการอะไหล่ที่ใช้ในงานซ่อม ================= -->
+          <section class="mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h2 class="h6 fw-semibold mb-0">รายการอะไหล่ที่ใช้</h2>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    type="button"
+                    id="addPartRowBtn"
+                  >
+                    <i class="bi bi-plus-lg me-1"></i> เพิ่มรายการอะไหล่
+                  </button>
+                </div>
+                <p class="small text-muted mb-2">
+                  เลือกอะไหล่จากสต๊อก ปรับจำนวน และราคาต่อหน่วย
+                  ระบบจะหักสต๊อกและคำนวณยอดให้อัตโนมัติเมื่อบันทึกบิล
+                </p>
+
+                <!-- สถานะโหลดข้อมูลสต๊อก -->
+                <div
+                  id="stockLoadingState"
+                  class="alert alert-light border small py-2 mb-2"
+                >
+                  กำลังโหลดข้อมูลสต๊อกอะไหล่...
+                </div>
+
+                <!-- ตารางรายการอะไหล่ -->
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead class="small text-muted">
+                      <tr>
+                        <th style="min-width: 160px;">ชื่ออะไหล่จากสต๊อก</th>
+                        <th class="text-end" style="width: 130px;">จำนวน</th>
+                        <th class="text-end" style="width: 130px;">ราคาต่อหน่วย (฿)</th>
+                        <th class="text-end" style="width: 130px;">รวม (฿)</th>
+                        <th class="text-center" style="width: 40px;">ลบ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="partsTbody">
+                      <!-- แถวรายการอะไหล่จะถูกสร้างด้วย JS -->
+                    </tbody>
+                  </table>
+                </div>
+                <p class="small text-muted mt-2 mb-0">
+                  ถ้าไม่ใช้อะไหล่ในงานนี้ สามารถข้ามส่วนนี้ได้ แต่ควรระบุค่าแรงในส่วนถัดไป
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= รายการค่าแรง ================= -->
+          <section class="mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h2 class="h6 fw-semibold mb-0">รายการค่าแรง</h2>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    type="button"
+                    id="addLaborRowBtn"
+                  >
+                    <i class="bi bi-plus-lg me-1"></i> เพิ่มรายการค่าแรง
+                  </button>
+                </div>
+                <p class="small text-muted mb-2">
+                  ระบุค่าแรงเช่น ค่าถอดประกอบ, ค่าล้าง, ค่าตั้งศูนย์ ฯลฯ
+                  เพื่อให้เห็นโครงสร้างรายได้ชัดเจน
+                </p>
+
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead class="small text-muted">
+                      <tr>
+                        <th>รายการค่าแรง</th>
+                        <th class="text-end" style="width: 150px;">ราคา (฿)</th>
+                        <th class="text-center" style="width: 40px;">ลบ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="laborTbody">
+                      <!-- แถวรายการค่าแรงจะถูกสร้างด้วย JS -->
+                    </tbody>
+                  </table>
+                </div>
+                <p class="small text-muted mt-2 mb-0">
+                  ถ้าไม่มีค่าแรง สามารถปล่อยว่างได้ โดยระบบจะคิดเฉพาะค่าอะไหล่
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ================= สรุปยอดและปุ่มบันทึก ================= -->
+          <section class="mb-5">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="h6 fw-semibold mb-3">สรุปยอดบิลซ่อม</h2>
+                <div class="row g-2 align-items-center mb-2">
+                  <div class="col-6 col-md-4">
+                    <div class="small text-muted">รวมค่าอะไหล่</div>
+                    <div class="h6 mb-0 fw-semibold" id="partsTotalDisplay">
+                      0.00 ฿
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-4">
+                    <div class="small text-muted">รวมค่าแรง</div>
+                    <div class="h6 mb-0 fw-semibold" id="laborTotalDisplay">
+                      0.00 ฿
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="small text-muted">ยอดรวมทั้งหมด</div>
+                    <div class="h4 mb-0 fw-bold text-primary" id="grandTotalDisplay">
+                      0.00 ฿
+                    </div>
+                  </div>
+                </div>
+                <p class="small text-muted mb-3">
+                  ระบบจะบันทึกบิลซ่อมในฐานข้อมูลงานซ่อม (jobs) ปรับลดสต๊อกอะไหล่
+                  สร้างธุรกรรมรายรับ (transactions) และบันทึกเหตุการณ์ (activityLogs)
+                  ให้อัตโนมัติเมื่อกดบันทึก
+                </p>
+
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary flex-fill"
+                    id="resetFormBtn"
+                  >
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> ล้างฟอร์ม
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary flex-fill"
+                    id="saveBillBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="saveBillSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="saveBillBtnText">บันทึกบิลซ่อม</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </form>
+
+        <!-- ระยะห่างด้านล่างไม่ให้เนื้อหาชนกับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยสำหรับเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddVehicleBtn">
+              <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         หน้าปัจจุบัน: เปิดบิล
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link active">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า open-bill.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // ฟอร์มเปิดบิล
+      const openBillForm = document.getElementById("openBillForm");
+      const jobDateInput = document.getElementById("jobDate");
+      const openBillTodayLabel = document.getElementById("openBillTodayLabel");
+      const customerNameInput = document.getElementById("customerName");
+      const customerPhoneInput = document.getElementById("customerPhone");
+      const plateInput = document.getElementById("plate");
+      const brandInput = document.getElementById("brand");
+      const modelInput = document.getElementById("model");
+      const mileageInput = document.getElementById("mileage");
+      const problemInput = document.getElementById("problem");
+      const prioritySelect = document.getElementById("priority");
+      const customerNameDatalist = document.getElementById("customerNameDatalist");
+      const plateDatalist = document.getElementById("plateDatalist");
+
+      // รายการอะไหล่
+      const stockLoadingState = document.getElementById("stockLoadingState");
+      const partsTbody = document.getElementById("partsTbody");
+      const addPartRowBtn = document.getElementById("addPartRowBtn");
+
+      // รายการค่าแรง
+      const laborTbody = document.getElementById("laborTbody");
+      const addLaborRowBtn = document.getElementById("addLaborRowBtn");
+
+      // สรุปยอด
+      const partsTotalDisplay = document.getElementById("partsTotalDisplay");
+      const laborTotalDisplay = document.getElementById("laborTotalDisplay");
+      const grandTotalDisplay = document.getElementById("grandTotalDisplay");
+      const resetFormBtn = document.getElementById("resetFormBtn");
+      const saveBillBtn = document.getElementById("saveBillBtn");
+      const saveBillSpinner = document.getElementById("saveBillSpinner");
+      const saveBillBtnText = document.getElementById("saveBillBtnText");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // ============================================================
+      // สถานะภายในหน้า
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      // แผนที่สต๊อกจาก Firestore: stockId -> ข้อมูลสต๊อก
+      const stockMap = {};
+      let stockOptionsHtml = ""; // ใช้สำหรับเติมใน select ของอะไหล่
+
+      // ประวัติสำหรับ auto-complete
+      let historyRecords = [];
+
+      // ป้องกันกดบันทึกหลายครั้ง
+      let isSavingBill = false;
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: รูปแบบตัวเลขและวันที่ไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        // ยังไม่มีเอกสารของ user นี้ → เช็คว่ามี user คนอื่นแล้วหรือยัง
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: สร้างแถวรายการอะไหล่ในตาราง
+      // ============================================================
+      function createPartRow() {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>
+            <select class="form-select form-select-sm part-stock-select">
+              <option value="">เลือกอะไหล่จากสต๊อก</option>
+              ${stockOptionsHtml}
+            </select>
+          </td>
+          <td class="text-end">
+            <div class="input-group input-group-sm justify-content-end">
+              <button
+                class="btn btn-outline-secondary btn-sm part-qty-decrease"
+                type="button"
+              >
+                <i class="bi bi-dash"></i>
+              </button>
+              <input
+                type="number"
+                class="form-control form-control-sm text-end part-qty-input"
+                value="1"
+                min="1"
+              />
+              <button
+                class="btn btn-outline-secondary btn-sm part-qty-increase"
+                type="button"
+              >
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+          </td>
+          <td class="text-end">
+            <input
+              type="number"
+              class="form-control form-control-sm text-end part-unit-price-input"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+            />
+          </td>
+          <td class="text-end">
+            <span class="part-line-total-text">0.00</span> ฿
+          </td>
+          <td class="text-center">
+            <button
+              class="btn btn-outline-danger btn-sm part-remove-row-btn"
+              type="button"
+              aria-label="ลบรายการอะไหล่นี้"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </td>
+        `;
+
+        return tr;
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: สร้างแถวรายการค่าแรง
+      // ============================================================
+      function createLaborRow() {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <input
+              type="text"
+              class="form-control form-control-sm labor-name-input"
+              placeholder="เช่น ค่าตั้งโซ่, ค่าล้างรถ"
+            />
+          </td>
+          <td class="text-end">
+            <input
+              type="number"
+              class="form-control form-control-sm text-end labor-price-input"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+            />
+          </td>
+          <td class="text-center">
+            <button
+              class="btn btn-outline-danger btn-sm labor-remove-row-btn"
+              type="button"
+              aria-label="ลบรายการค่าแรงนี้"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </td>
+        `;
+        return tr;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: คำนวณยอดรวมจากตารางอะไหล่และค่าแรง
+      // ============================================================
+      function recalcTotals() {
+        let partsTotal = 0;
+        let laborTotal = 0;
+
+        // รวมค่าอะไหล่จากทุกแถวที่เลือกสต๊อกและมีจำนวน/ราคา
+        partsTbody.querySelectorAll("tr").forEach((tr) => {
+          const select = tr.querySelector(".part-stock-select");
+          const qtyInput = tr.querySelector(".part-qty-input");
+          const priceInput = tr.querySelector(".part-unit-price-input");
+          const totalSpan = tr.querySelector(".part-line-total-text");
+
+          const stockId = select ? select.value : "";
+          let qty = qtyInput ? parseFloat(qtyInput.value) : 0;
+          let unitPrice = priceInput ? parseFloat(priceInput.value) : 0;
+
+          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) {
+            if (totalSpan) {
+              totalSpan.textContent = "0.00";
+            }
+            return;
+          }
+
+          const lineTotal = qty * unitPrice;
+          partsTotal += lineTotal;
+
+          if (totalSpan) {
+            totalSpan.textContent = formatNumber(lineTotal);
+          }
+        });
+
+        // รวมค่าแรงจากทุกแถวที่ใส่ชื่อและราคา
+        laborTbody.querySelectorAll("tr").forEach((tr) => {
+          const nameInput = tr.querySelector(".labor-name-input");
+          const priceInput = tr.querySelector(".labor-price-input");
+
+          const name = nameInput ? nameInput.value.trim() : "";
+          const price = priceInput ? parseFloat(priceInput.value) : 0;
+
+          if (!name || isNaN(price) || price <= 0) {
+            return;
+          }
+
+          laborTotal += price;
+        });
+
+        const grandTotal = partsTotal + laborTotal;
+
+        if (partsTotalDisplay) {
+          partsTotalDisplay.textContent = formatNumber(partsTotal) + " ฿";
+        }
+        if (laborTotalDisplay) {
+          laborTotalDisplay.textContent = formatNumber(laborTotal) + " ฿";
+        }
+        if (grandTotalDisplay) {
+          grandTotalDisplay.textContent = formatNumber(grandTotal) + " ฿";
+        }
+
+        return { partsTotal, laborTotal, grandTotal };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: อ่านรายการอะไหล่จาก DOM เพื่อเตรียมบันทึกลง Firestore
+      // ============================================================
+      function collectPartItemsForSave() {
+        const items = [];
+        let partsTotal = 0;
+
+        partsTbody.querySelectorAll("tr").forEach((tr) => {
+          const select = tr.querySelector(".part-stock-select");
+          const qtyInput = tr.querySelector(".part-qty-input");
+          const priceInput = tr.querySelector(".part-unit-price-input");
+
+          if (!select || !qtyInput || !priceInput) return;
+
+          const stockId = select.value;
+          const qty = parseFloat(qtyInput.value);
+          const unitPrice = parseFloat(priceInput.value);
+
+          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) {
+            return; // ข้ามแถวที่ข้อมูลไม่ครบ
+          }
+
+          const lineTotal = qty * unitPrice;
+          partsTotal += lineTotal;
+
+          const stockData = stockMap[stockId] || {};
+          const stockName =
+            stockData.name ||
+            (select.options[select.selectedIndex]
+              ? select.options[select.selectedIndex].textContent
+              : "");
+
+          items.push({
+            stockId,
+            stockName,
+            qty,
+            unitPrice,
+            lineTotal,
+          });
+        });
+
+        return { items, partsTotal };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: อ่านรายการค่าแรงจาก DOM เพื่อเตรียมบันทึกลง Firestore
+      // ============================================================
+      function collectLaborItemsForSave() {
+        const laborItems = [];
+        let laborTotal = 0;
+
+        laborTbody.querySelectorAll("tr").forEach((tr) => {
+          const nameInput = tr.querySelector(".labor-name-input");
+          const priceInput = tr.querySelector(".labor-price-input");
+          if (!nameInput || !priceInput) return;
+
+          const name = nameInput.value.trim();
+          const price = parseFloat(priceInput.value);
+
+          if (!name || isNaN(price) || price <= 0) {
+            return; // ข้ามแถวที่ข้อมูลไม่ครบ
+          }
+
+          laborItems.push({
+            name,
+            price,
+          });
+          laborTotal += price;
+        });
+
+        return { laborItems, laborTotal };
+      }
+
+      // ============================================================
+      // จัดการปุ่ม Loading สำหรับบันทึกบิล
+      // ============================================================
+      function setSaveBillButtonLoading(isLoading) {
+        isSavingBill = isLoading;
+        if (!saveBillBtn || !saveBillSpinner || !saveBillBtnText) return;
+
+        if (isLoading) {
+          saveBillBtn.disabled = true;
+          saveBillSpinner.classList.remove("d-none");
+          saveBillBtnText.textContent = "กำลังบันทึกบิลซ่อม...";
+        } else {
+          saveBillBtn.disabled = false;
+          saveBillSpinner.classList.add("d-none");
+          saveBillBtnText.textContent = "บันทึกบิลซ่อม";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ล้างค่าฟอร์มเปิดบิลซ่อมกลับค่าเริ่มต้น
+      // ============================================================
+      function resetOpenBillForm() {
+        if (!openBillForm) return;
+
+        openBillForm.reset();
+
+        const today = getTodayISODateString();
+        if (jobDateInput) {
+          jobDateInput.value = today;
+        }
+        if (openBillTodayLabel) {
+          openBillTodayLabel.textContent = formatDateThaiFromString(today);
+        }
+
+        partsTbody.innerHTML = "";
+        laborTbody.innerHTML = "";
+
+        // เพิ่มแถวเริ่มต้นอย่างน้อย 1 แถว
+        if (stockOptionsHtml) {
+          partsTbody.appendChild(createPartRow());
+        }
+        laborTbody.appendChild(createLaborRow());
+
+        // เคลียร์ invalid state
+        customerNameInput.classList.remove("is-invalid");
+        plateInput.classList.remove("is-invalid");
+        problemInput.classList.remove("is-invalid");
+        jobDateInput.classList.remove("is-invalid");
+
+        recalcTotals();
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดข้อมูลสต๊อกจาก Firestore เพื่อใช้ใน select อะไหล่
+      // ============================================================
+      async function loadStockForParts(branchId) {
+        try {
+          const stockCol = collection(db, "stock");
+          const constraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+
+          // หมายเหตุ: อาจต้องสร้าง index ตามที่ Firestore แจ้งถ้าใช้ where + orderBy
+          const stockQueryRef = query(
+            stockCol,
+            ...constraints,
+            orderBy("name"),
+            limit(200)
+          );
+
+          const snap = await getDocs(stockQueryRef);
+
+          // เคลียร์ข้อมูลเดิม
+          Object.keys(stockMap).forEach((k) => delete stockMap[k]);
+
+          let optionsHtml = "";
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            stockMap[docSnap.id] = data;
+
+            const name = data.name || "-";
+            const code = data.code || "";
+            const salePrice = Number(data.salePrice) || 0;
+            const label = code ? `${code} - ${name}` : name;
+
+            optionsHtml += `<option value="${docSnap.id}" data-sale-price="${salePrice}">${label}</option>`;
+          });
+
+          stockOptionsHtml = optionsHtml;
+
+          if (stockLoadingState) {
+            if (snap.empty) {
+              stockLoadingState.className =
+                "alert alert-warning border small py-2 mb-2";
+              stockLoadingState.textContent =
+                "ยังไม่มีข้อมูลอะไหล่ในสต๊อก กรุณาเพิ่มอะไหล่ที่หน้า 'สต๊อก' ก่อน";
+            } else {
+              stockLoadingState.className =
+                "alert alert-light border small py-2 mb-2 d-none";
+            }
+          }
+
+          // หลังโหลดสต๊อกเสร็จ ถ้ายังไม่มีแถวอะไหล่ ให้สร้างแถวเริ่มต้น
+          if (!partsTbody.querySelector("tr")) {
+            if (stockOptionsHtml) {
+              partsTbody.appendChild(createPartRow());
+            }
+          } else {
+            // อัปเดต options ของ select ในทุกแถวให้เป็นข้อมูลล่าสุด
+            partsTbody.querySelectorAll(".part-stock-select").forEach((select) => {
+              const currentValue = select.value;
+              select.innerHTML =
+                `<option value="">เลือกอะไหล่จากสต๊อก</option>${stockOptionsHtml}`;
+              if (currentValue && stockMap[currentValue]) {
+                select.value = currentValue;
+              }
+            });
+          }
+        } catch (error) {
+          console.error("โหลดข้อมูลสต๊อกไม่สำเร็จ:", error);
+          if (stockLoadingState) {
+            stockLoadingState.className =
+              "alert alert-danger border small py-2 mb-2";
+            stockLoadingState.textContent =
+              "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง";
+          }
+          showToast(
+            "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดประวัติลูกค้า/รถเพื่อใช้ auto-complete
+      // ============================================================
+      async function loadAutocompleteHistory(branchId) {
+        const recordsMap = new Map();
+
+        try {
+          // ดึงข้อมูลจาก jobs
+          const jobsCol = collection(db, "jobs");
+          const jobsConstraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            jobsConstraints.push(where("branchId", "==", branchId));
+          }
+
+          // หมายเหตุ: ถ้า Firestore แจ้งต้องสร้าง index ให้สร้างตามลิงก์
+          const jobsQueryRef = query(
+            jobsCol,
+            ...jobsConstraints,
+            orderBy("createdAt", "desc"),
+            limit(30)
+          );
+          const jobsSnap = await getDocs(jobsQueryRef);
+
+          jobsSnap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const key = `${data.customerName || ""}|${data.customerPhone || ""}|${
+              data.plate || ""
+            }`;
+            if (!recordsMap.has(key)) {
+              recordsMap.set(key, {
+                customerName: data.customerName || "",
+                customerPhone: data.customerPhone || "",
+                plate: data.plate || "",
+                brand: data.brand || "",
+                model: data.model || "",
+              });
+            }
+          });
+
+          // ดึงข้อมูลจาก vehicles
+          const vehiclesCol = collection(db, "vehicles");
+          const vehiclesConstraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            vehiclesConstraints.push(where("branchId", "==", branchId));
+          }
+
+          const vehiclesQueryRef = query(
+            vehiclesCol,
+            ...vehiclesConstraints,
+            orderBy("createdAt", "desc"),
+            limit(30)
+          );
+          const vehiclesSnap = await getDocs(vehiclesQueryRef);
+
+          vehiclesSnap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const key = `| |${data.plate || ""}`; // เน้นทะเบียนจาก vehicles
+            if (!recordsMap.has(key)) {
+              recordsMap.set(key, {
+                customerName: "",
+                customerPhone: "",
+                plate: data.plate || "",
+                brand: data.brand || "",
+                model: data.model || "",
+              });
+            }
+          });
+
+          historyRecords = Array.from(recordsMap.values());
+
+          // เติม datalist สำหรับชื่อลูกค้าและทะเบียน
+          const nameSet = new Set();
+          const plateSet = new Set();
+
+          historyRecords.forEach((r) => {
+            if (r.customerName) nameSet.add(r.customerName);
+            if (r.plate) plateSet.add(r.plate);
+          });
+
+          if (customerNameDatalist) {
+            customerNameDatalist.innerHTML = "";
+            nameSet.forEach((name) => {
+              const opt = document.createElement("option");
+              opt.value = name;
+              customerNameDatalist.appendChild(opt);
+            });
+          }
+
+          if (plateDatalist) {
+            plateDatalist.innerHTML = "";
+            plateSet.forEach((plate) => {
+              const opt = document.createElement("option");
+              opt.value = plate;
+              plateDatalist.appendChild(opt);
+            });
+          }
+        } catch (error) {
+          console.error("โหลดข้อมูล auto-complete ไม่สำเร็จ:", error);
+          // ไม่จำเป็นต้องขึ้น error ใหญ่ แค่ไม่ได้ auto-fill
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: auto-fill จากประวัติโดยใช้ทะเบียน
+      // ============================================================
+      function autoFillFromHistoryByPlate(plateValue) {
+        const plate = (plateValue || "").trim();
+        if (!plate || historyRecords.length === 0) return;
+
+        const record = historyRecords.find((r) => r.plate === plate);
+        if (!record) return;
+
+        if (record.brand && brandInput) {
+          brandInput.value = record.brand;
+        }
+        if (record.model && modelInput) {
+          modelInput.value = record.model;
+        }
+        if (record.customerName && customerNameInput) {
+          customerNameInput.value = record.customerName;
+        }
+        if (record.customerPhone && customerPhoneInput) {
+          customerPhoneInput.value = record.customerPhone;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: auto-fill จากประวัติโดยใช้ชื่อลูกค้า
+      // ============================================================
+      function autoFillFromHistoryByCustomerName(nameValue) {
+        const name = (nameValue || "").trim();
+        if (!name || historyRecords.length === 0) return;
+
+        const record = historyRecords.find((r) => r.customerName === name);
+        if (!record) return;
+
+        if (record.customerPhone && customerPhoneInput) {
+          customerPhoneInput.value = record.customerPhone;
+        }
+        if (record.plate && plateInput) {
+          plateInput.value = record.plate;
+          autoFillFromHistoryByPlate(record.plate);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: บันทึกบิลซ่อมใหม่ลง Firestore
+      // ============================================================
+      async function saveNewJobBill() {
+        if (!currentUser || !currentUserProfile) {
+          showToast("ไม่พบข้อมูลผู้ใช้ กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "danger");
+          return;
+        }
+
+        if (isSavingBill) return;
+
+        // ล้าง invalid state ก่อน validate ใหม่
+        jobDateInput.classList.remove("is-invalid");
+        customerNameInput.classList.remove("is-invalid");
+        plateInput.classList.remove("is-invalid");
+        problemInput.classList.remove("is-invalid");
+
+        const jobDate = jobDateInput.value || "";
+        const customerName = customerNameInput.value.trim();
+        const customerPhone = customerPhoneInput.value.trim();
+        const plate = plateInput.value.trim();
+        const brand = brandInput.value.trim();
+        const model = modelInput.value.trim();
+        const mileageStr = mileageInput.value.trim();
+        const problem = problemInput.value.trim();
+        const priority = prioritySelect.value || "normal";
+
+        let hasError = false;
+
+        if (!jobDate) {
+          jobDateInput.classList.add("is-invalid");
+          hasError = true;
+        }
+        if (!customerName) {
+          customerNameInput.classList.add("is-invalid");
+          hasError = true;
+        }
+        if (!plate) {
+          plateInput.classList.add("is-invalid");
+          hasError = true;
+        }
+        if (!problem) {
+          problemInput.classList.add("is-invalid");
+          hasError = true;
+        }
+
+        const mileage = mileageStr ? parseFloat(mileageStr) : null;
+        if (mileageStr && (isNaN(mileage) || mileage < 0)) {
+          mileageInput.classList.add("is-invalid");
+          hasError = true;
+        } else {
+          mileageInput.classList.remove("is-invalid");
+        }
+
+        // อ่านรายการอะไหล่และค่าแรง
+        const { items, partsTotal } = collectPartItemsForSave();
+        const { laborItems, laborTotal } = collectLaborItemsForSave();
+        const totalAmount = partsTotal + laborTotal;
+
+        if (items.length === 0 && laborItems.length === 0) {
+          showToast(
+            "กรุณาเพิ่มรายการอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ",
+            "warning"
+          );
+          hasError = true;
+        }
+
+        if (hasError) {
+          showToast("กรุณากรอกข้อมูลให้ครบถ้วนก่อนบันทึกบิล", "warning");
+          return;
+        }
+
+        // staff/admin สามารถสร้างบิลซ่อมได้ทั้งคู่ตามสเปก
+        setSaveBillButtonLoading(true);
+
+        const branchId = currentUserProfile.branchId || null;
+
+        try {
+          // 1) บันทึกเอกสารงานซ่อมใน jobs
+          const jobDocRef = await addDoc(collection(db, "jobs"), {
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            date: jobDate,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            customerName,
+            customerPhone,
+            plate,
+            brand,
+            model,
+            mileage: mileage !== null ? mileage : null,
+            problem,
+            status: "repairing",
+            priority,
+            partsTotal,
+            laborTotal,
+            totalAmount,
+            items,
+            laborItems,
+            isDeleted: false,
+            branchId,
+          });
+
+          const jobId = jobDocRef.id;
+
+          // 2) อัปเดตสต๊อกอะไหล่สำหรับแต่ละรายการ
+          for (const item of items) {
+            const stockId = item.stockId;
+            const qtyUsed = item.qty;
+
+            if (!stockId || !stockMap[stockId]) continue;
+
+            const stockData = stockMap[stockId];
+            const currentQty = Number(stockData.qty) || 0;
+            const currentFastMoving = Number(stockData.fastMovingScore) || 0;
+            const newQty = Math.max(0, currentQty - qtyUsed);
+            const newFastMoving = currentFastMoving + qtyUsed;
+
+            const stockRef = doc(db, "stock", stockId);
+            await updateDoc(stockRef, {
+              qty: newQty,
+              fastMovingScore: newFastMoving,
+              updatedAt: serverTimestamp(),
+            });
+
+            // อัปเดตค่าในแผนที่ภายในด้วย
+            stockData.qty = newQty;
+            stockData.fastMovingScore = newFastMoving;
+          }
+
+          // 3) เพิ่มเอกสารธุรกรรมรายรับ (transactions)
+          const txnDescription = `ค่าซ่อมรถ ทะเบียน ${plate} (${customerName})`;
+          await addDoc(collection(db, "transactions"), {
+            date: jobDate,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            type: "income",
+            category: "ค่าซ่อม",
+            description: txnDescription,
+            amount: totalAmount,
+            method: "cash",
+            sourceType: "job",
+            sourceId: jobId,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          });
+
+          // 4) บันทึก activityLogs สำหรับ job_created
+          const logMessage = `เปิดบิลซ่อมใหม่ให้ลูกค้า ${customerName} ทะเบียน ${plate} รวม ${formatNumber(
+            totalAmount
+          )} ฿`;
+
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "job_created",
+            message: logMessage,
+            refType: "job",
+            refId: jobId,
+            branchId,
+          });
+
+          showToast("บันทึกบิลซ่อมเรียบร้อยแล้ว", "success");
+
+          // ล้างฟอร์มกลับค่าเริ่มต้น
+          resetOpenBillForm();
+
+          // รีโหลด auto-complete เพื่อให้ดึงประวัติล่าสุด
+          loadAutocompleteHistory(branchId);
+        } catch (error) {
+          console.error("บันทึกบิลซ่อมไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกบิลซ่อมได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          setSaveBillButtonLoading(false);
+        }
+      }
+
+      // ============================================================
+      // Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้าเปิดบิลซ่อม
+      // ============================================================
+      function setupEventListenersForPage() {
+        // ปุ่ม Logout
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            handleLogout();
+          });
+        }
+
+        // ปุ่มสลับธีม
+        if (themeToggleBtn) {
+          themeToggleBtn.addEventListener("click", async () => {
+            const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+              ? "dark"
+              : "light";
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            applyTheme(nextTheme);
+            if (currentUser) {
+              saveThemeForUser(currentUser.uid, nextTheme);
+              try {
+                const userRef = doc(db, "users", currentUser.uid);
+                await updateDoc(userRef, { theme: nextTheme });
+              } catch (error) {
+                console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+              }
+            }
+          });
+        }
+
+        // FAB เมนูด่วน
+        if (fabOpenBillBtn) {
+          fabOpenBillBtn.addEventListener("click", () => {
+            // อยู่หน้าเปิดบิลแล้ว
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+        if (fabAddTxnBtn) {
+          fabAddTxnBtn.addEventListener("click", () => {
+            window.location.href = "finance.html";
+          });
+        }
+        if (fabStockInBtn) {
+          fabStockInBtn.addEventListener("click", () => {
+            window.location.href = "stock.html";
+          });
+        }
+        if (fabAddVehicleBtn) {
+          fabAddVehicleBtn.addEventListener("click", () => {
+            window.location.href = "vehicles.html";
+          });
+        }
+
+        // ปุ่มเพิ่มแถวอะไหล่
+        if (addPartRowBtn) {
+          addPartRowBtn.addEventListener("click", () => {
+            if (!stockOptionsHtml) {
+              showToast(
+                "ยังไม่มีข้อมูลอะไหล่ในสต๊อก กรุณาเพิ่มอะไหล่ที่หน้า 'สต๊อก' ก่อน",
+                "warning"
+              );
+              return;
+            }
+            const tr = createPartRow();
+            partsTbody.appendChild(tr);
+          });
+        }
+
+        // Event delegation สำหรับตารางอะไหล่
+        partsTbody.addEventListener("click", (event) => {
+          const target = event.target;
+
+          // ปุ่มลบแถว
+          const removeBtn = target.closest(".part-remove-row-btn");
+          if (removeBtn) {
+            const tr = removeBtn.closest("tr");
+            if (tr) {
+              tr.remove();
+              if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
+                partsTbody.appendChild(createPartRow());
+              }
+              recalcTotals();
+            }
+            return;
+          }
+
+          // ปุ่มเพิ่ม/ลดจำนวน
+          const decBtn = target.closest(".part-qty-decrease");
+          const incBtn = target.closest(".part-qty-increase");
+          if (decBtn || incBtn) {
+            const tr = target.closest("tr");
+            if (!tr) return;
+            const qtyInput = tr.querySelector(".part-qty-input");
+            if (!qtyInput) return;
+
+            let qty = parseFloat(qtyInput.value) || 0;
+            if (decBtn) {
+              qty = Math.max(1, qty - 1);
+            } else if (incBtn) {
+              qty = qty + 1;
+            }
+            qtyInput.value = qty;
+            recalcTotals();
+          }
+        });
+
+        // เปลี่ยนค่า select หรือราคา/จำนวน → recalcuate
+        partsTbody.addEventListener("input", (event) => {
+          const target = event.target;
+
+          // เมื่อเลือกอะไหล่จาก select ให้เติมราคาขายเริ่มต้น
+          if (target.classList.contains("part-stock-select")) {
+            const select = target;
+            const stockId = select.value;
+            const tr = select.closest("tr");
+            const priceInput = tr.querySelector(".part-unit-price-input");
+            if (stockId && stockMap[stockId] && priceInput) {
+              const salePrice = Number(stockMap[stockId].salePrice) || 0;
+              if (!priceInput.value || parseFloat(priceInput.value) <= 0) {
+                priceInput.value = salePrice > 0 ? salePrice : "";
+              }
+            }
+          }
+
+          recalcTotals();
+        });
+
+        // ปุ่มเพิ่ม/ลบ/แก้ไขค่าแรง
+        if (addLaborRowBtn) {
+          addLaborRowBtn.addEventListener("click", () => {
+            laborTbody.appendChild(createLaborRow());
+          });
+        }
+
+        laborTbody.addEventListener("click", (event) => {
+          const target = event.target;
+          const removeBtn = target.closest(".labor-remove-row-btn");
+          if (removeBtn) {
+            const tr = removeBtn.closest("tr");
+            if (tr) {
+              tr.remove();
+              if (!laborTbody.querySelector("tr")) {
+                laborTbody.appendChild(createLaborRow());
+              }
+              recalcTotals();
+            }
+          }
+        });
+
+        laborTbody.addEventListener("input", () => {
+          recalcTotals();
+        });
+
+        // ปุ่มล้างฟอร์ม
+        if (resetFormBtn) {
+          resetFormBtn.addEventListener("click", () => {
+            resetOpenBillForm();
+            showToast("ล้างข้อมูลฟอร์มเรียบร้อยแล้ว", "info");
+          });
+        }
+
+        // เมื่อเปลี่ยนทะเบียนหรือชื่อลูกค้า → auto-fill จากประวัติ
+        if (plateInput) {
+          plateInput.addEventListener("change", () => {
+            autoFillFromHistoryByPlate(plateInput.value);
+          });
+          plateInput.addEventListener("blur", () => {
+            autoFillFromHistoryByPlate(plateInput.value);
+          });
+        }
+
+        if (customerNameInput) {
+          customerNameInput.addEventListener("change", () => {
+            autoFillFromHistoryByCustomerName(customerNameInput.value);
+          });
+          customerNameInput.addEventListener("blur", () => {
+            autoFillFromHistoryByCustomerName(customerNameInput.value);
+          });
+        }
+
+        // Submit ฟอร์มเปิดบิลซ่อม
+        if (openBillForm) {
+          openBillForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            recalcTotals();
+            saveNewJobBill();
+          });
+        }
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้าเปิดบิลซ่อม
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          // ยังไม่ล็อกอิน → กลับไปหน้า index
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดตข้อมูลผู้ใช้บน Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // แสดงเมนูตั้งค่าเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งวันที่เริ่มต้นของฟอร์มเป็นวันนี้
+          const today = getTodayISODateString();
+          if (jobDateInput) {
+            jobDateInput.value = today;
+          }
+          if (openBillTodayLabel) {
+            openBillTodayLabel.textContent = formatDateThaiFromString(today);
+          }
+
+          // ตั้งค่า event listeners
+          setupEventListenersForPage();
+
+          // โหลดข้อมูลสต๊อกสำหรับใช้ในฟอร์มอะไหล่
+          await loadStockForParts(userProfile.branchId || null);
+
+          // โหลดประวัติลูกค้า/รถสำหรับ auto-complete
+          loadAutocompleteHistory(userProfile.branchId || null);
+
+          // ถ้ายังไม่มีแถวอะไหล่/ค่าแรง ให้สร้างแถวเริ่มต้น
+          if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
+            partsTbody.appendChild(createPartRow());
+          }
+          if (!laborTbody.querySelector("tr")) {
+            laborTbody.appendChild(createLaborRow());
+          }
+
+          // คำนวณยอดเริ่มต้น
+          recalcTotals();
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/สต๊อก:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

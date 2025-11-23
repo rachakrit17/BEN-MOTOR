@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้าแดชบอร์ด -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – แดชบอร์ดภาพรวม</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้าแดชบอร์ด
+         มีการ์ดสรุปตัวเลข, กราฟ, สต๊อกใกล้หมด และความเคลื่อนไหวล่าสุด
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ชื่อหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">แดชบอร์ดภาพรวม</h1>
+            <p class="small text-muted mb-0">
+              สรุปภาพรวมการเงิน งานซ่อม รถ และสต๊อกของอู่วันนี้
+            </p>
+          </div>
+          <span class="badge text-bg-secondary" id="dashboardTodayLabel">
+            วันนี้
+          </span>
+        </div>
+
+        <!-- การ์ดตัวเลขใหญ่ 4 ใบ: ยอดเงินคงเหลือ, รายได้วันนี้, รายจ่ายวันนี้, กำไรวันนี้ -->
+        <section class="mb-3">
+          <!-- คอมเมนต์: ส่วนแสดงสรุปการเงินหลัก -->
+          <div class="row g-2">
+            <div class="col-6 col-lg-3">
+              <div class="card bm-card-stat h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small text-muted">ยอดเงินคงเหลือทั้งหมด</span>
+                    <i class="bi bi-wallet2 text-primary"></i>
+                  </div>
+                  <p class="h5 mb-0 fw-bold" id="statTotalBalance">-</p>
+                  <p class="small text-muted mb-0" id="statTotalBalanceNote">
+                    กำลังโหลดข้อมูล...
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="card bm-card-stat h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small text-muted">รายได้วันนี้</span>
+                    <i class="bi bi-arrow-down-circle text-success"></i>
+                  </div>
+                  <p class="h5 mb-0 fw-bold text-success" id="statIncomeToday">-</p>
+                  <p class="small text-muted mb-0" id="statIncomeTodayNote">
+                    กำลังโหลดข้อมูล...
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="card bm-card-stat h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small text-muted">รายจ่ายวันนี้</span>
+                    <i class="bi bi-arrow-up-circle text-danger"></i>
+                  </div>
+                  <p class="h5 mb-0 fw-bold text-danger" id="statExpenseToday">-</p>
+                  <p class="small text-muted mb-0" id="statExpenseTodayNote">
+                    กำลังโหลดข้อมูล...
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-3">
+              <div class="card bm-card-stat h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small text-muted">กำไรวันนี้</span>
+                    <i class="bi bi-coin text-warning"></i>
+                  </div>
+                  <p class="h5 mb-0 fw-bold" id="statProfitToday">-</p>
+                  <p class="small text-muted mb-0" id="statProfitTodayNote">
+                    กำลังโหลดข้อมูล...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- การ์ดตัวเลขย่อย: งานวันนี้, รถค้างในอู่, ซื้อรถวันนี้, ขายรถวันนี้, ซื้ออะไหล่เข้าวันนี้ -->
+        <section class="mb-3">
+          <!-- คอมเมนต์: ส่วนสรุปตัวเลขเชิงปฏิบัติการ -->
+          <div class="row g-2">
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card bm-card-mini h-100">
+                <div class="card-body py-2">
+                  <div class="small text-muted">งานซ่อมวันนี้</div>
+                  <div class="d-flex align-items-center">
+                    <span class="h5 mb-0 fw-bold" id="statJobsToday">-</span>
+                    <span class="badge bg-primary ms-2">งาน</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card bm-card-mini h-100">
+                <div class="card-body py-2">
+                  <div class="small text-muted">รถค้างในอู่</div>
+                  <div class="d-flex align-items-center">
+                    <span class="h5 mb-0 fw-bold" id="statJobsInGarage">-</span>
+                    <span class="badge bg-warning text-dark ms-2">คัน</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card bm-card-mini h-100">
+                <div class="card-body py-2">
+                  <div class="small text-muted">ซื้อรถวันนี้</div>
+                  <div class="d-flex align-items-center">
+                    <span class="h5 mb-0 fw-bold" id="statVehiclesBoughtToday">-</span>
+                    <span class="badge bg-info text-dark ms-2">คัน</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card bm-card-mini h-100">
+                <div class="card-body py-2">
+                  <div class="small text-muted">ขายรถวันนี้</div>
+                  <div class="d-flex align-items-center">
+                    <span class="h5 mb-0 fw-bold" id="statVehiclesSoldToday">-</span>
+                    <span class="badge bg-success ms-2">คัน</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+              <div class="card bm-card-mini h-100">
+                <div class="card-body py-2">
+                  <div class="small text-muted">ซื้ออะไหล่เข้าวันนี้</div>
+                  <div class="d-flex align-items-center">
+                    <span class="h5 mb-0 fw-bold" id="statStockInToday">-</span>
+                    <span class="badge bg-secondary ms-2">รายการ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ช่องว่างเผื่อ layout กว้างขึ้น -->
+            <div class="col-6 col-md-4 col-lg-2 d-none d-lg-block">
+              <div class="card bm-card-mini h-100 border-0 bg-transparent"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- แถว: กราฟรายรับ/รายจ่าย 7 วัน + สต๊อกใกล้หมด + ความเคลื่อนไหวล่าสุด -->
+        <section class="mb-5">
+          <div class="row g-3">
+            <!-- กราฟรายรับ/รายจ่ายย้อนหลัง 7 วัน -->
+            <div class="col-12 col-lg-6">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="h6 mb-0 fw-semibold">
+                      กราฟรายรับ/รายจ่ายย้อนหลัง 7 วัน
+                    </h2>
+                    <span class="small text-muted" id="chartDateRangeLabel">
+                      กำลังโหลด...
+                    </span>
+                  </div>
+                  <div class="small text-muted mb-2">
+                    แสดงยอดรวมต่อวันตามวันที่บันทึกในธุรกรรม
+                  </div>
+                  <!-- Canvas กราฟ -->
+                  <div class="position-relative">
+                    <canvas
+                      id="incomeExpenseChart"
+                      height="220"
+                    >
+                      เบราว์เซอร์ของคุณไม่รองรับ Canvas
+                    </canvas>
+                    <div
+                      id="chartEmptyState"
+                      class="text-center text-muted small position-absolute top-50 start-50 translate-middle"
+                    >
+                      ไม่มีข้อมูลสำหรับแสดงกราฟ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- สต๊อกใกล้หมด -->
+            <div class="col-12 col-lg-6">
+              <div class="card h-100 mb-3">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="h6 mb-0 fw-semibold">สต๊อกอะไหล่ใกล้หมด</h2>
+                    <a href="stock.html" class="small text-decoration-none">
+                      ดูทั้งหมด <i class="bi bi-chevron-right small"></i>
+                    </a>
+                  </div>
+                  <p class="small text-muted mb-2">
+                    แสดงเฉพาะอะไหล่ที่ปริมาณคงเหลือน้อยกว่าหรือเท่ากับขั้นต่ำที่กำหนด
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead class="small text-muted">
+                        <tr>
+                          <th>รหัส</th>
+                          <th>ชื่ออะไหล่</th>
+                          <th class="text-end">คงเหลือ</th>
+                          <th class="text-end">ขั้นต่ำ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lowStockTbody">
+                        <tr>
+                          <td colspan="4" class="text-center small text-muted">
+                            กำลังโหลดข้อมูลสต๊อกใกล้หมด...
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ความเคลื่อนไหวล่าสุด -->
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="h6 mb-0 fw-semibold">ความเคลื่อนไหวล่าสุด</h2>
+                    <span class="small text-muted">ล่าสุด 10 รายการ</span>
+                  </div>
+                  <p class="small text-muted mb-2">
+                    ดูประวัติกิจกรรมสำคัญของระบบ เช่น เปิดบิลซ่อม ซื้อ/ขายรถ ซื้ออะไหล่ หรือบันทึกเงิน
+                  </p>
+                  <ul class="list-group list-group-flush" id="activityLogsList">
+                    <li class="list-group-item small text-muted text-center">
+                      กำลังโหลดประวัติกิจกรรม...
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ระยะห่างด้านล่างเพื่อไม่ให้เนื้อหาชนกับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยสำหรับเมนูด่วน เช่น เปิดบิลซ่อมใหม่, เพิ่มรายการเงิน, ซื้ออะไหล่เข้า, เพิ่มรถรับซื้อเข้า
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddVehicleBtn">
+              <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         1) แดชบอร์ด 2) เปิดบิล 3) งานซ่อม 4) รถรับซื้อ 5) สต๊อก 6) เงินเข้าออก
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link active">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า dashboard.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM ของหน้าแดชบอร์ด
+      // ============================================================
+      // Topbar
+      const bodyEl = document.body;
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarCircle = document.getElementById("userAvatarCircle");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // FAB ปุ่มด่วน
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
+
+      // ตัวเลขสรุปการเงิน
+      const statTotalBalance = document.getElementById("statTotalBalance");
+      const statTotalBalanceNote = document.getElementById("statTotalBalanceNote");
+      const statIncomeToday = document.getElementById("statIncomeToday");
+      const statIncomeTodayNote = document.getElementById("statIncomeTodayNote");
+      const statExpenseToday = document.getElementById("statExpenseToday");
+      const statExpenseTodayNote = document.getElementById("statExpenseTodayNote");
+      const statProfitToday = document.getElementById("statProfitToday");
+      const statProfitTodayNote = document.getElementById("statProfitTodayNote");
+
+      // ตัวเลขสรุปย่อย
+      const statJobsToday = document.getElementById("statJobsToday");
+      const statJobsInGarage = document.getElementById("statJobsInGarage");
+      const statVehiclesBoughtToday = document.getElementById("statVehiclesBoughtToday");
+      const statVehiclesSoldToday = document.getElementById("statVehiclesSoldToday");
+      const statStockInToday = document.getElementById("statStockInToday");
+      const dashboardTodayLabel = document.getElementById("dashboardTodayLabel");
+
+      // ตารางสต๊อกใกล้หมด
+      const lowStockTbody = document.getElementById("lowStockTbody");
+
+      // ความเคลื่อนไหวล่าสุด
+      const activityLogsList = document.getElementById("activityLogsList");
+
+      // กราฟ
+      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
+      const chartEmptyState = document.getElementById("chartEmptyState");
+      const chartDateRangeLabel = document.getElementById("chartDateRangeLabel");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // ============================================================
+      // ฟังก์ชันช่วย: แสดง Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: รูปแบบตัวเลข และวันที่แบบไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0";
+        return value.toLocaleString("th-TH", {
+          maximumFractionDigits: 2,
+        });
+      }
+
+      /**
+       * แปลงสตริง "YYYY-MM-DD" เป็นวันที่แบบไทย "17 ก.พ. 2568"
+       */
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      /**
+       * คืนค่าสตริงวันที่วันนี้ในรูปแบบ "YYYY-MM-DD" ตามเวลาเครื่อง (ใช้แทน timezone ไทย)
+       */
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      /**
+       * คืนค่าสตริงวันที่ในอดีต n วันรูปแบบ "YYYY-MM-DD"
+       */
+      function getPastISODateString(daysAgo) {
+        const now = new Date();
+        now.setDate(now.getDate() - daysAgo);
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      /**
+       * สร้างอาเรย์วันย้อนหลัง N วัน (จากอดีต → ปัจจุบัน)
+       */
+      function getLastNDates(n) {
+        const dates = [];
+        for (let i = n - 1; i >= 0; i--) {
+          dates.push(getPastISODateString(i));
+        }
+        return dates;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: สร้าง/อ่านข้อมูลผู้ใช้ใน collection users
+      // ============================================================
+      /**
+       * ตรวจสอบและสร้างเอกสาร users/{uid} ครั้งแรก
+       * - ถ้าไม่พบเอกสาร และยังไม่มี user คนอื่น → สร้างเป็น admin
+       * - ถ้ามี user แล้ว → สร้างเป็น staff
+       */
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        // ยังไม่มีเอกสารของ user นี้ → เช็คว่ามี user คนอื่นในระบบไหม
+        const usersCol = collection(db, "users");
+        const q = query(usersCol, limit(1));
+        const existingSnap = await getDocs(q);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // การวาดกราฟรายรับ/รายจ่ายด้วย Canvas 2D
+      // ============================================================
+      /**
+       * วาดกราฟเส้นอย่างง่ายสำหรับรายรับ/รายจ่ายย้อนหลัง 7 วัน
+       * โดยใช้ Canvas API พื้นฐาน
+       */
+      function drawIncomeExpenseChart(canvas, dataPoints, labels) {
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // เคลียร์พื้นที่เดิม
+        ctx.clearRect(0, 0, width, height);
+
+        const incomeValues = dataPoints.map((p) => p.income);
+        const expenseValues = dataPoints.map((p) => p.expense);
+        const allValues = incomeValues.concat(expenseValues);
+
+        const maxValue = Math.max(...allValues, 0);
+        const padding = 30;
+
+        if (maxValue === 0) {
+          // ถ้าไม่มีข้อมูลเลยไม่ต้องวาดแกน ให้ปล่อยให้ empty state แสดง
+          return;
+        }
+
+        const chartHeight = height - padding * 2;
+        const chartWidth = width - padding * 2;
+
+        const stepX = chartWidth / Math.max(labels.length - 1, 1);
+
+        // ฟังก์ชันช่วยแปลงค่าตัวเลขเป็นตำแหน่ง Y
+        const valueToY = (val) =>
+          padding + chartHeight - (val / maxValue) * chartHeight;
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#cccccc";
+        ctx.fillStyle = "#666666";
+        ctx.font = "10px Kanit, sans-serif";
+
+        // วาดแกน X + Label วันที่ (ใช้วัน/เดือนสั้น ๆ)
+        labels.forEach((dateStr, index) => {
+          const x = padding + index * stepX;
+          // เส้นแนวตั้งเบา ๆ
+          ctx.beginPath();
+          ctx.moveTo(x, padding);
+          ctx.lineTo(x, padding + chartHeight);
+          ctx.stroke();
+
+          // Label วันที่
+          const [year, month, day] = dateStr.split("-");
+          const label = `${Number(day)}/${Number(month)}`;
+          ctx.save();
+          ctx.translate(x, padding + chartHeight + 12);
+          ctx.rotate(-Math.PI / 4);
+          ctx.fillText(label, 0, 0);
+          ctx.restore();
+        });
+
+        // วาดกราฟเส้นสำหรับรายรับ (สี default)
+        ctx.beginPath();
+        dataPoints.forEach((point, index) => {
+          const x = padding + index * stepX;
+          const y = valueToY(point.income);
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = "#198754"; // เขียว (Bootstrap success)
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // จุด
+        ctx.fillStyle = "#198754";
+        dataPoints.forEach((point, index) => {
+          const x = padding + index * stepX;
+          const y = valueToY(point.income);
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // วาดกราฟเส้นสำหรับรายจ่าย
+        ctx.beginPath();
+        dataPoints.forEach((point, index) => {
+          const x = padding + index * stepX;
+          const y = valueToY(point.expense);
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = "#dc3545"; // แดง (Bootstrap danger)
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // จุด
+        ctx.fillStyle = "#dc3545";
+        dataPoints.forEach((point, index) => {
+          const x = padding + index * stepX;
+          const y = valueToY(point.expense);
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // แสดงคำอธิบาย (Legend) มุมซ้ายบน
+        ctx.fillStyle = "#198754";
+        ctx.fillRect(padding, padding - 18, 10, 3);
+        ctx.fillStyle = "#333333";
+        ctx.fillText("รายรับ", padding + 14, padding - 12);
+
+        ctx.fillStyle = "#dc3545";
+        ctx.fillRect(padding + 60, padding - 18, 10, 3);
+        ctx.fillStyle = "#333333";
+        ctx.fillText("รายจ่าย", padding + 74, padding - 12);
+      }
+
+      // ============================================================
+      // การโหลดข้อมูลแดชบอร์ดจาก Firestore
+      // ============================================================
+      async function loadDashboardData(currentUser, userProfile) {
+        const branchId = userProfile.branchId || null;
+        const today = getTodayISODateString();
+        const last7Dates = getLastNDates(7);
+        const startDateFor7Days = last7Dates[0];
+
+        if (dashboardTodayLabel) {
+          dashboardTodayLabel.textContent = formatDateThaiFromString(today);
+        }
+
+        // ---------------------------
+        // 1) ดึงธุรกรรมทั้งหมดเพื่อคำนวณยอดเงินคงเหลือ
+        // ---------------------------
+        try {
+          const constraintsAll = [];
+          if (branchId) {
+            constraintsAll.push(where("branchId", "==", branchId));
+          }
+          // หมายเหตุ: ถ้าข้อมูลเยอะมาก แนะนำใช้ Cloud Functions ช่วยรวม แต่ตามสเปกนี้ต้อง compute จากรายการจริง
+          const txnQueryAll = query(collection(db, "transactions"), ...constraintsAll);
+          const txnSnapAll = await getDocs(txnQueryAll);
+
+          let totalIncome = 0;
+          let totalExpense = 0;
+
+          txnSnapAll.forEach((docSnap) => {
+            const data = docSnap.data();
+            const amount = Number(data.amount) || 0;
+            if (data.type === "income") totalIncome += amount;
+            if (data.type === "expense") totalExpense += amount;
+          });
+
+          const balance = totalIncome - totalExpense;
+
+          if (statTotalBalance) {
+            statTotalBalance.textContent = formatNumber(balance) + " ฿";
+          }
+          if (statTotalBalanceNote) {
+            statTotalBalanceNote.textContent =
+              "รวมรายรับ " +
+              formatNumber(totalIncome) +
+              " ฿ - รายจ่าย " +
+              formatNumber(totalExpense) +
+              " ฿";
+          }
+        } catch (error) {
+          console.error("โหลดธุรกรรมทั้งหมดไม่สำเร็จ:", error);
+          if (statTotalBalanceNote) {
+            statTotalBalanceNote.textContent = "ไม่สามารถโหลดข้อมูลยอดเงินคงเหลือได้";
+          }
+          showToast(
+            "ไม่สามารถโหลดข้อมูลธุรกรรมทั้งหมดได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+
+        // ---------------------------
+        // 2) ดึงธุรกรรมของ "วันนี้" และช่วง 7 วันสำหรับสรุปและกราฟ
+        // ---------------------------
+        let incomeToday = 0;
+        let expenseToday = 0;
+
+        // วัตถุเก็บยอดต่อวันสำหรับ 7 วันล่าสุด
+        const dailySummary = {};
+        last7Dates.forEach((d) => {
+          dailySummary[d] = { income: 0, expense: 0 };
+        });
+
+        try {
+          const constraints7Days = [
+            where("date", ">=", startDateFor7Days),
+            where("date", "<=", today),
+          ];
+          if (branchId) {
+            constraints7Days.push(where("branchId", "==", branchId));
+          }
+
+          const txnQuery7Days = query(
+            collection(db, "transactions"),
+            ...constraints7Days,
+            orderBy("date", "asc")
+          );
+
+          const txnSnap7Days = await getDocs(txnQuery7Days);
+
+          let stockInTodayCount = 0;
+
+          txnSnap7Days.forEach((docSnap) => {
+            const data = docSnap.data();
+            const dateStr = data.date;
+            const amount = Number(data.amount) || 0;
+            const type = data.type;
+
+            if (dateStr === today) {
+              if (type === "income") incomeToday += amount;
+              if (type === "expense") expenseToday += amount;
+
+              if (type === "expense" && data.category === "ซื้ออะไหล่") {
+                stockInTodayCount++;
+              }
+            }
+
+            // สะสมยอดลงในกราฟ 7 วัน
+            if (dailySummary[dateStr]) {
+              if (type === "income") {
+                dailySummary[dateStr].income += amount;
+              } else if (type === "expense") {
+                dailySummary[dateStr].expense += amount;
+              }
+            }
+          });
+
+          const profitToday = incomeToday - expenseToday;
+
+          if (statIncomeToday) {
+            statIncomeToday.textContent = formatNumber(incomeToday) + " ฿";
+          }
+          if (statIncomeTodayNote) {
+            statIncomeTodayNote.textContent =
+              incomeToday > 0 ? "รวมรายรับจากทุกประเภทธุรกรรมวันนี้" : "ยังไม่มีรายได้บันทึกวันนี้";
+          }
+
+          if (statExpenseToday) {
+            statExpenseToday.textContent = formatNumber(expenseToday) + " ฿";
+          }
+          if (statExpenseTodayNote) {
+            statExpenseTodayNote.textContent =
+              expenseToday > 0 ? "รวมรายจ่ายจากทุกประเภทธุรกรรมวันนี้" : "ยังไม่มีรายจ่ายบันทึกวันนี้";
+          }
+
+          if (statProfitToday) {
+            const formatted = formatNumber(profitToday) + " ฿";
+            statProfitToday.textContent = formatted;
+            statProfitToday.classList.toggle("text-success", profitToday >= 0);
+            statProfitToday.classList.toggle("text-danger", profitToday < 0);
+          }
+          if (statProfitTodayNote) {
+            statProfitTodayNote.textContent =
+              "รายได้วันนี้ - รายจ่ายวันนี้ = " + formatNumber(profitToday) + " ฿";
+          }
+
+          if (statStockInToday) {
+            statStockInToday.textContent = String(stockInTodayCount);
+          }
+
+          // วาดกราฟถ้ามีข้อมูล
+          const dataPoints = last7Dates.map((d) => ({
+            date: d,
+            income: dailySummary[d].income,
+            expense: dailySummary[d].expense,
+          }));
+
+          const anyDataForChart = dataPoints.some(
+            (p) => p.income > 0 || p.expense > 0
+          );
+
+          if (chartDateRangeLabel) {
+            chartDateRangeLabel.textContent =
+              formatDateThaiFromString(startDateFor7Days) +
+              " - " +
+              formatDateThaiFromString(today);
+          }
+
+          if (anyDataForChart) {
+            if (chartEmptyState) chartEmptyState.classList.add("d-none");
+            // ตั้งค่าขนาด canvas ให้สัมพันธ์กับขนาดจริงบนหน้าจอ
+            if (incomeExpenseChartCanvas) {
+              const rect = incomeExpenseChartCanvas.getBoundingClientRect();
+              incomeExpenseChartCanvas.width = rect.width;
+              incomeExpenseChartCanvas.height = rect.height;
+            }
+            drawIncomeExpenseChart(
+              incomeExpenseChartCanvas,
+              dataPoints,
+              last7Dates
+            );
+          } else {
+            if (chartEmptyState) chartEmptyState.classList.remove("d-none");
+          }
+        } catch (error) {
+          console.error("โหลดธุรกรรม 7 วันไม่สำเร็จ:", error);
+          if (statIncomeTodayNote) {
+            statIncomeTodayNote.textContent = "ไม่สามารถโหลดข้อมูลรายได้วันนี้ได้";
+          }
+          if (statExpenseTodayNote) {
+            statExpenseTodayNote.textContent = "ไม่สามารถโหลดข้อมูลรายจ่ายวันนี้ได้";
+          }
+          if (statProfitTodayNote) {
+            statProfitTodayNote.textContent = "ไม่สามารถคำนวณกำไรวันนี้ได้";
+          }
+          showToast(
+            "ไม่สามารถโหลดข้อมูลธุรกรรมช่วง 7 วันได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+
+        // ---------------------------
+        // 3) ดึงข้อมูล jobs (งานซ่อม)
+        // ---------------------------
+        try {
+          const jobsCol = collection(db, "jobs");
+          const constraintsJobsToday = [
+            where("isDeleted", "==", false),
+            where("date", "==", today),
+          ];
+          const constraintsJobsInGarage = [
+            where("isDeleted", "==", false),
+            where("status", "!=", "picked_up"),
+          ];
+
+          if (branchId) {
+            constraintsJobsToday.push(where("branchId", "==", branchId));
+            constraintsJobsInGarage.push(where("branchId", "==", branchId));
+          }
+
+          // งานวันนี้
+          const jobsTodayQuery = query(jobsCol, ...constraintsJobsToday);
+          const jobsTodaySnap = await getDocs(jobsTodayQuery);
+          if (statJobsToday) {
+            statJobsToday.textContent = String(jobsTodaySnap.size);
+          }
+
+          // รถค้างในอู่ (status != picked_up)
+          // หมายเหตุ: การใช้ where "!=" อาจต้องสร้าง index ตามลิงก์ที่ Firestore แจ้งครั้งแรก
+          const jobsInGarageQuery = query(jobsCol, ...constraintsJobsInGarage);
+          const jobsInGarageSnap = await getDocs(jobsInGarageQuery);
+          if (statJobsInGarage) {
+            statJobsInGarage.textContent = String(jobsInGarageSnap.size);
+          }
+        } catch (error) {
+          console.error("โหลดข้อมูล jobs ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลงานซ่อมได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "warning"
+          );
+        }
+
+        // ---------------------------
+        // 4) ดึงข้อมูล vehicles (รถรับซื้อ/ขาย)
+        // ---------------------------
+        try {
+          const vehiclesCol = collection(db, "vehicles");
+          const constraintsBuyToday = [where("buyDate", "==", today)];
+          const constraintsSellToday = [where("sellDate", "==", today)];
+
+          if (branchId) {
+            constraintsBuyToday.push(where("branchId", "==", branchId));
+            constraintsSellToday.push(where("branchId", "==", branchId));
+          }
+
+          const vehiclesBuyTodayQuery = query(vehiclesCol, ...constraintsBuyToday);
+          const vehiclesSellTodayQuery = query(vehiclesCol, ...constraintsSellToday);
+
+          const [buySnap, sellSnap] = await Promise.all([
+            getDocs(vehiclesBuyTodayQuery),
+            getDocs(vehiclesSellTodayQuery),
+          ]);
+
+          if (statVehiclesBoughtToday) {
+            statVehiclesBoughtToday.textContent = String(buySnap.size);
+          }
+          if (statVehiclesSoldToday) {
+            statVehiclesSoldToday.textContent = String(sellSnap.size);
+          }
+        } catch (error) {
+          console.error("โหลดข้อมูล vehicles ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลรถรับซื้อ/ขายได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "warning"
+          );
+        }
+
+        // ---------------------------
+        // 5) ดึงสต๊อกใกล้หมด
+        // ---------------------------
+        try {
+          const stockCol = collection(db, "stock");
+          const constraintsStock = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraintsStock.push(where("branchId", "==", branchId));
+          }
+
+          const stockQuery = query(stockCol, ...constraintsStock, orderBy("name"), limit(20));
+          const stockSnap = await getDocs(stockQuery);
+
+          if (lowStockTbody) {
+            lowStockTbody.innerHTML = "";
+          }
+
+          let lowCount = 0;
+
+          stockSnap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const qty = Number(data.qty) || 0;
+            const minQty = Number(data.minQty) || 0;
+
+            if (qty <= minQty) {
+              lowCount++;
+
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td class="small">${data.code || "-"}</td>
+                <td class="small">${data.name || "-"}</td>
+                <td class="small text-end">
+                  <span class="badge bg-danger-subtle text-danger fw-semibold">${formatNumber(
+                    qty
+                  )}</span>
+                </td>
+                <td class="small text-end">${formatNumber(minQty)}</td>
+              `;
+              lowStockTbody.appendChild(tr);
+            }
+          });
+
+          if (lowCount === 0 && lowStockTbody) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td colspan="4" class="text-center small text-muted">
+                ตอนนี้ยังไม่มีอะไหล่ที่ใกล้หมดตามเกณฑ์ที่กำหนด
+              </td>
+            `;
+            lowStockTbody.appendChild(tr);
+          }
+        } catch (error) {
+          console.error("โหลดสต๊อกใกล้หมดไม่สำเร็จ:", error);
+          if (lowStockTbody) {
+            lowStockTbody.innerHTML = `
+              <tr>
+                <td colspan="4" class="text-center small text-danger">
+                  ไม่สามารถโหลดข้อมูลสต๊อกใกล้หมดได้
+                </td>
+              </tr>
+            `;
+          }
+          showToast(
+            "ไม่สามารถโหลดข้อมูลสต๊อกใกล้หมดได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+
+        // ---------------------------
+        // 6) ดึง activityLogs 10 รายการล่าสุด
+        // ---------------------------
+        try {
+          const logsCol = collection(db, "activityLogs");
+          const constraintsLogs = [];
+          if (branchId) {
+            constraintsLogs.push(where("branchId", "==", branchId));
+          }
+
+          const logsQuery = query(
+            logsCol,
+            ...constraintsLogs,
+            orderBy("createdAt", "desc"),
+            limit(10)
+          );
+          const logsSnap = await getDocs(logsQuery);
+
+          if (activityLogsList) {
+            activityLogsList.innerHTML = "";
+          }
+
+          if (logsSnap.empty) {
+            if (activityLogsList) {
+              const li = document.createElement("li");
+              li.className =
+                "list-group-item small text-muted text-center border-0";
+              li.textContent = "ยังไม่มีความเคลื่อนไหวในระบบ";
+              activityLogsList.appendChild(li);
+            }
+          } else {
+            logsSnap.forEach((docSnap) => {
+              const data = docSnap.data();
+              const createdAt = data.createdAt?.toDate
+                ? data.createdAt.toDate()
+                : null;
+
+              let createdAtText = "-";
+              if (createdAt) {
+                const datePart = `${createdAt.getFullYear()}-${String(
+                  createdAt.getMonth() + 1
+                ).padStart(2, "0")}-${String(createdAt.getDate()).padStart(
+                  2,
+                  "0"
+                )}`;
+                const timePart = `${String(createdAt.getHours()).padStart(
+                  2,
+                  "0"
+                )}:${String(createdAt.getMinutes()).padStart(2, "0")}`;
+                createdAtText =
+                  formatDateThaiFromString(datePart) + " " + timePart + " น.";
+              }
+
+              const li = document.createElement("li");
+              li.className = "list-group-item small d-flex flex-column";
+
+              const msg = data.message || "-";
+              const byName = data.createdByName || "ระบบ";
+
+              li.innerHTML = `
+                <div class="d-flex justify-content-between">
+                  <span>${msg}</span>
+                  <span class="text-muted ms-2">${createdAtText}</span>
+                </div>
+                <div class="text-muted mt-1">
+                  โดย: ${byName}
+                </div>
+              `;
+              activityLogsList.appendChild(li);
+            });
+          }
+        } catch (error) {
+          console.error("โหลด activityLogs ไม่สำเร็จ:", error);
+          if (activityLogsList) {
+            activityLogsList.innerHTML = `
+              <li class="list-group-item small text-danger text-center">
+                ไม่สามารถโหลดความเคลื่อนไหวล่าสุดได้
+              </li>
+            `;
+          }
+          showToast(
+            "ไม่สามารถโหลดความเคลื่อนไหวล่าสุดได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // การจัดการ Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners ต่าง ๆ
+      // ============================================================
+      function setupEventListeners(currentUser, userProfile) {
+        // ปุ่ม Logout
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            handleLogout();
+          });
+        }
+
+        // ปุ่มสลับธีม
+        if (themeToggleBtn) {
+          themeToggleBtn.addEventListener("click", async () => {
+            const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+              ? "dark"
+              : "light";
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            applyTheme(nextTheme);
+            saveThemeForUser(currentUser.uid, nextTheme);
+
+            // บันทึกธีมลง Firestore ด้วย เพื่อใช้ข้ามอุปกรณ์
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          });
+        }
+
+        // FAB เมนูด่วน
+        if (fabOpenBillBtn) {
+          fabOpenBillBtn.addEventListener("click", () => {
+            window.location.href = "open-bill.html";
+          });
+        }
+        if (fabAddTxnBtn) {
+          fabAddTxnBtn.addEventListener("click", () => {
+            window.location.href = "finance.html";
+          });
+        }
+        if (fabStockInBtn) {
+          fabStockInBtn.addEventListener("click", () => {
+            window.location.href = "stock.html";
+          });
+        }
+        if (fabAddVehicleBtn) {
+          fabAddVehicleBtn.addEventListener("click", () => {
+            window.location.href = "vehicles.html";
+          });
+        }
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้าแดชบอร์ด
+      // - ถ้าไม่ได้ล็อกอิน → redirect ไปหน้า index.html
+      // - ถ้าล็อกอินแล้ว → โหลด users/{uid} เพื่อตรวจสอบ role/theme/disabled
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          // ยังไม่ล็อกอิน → กลับไปหน้าเข้าสู่ระบบ
+          window.location.href = "index.html";
+          return;
+        }
+
+        try {
+          // โหลดหรือสร้างโปรไฟล์ผู้ใช้ใน collection users
+          const userProfile = await ensureUserProfile(user);
+
+          // ถ้า disabled ให้บังคับออกจากระบบ
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดตข้อมูลผู้ใช้ใน Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+
+          // Avatar ใช้ตัวอักษรแรกของ displayName
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // แสดงเมนูตั้งค่าระบบเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // จัดการธีมจาก users.theme หรือ localStorage
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่า Event listeners ที่เกี่ยวข้องกับผู้ใช้
+          setupEventListeners(user, userProfile);
+
+          // โหลดข้อมูลแดชบอร์ดจริงจาก Firestore
+          await loadDashboardData(user, userProfile);
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/แดชบอร์ด:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือแดชบอร์ดได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

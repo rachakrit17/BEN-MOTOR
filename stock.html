@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า "สต๊อกอะไหล่" -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – สต๊อกอะไหล่</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "สต๊อกอะไหล่"
+         ฟอร์มเพิ่ม/แก้ไขสินค้า + ตารางดูข้อมูล + ซื้ออะไหล่เข้า
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">สต๊อกอะไหล่</h1>
+            <p class="small text-muted mb-0">
+              จัดการรายการอะไหล่ในสต๊อก ดูของใกล้หมด บันทึกซื้อเข้า และดูสินค้าขายดี/ขายช้า
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= ฟอร์มเพิ่ม / แก้ไขสินค้าในสต๊อก ================= -->
+        <!-- คอมเมนต์: ฟอร์มส่วนบนสำหรับสร้าง/แก้ไขข้อมูลอะไหล่ -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 fw-semibold mb-0">
+                  <i class="bi bi-box-seam me-2"></i>
+                  <span id="stockFormTitleText">เพิ่มสินค้าอะไหล่ใหม่</span>
+                </h2>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm d-none"
+                  id="cancelEditStockBtn"
+                >
+                  ยกเลิกการแก้ไข
+                </button>
+              </div>
+              <form id="stockItemForm" class="row g-2 small">
+                <!-- hidden id สำหรับโหมดแก้ไข -->
+                <input type="hidden" id="stockItemIdInput" />
+
+                <div class="col-6 col-md-3">
+                  <label for="stockCodeInput" class="form-label small mb-1">
+                    รหัสสินค้า
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="stockCodeInput"
+                    placeholder="เช่น OIL-10W40"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockNameInput" class="form-label small mb-1">
+                    ชื่อสินค้า
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="stockNameInput"
+                    placeholder="เช่น น้ำมันเครื่อง 10W40"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockCategoryInput" class="form-label small mb-1">
+                    หมวดหมู่
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="stockCategoryInput"
+                    placeholder="เช่น น้ำมันเครื่อง, ยาง, ผ้าเบรก"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockUnitInput" class="form-label small mb-1">
+                    หน่วยนับ
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="stockUnitInput"
+                    placeholder="เช่น ขวด, เส้น, ชิ้น"
+                    required
+                  />
+                </div>
+
+                <div class="col-6 col-md-3">
+                  <label for="stockQtyInput" class="form-label small mb-1">
+                    จำนวนคงเหลือ
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="stockQtyInput"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockMinQtyInput" class="form-label small mb-1">
+                    จำนวนขั้นต่ำ (เตือนใกล้หมด)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="stockMinQtyInput"
+                    placeholder="0"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockCostPriceInput" class="form-label small mb-1">
+                    ราคาต้นทุน (ต่อหน่วย)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="stockCostPriceInput"
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="stockSalePriceInput" class="form-label small mb-1">
+                    ราคาขาย (ต่อหน่วย)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="stockSalePriceInput"
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+
+                <div class="col-12 mt-1 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-sm"
+                    id="saveStockItemBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="saveStockItemSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="saveStockItemBtnText">บันทึกสินค้า</span>
+                  </button>
+                </div>
+              </form>
+              <p class="small text-muted mt-2 mb-0">
+                เมื่อบันทึกสำเร็จ ข้อมูลจะถูกเก็บใน Firestore (collection
+                <code>stock</code>) พร้อมระบุสาขาจาก <code>branchId</code> ของผู้ใช้
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= แถบกรองและสรุปสต๊อก ================= -->
+        <!-- คอมเมนต์: ส่วนนี้ใช้ค้นหา/กรอง และแสดงตัวเลขสรุป -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-2"
+              >
+                <div class="d-flex flex-column flex-md-row gap-2 align-items-start align-items-md-center">
+                  <div class="input-group input-group-sm" style="min-width: 220px;">
+                    <span class="input-group-text">
+                      <i class="bi bi-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      id="searchStockInput"
+                      class="form-control"
+                      placeholder="ค้นหาด้วยรหัส / ชื่อสินค้า"
+                    />
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <label for="stockCategoryFilter" class="form-label small mb-0">
+                      หมวดหมู่:
+                    </label>
+                    <select
+                      id="stockCategoryFilter"
+                      class="form-select form-select-sm"
+                      style="min-width: 150px;"
+                    >
+                      <option value="all" selected>ทุกหมวดหมู่</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="small text-muted" id="stockLoadingState">
+                  กำลังโหลดข้อมูลสต๊อกจากฐานข้อมูล...
+                </div>
+              </div>
+
+              <div class="row g-2 align-items-center mb-2 small">
+                <div class="col-12 col-md-6">
+                  <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผล">
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="stockFilterMode"
+                      id="stockFilterModeAll"
+                      autocomplete="off"
+                      value="all"
+                      checked
+                    />
+                    <label class="btn btn-outline-secondary" for="stockFilterModeAll">
+                      ทั้งหมด
+                    </label>
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="stockFilterMode"
+                      id="stockFilterModeLow"
+                      autocomplete="off"
+                      value="low"
+                    />
+                    <label class="btn btn-outline-warning" for="stockFilterModeLow">
+                      ใกล้หมด
+                    </label>
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="stockFilterMode"
+                      id="stockFilterModeFast"
+                      autocomplete="off"
+                      value="fast"
+                    />
+                    <label class="btn btn-outline-success" for="stockFilterModeFast">
+                      ขายดี
+                    </label>
+
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="stockFilterMode"
+                      id="stockFilterModeSlow"
+                      autocomplete="off"
+                      value="slow"
+                    />
+                    <label class="btn btn-outline-info" for="stockFilterModeSlow">
+                      ขายช้า
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                  <span class="small text-muted d-none" id="stockCountInfo">
+                    พบสินค้า
+                    <span id="stockCountNumber">0</span> รายการ (จากข้อมูลที่โหลด)
+                  </span>
+                </div>
+              </div>
+
+              <!-- การ์ดสรุปสต๊อก -->
+              <div class="row g-2 small">
+                <div class="col-12 col-md-3">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">จำนวนสินค้าในสต๊อก</div>
+                      <div class="h5 mb-0 fw-bold" id="stockTotalItemsText">
+                        0 รายการ
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-3">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">สินค้าที่ใกล้หมด</div>
+                      <div class="h5 mb-0 fw-bold text-warning" id="stockLowItemsText">
+                        0 รายการ
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-3">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">มูลค่าต้นทุนรวมโดยประมาณ</div>
+                      <div class="h5 mb-0 fw-bold" id="stockTotalCostValueText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-3">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">มูลค่าขายรวมโดยประมาณ</div>
+                      <div class="h5 mb-0 fw-bold text-success" id="stockTotalSaleValueText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="small text-muted mt-2 mb-0">
+                ตัวเลขสรุปอิงจากข้อมูลใน Firestore ตามสาขาที่ผู้ใช้สังกัด (branchId)
+                และไม่นับสินค้าที่ถูกซ่อน (isDeleted = true)
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ตารางข้อมูลสินค้าในสต๊อก ================= -->
+        <!-- คอมเมนต์: แสดงรายการอะไหล่ในรูปแบบตาราง พร้อมปุ่มซื้อเข้า/แก้ไข/ลบ -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="small text-muted">
+                  รายการสินค้าในสต๊อกตามตัวกรองที่เลือก
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="small text-muted">
+                    <tr>
+                      <th style="min-width: 110px;">รหัส</th>
+                      <th style="min-width: 180px;">ชื่อสินค้า</th>
+                      <th style="min-width: 120px;">หมวดหมู่</th>
+                      <th style="min-width: 80px;">หน่วย</th>
+                      <th class="text-end" style="min-width: 120px;">จำนวน / ขั้นต่ำ</th>
+                      <th class="text-end" style="min-width: 110px;">ราคาขาย/หน่วย</th>
+                      <th class="text-center" style="min-width: 110px;">คะแนนขายดี</th>
+                      <th class="text-center" style="min-width: 200px;">การทำงาน</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stockTableBody">
+                    <!-- รายการแถวสต๊อกจะแทรกผ่าน JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ปุ่มโหลดเพิ่ม (Pagination) -->
+        <section class="mb-5 text-center">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm d-none"
+            id="loadMoreStockBtn"
+          >
+            <span
+              class="spinner-border spinner-border-sm me-2 d-none"
+              id="loadMoreStockSpinner"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span id="loadMoreStockBtnText">โหลดรายการสต๊อกเพิ่ม</span>
+          </button>
+        </section>
+
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         หน้าปัจจุบัน: สต๊อก
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link active">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         Modal ซื้ออะไหล่เข้า (Stock In)
+         ใช้บันทึกจำนวนที่ซื้อเข้า + ต้นทุนต่อหน่วย
+    ============================================================ -->
+    <div
+      class="modal fade"
+      id="stockInModal"
+      tabindex="-1"
+      aria-labelledby="stockInModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-6" id="stockInModalLabel">
+              บันทึกซื้ออะไหล่เข้า
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="ปิด"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- สถานะโหลดข้อมูล -->
+            <div
+              id="stockInLoadingState"
+              class="alert alert-light border small py-2 mb-3 d-none"
+            >
+              กำลังโหลดข้อมูลสินค้า...
+            </div>
+
+            <!-- ข้อมูลสินค้าแบบสรุป -->
+            <section class="mb-3 small">
+              <h2 class="h6 fw-semibold mb-2">ข้อมูลสินค้า</h2>
+              <div>
+                <div>
+                  <span class="fw-semibold">รหัสสินค้า:</span>
+                  <span id="stockInItemCodeText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">ชื่อสินค้า:</span>
+                  <span id="stockInItemNameText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">หมวดหมู่:</span>
+                  <span id="stockInItemCategoryText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">จำนวนคงเหลือปัจจุบัน:</span>
+                  <span id="stockInItemQtyText">-</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- ฟอร์มบันทึกซื้อเข้า -->
+            <section class="mb-0">
+              <h2 class="h6 fw-semibold mb-2">บันทึกการซื้อเข้า</h2>
+              <form id="stockInForm" class="row g-2 small">
+                <div class="col-6">
+                  <label for="stockInDateInput" class="form-label small mb-1">
+                    วันที่ซื้อเข้า
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="stockInDateInput"
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="stockInQtyInput" class="form-label small mb-1">
+                    จำนวนที่ซื้อเข้า
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    class="form-control form-control-sm"
+                    id="stockInQtyInput"
+                    placeholder="เช่น 10"
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="stockInCostPerUnitInput" class="form-label small mb-1">
+                    ราคาต้นทุนต่อหน่วย (บาท)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="stockInCostPerUnitInput"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div class="col-6">
+                  <label class="form-label small mb-1">
+                    มูลค่ารวมโดยประมาณ
+                  </label>
+                  <div
+                    class="alert alert-secondary py-2 mb-0"
+                    id="stockInTotalCostPreview"
+                  >
+                    0.00 ฿
+                  </div>
+                </div>
+              </form>
+              <p class="small text-muted mt-2 mb-0">
+                ระบบจะเพิ่มจำนวนในสต๊อก อัปเดตราคาต้นทุนล่าสุด
+                บันทึกค่าใช้จ่ายใน <code>transactions</code>
+                และบันทึกเหตุการณ์ใน <code>activityLogs</code> ให้โดยอัตโนมัติ
+              </p>
+            </section>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              id="stockInSaveBtn"
+            >
+              <span
+                class="spinner-border spinner-border-sm me-2 d-none"
+                id="stockInSaveSpinner"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span id="stockInSaveBtnText">บันทึกซื้อเข้า</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า stock.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // ฟอร์มสต๊อก
+      const stockItemForm = document.getElementById("stockItemForm");
+      const stockItemIdInput = document.getElementById("stockItemIdInput");
+      const stockFormTitleText = document.getElementById("stockFormTitleText");
+      const cancelEditStockBtn = document.getElementById("cancelEditStockBtn");
+
+      const stockCodeInput = document.getElementById("stockCodeInput");
+      const stockNameInput = document.getElementById("stockNameInput");
+      const stockCategoryInput = document.getElementById("stockCategoryInput");
+      const stockUnitInput = document.getElementById("stockUnitInput");
+      const stockQtyInput = document.getElementById("stockQtyInput");
+      const stockMinQtyInput = document.getElementById("stockMinQtyInput");
+      const stockCostPriceInput = document.getElementById("stockCostPriceInput");
+      const stockSalePriceInput = document.getElementById("stockSalePriceInput");
+      const saveStockItemBtn = document.getElementById("saveStockItemBtn");
+      const saveStockItemSpinner = document.getElementById("saveStockItemSpinner");
+      const saveStockItemBtnText = document.getElementById("saveStockItemBtnText");
+
+      // Filter + Summary
+      const searchStockInput = document.getElementById("searchStockInput");
+      const stockCategoryFilter = document.getElementById("stockCategoryFilter");
+      const stockFilterModeAll = document.getElementById("stockFilterModeAll");
+      const stockFilterModeLow = document.getElementById("stockFilterModeLow");
+      const stockFilterModeFast = document.getElementById("stockFilterModeFast");
+      const stockFilterModeSlow = document.getElementById("stockFilterModeSlow");
+
+      const stockLoadingState = document.getElementById("stockLoadingState");
+      const stockCountInfo = document.getElementById("stockCountInfo");
+      const stockCountNumber = document.getElementById("stockCountNumber");
+
+      const stockTotalItemsText = document.getElementById("stockTotalItemsText");
+      const stockLowItemsText = document.getElementById("stockLowItemsText");
+      const stockTotalCostValueText = document.getElementById("stockTotalCostValueText");
+      const stockTotalSaleValueText = document.getElementById("stockTotalSaleValueText");
+
+      // ตาราง
+      const stockTableBody = document.getElementById("stockTableBody");
+      const loadMoreStockBtn = document.getElementById("loadMoreStockBtn");
+      const loadMoreStockSpinner = document.getElementById("loadMoreStockSpinner");
+      const loadMoreStockBtnText = document.getElementById("loadMoreStockBtnText");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+
+      // Modal Stock In
+      const stockInModalEl = document.getElementById("stockInModal");
+      const stockInLoadingState = document.getElementById("stockInLoadingState");
+      const stockInItemCodeText = document.getElementById("stockInItemCodeText");
+      const stockInItemNameText = document.getElementById("stockInItemNameText");
+      const stockInItemCategoryText = document.getElementById("stockInItemCategoryText");
+      const stockInItemQtyText = document.getElementById("stockInItemQtyText");
+      const stockInDateInput = document.getElementById("stockInDateInput");
+      const stockInQtyInput = document.getElementById("stockInQtyInput");
+      const stockInCostPerUnitInput = document.getElementById("stockInCostPerUnitInput");
+      const stockInTotalCostPreview = document.getElementById("stockInTotalCostPreview");
+      const stockInForm = document.getElementById("stockInForm");
+      const stockInSaveBtn = document.getElementById("stockInSaveBtn");
+      const stockInSaveSpinner = document.getElementById("stockInSaveSpinner");
+      const stockInSaveBtnText = document.getElementById("stockInSaveBtnText");
+      const stockInModalLabel = document.getElementById("stockInModalLabel");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // Modal instance
+      const stockInModal = bootstrap.Modal.getOrCreateInstance(stockInModalEl);
+
+      // ============================================================
+      // สถานะภายในหน้า
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      // สถานะข้อมูลสต๊อกและ pagination
+      const STOCK_PAGE_SIZE = 20;
+      let stockLastVisible = null;
+      let isLoadingStock = false;
+
+      let stockItemsRaw = []; // ข้อมูลสต๊อกที่โหลดมาจาก Firestore (ตาม branchId)
+      let stockFilterMode = "all";
+      let searchKeyword = "";
+      let selectedCategory = "all";
+
+      // สถานะแบบสรุป
+      let stockSummaryTotalItems = 0;
+      let stockSummaryLowItems = 0;
+      let stockSummaryTotalCostValue = 0;
+      let stockSummaryTotalSaleValue = 0;
+
+      // การแก้ไขสินค้า
+      let isEditingStockItem = false;
+
+      // ซื้อเข้า
+      let stockInCurrentItem = null;
+      let isSavingStockIn = false;
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: รูปแบบตัวเลขและวันที่แบบไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function formatIntegerNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0";
+        return value.toLocaleString("th-TH", {
+          maximumFractionDigits: 0,
+        });
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      function parseNumberFromInput(inputEl) {
+        if (!inputEl) return 0;
+        const value = inputEl.value;
+        if (!value) return 0;
+        const num = parseFloat(value);
+        if (isNaN(num)) return 0;
+        return num;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตั้งค่าสถานะ Loading ของสต๊อก
+      // ============================================================
+      function setStockLoadingState(isLoading, isFirstPage = false) {
+        isLoadingStock = isLoading;
+
+        if (stockLoadingState) {
+          if (isLoading && isFirstPage) {
+            stockLoadingState.textContent =
+              "กำลังโหลดข้อมูลสต๊อกจากฐานข้อมูล...";
+            stockLoadingState.classList.remove("text-danger");
+            stockLoadingState.classList.remove("text-success");
+          } else if (!isLoading && stockItemsRaw.length === 0) {
+            stockLoadingState.textContent =
+              "ไม่พบรายการสต๊อกในระบบตามตัวกรองปัจจุบัน";
+            stockLoadingState.classList.remove("text-success");
+            stockLoadingState.classList.add("text-danger");
+          } else if (!isLoading) {
+            stockLoadingState.textContent = "โหลดข้อมูลล่าสุดแล้ว";
+            stockLoadingState.classList.add("text-success");
+          }
+        }
+
+        if (loadMoreStockBtn && loadMoreStockSpinner && loadMoreStockBtnText) {
+          if (isLoading && !isFirstPage) {
+            loadMoreStockSpinner.classList.remove("d-none");
+            loadMoreStockBtnText.textContent = "กำลังโหลดรายการสต๊อกเพิ่ม...";
+            loadMoreStockBtn.disabled = true;
+          } else {
+            loadMoreStockSpinner.classList.add("d-none");
+            loadMoreStockBtnText.textContent = "โหลดรายการสต๊อกเพิ่ม";
+            loadMoreStockBtn.disabled = false;
+          }
+        }
+      }
+
+      // ============================================================
+      // สรุปสต๊อกจาก stockItemsRaw ทั้งหมด
+      // ============================================================
+      function recalculateStockSummary() {
+        let totalItems = 0;
+        let lowItems = 0;
+        let totalCostValue = 0;
+        let totalSaleValue = 0;
+
+        stockItemsRaw.forEach((item) => {
+          const qty = Number(item.qty) || 0;
+          const minQty = Number(item.minQty) || 0;
+          const costPrice = Number(item.costPrice) || 0;
+          const salePrice = Number(item.salePrice) || 0;
+
+          totalItems += 1;
+          if (qty <= minQty) {
+            lowItems += 1;
+          }
+          totalCostValue += qty * costPrice;
+          totalSaleValue += qty * salePrice;
+        });
+
+        stockSummaryTotalItems = totalItems;
+        stockSummaryLowItems = lowItems;
+        stockSummaryTotalCostValue = totalCostValue;
+        stockSummaryTotalSaleValue = totalSaleValue;
+
+        if (stockTotalItemsText) {
+          stockTotalItemsText.textContent =
+            formatIntegerNumber(totalItems) + " รายการ";
+        }
+        if (stockLowItemsText) {
+          stockLowItemsText.textContent =
+            formatIntegerNumber(lowItems) + " รายการ";
+        }
+        if (stockTotalCostValueText) {
+          stockTotalCostValueText.textContent =
+            formatNumber(totalCostValue) + " ฿";
+        }
+        if (stockTotalSaleValueText) {
+          stockTotalSaleValueText.textContent =
+            formatNumber(totalSaleValue) + " ฿";
+        }
+      }
+
+      // ============================================================
+      // อัปเดตรายการหมวดหมู่ในตัวเลือก filter จาก stockItemsRaw
+      // ============================================================
+      function updateCategoryFilterOptions() {
+        if (!stockCategoryFilter) return;
+
+        const categoriesSet = new Set();
+        stockItemsRaw.forEach((item) => {
+          const category = (item.category || "").trim();
+          if (category) {
+            categoriesSet.add(category);
+          }
+        });
+
+        const options = ['<option value="all">ทุกหมวดหมู่</option>'];
+        Array.from(categoriesSet)
+          .sort((a, b) => a.localeCompare(b, "th"))
+          .forEach((cat) => {
+            const selectedAttr =
+              selectedCategory === cat ? ' selected="selected"' : "";
+            options.push(
+              `<option value="${cat.replace(/"/g, "&quot;")}"${selectedAttr}>${cat}</option>`
+            );
+          });
+
+        stockCategoryFilter.innerHTML = options.join("");
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ใช้ตัวกรองกับ stockItemsRaw และ Render ตาราง
+      // ============================================================
+      function applyFiltersAndRenderTable() {
+        if (!stockTableBody) return;
+
+        // คำค้นหา
+        const keyword = (searchKeyword || "").trim().toLowerCase();
+        const mode = stockFilterMode;
+        const categoryFilterValue = selectedCategory;
+
+        let filteredItems = stockItemsRaw.filter((item) => {
+          if (!item) return false;
+
+          // หมวดหมู่
+          if (
+            categoryFilterValue &&
+            categoryFilterValue !== "all" &&
+            (item.category || "") !== categoryFilterValue
+          ) {
+            return false;
+          }
+
+          // ใกล้หมด / ขายดี / ขายช้า
+          const qty = Number(item.qty) || 0;
+          const minQty = Number(item.minQty) || 0;
+          const fastMovingScore = Number(item.fastMovingScore) || 0;
+
+          if (mode === "low") {
+            if (!(qty <= minQty)) return false;
+          } else if (mode === "fast") {
+            // กำหนดให้ "ขายดี" = fastMovingScore >= 10
+            if (!(fastMovingScore >= 10)) return false;
+          } else if (mode === "slow") {
+            // "ขายช้า" = fastMovingScore > 0 และ < 10
+            if (!(fastMovingScore > 0 && fastMovingScore < 10)) return false;
+          }
+
+          // คำค้นหาโดยรหัส/ชื่อ
+          if (keyword) {
+            const code = (item.code || "").toLowerCase();
+            const name = (item.name || "").toLowerCase();
+            if (!code.includes(keyword) && !name.includes(keyword)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+
+        // ล้างตาราง
+        stockTableBody.innerHTML = "";
+
+        if (filteredItems.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="8" class="text-center small text-muted">
+              ไม่พบรายการสต๊อกตามตัวกรองที่เลือก
+            </td>
+          `;
+          stockTableBody.appendChild(tr);
+        } else {
+          filteredItems.forEach((item) => {
+            const tr = document.createElement("tr");
+
+            const qty = Number(item.qty) || 0;
+            const minQty = Number(item.minQty) || 0;
+            const salePrice = Number(item.salePrice) || 0;
+            const fastMovingScore = Number(item.fastMovingScore) || 0;
+
+            const isLow = qty <= minQty;
+            if (isLow) {
+              tr.classList.add("table-warning");
+            }
+
+            tr.innerHTML = `
+              <td class="small">
+                ${item.code || "-"}
+              </td>
+              <td class="small">
+                ${item.name || "-"}
+              </td>
+              <td class="small">
+                ${item.category || "-"}
+              </td>
+              <td class="small">
+                ${item.unit || "-"}
+              </td>
+              <td class="small text-end">
+                ${formatIntegerNumber(qty)} / ${formatIntegerNumber(minQty)}
+              </td>
+              <td class="small text-end">
+                ${formatNumber(salePrice)} ฿
+              </td>
+              <td class="small text-center">
+                <span class="badge bg-${
+                  fastMovingScore >= 10
+                    ? "success"
+                    : fastMovingScore > 0
+                    ? "info"
+                    : "secondary"
+                }">
+                  ${formatIntegerNumber(fastMovingScore)}
+                </span>
+              </td>
+              <td class="small text-center">
+                <button
+                  type="button"
+                  class="btn btn-outline-success btn-sm me-1 stock-in-btn"
+                  data-stock-id="${item.id}"
+                >
+                  ซื้อเข้า
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm me-1 edit-stock-btn"
+                  data-stock-id="${item.id}"
+                >
+                  แก้ไข
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm delete-stock-btn"
+                  data-stock-id="${item.id}"
+                >
+                  ลบ
+                </button>
+              </td>
+            `;
+
+            stockTableBody.appendChild(tr);
+          });
+        }
+
+        // แสดงจำนวนรายการที่ผ่านการกรอง
+        if (stockCountInfo && stockCountNumber) {
+          stockCountInfo.classList.remove("d-none");
+          stockCountNumber.textContent = String(filteredItems.length);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดสต๊อกจาก Firestore พร้อม pagination
+      // ============================================================
+      async function loadStockItems(reset = false) {
+        if (isLoadingStock) return;
+        if (!currentUserProfile) return;
+
+        const branchId = currentUserProfile.branchId || null;
+
+        if (reset) {
+          stockItemsRaw = [];
+          stockLastVisible = null;
+        }
+
+        const isFirstPage = reset || !stockLastVisible;
+        setStockLoadingState(true, isFirstPage);
+
+        try {
+          const stockCol = collection(db, "stock");
+          const constraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+
+          let qStock = query(
+            stockCol,
+            ...constraints,
+            orderBy("name", "asc"),
+            limit(STOCK_PAGE_SIZE)
+          );
+
+          if (!isFirstPage && stockLastVisible) {
+            qStock = query(
+              stockCol,
+              ...constraints,
+              orderBy("name", "asc"),
+              startAfter(stockLastVisible),
+              limit(STOCK_PAGE_SIZE)
+            );
+          }
+
+          // หมายเหตุ: หาก Firestore แจ้งว่าต้องสร้างดัชนี (index)
+          // ให้สร้าง index ตามลิงก์ที่ Firestore แจ้งครั้งแรกเท่านั้น
+          const snap = await getDocs(qStock);
+
+          const newItems = [];
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            newItems.push({
+              id: docSnap.id,
+              code: data.code || "",
+              name: data.name || "",
+              category: data.category || "",
+              unit: data.unit || "",
+              qty: Number(data.qty) || 0,
+              minQty: Number(data.minQty) || 0,
+              costPrice: Number(data.costPrice) || 0,
+              salePrice: Number(data.salePrice) || 0,
+              fastMovingScore: Number(data.fastMovingScore) || 0,
+              imageUrl: data.imageUrl || null,
+              createdAt: data.createdAt || null,
+              updatedAt: data.updatedAt || null,
+              isDeleted: data.isDeleted || false,
+              branchId: data.branchId || null,
+            });
+          });
+
+          if (reset) {
+            stockItemsRaw = newItems;
+          } else {
+            stockItemsRaw = stockItemsRaw.concat(newItems);
+          }
+
+          if (!snap.empty) {
+            stockLastVisible = snap.docs[snap.docs.length - 1];
+          }
+
+          // แสดง/ซ่อนปุ่มโหลดเพิ่ม
+          if (loadMoreStockBtn) {
+            if (snap.size === STOCK_PAGE_SIZE) {
+              loadMoreStockBtn.classList.remove("d-none");
+            } else {
+              loadMoreStockBtn.classList.add("d-none");
+            }
+          }
+
+          // อัปเดตหมวดหมู่ + สรุป + ตาราง
+          updateCategoryFilterOptions();
+          recalculateStockSummary();
+          applyFiltersAndRenderTable();
+        } catch (error) {
+          console.error("โหลดรายการสต๊อกไม่สำเร็จ:", error);
+          if (stockLoadingState) {
+            stockLoadingState.textContent =
+              "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")";
+            stockLoadingState.classList.add("text-danger");
+          }
+          showToast(
+            "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          setStockLoadingState(false, isFirstPage);
+        }
+      }
+
+      // ============================================================
+      // ฟอร์มสต๊อก: รีเซ็ตเป็นโหมดเพิ่มใหม่
+      // ============================================================
+      function resetStockFormToCreateMode() {
+        isEditingStockItem = false;
+        stockItemIdInput.value = "";
+        stockFormTitleText.textContent = "เพิ่มสินค้าอะไหล่ใหม่";
+        cancelEditStockBtn.classList.add("d-none");
+        saveStockItemBtnText.textContent = "บันทึกสินค้า";
+
+        stockCodeInput.value = "";
+        stockNameInput.value = "";
+        stockCategoryInput.value = "";
+        stockUnitInput.value = "";
+        stockQtyInput.value = "";
+        stockMinQtyInput.value = "";
+        stockCostPriceInput.value = "";
+        stockSalePriceInput.value = "";
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: handle บันทึกสินค้าในสต๊อก (Create/Update)
+      // ============================================================
+      async function handleSaveStockItem(event) {
+        event.preventDefault();
+        if (!currentUser || !currentUserProfile) return;
+
+        const code = (stockCodeInput.value || "").trim();
+        const name = (stockNameInput.value || "").trim();
+        const category = (stockCategoryInput.value || "").trim();
+        const unit = (stockUnitInput.value || "").trim();
+        const qty = parseNumberFromInput(stockQtyInput);
+        const minQty = parseNumberFromInput(stockMinQtyInput);
+        const costPrice = parseNumberFromInput(stockCostPriceInput);
+        const salePrice = parseNumberFromInput(stockSalePriceInput);
+
+        if (!code || !name || !category || !unit) {
+          showToast(
+            "กรุณากรอกรหัสสินค้า ชื่อสินค้า หมวดหมู่ และหน่วยนับให้ครบถ้วน",
+            "warning"
+          );
+          return;
+        }
+
+        if (qty < 0 || minQty < 0 || costPrice < 0 || salePrice < 0) {
+          showToast(
+            "จำนวนและราคาไม่สามารถติดลบได้ กรุณาตรวจสอบข้อมูลอีกครั้ง",
+            "warning"
+          );
+          return;
+        }
+
+        saveStockItemSpinner.classList.remove("d-none");
+        saveStockItemBtnText.textContent = isEditingStockItem
+          ? "กำลังอัปเดตสินค้า..."
+          : "กำลังบันทึกสินค้า...";
+        saveStockItemBtn.disabled = true;
+
+        const branchId = currentUserProfile.branchId || null;
+
+        try {
+          if (isEditingStockItem && stockItemIdInput.value) {
+            // โหมดแก้ไข
+            const stockId = stockItemIdInput.value;
+            const stockRef = doc(db, "stock", stockId);
+            await updateDoc(stockRef, {
+              code,
+              name,
+              category,
+              unit,
+              qty,
+              minQty,
+              costPrice,
+              salePrice,
+              updatedAt: serverTimestamp(),
+            });
+
+            // อัปเดตใน state
+            stockItemsRaw = stockItemsRaw.map((item) =>
+              item.id === stockId
+                ? {
+                    ...item,
+                    code,
+                    name,
+                    category,
+                    unit,
+                    qty,
+                    minQty,
+                    costPrice,
+                    salePrice,
+                  }
+                : item
+            );
+
+            // บันทึก activityLogs
+            await addDoc(collection(db, "activityLogs"), {
+              createdAt: serverTimestamp(),
+              createdBy: currentUser.uid,
+              createdByName: currentUserProfile.displayName || "",
+              type: "stock_updated",
+              message: `แก้ไขข้อมูลสินค้า (${code}) ${name}`,
+              refType: "stock",
+              refId: stockId,
+              branchId,
+            });
+
+            showToast("อัปเดตข้อมูลสินค้าเรียบร้อยแล้ว", "success");
+          } else {
+            // โหมดสร้างใหม่
+            const newItem = {
+              code,
+              name,
+              category,
+              unit,
+              qty,
+              minQty,
+              costPrice,
+              salePrice,
+              fastMovingScore: 0,
+              imageUrl: null,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+              isDeleted: false,
+              branchId,
+            };
+
+            const docRef = await addDoc(collection(db, "stock"), newItem);
+
+            // เพิ่มใน state
+            stockItemsRaw.push({
+              id: docRef.id,
+              ...newItem,
+            });
+
+            // บันทึก activityLogs
+            await addDoc(collection(db, "activityLogs"), {
+              createdAt: serverTimestamp(),
+              createdBy: currentUser.uid,
+              createdByName: currentUserProfile.displayName || "",
+              type: "stock_created",
+              message: `เพิ่มสินค้าใหม่ (${code}) ${name}`,
+              refType: "stock",
+              refId: docRef.id,
+              branchId,
+            });
+
+            showToast("บันทึกสินค้าใหม่เรียบร้อยแล้ว", "success");
+          }
+
+          // รีเซ็ตฟอร์ม, อัปเดตสรุป + ตาราง + หมวดหมู่
+          resetStockFormToCreateMode();
+          recalculateStockSummary();
+          updateCategoryFilterOptions();
+          applyFiltersAndRenderTable();
+        } catch (error) {
+          console.error("บันทึก/อัปเดตสินค้าไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกข้อมูลสินค้าได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          saveStockItemSpinner.classList.add("d-none");
+          saveStockItemBtnText.textContent = "บันทึกสินค้า";
+          saveStockItemBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: เปิดโหมดแก้ไขสินค้าในฟอร์ม
+      // ============================================================
+      function startEditStockItem(stockId) {
+        const item = stockItemsRaw.find((s) => s.id === stockId);
+        if (!item) {
+          showToast("ไม่พบข้อมูลสินค้าที่ต้องการแก้ไข", "warning");
+          return;
+        }
+
+        isEditingStockItem = true;
+        stockItemIdInput.value = item.id;
+        stockFormTitleText.textContent = "แก้ไขข้อมูลสินค้า";
+        cancelEditStockBtn.classList.remove("d-none");
+        saveStockItemBtnText.textContent = "อัปเดตสินค้า";
+
+        stockCodeInput.value = item.code || "";
+        stockNameInput.value = item.name || "";
+        stockCategoryInput.value = item.category || "";
+        stockUnitInput.value = item.unit || "";
+        stockQtyInput.value = item.qty != null ? item.qty : "";
+        stockMinQtyInput.value = item.minQty != null ? item.minQty : "";
+        stockCostPriceInput.value = item.costPrice != null ? item.costPrice : "";
+        stockSalePriceInput.value = item.salePrice != null ? item.salePrice : "";
+
+        // เลื่อนจอไปยังฟอร์ม
+        const rect = stockItemForm?.getBoundingClientRect();
+        if (rect) {
+          window.scrollTo({
+            top: window.scrollY + rect.top - 80,
+            behavior: "smooth",
+          });
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ลบสินค้า (soft delete) – เฉพาะ admin
+      // ============================================================
+      async function deleteStockItem(stockId) {
+        if (!currentUser || !currentUserProfile) return;
+
+        if (currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์ทำรายการนี้", "warning");
+          return;
+        }
+
+        const item = stockItemsRaw.find((s) => s.id === stockId);
+        if (!item) {
+          showToast("ไม่พบข้อมูลสินค้าที่ต้องการลบ", "warning");
+          return;
+        }
+
+        if (
+          !confirm(
+            `ต้องการซ่อน/ลบสินค้า (${item.code}) ${item.name} ออกจากรายการหรือไม่?\nคุณสามารถดู/กู้คืนได้จาก Firestore ภายหลัง`
+          )
+        ) {
+          return;
+        }
+
+        try {
+          const stockRef = doc(db, "stock", stockId);
+          await updateDoc(stockRef, {
+            isDeleted: true,
+            updatedAt: serverTimestamp(),
+          });
+
+          const branchId = currentUserProfile.branchId || null;
+
+          // บันทึก activityLogs
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "stock_deleted",
+            message: `ซ่อนสินค้า (${item.code}) ${item.name} ออกจากรายการสต๊อก`,
+            refType: "stock",
+            refId: stockId,
+            branchId,
+          });
+
+          // ลบออกจาก state
+          stockItemsRaw = stockItemsRaw.filter((s) => s.id !== stockId);
+
+          recalculateStockSummary();
+          updateCategoryFilterOptions();
+          applyFiltersAndRenderTable();
+
+          showToast("ซ่อน/ลบสินค้าออกจากรายการเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("ลบสินค้าไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถซ่อน/ลบสินค้าได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: เปิด Modal ซื้อเข้า สำหรับสินค้าแต่ละตัว
+      // ============================================================
+      function openStockInModal(stockId) {
+        const item = stockItemsRaw.find((s) => s.id === stockId);
+        if (!item) {
+          showToast("ไม่พบข้อมูลสินค้าที่ต้องการบันทึกซื้อเข้า", "warning");
+          return;
+        }
+
+        stockInCurrentItem = item;
+
+        if (stockInLoadingState) {
+          stockInLoadingState.classList.add("d-none");
+        }
+
+        stockInModalLabel.textContent = "บันทึกซื้ออะไหล่เข้า";
+
+        stockInItemCodeText.textContent = item.code || "-";
+        stockInItemNameText.textContent = item.name || "-";
+        stockInItemCategoryText.textContent = item.category || "-";
+        stockInItemQtyText.textContent = formatIntegerNumber(item.qty || 0);
+
+        stockInDateInput.value = getTodayISODateString();
+        stockInQtyInput.value = "";
+        stockInCostPerUnitInput.value = "";
+        stockInTotalCostPreview.textContent = "0.00 ฿";
+
+        stockInSaveBtn.disabled = false;
+        stockInSaveSpinner.classList.add("d-none");
+        stockInSaveBtnText.textContent = "บันทึกซื้อเข้า";
+
+        stockInModal.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: อัปเดต preview มูลค่ารวมในการซื้อเข้า
+      // ============================================================
+      function updateStockInTotalCostPreview() {
+        const qty = parseNumberFromInput(stockInQtyInput);
+        const costPerUnit = parseNumberFromInput(stockInCostPerUnitInput);
+        const totalCost = qty * costPerUnit;
+        stockInTotalCostPreview.textContent = formatNumber(totalCost) + " ฿";
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: บันทึกซื้ออะไหล่เข้า (update stock + transaction + log)
+      // ============================================================
+      async function handleSaveStockIn() {
+        if (!stockInCurrentItem || !currentUser || !currentUserProfile) return;
+        if (isSavingStockIn) return;
+
+        const date = stockInDateInput.value || getTodayISODateString();
+        const qtyAdded = parseNumberFromInput(stockInQtyInput);
+        const costPerUnit = parseNumberFromInput(stockInCostPerUnitInput);
+
+        if (!date || qtyAdded <= 0 || costPerUnit < 0) {
+          showToast(
+            "กรุณากรอกวันที่ จำนวนที่ซื้อเข้า และราคาต้นทุนต่อหน่วยให้ถูกต้อง",
+            "warning"
+          );
+          return;
+        }
+
+        isSavingStockIn = true;
+        stockInSaveSpinner.classList.remove("d-none");
+        stockInSaveBtnText.textContent = "กำลังบันทึกซื้อเข้า...";
+        stockInSaveBtn.disabled = true;
+
+        const branchId = currentUserProfile.branchId || null;
+        const totalCost = qtyAdded * costPerUnit;
+
+        try {
+          const stockRef = doc(db, "stock", stockInCurrentItem.id);
+          const newQty = (Number(stockInCurrentItem.qty) || 0) + qtyAdded;
+
+          // อัปเดตใน Firestore: จำนวนและต้นทุนล่าสุด
+          await updateDoc(stockRef, {
+            qty: newQty,
+            costPrice: costPerUnit,
+            updatedAt: serverTimestamp(),
+          });
+
+          // บันทึกเป็นค่าใช้จ่ายใน transactions
+          await addDoc(collection(db, "transactions"), {
+            date,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            type: "expense",
+            category: "ซื้ออะไหล่",
+            description: `ซื้ออะไหล่ (${stockInCurrentItem.code}) ${stockInCurrentItem.name}`,
+            amount: totalCost,
+            method: "cash",
+            sourceType: "stock",
+            sourceId: stockInCurrentItem.id,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          });
+
+          // บันทึก activityLogs
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "stock_in",
+            message: `ซื้ออะไหล่เข้า (${stockInCurrentItem.code}) ${
+              stockInCurrentItem.name
+            } จำนวน ${qtyAdded.toLocaleString("th-TH")} ${
+              stockInCurrentItem.unit || ""
+            } รวม ${totalCost.toLocaleString("th-TH")} บาท`,
+            refType: "stock",
+            refId: stockInCurrentItem.id,
+            branchId,
+          });
+
+          // อัปเดต state
+          stockItemsRaw = stockItemsRaw.map((item) =>
+            item.id === stockInCurrentItem.id
+              ? {
+                  ...item,
+                  qty: newQty,
+                  costPrice: costPerUnit,
+                }
+              : item
+          );
+
+          recalculateStockSummary();
+          applyFiltersAndRenderTable();
+
+          showToast("บันทึกซื้ออะไหล่เข้าเรียบร้อยแล้ว", "success");
+          stockInModal.hide();
+        } catch (error) {
+          console.error("บันทึกซื้อเข้าไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกซื้ออะไหล่เข้าได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isSavingStockIn = false;
+          stockInSaveSpinner.classList.add("d-none");
+          stockInSaveBtnText.textContent = "บันทึกซื้อเข้า";
+          stockInSaveBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้านี้
+      // ============================================================
+      function setupEventListenersForPage() {
+        // Logout
+        logoutBtn?.addEventListener("click", () => {
+          handleLogout();
+        });
+
+        // ปุ่มสลับธีม
+        themeToggleBtn?.addEventListener("click", async () => {
+          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+            ? "dark"
+            : "light";
+          const nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+          if (currentUser) {
+            saveThemeForUser(currentUser.uid, nextTheme);
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          }
+        });
+
+        // ฟอร์มสินค้า
+        stockItemForm?.addEventListener("submit", handleSaveStockItem);
+
+        // ปุ่มยกเลิกการแก้ไข
+        cancelEditStockBtn?.addEventListener("click", () => {
+          resetStockFormToCreateMode();
+        });
+
+        // Enter ใน input สำคัญให้ submit ฟอร์ม
+        [
+          stockCodeInput,
+          stockNameInput,
+          stockCategoryInput,
+          stockUnitInput,
+          stockQtyInput,
+          stockMinQtyInput,
+          stockCostPriceInput,
+          stockSalePriceInput,
+        ].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              stockItemForm?.dispatchEvent(new Event("submit"));
+            }
+          });
+        });
+
+        // ค้นหา
+        searchStockInput?.addEventListener("input", (event) => {
+          searchKeyword = event.target.value || "";
+          applyFiltersAndRenderTable();
+        });
+
+        // เปลี่ยนหมวดหมู่
+        stockCategoryFilter?.addEventListener("change", (event) => {
+          selectedCategory = event.target.value || "all";
+          applyFiltersAndRenderTable();
+        });
+
+        // โหมด filter
+        [stockFilterModeAll, stockFilterModeLow, stockFilterModeFast, stockFilterModeSlow].forEach(
+          (radio) => {
+            radio?.addEventListener("change", (event) => {
+              if (!event.target.checked) return;
+              stockFilterMode = event.target.value || "all";
+              applyFiltersAndRenderTable();
+            });
+          }
+        );
+
+        // ปุ่มโหลดเพิ่มเติม
+        loadMoreStockBtn?.addEventListener("click", () => {
+          loadStockItems(false);
+        });
+
+        // ตาราง: event delegation สำหรับปุ่ม ซื้อเข้า / แก้ไข / ลบ
+        stockTableBody?.addEventListener("click", (event) => {
+          const stockInBtn = event.target.closest(".stock-in-btn");
+          if (stockInBtn) {
+            const stockId = stockInBtn.getAttribute("data-stock-id");
+            openStockInModal(stockId);
+            return;
+          }
+
+          const editBtn = event.target.closest(".edit-stock-btn");
+          if (editBtn) {
+            const stockId = editBtn.getAttribute("data-stock-id");
+            startEditStockItem(stockId);
+            return;
+          }
+
+          const deleteBtn = event.target.closest(".delete-stock-btn");
+          if (deleteBtn) {
+            const stockId = deleteBtn.getAttribute("data-stock-id");
+            deleteStockItem(stockId);
+            return;
+          }
+        });
+
+        // Modal Stock In: อัปเดต preview เมื่อกรอกจำนวน/ราคา
+        stockInQtyInput?.addEventListener("input", updateStockInTotalCostPreview);
+        stockInCostPerUnitInput?.addEventListener(
+          "input",
+          updateStockInTotalCostPreview
+        );
+        stockInForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          handleSaveStockIn();
+        });
+        stockInSaveBtn?.addEventListener("click", () => {
+          handleSaveStockIn();
+        });
+
+        // FAB เมนูด่วน
+        fabOpenBillBtn?.addEventListener("click", () => {
+          window.location.href = "open-bill.html";
+        });
+        fabAddTxnBtn?.addEventListener("click", () => {
+          window.location.href = "finance.html";
+        });
+        fabStockInBtn?.addEventListener("click", () => {
+          // เลื่อนจอไปยังตารางสต๊อก
+          const rect = stockTableBody?.getBoundingClientRect();
+          if (rect) {
+            window.scrollTo({
+              top: window.scrollY + rect.top - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้า stock.html
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // เมนูตั้งค่าเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่าเริ่มต้นของฟิลเตอร์
+          searchKeyword = "";
+          selectedCategory = "all";
+          stockFilterMode = "all";
+
+          // ตั้งค่า Event listeners
+          setupEventListenersForPage();
+
+          // โหลดข้อมูลสต๊อกชุดแรก
+          await loadStockItems(true);
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/สต๊อก:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายการสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

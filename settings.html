@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า "ตั้งค่าระบบ" -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – ตั้งค่าระบบ & ผู้ใช้ & สำรองข้อมูล</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item active"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "ตั้งค่าระบบ"
+         - โปรไฟล์ของฉัน
+         - ผู้ใช้ในระบบ (เฉพาะ admin)
+         - สำรองข้อมูล (Export jobs / transactions)
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">ตั้งค่าระบบ & ข้อมูลผู้ใช้</h1>
+            <p class="small text-muted mb-0">
+              จัดการโปรไฟล์ของคุณ ปรับธีม เปลี่ยนสิทธิ์ผู้ใช้ และสำรองข้อมูลงานซ่อม/รายการเงิน
+            </p>
+          </div>
+          <div class="text-end">
+            <span
+              class="badge rounded-pill text-bg-secondary small"
+              id="settingsRoleBadge"
+            >
+              -
+            </span>
+          </div>
+        </div>
+
+        <!-- ================= แถบเมนูแท็บ Settings ================= -->
+        <!-- คอมเมนต์: ใช้ Nav พื้นฐานของ Bootstrap แยก 3 Tabs ตามสเปก -->
+        <ul
+          class="nav nav-pills mb-3 small"
+          id="settingsTabs"
+          role="tablist"
+        >
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="profile-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#profileTabPane"
+              type="button"
+              role="tab"
+              aria-controls="profileTabPane"
+              aria-selected="true"
+            >
+              <i class="bi bi-person-circle me-1"></i> โปรไฟล์ของฉัน
+            </button>
+          </li>
+          <li class="nav-item" role="presentation" id="usersTabNavItem">
+            <button
+              class="nav-link"
+              id="users-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#usersTabPane"
+              type="button"
+              role="tab"
+              aria-controls="usersTabPane"
+              aria-selected="false"
+            >
+              <i class="bi bi-people-fill me-1"></i> ผู้ใช้ในระบบ
+              <span
+                class="badge bg-secondary ms-1"
+                id="usersCountBadge"
+              >0</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="backup-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#backupTabPane"
+              type="button"
+              role="tab"
+              aria-controls="backupTabPane"
+              aria-selected="false"
+            >
+              <i class="bi bi-cloud-arrow-down me-1"></i> สำรองข้อมูล
+            </button>
+          </li>
+        </ul>
+
+        <!-- ================= เนื้อหาแต่ละ Tab ================= -->
+        <div class="tab-content" id="settingsTabContent">
+          <!-- -------------------------------------------------------
+               Tab 1: โปรไฟล์ของฉัน
+               - แสดง Email (อ่านอย่างเดียว)
+               - เปลี่ยน Display Name
+               - เลือก Theme light/dark
+          -------------------------------------------------------- -->
+          <div
+            class="tab-pane fade show active"
+            id="profileTabPane"
+            role="tabpanel"
+            aria-labelledby="profile-tab"
+            tabindex="0"
+          >
+            <div class="card">
+              <div class="card-body small">
+                <h2 class="h6 fw-semibold mb-3">
+                  <i class="bi bi-person-check me-2"></i> โปรไฟล์ของฉัน
+                </h2>
+
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <div class="mb-2">
+                      <label class="form-label small">อีเมล (ใช้เข้าสู่ระบบ)</label>
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        id="profileEmailInput"
+                        readonly
+                      />
+                      <div class="form-text small">
+                        อีเมลใช้สำหรับเข้าสู่ระบบและรับลิงก์รีเซ็ตรหัสผ่าน
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small">ชื่อที่ใช้แสดงในระบบ</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="profileDisplayNameInput"
+                        placeholder="เช่น ช่างเบน, เจ้าของอู่ ฯลฯ"
+                      />
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label small">สาขาที่สังกัด (ถ้ามี)</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="profileBranchIdInput"
+                        placeholder="เช่น main, branch01 หรือปล่อยว่างหากมีสาขาเดียว"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="mb-2">
+                      <label class="form-label small">ธีมการแสดงผล</label>
+                      <div class="d-flex flex-wrap gap-2">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="profileThemeRadio"
+                            id="themeLightRadio"
+                            value="light"
+                          />
+                          <label
+                            class="form-check-label small"
+                            for="themeLightRadio"
+                          >
+                            โหมดสว่าง (Light)
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="profileThemeRadio"
+                            id="themeDarkRadio"
+                            value="dark"
+                          />
+                          <label
+                            class="form-check-label small"
+                            for="themeDarkRadio"
+                          >
+                            โหมดมืด (Dark)
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-text small">
+                        การเลือกธีมจะมีผลทั้งในอุปกรณ์นี้ และบันทึกไว้ในบัญชีของคุณ
+                      </div>
+                    </div>
+                    <div class="alert alert-info small mb-2" id="profileInfoAlert">
+                      คุณสามารถใช้หน้านี้เพื่อปรับชื่อที่ใช้แสดงและธีมได้ทุกเวลา
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-3 d-flex justify-content-between align-items-center">
+                  <small class="text-muted" id="profileSaveStatusText">
+                    ยังไม่มีการเปลี่ยนแปลง
+                  </small>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      id="profileSaveBtn"
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm me-2 d-none"
+                        id="profileSaveSpinner"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span id="profileSaveBtnText">บันทึกการเปลี่ยนแปลง</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------------------------------------------
+               Tab 2: ผู้ใช้ในระบบ (เฉพาะ admin)
+               - ตารางผู้ใช้ทั้งหมด
+               - เปลี่ยน role, disabled, branchId, displayName
+               - ฟอร์มสร้างผู้ใช้ใหม่ (email + password + displayName + role + branchId)
+          -------------------------------------------------------- -->
+          <div
+            class="tab-pane fade"
+            id="usersTabPane"
+            role="tabpanel"
+            aria-labelledby="users-tab"
+            tabindex="0"
+          >
+            <div class="card">
+              <div class="card-body small">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2">
+                  <h2 class="h6 fw-semibold mb-0">
+                    <i class="bi bi-people-fill me-2"></i> ผู้ใช้ในระบบ
+                  </h2>
+                  <span
+                    class="badge rounded-pill text-bg-warning small d-none"
+                    id="usersAdminOnlyBadge"
+                  >
+                    เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่สามารถจัดการผู้ใช้
+                  </span>
+                </div>
+
+                <div
+                  class="alert alert-warning small d-none"
+                  id="usersNotAdminAlert"
+                >
+                  ขณะนี้คุณยังไม่ได้เป็นผู้ดูแลระบบ (Admin)
+                  คุณสามารถดูข้อมูลผู้ใช้คนอื่นได้แต่ไม่สามารถแก้ไขได้
+                </div>
+
+                <!-- ตารางผู้ใช้ทั้งหมด -->
+                <div class="table-responsive mb-3">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead class="small text-muted">
+                      <tr>
+                        <th>อีเมล</th>
+                        <th>ชื่อแสดง</th>
+                        <th>Role</th>
+                        <th>สาขา</th>
+                        <th>สถานะ</th>
+                        <th class="text-end">จัดการ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usersTableTbody">
+                      <tr>
+                        <td colspan="6" class="text-center small text-muted">
+                          กำลังโหลดข้อมูลผู้ใช้...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- ฟอร์มสร้างผู้ใช้ใหม่ -->
+                <div class="border-top pt-3 mt-3">
+                  <h3 class="h6 fw-semibold mb-2">
+                    <i class="bi bi-person-plus me-2"></i> สร้างผู้ใช้ใหม่
+                  </h3>
+                  <p class="small text-muted mb-2">
+                    ระบบจะสร้างบัญชีผู้ใช้ใหม่ใน Firebase Auth และสร้างเอกสาร
+                    <code>/users</code> ให้อัตโนมัติ โดยไม่กระทบการล็อกอินของคุณ
+                  </p>
+                  <div class="row g-2">
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserEmailInput"
+                        >อีเมล</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        id="newUserEmailInput"
+                        placeholder="example@domain.com"
+                      />
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserPasswordInput"
+                        >รหัสผ่านเริ่มต้น</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        id="newUserPasswordInput"
+                        placeholder="อย่างน้อย 6 ตัวอักษร"
+                      />
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserDisplayNameInput"
+                        >ชื่อที่ใช้แสดง</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="newUserDisplayNameInput"
+                        placeholder="เช่น ช่าง A"
+                      />
+                    </div>
+                    <div class="col-6 col-md-1">
+                      <label class="form-label small" for="newUserRoleSelect"
+                        >Role</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        id="newUserRoleSelect"
+                      >
+                        <option value="staff">staff</option>
+                        <option value="admin">admin</option>
+                      </select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                      <label class="form-label small" for="newUserBranchIdInput"
+                        >สาขา</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="newUserBranchIdInput"
+                        placeholder="เว้นว่างได้"
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-2 d-flex justify-content-between align-items-center">
+                    <small class="text-muted" id="newUserCreateStatusText">
+                      ระบุข้อมูลให้ครบแล้วกดปุ่ม "สร้างผู้ใช้ใหม่"
+                    </small>
+                    <button
+                      type="button"
+                      class="btn btn-success btn-sm"
+                      id="newUserCreateBtn"
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm me-2 d-none"
+                        id="newUserCreateSpinner"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span id="newUserCreateBtnText">สร้างผู้ใช้ใหม่</span>
+                    </button>
+                  </div>
+
+                  <div class="alert alert-info small mt-2 mb-0">
+                    <strong>หมายเหตุ:</strong>
+                    เมื่อสร้างผู้ใช้ใหม่แล้ว
+                    แนะนำให้เปลี่ยนรหัสผ่านทันทีหลังจากเข้าสู่ระบบครั้งแรกด้วยตนเอง
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- -------------------------------------------------------
+               Tab 3: สำรองข้อมูล
+               - เลือกช่วงวันที่
+               - Export jobs ช่วงนี้ (JSON / CSV)
+               - Export transactions ช่วงนี้ (JSON / CSV)
+          -------------------------------------------------------- -->
+          <div
+            class="tab-pane fade"
+            id="backupTabPane"
+            role="tabpanel"
+            aria-labelledby="backup-tab"
+            tabindex="0"
+          >
+            <div class="card">
+              <div class="card-body small">
+                <h2 class="h6 fw-semibold mb-3">
+                  <i class="bi bi-cloud-arrow-down me-2"></i> สำรองข้อมูล
+                </h2>
+
+                <!-- ฟอร์มเลือกช่วงวันที่ -->
+                <div class="row g-2 align-items-end mb-3">
+                  <div class="col-6 col-md-3">
+                    <label
+                      for="backupStartDateInput"
+                      class="form-label small mb-1"
+                    >
+                      วันที่เริ่มต้น
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="backupStartDateInput"
+                    />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <label for="backupEndDateInput" class="form-label small mb-1">
+                      วันที่สิ้นสุด
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="backupEndDateInput"
+                    />
+                  </div>
+                  <div class="col-12 col-md-6 text-md-end">
+                    <span class="small text-muted" id="backupRangeStatusText">
+                      เลือกช่วงวันที่ที่ต้องการสำรองข้อมูล
+                    </span>
+                  </div>
+                </div>
+
+                <!-- ปุ่ม Export แต่ละประเภท -->
+                <div class="row g-2 mb-3">
+                  <div class="col-12 col-lg-6">
+                    <div class="border rounded p-2 h-100">
+                      <h3 class="h6 fw-semibold mb-2">
+                        <i class="bi bi-receipt-cutoff me-2"></i> Export Jobs (ใบงานซ่อม)
+                      </h3>
+                      <p class="small text-muted mb-2">
+                        ดึงข้อมูลจาก collection <code>jobs</code>
+                        เฉพาะรายการที่ยังไม่ถูกซ่อน (<code>isDeleted = false</code>)
+                        และอยู่ในช่วงวันที่ที่เลือก
+                      </p>
+                      <div class="d-flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupJobsJsonBtn"
+                        >
+                          <i class="bi bi-filetype-json me-1"></i> Export Jobs JSON
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupJobsCsvBtn"
+                        >
+                          <i class="bi bi-filetype-csv me-1"></i> Export Jobs CSV
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-6">
+                    <div class="border rounded p-2 h-100">
+                      <h3 class="h6 fw-semibold mb-2">
+                        <i class="bi bi-cash-coin me-2"></i> Export Transactions (เงินเข้าออก)
+                      </h3>
+                      <p class="small text-muted mb-2">
+                        ดึงข้อมูลจาก collection <code>transactions</code>
+                        เฉพาะรายการที่ยังไม่ถูกซ่อน (<code>isDeleted = false</code>)
+                        และอยู่ในช่วงวันที่ที่เลือก
+                      </p>
+                      <div class="d-flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupTxJsonBtn"
+                        >
+                          <i class="bi bi-filetype-json me-1"></i> Export Txn JSON
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupTxCsvBtn"
+                        >
+                          <i class="bi bi-filetype-csv me-1"></i> Export Txn CSV
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Textarea แสดง JSON ที่ Export ล่าสุดให้ copy ได้ง่าย -->
+                <div class="mb-2">
+                  <label for="backupResultTextarea" class="form-label small">
+                    พื้นที่แสดงผล JSON ล่าสุดที่ Export (คัดลอกไปเก็บเองได้)
+                  </label>
+                  <textarea
+                    class="form-control form-control-sm"
+                    id="backupResultTextarea"
+                    rows="8"
+                    placeholder="เมื่อ Export แบบ JSON ระบบจะแสดงข้อมูลล่าสุดที่นี่ให้คุณตรวจสอบ/คัดลอก"
+                  ></textarea>
+                </div>
+                <p class="small text-muted mb-0">
+                  หากต้องการกู้คืนข้อมูลในอนาคต แนะนำให้เก็บไฟล์ JSON/CSV
+                  ไว้ในที่ปลอดภัย (เช่น Google Drive, External HDD)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul
+          class="dropdown-menu dropdown-menu-end mb-2"
+          aria-labelledby="fabDropdownButton"
+        >
+          <li>
+            <button
+              class="dropdown-item d-flex align-items-center"
+              type="button"
+              id="fabOpenBillBtn"
+            >
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button
+              class="dropdown-item d-flex align-items-center"
+              type="button"
+              id="fabAddTxnBtn"
+            >
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button
+              class="dropdown-item d-flex align-items-center"
+              type="button"
+              id="fabStockInBtn"
+            >
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่มหลัก
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ลิงก์ซ่อนสำหรับดาวน์โหลดไฟล์ Export -->
+    <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า settings.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // DOM Elements หลักที่ใช้ในหน้านี้
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar / User
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const settingsRoleBadge = document.getElementById("settingsRoleBadge");
+
+      // Tabs
+      const usersTabNavItem = document.getElementById("usersTabNavItem");
+      const usersAdminOnlyBadge = document.getElementById("usersAdminOnlyBadge");
+      const usersNotAdminAlert = document.getElementById("usersNotAdminAlert");
+      const usersCountBadge = document.getElementById("usersCountBadge");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+
+      // ซ่อนลิงก์ดาวน์โหลด
+      const hiddenDownloadLink = document.getElementById("hiddenDownloadLink");
+
+      // --------- Profile Tab Elements ---------
+      const profileEmailInput = document.getElementById("profileEmailInput");
+      const profileDisplayNameInput = document.getElementById(
+        "profileDisplayNameInput"
+      );
+      const profileBranchIdInput = document.getElementById("profileBranchIdInput");
+      const themeLightRadio = document.getElementById("themeLightRadio");
+      const themeDarkRadio = document.getElementById("themeDarkRadio");
+      const profileSaveBtn = document.getElementById("profileSaveBtn");
+      const profileSaveSpinner = document.getElementById("profileSaveSpinner");
+      const profileSaveBtnText = document.getElementById("profileSaveBtnText");
+      const profileSaveStatusText = document.getElementById(
+        "profileSaveStatusText"
+      );
+
+      // --------- Users Tab Elements ---------
+      const usersTableTbody = document.getElementById("usersTableTbody");
+      const newUserEmailInput = document.getElementById("newUserEmailInput");
+      const newUserPasswordInput = document.getElementById(
+        "newUserPasswordInput"
+      );
+      const newUserDisplayNameInput = document.getElementById(
+        "newUserDisplayNameInput"
+      );
+      const newUserRoleSelect = document.getElementById("newUserRoleSelect");
+      const newUserBranchIdInput = document.getElementById("newUserBranchIdInput");
+      const newUserCreateBtn = document.getElementById("newUserCreateBtn");
+      const newUserCreateSpinner = document.getElementById(
+        "newUserCreateSpinner"
+      );
+      const newUserCreateBtnText = document.getElementById(
+        "newUserCreateBtnText"
+      );
+      const newUserCreateStatusText = document.getElementById(
+        "newUserCreateStatusText"
+      );
+
+      // --------- Backup Tab Elements ---------
+      const backupStartDateInput = document.getElementById(
+        "backupStartDateInput"
+      );
+      const backupEndDateInput = document.getElementById("backupEndDateInput");
+      const backupRangeStatusText = document.getElementById(
+        "backupRangeStatusText"
+      );
+      const backupJobsJsonBtn = document.getElementById("backupJobsJsonBtn");
+      const backupJobsCsvBtn = document.getElementById("backupJobsCsvBtn");
+      const backupTxJsonBtn = document.getElementById("backupTxJsonBtn");
+      const backupTxCsvBtn = document.getElementById("backupTxCsvBtn");
+      const backupResultTextarea = document.getElementById(
+        "backupResultTextarea"
+      );
+
+      // ============================================================
+      // สถานะภายใน
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      let isSavingProfile = false;
+      let isLoadingUsers = false;
+      let isCreatingNewUser = false;
+      let isExportingBackup = false;
+
+      let allUsers = [];
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Format ตัวเลข & วันที่
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark (ใช้ร่วมกับทั้งระบบ)
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+
+        // อัปเดต radio/button ใน Tab โปรไฟล์
+        if (normalized === "dark") {
+          if (themeDarkRadio) themeDarkRadio.checked = true;
+        } else {
+          if (themeLightRadio) themeLightRadio.checked = true;
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (error) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", error);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (error) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        // ถ้ายังไม่มีเอกสาร /users/{uid} ให้สร้าง
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: อัปเดต UI โปรไฟล์จาก currentUserProfile
+      // ============================================================
+      function updateProfileTabUI() {
+        if (!currentUser || !currentUserProfile) return;
+
+        if (profileEmailInput) {
+          profileEmailInput.value = currentUser.email || "";
+        }
+        if (profileDisplayNameInput) {
+          profileDisplayNameInput.value = currentUserProfile.displayName || "";
+        }
+        if (profileBranchIdInput) {
+          profileBranchIdInput.value = currentUserProfile.branchId || "";
+        }
+
+        const theme = readThemeForUser(
+          currentUser.uid,
+          currentUserProfile.theme || "light"
+        );
+        applyTheme(theme);
+
+        if (profileSaveStatusText) {
+          profileSaveStatusText.textContent = "ยังไม่มีการเปลี่ยนแปลง";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: บันทึกข้อมูลโปรไฟล์ (ชื่อแสดง + สาขา + ธีม)
+      // ============================================================
+      async function handleSaveProfile() {
+        if (!currentUser || !currentUserProfile) return;
+        if (isSavingProfile) return;
+
+        const newDisplayName = profileDisplayNameInput.value.trim();
+        const newBranchId = profileBranchIdInput.value.trim() || null;
+        let newTheme = "light";
+        if (themeDarkRadio?.checked) newTheme = "dark";
+        if (themeLightRadio?.checked) newTheme = "light";
+
+        if (!newDisplayName) {
+          showToast("กรุณาระบุชื่อที่ใช้แสดงก่อนบันทึก", "warning");
+          return;
+        }
+
+        isSavingProfile = true;
+        profileSaveSpinner.classList.remove("d-none");
+        profileSaveBtnText.textContent = "กำลังบันทึก...";
+        profileSaveBtn.disabled = true;
+
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          await updateDoc(userRef, {
+            displayName: newDisplayName,
+            branchId: newBranchId,
+            theme: newTheme,
+          });
+
+          currentUserProfile.displayName = newDisplayName;
+          currentUserProfile.branchId = newBranchId;
+          currentUserProfile.theme = newTheme;
+
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = newDisplayName;
+          }
+
+          if (userAvatarInitial) {
+            userAvatarInitial.textContent =
+              newDisplayName.trim().charAt(0).toUpperCase() || "U";
+          }
+
+          saveThemeForUser(currentUser.uid, newTheme);
+          applyTheme(newTheme);
+
+          if (profileSaveStatusText) {
+            profileSaveStatusText.textContent = "บันทึกการเปลี่ยนแปลงล่าสุดแล้ว";
+          }
+
+          showToast("บันทึกโปรไฟล์เรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("บันทึกโปรไฟล์ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกโปรไฟล์ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+          if (profileSaveStatusText) {
+            profileSaveStatusText.textContent =
+              "บันทึกไม่สำเร็จ: " + (error.code || "error");
+          }
+        } finally {
+          isSavingProfile = false;
+          profileSaveSpinner.classList.add("d-none");
+          profileSaveBtnText.textContent = "บันทึกการเปลี่ยนแปลง";
+          profileSaveBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดผู้ใช้ทั้งหมด (สำหรับ admin)
+      // ============================================================
+      async function loadAllUsers() {
+        if (isLoadingUsers) return;
+        isLoadingUsers = true;
+
+        if (usersTableTbody) {
+          usersTableTbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center small text-muted">
+                กำลังโหลดข้อมูลผู้ใช้...
+              </td>
+            </tr>
+          `;
+        }
+
+        try {
+          const usersCol = collection(db, "users");
+          const qUsers = query(usersCol, orderBy("createdAt", "asc"));
+          // หมายเหตุ: หาก Firestore แจ้งให้สร้าง Index ให้ทำตามลิงก์ที่แจ้งเตือน (ครั้งแรกเท่านั้น)
+          const snap = await getDocs(qUsers);
+
+          const results = [];
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            results.push({
+              id: docSnap.id,
+              displayName: data.displayName || "",
+              role: data.role || "staff",
+              branchId: data.branchId || null,
+              theme: data.theme || "light",
+              disabled: !!data.disabled,
+              email: data.email || null, // อาจจะไม่เก็บ email ใน users เสมอไป
+            });
+          });
+
+          allUsers = results;
+
+          if (usersCountBadge) {
+            usersCountBadge.textContent = String(allUsers.length || 0);
+          }
+
+          renderUsersTable();
+        } catch (error) {
+          console.error("โหลดข้อมูลผู้ใช้ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดรายชื่อผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+          if (usersTableTbody) {
+            usersTableTbody.innerHTML = `
+              <tr>
+                <td colspan="6" class="text-center small text-danger">
+                  ไม่สามารถโหลดรายชื่อผู้ใช้ได้ (${error.code || "error"})
+                </td>
+              </tr>
+            `;
+          }
+        } finally {
+          isLoadingUsers = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: แสดงตารางผู้ใช้
+      // ============================================================
+      function renderUsersTable() {
+        if (!usersTableTbody) return;
+
+        usersTableTbody.innerHTML = "";
+
+        if (!allUsers || allUsers.length === 0) {
+          usersTableTbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center small text-muted">
+                ยังไม่มีข้อมูลผู้ใช้ในระบบ
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        allUsers.forEach((u) => {
+          const tr = document.createElement("tr");
+
+          const isCurrent = currentUser && currentUser.uid === u.id;
+
+          const emailText = u.email || "(ไม่ระบุใน users)";
+          const disabledBadge = u.disabled
+            ? '<span class="badge rounded-pill text-bg-danger">ถูกระงับ</span>'
+            : '<span class="badge rounded-pill text-bg-success">ใช้งานได้</span>';
+
+          tr.innerHTML = `
+            <td class="small">${emailText}</td>
+            <td class="small">
+              <input
+                type="text"
+                class="form-control form-control-sm users-displayname-input"
+                data-uid="${u.id}"
+                value="${u.displayName || ""}"
+              />
+            </td>
+            <td class="small">
+              <select
+                class="form-select form-select-sm users-role-select"
+                data-uid="${u.id}"
+              >
+                <option value="staff" ${
+                  u.role === "staff" ? "selected" : ""
+                }>staff</option>
+                <option value="admin" ${
+                  u.role === "admin" ? "selected" : ""
+                }>admin</option>
+              </select>
+            </td>
+            <td class="small">
+              <input
+                type="text"
+                class="form-control form-control-sm users-branch-input"
+                data-uid="${u.id}"
+                value="${u.branchId || ""}"
+              />
+            </td>
+            <td class="small">
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input users-disabled-switch"
+                  type="checkbox"
+                  role="switch"
+                  data-uid="${u.id}"
+                  ${u.disabled ? "" : "checked"}
+                />
+                <label class="form-check-label small">
+                  ${disabledBadge}
+                </label>
+              </div>
+            </td>
+            <td class="small text-end">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm users-save-btn"
+                data-uid="${u.id}"
+              >
+                <i class="bi bi-save me-1"></i> บันทึก
+              </button>
+            </td>
+          `;
+
+          // ถ้าเป็น user ปัจจุบัน ให้ใส่พื้นหลังเบา ๆ
+          if (isCurrent) {
+            tr.classList.add("table-info");
+          }
+
+          usersTableTbody.appendChild(tr);
+        });
+
+        // ผูก Event ให้ปุ่มบันทึกของแต่ละแถว
+        const saveButtons = usersTableTbody.querySelectorAll(".users-save-btn");
+        saveButtons.forEach((btn) => {
+          btn.addEventListener("click", async (event) => {
+            const uid = event.currentTarget.getAttribute("data-uid");
+            await handleSaveUserRow(uid);
+          });
+        });
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: บันทึกผู้ใช้ในแต่ละแถว (เปลี่ยน role / สถานะ / branchId / displayName)
+      // ============================================================
+      async function handleSaveUserRow(uid) {
+        if (!currentUserProfile || currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์ทำรายการนี้ (เฉพาะผู้ดูแลระบบ)", "danger");
+          return;
+        }
+
+        const row = usersTableTbody?.querySelector(
+          `.users-save-btn[data-uid="${uid}"]`
+        )?.closest("tr");
+        if (!row) return;
+
+        const dnInput = row.querySelector(
+          '.users-displayname-input[data-uid="' + uid + '"]'
+        );
+        const roleSelect = row.querySelector(
+          '.users-role-select[data-uid="' + uid + '"]'
+        );
+        const branchInput = row.querySelector(
+          '.users-branch-input[data-uid="' + uid + '"]'
+        );
+        const disabledSwitch = row.querySelector(
+          '.users-disabled-switch[data-uid="' + uid + '"]'
+        );
+        const saveBtn = row.querySelector(
+          '.users-save-btn[data-uid="' + uid + '"]'
+        );
+
+        if (!dnInput || !roleSelect || !branchInput || !disabledSwitch || !saveBtn) {
+          return;
+        }
+
+        const dn = dnInput.value.trim();
+        const role = roleSelect.value;
+        const branchId = branchInput.value.trim() || null;
+        const isEnabled = disabledSwitch.checked;
+        const disabled = !isEnabled;
+
+        if (!dn) {
+          showToast("กรุณาระบุชื่อแสดงของผู้ใช้ก่อนบันทึก", "warning");
+          return;
+        }
+
+        saveBtn.disabled = true;
+        const originalHtml = saveBtn.innerHTML;
+        saveBtn.innerHTML =
+          '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> กำลังบันทึก...';
+
+        try {
+          const userRef = doc(db, "users", uid);
+          await updateDoc(userRef, {
+            displayName: dn,
+            role,
+            branchId,
+            disabled,
+          });
+
+          const targetIndex = allUsers.findIndex((u) => u.id === uid);
+          if (targetIndex >= 0) {
+            allUsers[targetIndex].displayName = dn;
+            allUsers[targetIndex].role = role;
+            allUsers[targetIndex].branchId = branchId;
+            allUsers[targetIndex].disabled = disabled;
+          }
+
+          renderUsersTable();
+
+          showToast("บันทึกข้อมูลผู้ใช้เรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("บันทึกข้อมูลผู้ใช้ล้มเหลว:", error);
+          showToast(
+            "ไม่สามารถบันทึกข้อมูลผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = originalHtml;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: สร้างผู้ใช้ใหม่ (ใช้ Auth App แยกเพื่อไม่ให้ logout admin)
+      // ============================================================
+      async function handleCreateNewUser() {
+        if (!currentUserProfile || currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์สร้างผู้ใช้ใหม่ (เฉพาะผู้ดูแลระบบ)", "danger");
+          return;
+        }
+        if (isCreatingNewUser) return;
+
+        const email = newUserEmailInput.value.trim();
+        const password = newUserPasswordInput.value;
+        const displayName = newUserDisplayNameInput.value.trim();
+        const role = newUserRoleSelect.value;
+        const branchId = newUserBranchIdInput.value.trim() || null;
+
+        if (!email || !password || !displayName) {
+          showToast("กรุณากรอกอีเมล รหัสผ่าน และชื่อแสดงให้ครบ", "warning");
+          return;
+        }
+        if (password.length < 6) {
+          showToast("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร", "warning");
+          return;
+        }
+
+        isCreatingNewUser = true;
+        newUserCreateSpinner.classList.remove("d-none");
+        newUserCreateBtnText.textContent = "กำลังสร้าง...";
+        newUserCreateBtn.disabled = true;
+        newUserCreateStatusText.textContent = "กำลังสร้างผู้ใช้ใหม่...";
+
+        try {
+          // ใช้ Secondary App เพื่อสร้างผู้ใช้ใหม่โดยไม่กระทบ session ปัจจุบัน
+          const secondaryApp = initializeApp(firebaseConfig, "admin-create-user");
+          const secondaryAuth = getAuth(secondaryApp);
+
+          const userCredential = await createUserWithEmailAndPassword(
+            secondaryAuth,
+            email,
+            password
+          );
+          const newUser = userCredential.user;
+
+          // สร้างเอกสาร users สำหรับผู้ใช้ใหม่
+          const userRef = doc(db, "users", newUser.uid);
+          await setDoc(userRef, {
+            displayName,
+            role,
+            createdAt: serverTimestamp(),
+            branchId,
+            theme: "light",
+            disabled: false,
+            email, // บันทึก email เผื่อใช้ในตาราง
+          });
+
+          // ปิด secondaryApp session (ถ้าจำเป็น)
+          try {
+            await signOut(secondaryAuth);
+          } catch (e) {
+            console.warn("signOut secondary auth ไม่สำเร็จแต่ไม่เป็นอันตราย:", e);
+          }
+
+          // เคลียร์ฟอร์ม
+          newUserEmailInput.value = "";
+          newUserPasswordInput.value = "";
+          newUserDisplayNameInput.value = "";
+          newUserBranchIdInput.value = "";
+          newUserRoleSelect.value = "staff";
+
+          newUserCreateStatusText.textContent =
+            "สร้างผู้ใช้ใหม่สำเร็จแล้ว (ระบบเพิ่มใน Firebase Auth และ collection users แล้ว)";
+          showToast("สร้างผู้ใช้ใหม่สำเร็จแล้ว", "success");
+
+          // โหลด users ใหม่
+          await loadAllUsers();
+        } catch (error) {
+          console.error("สร้างผู้ใช้ใหม่ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถสร้างผู้ใช้ใหม่ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+          newUserCreateStatusText.textContent =
+            "ไม่สามารถสร้างผู้ใช้ใหม่ได้: " + (error.code || "error");
+        } finally {
+          isCreatingNewUser = false;
+          newUserCreateSpinner.classList.add("d-none");
+          newUserCreateBtnText.textContent = "สร้างผู้ใช้ใหม่";
+          newUserCreateBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบช่วงวันที่สำหรับ Backup
+      // ============================================================
+      function validateBackupRange() {
+        const startStr = backupStartDateInput.value;
+        const endStr = backupEndDateInput.value;
+
+        if (!startStr || !endStr) {
+          backupRangeStatusText.textContent =
+            "กรุณาเลือกวันที่เริ่มต้นและสิ้นสุดให้ครบก่อน Export";
+          backupRangeStatusText.classList.remove("text-success", "text-danger");
+          backupRangeStatusText.classList.add("text-warning");
+          return null;
+        }
+
+        if (startStr > endStr) {
+          backupRangeStatusText.textContent =
+            "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด";
+          backupRangeStatusText.classList.remove("text-success");
+          backupRangeStatusText.classList.add("text-danger");
+          return null;
+        }
+
+        backupRangeStatusText.textContent =
+          "ช่วงวันที่ที่เลือก: " +
+          formatDateThaiFromString(startStr) +
+          " - " +
+          formatDateThaiFromString(endStr);
+        backupRangeStatusText.classList.remove("text-danger", "text-warning");
+        backupRangeStatusText.classList.add("text-success");
+
+        return { startStr, endStr };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ดึง Jobs ตามช่วงวันที่ (Backup)
+      // ============================================================
+      async function loadJobsForBackup(startStr, endStr, branchId) {
+        const constraints = [
+          where("isDeleted", "==", false),
+          where("date", ">=", startStr),
+          where("date", "<=", endStr),
+        ];
+        if (branchId) {
+          constraints.push(where("branchId", "==", branchId));
+        }
+
+        const jobsCol = collection(db, "jobs");
+        const qJobs = query(
+          jobsCol,
+          ...constraints,
+          orderBy("date", "asc")
+        );
+
+        // หมายเหตุ: หากมี error เรื่อง Index ให้ไปสร้าง Index ตามลิงก์ที่ Firestore แจ้งครั้งแรก
+        const snap = await getDocs(qJobs);
+
+        const results = [];
+        snap.forEach((docSnap) => {
+          results.push({
+            id: docSnap.id,
+            ...docSnap.data(),
+          });
+        });
+
+        return results;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ดึง Transactions ตามช่วงวันที่ (Backup)
+      // ============================================================
+      async function loadTransactionsForBackup(startStr, endStr, branchId) {
+        const constraints = [
+          where("isDeleted", "==", false),
+          where("date", ">=", startStr),
+          where("date", "<=", endStr),
+        ];
+        if (branchId) {
+          constraints.push(where("branchId", "==", branchId));
+        }
+
+        const txCol = collection(db, "transactions");
+        const qTx = query(
+          txCol,
+          ...constraints,
+          orderBy("date", "asc")
+        );
+
+        // หมายเหตุ: หาก Firestore แจ้งให้สร้าง Index ให้สร้างตามลิงก์ (ครั้งแรกเท่านั้น)
+        const snap = await getDocs(qTx);
+
+        const results = [];
+        snap.forEach((docSnap) => {
+          results.push({
+            id: docSnap.id,
+            ...docSnap.data(),
+          });
+        });
+
+        return results;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Trigger ดาวน์โหลดไฟล์
+      // ============================================================
+      function triggerDownloadFile(filename, content, mimeType) {
+        if (!hiddenDownloadLink) return;
+
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+
+        hiddenDownloadLink.href = url;
+        hiddenDownloadLink.download = filename;
+        hiddenDownloadLink.click();
+
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 1000);
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Export Jobs JSON / CSV
+      // ============================================================
+      async function handleExportJobsJson() {
+        if (!currentUserProfile) return;
+        if (isExportingBackup) return;
+
+        const range = validateBackupRange();
+        if (!range) {
+          showToast("กรุณาเลือกช่วงวันที่ให้ถูกต้องก่อน Export Jobs", "warning");
+          return;
+        }
+
+        isExportingBackup = true;
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const jobs = await loadJobsForBackup(
+            range.startStr,
+            range.endStr,
+            branchId
+          );
+
+          const payload = {
+            type: "jobs",
+            range,
+            count: jobs.length,
+            docs: jobs,
+          };
+
+          const jsonStr = JSON.stringify(payload, null, 2);
+          const filename = `ben-motor-backup-jobs-${range.startStr}-${range.endStr}.json`;
+          triggerDownloadFile(filename, jsonStr, "application/json");
+
+          if (backupResultTextarea) {
+            backupResultTextarea.value = jsonStr;
+          }
+
+          showToast("Export Jobs (JSON) สำเร็จ", "success");
+        } catch (error) {
+          console.error("Export Jobs JSON ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถ Export Jobs (JSON) ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isExportingBackup = false;
+        }
+      }
+
+      async function handleExportJobsCsv() {
+        if (!currentUserProfile) return;
+        if (isExportingBackup) return;
+
+        const range = validateBackupRange();
+        if (!range) {
+          showToast("กรุณาเลือกช่วงวันที่ให้ถูกต้องก่อน Export Jobs", "warning");
+          return;
+        }
+
+        isExportingBackup = true;
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const jobs = await loadJobsForBackup(
+            range.startStr,
+            range.endStr,
+            branchId
+          );
+
+          // header หลัก (ไม่รวม items/laborItems ในเชิงลึก)
+          const header = [
+            "id",
+            "date",
+            "customerName",
+            "customerPhone",
+            "plate",
+            "brand",
+            "model",
+            "mileage",
+            "problem",
+            "status",
+            "priority",
+            "partsTotal",
+            "laborTotal",
+            "totalAmount",
+            "createdBy",
+            "createdByName",
+            "branchId",
+          ];
+
+          const rows = jobs.map((job) => [
+            job.id || "",
+            job.date || "",
+            job.customerName || "",
+            job.customerPhone || "",
+            job.plate || "",
+            job.brand || "",
+            job.model || "",
+            job.mileage != null ? String(job.mileage) : "",
+            job.problem || "",
+            job.status || "",
+            job.priority || "",
+            job.partsTotal != null ? String(job.partsTotal) : "",
+            job.laborTotal != null ? String(job.laborTotal) : "",
+            job.totalAmount != null ? String(job.totalAmount) : "",
+            job.createdBy || "",
+            job.createdByName || "",
+            job.branchId || "",
+          ]);
+
+          const csvLines = [];
+          csvLines.push(header.join(","));
+          rows.forEach((row) => {
+            const line = row
+              .map((value) => {
+                const text = String(value ?? "");
+                if (
+                  text.includes(",") ||
+                  text.includes('"') ||
+                  text.includes("\n")
+                ) {
+                  return `"${text.replace(/"/g, '""')}"`;
+                }
+                return text;
+              })
+              .join(",");
+            csvLines.push(line);
+          });
+
+          const csvContent = csvLines.join("\r\n");
+          const filename = `ben-motor-backup-jobs-${range.startStr}-${range.endStr}.csv`;
+          triggerDownloadFile(
+            filename,
+            csvContent,
+            "text/csv;charset=utf-8;"
+          );
+
+          showToast("Export Jobs (CSV) สำเร็จ", "success");
+        } catch (error) {
+          console.error("Export Jobs CSV ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถ Export Jobs (CSV) ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isExportingBackup = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Export Transactions JSON / CSV
+      // ============================================================
+      async function handleExportTxJson() {
+        if (!currentUserProfile) return;
+        if (isExportingBackup) return;
+
+        const range = validateBackupRange();
+        if (!range) {
+          showToast(
+            "กรุณาเลือกช่วงวันที่ให้ถูกต้องก่อน Export Transactions",
+            "warning"
+          );
+          return;
+        }
+
+        isExportingBackup = true;
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const txns = await loadTransactionsForBackup(
+            range.startStr,
+            range.endStr,
+            branchId
+          );
+
+          const payload = {
+            type: "transactions",
+            range,
+            count: txns.length,
+            docs: txns,
+          };
+
+          const jsonStr = JSON.stringify(payload, null, 2);
+          const filename = `ben-motor-backup-transactions-${range.startStr}-${range.endStr}.json`;
+          triggerDownloadFile(filename, jsonStr, "application/json");
+
+          if (backupResultTextarea) {
+            backupResultTextarea.value = jsonStr;
+          }
+
+          showToast("Export Transactions (JSON) สำเร็จ", "success");
+        } catch (error) {
+          console.error("Export Transactions JSON ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถ Export Transactions (JSON) ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isExportingBackup = false;
+        }
+      }
+
+      async function handleExportTxCsv() {
+        if (!currentUserProfile) return;
+        if (isExportingBackup) return;
+
+        const range = validateBackupRange();
+        if (!range) {
+          showToast(
+            "กรุณาเลือกช่วงวันที่ให้ถูกต้องก่อน Export Transactions",
+            "warning"
+          );
+          return;
+        }
+
+        isExportingBackup = true;
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const txns = await loadTransactionsForBackup(
+            range.startStr,
+            range.endStr,
+            branchId
+          );
+
+          const header = [
+            "id",
+            "date",
+            "type",
+            "category",
+            "description",
+            "amount",
+            "method",
+            "sourceType",
+            "sourceId",
+            "createdBy",
+            "createdByName",
+            "branchId",
+          ];
+
+          const rows = txns.map((t) => [
+            t.id || "",
+            t.date || "",
+            t.type || "",
+            t.category || "",
+            t.description || "",
+            t.amount != null ? String(t.amount) : "",
+            t.method || "",
+            t.sourceType || "",
+            t.sourceId || "",
+            t.createdBy || "",
+            t.createdByName || "",
+            t.branchId || "",
+          ]);
+
+          const csvLines = [];
+          csvLines.push(header.join(","));
+          rows.forEach((row) => {
+            const line = row
+              .map((value) => {
+                const text = String(value ?? "");
+                if (
+                  text.includes(",") ||
+                  text.includes('"') ||
+                  text.includes("\n")
+                ) {
+                  return `"${text.replace(/"/g, '""')}"`;
+                }
+                return text;
+              })
+              .join(",");
+            csvLines.push(line);
+          });
+
+          const csvContent = csvLines.join("\r\n");
+          const filename = `ben-motor-backup-transactions-${range.startStr}-${range.endStr}.csv`;
+          triggerDownloadFile(
+            filename,
+            csvContent,
+            "text/csv;charset=utf-8;"
+          );
+
+          showToast("Export Transactions (CSV) สำเร็จ", "success");
+        } catch (error) {
+          console.error("Export Transactions CSV ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถ Export Transactions (CSV) ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isExportingBackup = false;
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้านี้
+      // ============================================================
+      function setupEventListenersForPage() {
+        // Logout
+        logoutBtn?.addEventListener("click", () => {
+          handleLogout();
+        });
+
+        // สลับธีมผ่านปุ่มบน Topbar
+        themeToggleBtn?.addEventListener("click", async () => {
+          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+            ? "dark"
+            : "light";
+          const nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+          if (currentUser) {
+            saveThemeForUser(currentUser.uid, nextTheme);
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          }
+        });
+
+        // บันทึกโปรไฟล์
+        profileSaveBtn?.addEventListener("click", () => {
+          handleSaveProfile();
+        });
+
+        // Enter บางส่วนของฟอร์มโปรไฟล์
+        [profileDisplayNameInput, profileBranchIdInput].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleSaveProfile();
+            }
+          });
+        });
+
+        // เปลี่ยน radio theme ในโปรไฟล์แล้วให้ mark ว่ามีการเปลี่ยน
+        [themeLightRadio, themeDarkRadio].forEach((radio) => {
+          radio?.addEventListener("change", () => {
+            if (profileSaveStatusText) {
+              profileSaveStatusText.textContent =
+                "มีการเปลี่ยนแปลงธีมแล้ว แต่ยังไม่ได้บันทึก";
+            }
+          });
+        });
+
+        // สร้างผู้ใช้ใหม่
+        newUserCreateBtn?.addEventListener("click", () => {
+          handleCreateNewUser();
+        });
+
+        [newUserEmailInput, newUserPasswordInput, newUserDisplayNameInput].forEach(
+          (input) => {
+            input?.addEventListener("keypress", (event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                handleCreateNewUser();
+              }
+            });
+          }
+        );
+
+        // Backup Export ปุ่ม
+        backupJobsJsonBtn?.addEventListener("click", () => {
+          handleExportJobsJson();
+        });
+        backupJobsCsvBtn?.addEventListener("click", () => {
+          handleExportJobsCsv();
+        });
+        backupTxJsonBtn?.addEventListener("click", () => {
+          handleExportTxJson();
+        });
+        backupTxCsvBtn?.addEventListener("click", () => {
+          handleExportTxCsv();
+        });
+
+        // กด Enter ใน input วันที่ backup
+        [backupStartDateInput, backupEndDateInput].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              validateBackupRange();
+            }
+          });
+        });
+
+        // FAB เมนูด่วน
+        fabOpenBillBtn?.addEventListener("click", () => {
+          window.location.href = "open-bill.html";
+        });
+        fabAddTxnBtn?.addEventListener("click", () => {
+          window.location.href = "finance.html";
+        });
+        fabStockInBtn?.addEventListener("click", () => {
+          window.location.href = "stock.html";
+        });
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้า settings.html
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          // ถ้าบัญชีถูกระงับ
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+
+          if (settingsRoleBadge) {
+            settingsRoleBadge.textContent =
+              "Role: " + (userProfile.role || "staff");
+          }
+
+          // เมนูตั้งค่าระบบ: ตามสเปกให้แสดงเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // การควบคุม Tab ผู้ใช้ในระบบ
+          if (userProfile.role === "admin") {
+            usersTabNavItem?.classList.remove("d-none");
+            usersAdminOnlyBadge?.classList.remove("d-none");
+            usersNotAdminAlert?.classList.add("d-none");
+          } else {
+            // ซ่อน Tab ผู้ใช้ในระบบจาก Staff ตามสเปก
+            usersTabNavItem?.classList.add("d-none");
+            usersAdminOnlyBadge?.classList.add("d-none");
+            usersNotAdminAlert?.classList.remove("d-none");
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่าวันเริ่มต้นของ Backup เป็นวันนี้
+          const todayStr = getTodayISODateString();
+          if (backupStartDateInput) backupStartDateInput.value = todayStr;
+          if (backupEndDateInput) backupEndDateInput.value = todayStr;
+
+          updateProfileTabUI();
+          setupEventListenersForPage();
+
+          // ถ้าเป็น admin ให้โหลดรายชื่อผู้ใช้ทั้งหมด
+          if (userProfile.role === "admin") {
+            await loadAllUsers();
+          }
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

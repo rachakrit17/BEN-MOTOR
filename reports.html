@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า "รายงานทั้งหมด" -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – รายงานทั้งหมด</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "รายงานทั้งหมด"
+         ฟิลเตอร์ช่วงวันที่ + การ์ดสรุป + กราฟ + ตาราง Top Parts / สต๊อกใกล้หมด
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">รายงานทั้งหมด</h1>
+            <p class="small text-muted mb-0">
+              เลือกช่วงวันที่เพื่อดูสรุปภาพรวมเงิน งานซ่อม รถรับซื้อ/ขาย และการใช้อะไหล่
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= ฟิลเตอร์ช่วงวันที่ + ปุ่ม Preset ================= -->
+        <!-- คอมเมนต์: ส่วนนี้ใช้เลือกช่วงวันที่ของรายงาน และมีปุ่มลัดสำหรับช่วงยอดนิยม -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <div class="row g-2 align-items-center mb-2">
+                <div class="col-12 col-lg-8">
+                  <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="text-muted">ช่วงวันที่รายงาน:</span>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="today"
+                        id="presetTodayBtn"
+                      >
+                        วันนี้
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="7d"
+                        id="preset7dBtn"
+                      >
+                        7 วัน
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="14d"
+                        id="preset14dBtn"
+                      >
+                        14 วัน
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="30d"
+                        id="preset30dBtn"
+                      >
+                        30 วัน
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="3m"
+                        id="preset3mBtn"
+                      >
+                        3 เดือน
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="6m"
+                        id="preset6mBtn"
+                      >
+                        6 เดือน
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn"
+                        data-range="1y"
+                        id="preset1yBtn"
+                      >
+                        1 ปี
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-4 text-lg-end">
+                  <span class="small text-muted" id="reportsLoadingState">
+                    ยังไม่ได้โหลดรายงาน
+                  </span>
+                </div>
+              </div>
+
+              <div class="row g-2 align-items-end">
+                <div class="col-6 col-md-3">
+                  <label for="reportStartDateInput" class="form-label small mb-1">
+                    วันที่เริ่มต้น
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="reportStartDateInput"
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="reportEndDateInput" class="form-label small mb-1">
+                    วันที่สิ้นสุด
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="reportEndDateInput"
+                  />
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm mt-2 mt-md-0"
+                    id="loadReportBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="loadReportSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="loadReportBtnText">ดูรายงานช่วงนี้</span>
+                  </button>
+                </div>
+              </div>
+
+              <p class="small text-muted mt-2 mb-0">
+                ระบบจะดึงข้อมูลจาก <code>transactions</code>, <code>jobs</code>,
+                <code>vehicles</code> และ <code>stock</code>
+                เฉพาะรายการที่ยังไม่ถูกซ่อนและอยู่ในช่วงวันที่ที่เลือก
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= สรุปภาพรวมเงิน ================= -->
+        <!-- คอมเมนต์: แสดงรายรับ/รายจ่าย/กำไรสุทธิ ในช่วงที่เลือก -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <h2 class="h6 fw-semibold mb-2">
+                <i class="bi bi-cash-coin me-2"></i> สรุปภาพรวมเงิน
+              </h2>
+              <div class="row g-2">
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">รายรับรวม (ช่วงที่เลือก)</div>
+                      <div
+                        class="h5 mb-0 fw-bold text-success"
+                        id="reportMoneyIncomeText"
+                      >
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">รายจ่ายรวม (ช่วงที่เลือก)</div>
+                      <div
+                        class="h5 mb-0 fw-bold text-danger"
+                        id="reportMoneyExpenseText"
+                      >
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">กำไรสุทธิ (ช่วงที่เลือก)</div>
+                      <div class="h5 mb-0 fw-bold" id="reportMoneyNetText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                ตัวเลขนี้คิดจากทุกรายการใน <code>transactions</code>
+                ที่อยู่ในช่วงวันที่ที่เลือก โดยไม่นับรายการที่ถูกซ่อน
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= สรุปงานซ่อม ================= -->
+        <!-- คอมเมนต์: แสดงจำนวนงานซ่อม ยอดรวมค่าซ่อม และค่าเฉลี่ยต่อบิล -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <h2 class="h6 fw-semibold mb-2">
+                <i class="bi bi-wrench-adjustable-circle me-2"></i> สรุปงานซ่อม
+              </h2>
+              <div class="row g-2">
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">จำนวนงานซ่อม (บิล)</div>
+                      <div class="h5 mb-0 fw-bold" id="reportJobsCountText">0</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">ยอดรวมค่าซ่อมทั้งหมด</div>
+                      <div class="h5 mb-0 fw-bold" id="reportJobsTotalText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">ค่าเฉลี่ยค่าซ่อมต่อบิล</div>
+                      <div class="h5 mb-0 fw-bold" id="reportJobsAvgText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                ข้อมูลนี้คำนวณจากเอกสารใน <code>jobs</code>
+                ที่อยู่ในช่วงวันที่ที่เลือกและยังไม่ถูกซ่อน
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= สรุปรถรับซื้อ/ขาย ================= -->
+        <!-- คอมเมนต์: แสดงจำนวนรถที่ซื้อเข้า/ขายออก และกำไรรวมจากรถ -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <h2 class="h6 fw-semibold mb-2">
+                <i class="bi bi-truck-front me-2"></i> สรุปรถรับซื้อ/ขาย
+              </h2>
+              <div class="row g-2">
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">จำนวนรถที่ซื้อเข้า</div>
+                      <div class="h5 mb-0 fw-bold" id="reportVehiclesBuyCountText">
+                        0
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">จำนวนรถที่ขายออก</div>
+                      <div class="h5 mb-0 fw-bold" id="reportVehiclesSoldCountText">
+                        0
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">กำไรรวมจากการขายรถ</div>
+                      <div class="h5 mb-0 fw-bold" id="reportVehiclesProfitText">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                ข้อมูลนี้คำนวณจาก <code>vehicles</code> โดยใช้
+                <strong>วันที่ซื้อเข้า</strong> สำหรับจำนวนรถซื้อเข้า และ
+                <strong>วันที่ขายออก</strong> สำหรับจำนวนรถขายออกและกำไรรวม
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= สรุปอะไหล่ + สต๊อกใกล้หมด ================= -->
+        <!-- คอมเมนต์: แสดง Top 5 อะไหล่ที่ใช้เยอะสุด และสต๊อกที่ใกล้หมด -->
+        <section class="mb-3">
+          <div class="row g-3">
+            <div class="col-12 col-lg-6">
+              <div class="card h-100">
+                <div class="card-body small">
+                  <h2 class="h6 fw-semibold mb-2">
+                    <i class="bi bi-tools me-2"></i> Top 5 อะไหล่ที่ใช้เยอะสุด
+                  </h2>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead class="small text-muted">
+                        <tr>
+                          <th>อะไหล่</th>
+                          <th class="text-end">จำนวนที่ใช้</th>
+                        </tr>
+                      </thead>
+                      <tbody id="topPartsTbody">
+                        <tr>
+                          <td colspan="2" class="text-center small text-muted">
+                            ยังไม่มีข้อมูลการใช้อะไหล่ในช่วงนี้
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="small text-muted mt-2 mb-0">
+                    ข้อมูลนี้ดึงจากรายการ <code>items</code> ในเอกสาร
+                    <code>jobs</code> ของช่วงวันที่ที่เลือก
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="card h-100">
+                <div class="card-body small">
+                  <h2 class="h6 fw-semibold mb-2">
+                    <i class="bi bi-exclamation-triangle me-2"></i> สต๊อกใกล้หมด (ปัจจุบัน)
+                  </h2>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead class="small text-muted">
+                        <tr>
+                          <th>รหัส</th>
+                          <th>ชื่ออะไหล่</th>
+                          <th class="text-end">คงเหลือ</th>
+                          <th class="text-end">ขั้นต่ำ</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lowStockTbody">
+                        <tr>
+                          <td colspan="4" class="text-center small text-muted">
+                            กำลังโหลดข้อมูลสต๊อกใกล้หมด...
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="small text-muted mt-2 mb-0">
+                    รายการนี้ดึงจาก <code>stock</code> ปัจจุบัน โดยใช้เงื่อนไข
+                    <code>qty &lt;= minQty</code> และ <code>isDeleted = false</code>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= กราฟรายรับ/รายจ่ายต่อวัน ================= -->
+        <!-- คอมเมนต์: กราฟ Canvas แสดงรายรับ/รายจ่ายต่อวัน ในช่วงที่เลือก -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2"
+              >
+                <h2 class="h6 fw-semibold mb-0">
+                  <i class="bi bi-graph-up-arrow me-2"></i> กราฟรายรับ/รายจ่ายต่อวัน
+                </h2>
+                <div class="d-flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    id="exportReportJsonBtn"
+                  >
+                    <i class="bi bi-filetype-json me-1"></i> Export JSON
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    id="exportReportCsvBtn"
+                  >
+                    <i class="bi bi-filetype-csv me-1"></i> Export CSV (สรุปรายวัน)
+                  </button>
+                </div>
+              </div>
+              <canvas
+                id="incomeExpenseChart"
+                height="200"
+                style="width: 100%; max-height: 260px;"
+              ></canvas>
+              <p class="small text-muted mt-2 mb-0">
+                กราฟนี้สรุปยอดรายรับและรายจ่ายในแต่ละวันของช่วงวันที่ที่เลือก
+                เพื่อช่วยดูแนวโน้มเงินเข้าออกของอู่
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         หน้ารายงานจะไม่มีปุ่ม active (เพราะเป็นหน้ารวม)
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ลิงก์ซ่อนสำหรับดาวน์โหลดไฟล์ Export -->
+    <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า reports.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // ฟิลเตอร์ช่วงวันที่
+      const reportsLoadingState = document.getElementById("reportsLoadingState");
+      const reportStartDateInput = document.getElementById("reportStartDateInput");
+      const reportEndDateInput = document.getElementById("reportEndDateInput");
+      const loadReportBtn = document.getElementById("loadReportBtn");
+      const loadReportSpinner = document.getElementById("loadReportSpinner");
+      const loadReportBtnText = document.getElementById("loadReportBtnText");
+
+      // ปุ่ม preset
+      const presetTodayBtn = document.getElementById("presetTodayBtn");
+      const preset7dBtn = document.getElementById("preset7dBtn");
+      const preset14dBtn = document.getElementById("preset14dBtn");
+      const preset30dBtn = document.getElementById("preset30dBtn");
+      const preset3mBtn = document.getElementById("preset3mBtn");
+      const preset6mBtn = document.getElementById("preset6mBtn");
+      const preset1yBtn = document.getElementById("preset1yBtn");
+
+      // การ์ดสรุปเงิน
+      const reportMoneyIncomeText = document.getElementById("reportMoneyIncomeText");
+      const reportMoneyExpenseText = document.getElementById("reportMoneyExpenseText");
+      const reportMoneyNetText = document.getElementById("reportMoneyNetText");
+
+      // การ์ดสรุปงานซ่อม
+      const reportJobsCountText = document.getElementById("reportJobsCountText");
+      const reportJobsTotalText = document.getElementById("reportJobsTotalText");
+      const reportJobsAvgText = document.getElementById("reportJobsAvgText");
+
+      // การ์ดสรุปรถ
+      const reportVehiclesBuyCountText = document.getElementById(
+        "reportVehiclesBuyCountText"
+      );
+      const reportVehiclesSoldCountText = document.getElementById(
+        "reportVehiclesSoldCountText"
+      );
+      const reportVehiclesProfitText = document.getElementById(
+        "reportVehiclesProfitText"
+      );
+
+      // ตาราง Top Parts และสต๊อกใกล้หมด
+      const topPartsTbody = document.getElementById("topPartsTbody");
+      const lowStockTbody = document.getElementById("lowStockTbody");
+
+      // กราฟ
+      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
+
+      // Export
+      const exportReportJsonBtn = document.getElementById("exportReportJsonBtn");
+      const exportReportCsvBtn = document.getElementById("exportReportCsvBtn");
+      const hiddenDownloadLink = document.getElementById("hiddenDownloadLink");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // ============================================================
+      // สถานะภายในหน้า
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      // ช่วงวันที่ของรายงาน
+      let reportRangeStartDate = null; // "YYYY-MM-DD"
+      let reportRangeEndDate = null; // "YYYY-MM-DD"
+
+      // ข้อมูลดิบที่ใช้ในรายงาน
+      let reportTransactions = [];
+      let reportJobs = [];
+      let reportVehiclesBuy = [];
+      let reportVehiclesSold = [];
+      let reportLowStock = [];
+      let reportTopPartsUsage = [];
+
+      // ข้อมูลสรุป
+      let reportMoneySummary = {
+        incomeTotal: 0,
+        expenseTotal: 0,
+        net: 0,
+      };
+
+      let reportJobsSummary = {
+        jobsCount: 0,
+        jobsTotalAmount: 0,
+        jobsAvgAmount: 0,
+      };
+
+      let reportVehiclesSummary = {
+        buyCount: 0,
+        soldCount: 0,
+        profitTotal: 0,
+      };
+
+      // กราฟ: ข้อมูลสรุปรายวัน
+      let reportDailyStats = []; // [{date, income, expense}]
+
+      // สถานะ loading
+      let isLoadingReport = false;
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: ตัวเลข + วันที่แบบไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function formatIntegerNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0";
+        return value.toLocaleString("th-TH", {
+          maximumFractionDigits: 0,
+        });
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      function createDateRangePreset(presetKey) {
+        // คอมเมนต์: คืนค่า {start, end} ตาม preset ที่กำหนด
+        const today = new Date();
+        const todayStr = getTodayISODateString();
+
+        if (presetKey === "today") {
+          return { start: todayStr, end: todayStr };
+        }
+
+        if (presetKey === "7d" || presetKey === "14d" || presetKey === "30d") {
+          const days =
+            presetKey === "7d" ? 7 : presetKey === "14d" ? 14 : presetKey === "30d" ? 30 : 7;
+          const startDate = new Date(today);
+          startDate.setDate(startDate.getDate() - (days - 1));
+          const y = startDate.getFullYear();
+          const m = String(startDate.getMonth() + 1).padStart(2, "0");
+          const d = String(startDate.getDate()).padStart(2, "0");
+          return {
+            start: `${y}-${m}-${d}`,
+            end: todayStr,
+          };
+        }
+
+        if (presetKey === "3m" || presetKey === "6m" || presetKey === "1y") {
+          const months = presetKey === "3m" ? 3 : presetKey === "6m" ? 6 : 12;
+
+          const endDate = today;
+          const startDate = new Date(endDate);
+          startDate.setMonth(startDate.getMonth() - months);
+
+          const yStart = startDate.getFullYear();
+          const mStart = String(startDate.getMonth() + 1).padStart(2, "0");
+          const dStart = String(startDate.getDate()).padStart(2, "0");
+
+          const yEnd = endDate.getFullYear();
+          const mEnd = String(endDate.getMonth() + 1).padStart(2, "0");
+          const dEnd = String(endDate.getDate()).padStart(2, "0");
+
+          return {
+            start: `${yStart}-${mStart}-${dStart}`,
+            end: `${yEnd}-${mEnd}-${dEnd}`,
+          };
+        }
+
+        return { start: todayStr, end: todayStr };
+      }
+
+      function generateDateList(startStr, endStr) {
+        // คอมเมนต์: สร้างรายการวันที่ทั้งหมดระหว่าง start-end (รวมปลาย)
+        const result = [];
+        if (!startStr || !endStr) return result;
+
+        let [sy, sm, sd] = startStr.split("-").map((v) => parseInt(v, 10));
+        const [ey, em, ed] = endStr.split("-").map((v) => parseInt(v, 10));
+
+        let current = new Date(sy, sm - 1, sd);
+        const endDate = new Date(ey, em - 1, ed);
+
+        while (current <= endDate) {
+          const y = current.getFullYear();
+          const m = String(current.getMonth() + 1).padStart(2, "0");
+          const d = String(current.getDate()).padStart(2, "0");
+          result.push(`${y}-${m}-${d}`);
+          current.setDate(current.getDate() + 1);
+        }
+
+        return result;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        // ฟังก์ชันนี้จะตรวจสอบว่า /users/{uid} มีหรือยัง
+        // ถ้ายังไม่มีจะสร้างให้โดยตั้ง role admin ให้คนแรก และ staff ให้คนถัดไป
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตั้งค่า Loading ของรายงาน
+      // ============================================================
+      function setReportLoadingState(isLoading) {
+        isLoadingReport = isLoading;
+
+        if (isLoading) {
+          reportsLoadingState.textContent = "กำลังโหลดรายงานจากฐานข้อมูล...";
+          reportsLoadingState.classList.remove("text-success", "text-danger");
+          loadReportSpinner.classList.remove("d-none");
+          loadReportBtnText.textContent = "กำลังโหลด...";
+          loadReportBtn.disabled = true;
+        } else {
+          loadReportSpinner.classList.add("d-none");
+          loadReportBtnText.textContent = "ดูรายงานช่วงนี้";
+          loadReportBtn.disabled = false;
+
+          if (reportTransactions.length === 0 && reportJobs.length === 0) {
+            reportsLoadingState.textContent = "ไม่พบข้อมูลรายงานในช่วงวันที่ที่เลือก";
+            reportsLoadingState.classList.add("text-danger");
+            reportsLoadingState.classList.remove("text-success");
+          } else {
+            reportsLoadingState.textContent = "โหลดรายงานล่าสุดแล้ว";
+            reportsLoadingState.classList.add("text-success");
+            reportsLoadingState.classList.remove("text-danger");
+          }
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลด transactions ตามช่วงวันที่
+      // ============================================================
+      async function loadTransactionsForRange(startStr, endStr, branchId) {
+        const constraints = [
+          where("isDeleted", "==", false),
+          where("date", ">=", startStr),
+          where("date", "<=", endStr),
+        ];
+        if (branchId) {
+          constraints.push(where("branchId", "==", branchId));
+        }
+
+        const txCol = collection(db, "transactions");
+        let qTx = query(
+          txCol,
+          ...constraints,
+          orderBy("date", "asc")
+        );
+
+        // หมายเหตุ: หาก Firestore แจ้งให้สร้าง index
+        // ให้สร้าง index ตามลิงก์ที่ Firestore แสดงใน error (ครั้งแรกเท่านั้น)
+        const snap = await getDocs(qTx);
+
+        const results = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          results.push({
+            id: docSnap.id,
+            date: data.date || "",
+            type: data.type || "income",
+            category: data.category || "",
+            description: data.description || "",
+            amount: Number(data.amount) || 0,
+            method: data.method || "cash",
+            sourceType: data.sourceType || "manual",
+            sourceId: data.sourceId || null,
+            createdBy: data.createdBy || "",
+            createdByName: data.createdByName || "",
+            branchId: data.branchId || null,
+          });
+        });
+
+        return results;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลด jobs ตามช่วงวันที่
+      // ============================================================
+      async function loadJobsForRange(startStr, endStr, branchId) {
+        const constraints = [
+          where("isDeleted", "==", false),
+          where("date", ">=", startStr),
+          where("date", "<=", endStr),
+        ];
+        if (branchId) {
+          constraints.push(where("branchId", "==", branchId));
+        }
+
+        const jobsCol = collection(db, "jobs");
+        const qJobs = query(
+          jobsCol,
+          ...constraints,
+          orderBy("date", "asc")
+        );
+
+        // หาก Firestore แจ้ง error ต้องสร้าง index ให้กับ jobs ตามลิงก์
+        const snap = await getDocs(qJobs);
+
+        const results = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          results.push({
+            id: docSnap.id,
+            date: data.date || "",
+            totalAmount: Number(data.totalAmount) || 0,
+            items: Array.isArray(data.items) ? data.items : [],
+            branchId: data.branchId || null,
+          });
+        });
+
+        return results;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลด vehicles สำหรับสรุปรถในช่วง
+      // ============================================================
+      async function loadVehiclesForRange(startStr, endStr, branchId) {
+        const vehiclesCol = collection(db, "vehicles");
+
+        const constraintsBuy = [
+          where("isDeleted", "==", false),
+          where("buyDate", ">=", startStr),
+          where("buyDate", "<=", endStr),
+        ];
+        if (branchId) {
+          constraintsBuy.push(where("branchId", "==", branchId));
+        }
+
+        const constraintsSold = [
+          where("isDeleted", "==", false),
+          where("status", "==", "sold"),
+          where("sellDate", ">=", startStr),
+          where("sellDate", "<=", endStr),
+        ];
+        if (branchId) {
+          constraintsSold.push(where("branchId", "==", branchId));
+        }
+
+        const qBuy = query(vehiclesCol, ...constraintsBuy);
+        const qSold = query(vehiclesCol, ...constraintsSold);
+
+        // หมายเหตุ: สามารถต้องสร้าง index เพิ่มใน Firestore ตาม error หากมี
+        const [snapBuy, snapSold] = await Promise.all([
+          getDocs(qBuy),
+          getDocs(qSold),
+        ]);
+
+        const buyList = [];
+        snapBuy.forEach((docSnap) => {
+          const data = docSnap.data();
+          buyList.push({
+            id: docSnap.id,
+            buyDate: data.buyDate || "",
+            buyPrice: Number(data.buyPrice) || 0,
+            branchId: data.branchId || null,
+          });
+        });
+
+        const soldList = [];
+        snapSold.forEach((docSnap) => {
+          const data = docSnap.data();
+          soldList.push({
+            id: docSnap.id,
+            sellDate: data.sellDate || "",
+            buyPrice: Number(data.buyPrice) || 0,
+            sellPrice: Number(data.sellPrice) || 0,
+            profit: typeof data.profit === "number"
+              ? data.profit
+              : Number(data.sellPrice || 0) - Number(data.buyPrice || 0),
+            branchId: data.branchId || null,
+          });
+        });
+
+        return { buyList, soldList };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดสต๊อกใกล้หมด (ปัจจุบัน)
+      // ============================================================
+      async function loadLowStock(branchId) {
+        const constraints = [where("isDeleted", "==", false)];
+        if (branchId) {
+          constraints.push(where("branchId", "==", branchId));
+        }
+
+        const stockCol = collection(db, "stock");
+        const qStock = query(stockCol, ...constraints);
+
+        const snap = await getDocs(qStock);
+
+        const lowList = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          const qty = Number(data.qty) || 0;
+          const minQty = Number(data.minQty) || 0;
+          if (qty <= minQty) {
+            lowList.push({
+              id: docSnap.id,
+              code: data.code || "",
+              name: data.name || "",
+              qty,
+              minQty,
+            });
+          }
+        });
+
+        return lowList;
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: คำนวณสรุปจากข้อมูลดิบ (buildSummary)
+      // ============================================================
+      function buildSummary() {
+        // ---- สรุปเงินจาก transactions ----
+        let incomeTotal = 0;
+        let expenseTotal = 0;
+        const dailyMap = {}; // {date: {income, expense}}
+
+        reportTransactions.forEach((txn) => {
+          const amount = Number(txn.amount) || 0;
+          const date = txn.date || "";
+          if (!dailyMap[date]) {
+            dailyMap[date] = { income: 0, expense: 0 };
+          }
+
+          if (txn.type === "income") {
+            incomeTotal += amount;
+            dailyMap[date].income += amount;
+          } else if (txn.type === "expense") {
+            expenseTotal += amount;
+            dailyMap[date].expense += amount;
+          }
+        });
+
+        const net = incomeTotal - expenseTotal;
+        reportMoneySummary = { incomeTotal, expenseTotal, net };
+
+        if (reportMoneyIncomeText) {
+          reportMoneyIncomeText.textContent = formatNumber(incomeTotal) + " ฿";
+        }
+        if (reportMoneyExpenseText) {
+          reportMoneyExpenseText.textContent = formatNumber(expenseTotal) + " ฿";
+        }
+        if (reportMoneyNetText) {
+          const prefix = net >= 0 ? "" : "-";
+          reportMoneyNetText.textContent =
+            prefix + formatNumber(Math.abs(net)) + " ฿";
+          reportMoneyNetText.classList.toggle("text-success", net >= 0);
+          reportMoneyNetText.classList.toggle("text-danger", net < 0);
+        }
+
+        // เตรียมสรุปรายวันสำหรับกราฟ
+        const dateList = generateDateList(reportRangeStartDate, reportRangeEndDate);
+        reportDailyStats = dateList.map((date) => {
+          const m = dailyMap[date] || { income: 0, expense: 0 };
+          return {
+            date,
+            income: m.income,
+            expense: m.expense,
+          };
+        });
+
+        // ---- สรุปงานซ่อมจาก jobs ----
+        let jobsCount = reportJobs.length;
+        let jobsTotalAmount = 0;
+
+        reportJobs.forEach((job) => {
+          const total = Number(job.totalAmount) || 0;
+          jobsTotalAmount += total;
+        });
+
+        const jobsAvgAmount = jobsCount > 0 ? jobsTotalAmount / jobsCount : 0;
+
+        reportJobsSummary = {
+          jobsCount,
+          jobsTotalAmount,
+          jobsAvgAmount,
+        };
+
+        if (reportJobsCountText) {
+          reportJobsCountText.textContent = String(jobsCount);
+        }
+        if (reportJobsTotalText) {
+          reportJobsTotalText.textContent = formatNumber(jobsTotalAmount) + " ฿";
+        }
+        if (reportJobsAvgText) {
+          reportJobsAvgText.textContent = formatNumber(jobsAvgAmount) + " ฿";
+        }
+
+        // ---- สรุปรถจาก vehicles ----
+        const buyCount = reportVehiclesBuy.length;
+        const soldCount = reportVehiclesSold.length;
+        let profitTotal = 0;
+
+        reportVehiclesSold.forEach((v) => {
+          const profit =
+            typeof v.profit === "number"
+              ? v.profit
+              : Number(v.sellPrice || 0) - Number(v.buyPrice || 0);
+          profitTotal += profit;
+        });
+
+        reportVehiclesSummary = {
+          buyCount,
+          soldCount,
+          profitTotal,
+        };
+
+        if (reportVehiclesBuyCountText) {
+          reportVehiclesBuyCountText.textContent = String(buyCount);
+        }
+        if (reportVehiclesSoldCountText) {
+          reportVehiclesSoldCountText.textContent = String(soldCount);
+        }
+        if (reportVehiclesProfitText) {
+          const prefix = profitTotal >= 0 ? "" : "-";
+          reportVehiclesProfitText.textContent =
+            prefix + formatNumber(Math.abs(profitTotal)) + " ฿";
+          reportVehiclesProfitText.classList.toggle("text-success", profitTotal >= 0);
+          reportVehiclesProfitText.classList.toggle("text-danger", profitTotal < 0);
+        }
+
+        // ---- Top 5 อะไหล่ ----
+        const partsUsageMap = {}; // key: stockId หรือชื่อ, value: qty
+
+        reportJobs.forEach((job) => {
+          const items = Array.isArray(job.items) ? job.items : [];
+          items.forEach((item) => {
+            const stockId = item.stockId || "";
+            const stockName = item.stockName || "";
+            const key = stockId || stockName || "";
+            if (!key) return;
+
+            const qty = Number(item.qty) || 0;
+            if (!partsUsageMap[key]) {
+              partsUsageMap[key] = {
+                label: stockName || stockId,
+                totalQty: 0,
+              };
+            }
+            partsUsageMap[key].totalQty += qty;
+          });
+        });
+
+        const partsArray = Object.values(partsUsageMap);
+        partsArray.sort((a, b) => (b.totalQty || 0) - (a.totalQty || 0));
+
+        reportTopPartsUsage = partsArray.slice(0, 5);
+
+        renderTopPartsTable();
+        renderLowStockTable();
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: วาดกราฟรายรับ/รายจ่าย (drawCharts)
+      // ============================================================
+      function drawCharts() {
+        if (!incomeExpenseChartCanvas) return;
+        const ctx = incomeExpenseChartCanvas.getContext("2d");
+        if (!ctx) return;
+
+        const width = incomeExpenseChartCanvas.width;
+        const height = incomeExpenseChartCanvas.height;
+
+        // ล้างกราฟเดิม
+        ctx.clearRect(0, 0, width, height);
+
+        // ตั้งขอบเขตสำหรับกราฟ
+        const marginLeft = 40;
+        const marginRight = 10;
+        const marginTop = 10;
+        const marginBottom = 30;
+
+        const plotWidth = width - marginLeft - marginRight;
+        const plotHeight = height - marginTop - marginBottom;
+
+        // ถ้าไม่มีข้อมูล ให้แสดงข้อความตรงกลาง
+        if (!reportDailyStats || reportDailyStats.length === 0) {
+          ctx.fillStyle = "#999999";
+          ctx.font = "12px Kanit, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "ยังไม่มีข้อมูลเงินเข้าออกในช่วงนี้",
+            width / 2,
+            height / 2
+          );
+          return;
+        }
+
+        // หา max value ของ income/expense
+        let maxVal = 0;
+        reportDailyStats.forEach((d) => {
+          maxVal = Math.max(maxVal, d.income, d.expense);
+        });
+        if (maxVal <= 0) maxVal = 1; // กันหารด้วย 0
+
+        // สเกลตามแนวตั้ง: value -> y
+        function valueToY(value) {
+          const ratio = value / maxVal;
+          return marginTop + (1 - ratio) * plotHeight;
+        }
+
+        const n = reportDailyStats.length;
+        const stepX = n > 1 ? plotWidth / (n - 1) : 0;
+
+        // แกน X / Y
+        ctx.strokeStyle = "#cccccc";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        // แกน Y
+        ctx.moveTo(marginLeft, marginTop);
+        ctx.lineTo(marginLeft, marginTop + plotHeight);
+        // แกน X
+        ctx.lineTo(marginLeft + plotWidth, marginTop + plotHeight);
+        ctx.stroke();
+
+        // วาดเส้นรายรับ (income)
+        ctx.beginPath();
+        reportDailyStats.forEach((d, index) => {
+          const x = marginLeft + index * stepX;
+          const y = valueToY(d.income);
+          if (index === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.strokeStyle = "#28a745"; // สีเขียวรายรับ
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // วาดเส้นรายจ่าย (expense)
+        ctx.beginPath();
+        reportDailyStats.forEach((d, index) => {
+          const x = marginLeft + index * stepX;
+          const y = valueToY(d.expense);
+          if (index === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.strokeStyle = "#dc3545"; // สีแดงรายจ่าย
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // จุด marker
+        ctx.lineWidth = 1;
+        reportDailyStats.forEach((d, index) => {
+          const x = marginLeft + index * stepX;
+          // income
+          let y = valueToY(d.income);
+          ctx.fillStyle = "#28a745";
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          // expense
+          y = valueToY(d.expense);
+          ctx.fillStyle = "#dc3545";
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // ป้ายวันที่บางจุดบนแกน X
+        ctx.fillStyle = "#666666";
+        ctx.font = "10px Kanit, sans-serif";
+        ctx.textAlign = "center";
+
+        const maxLabels = 8;
+        const stepLabel = Math.ceil(n / maxLabels);
+
+        reportDailyStats.forEach((d, index) => {
+          if (index % stepLabel === 0 || index === n - 1) {
+            const x = marginLeft + index * stepX;
+            const y = marginTop + plotHeight + 12;
+            const label = d.date.slice(5); // MM-DD
+            ctx.fillText(label, x, y);
+          }
+        });
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: แสดงตาราง Top 5 อะไหล่
+      // ============================================================
+      function renderTopPartsTable() {
+        if (!topPartsTbody) return;
+
+        topPartsTbody.innerHTML = "";
+
+        if (!reportTopPartsUsage || reportTopPartsUsage.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="2" class="text-center small text-muted">
+              ยังไม่มีข้อมูลการใช้อะไหล่ในช่วงวันที่ที่เลือก
+            </td>
+          `;
+          topPartsTbody.appendChild(tr);
+          return;
+        }
+
+        reportTopPartsUsage.forEach((item) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="small">${item.label || "-"}</td>
+            <td class="small text-end">${formatIntegerNumber(item.totalQty || 0)}</td>
+          `;
+          topPartsTbody.appendChild(tr);
+        });
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: แสดงตารางสต๊อกใกล้หมด
+      // ============================================================
+      function renderLowStockTable() {
+        if (!lowStockTbody) return;
+
+        lowStockTbody.innerHTML = "";
+
+        if (!reportLowStock || reportLowStock.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="4" class="text-center small text-muted">
+              ขณะนี้ยังไม่มีรายการสต๊อกที่ใกล้หมด (qty &lt;= minQty)
+            </td>
+          `;
+          lowStockTbody.appendChild(tr);
+          return;
+        }
+
+        reportLowStock.forEach((item) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="small">${item.code || "-"}</td>
+            <td class="small">${item.name || "-"}</td>
+            <td class="small text-end">${formatIntegerNumber(item.qty || 0)}</td>
+            <td class="small text-end">${formatIntegerNumber(item.minQty || 0)}</td>
+          `;
+          lowStockTbody.appendChild(tr);
+        });
+      }
+
+      // ============================================================
+      // ฟังก์ชันหลัก: โหลดรายงานตามช่วงวันที่ (loadReportsForRange)
+      // ============================================================
+      async function loadReportsForRange(startStr, endStr) {
+        if (!currentUserProfile) return;
+        if (isLoadingReport) return;
+
+        if (!startStr || !endStr) {
+          showToast("กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน", "warning");
+          return;
+        }
+        if (startStr > endStr) {
+          showToast("วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด", "warning");
+          return;
+        }
+
+        reportRangeStartDate = startStr;
+        reportRangeEndDate = endStr;
+
+        if (reportStartDateInput) reportStartDateInput.value = startStr;
+        if (reportEndDateInput) reportEndDateInput.value = endStr;
+
+        setReportLoadingState(true);
+
+        try {
+          const branchId = currentUserProfile.branchId || null;
+
+          // ดึงข้อมูลจากหลาย collection พร้อมกัน
+          const [txns, jobs, vehicles, lowStock] = await Promise.all([
+            loadTransactionsForRange(startStr, endStr, branchId),
+            loadJobsForRange(startStr, endStr, branchId),
+            loadVehiclesForRange(startStr, endStr, branchId),
+            loadLowStock(branchId),
+          ]);
+
+          reportTransactions = txns;
+          reportJobs = jobs;
+          reportVehiclesBuy = vehicles.buyList;
+          reportVehiclesSold = vehicles.soldList;
+          reportLowStock = lowStock;
+
+          // สร้างสรุปและวาดกราฟ
+          buildSummary();
+          drawCharts();
+
+          showToast("โหลดรายงานช่วงที่เลือกเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("โหลดรายงานไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดรายงานได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+          reportsLoadingState.textContent =
+            "ไม่สามารถโหลดรายงานได้ (" + (error.code || "error") + ")";
+          reportsLoadingState.classList.add("text-danger");
+          reportsLoadingState.classList.remove("text-success");
+        } finally {
+          setReportLoadingState(false);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Export JSON รายงาน
+      // ============================================================
+      function triggerDownloadFile(filename, content, mimeType) {
+        if (!hiddenDownloadLink) return;
+
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+
+        hiddenDownloadLink.href = url;
+        hiddenDownloadLink.download = filename;
+        hiddenDownloadLink.click();
+
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 1000);
+      }
+
+      function handleExportReportJson() {
+        if (!reportRangeStartDate || !reportRangeEndDate) {
+          showToast("กรุณาโหลดรายงานช่วงใดช่วงหนึ่งก่อน Export", "warning");
+          return;
+        }
+
+        const payload = {
+          range: {
+            startDate: reportRangeStartDate,
+            endDate: reportRangeEndDate,
+          },
+          moneySummary: reportMoneySummary,
+          jobsSummary: reportJobsSummary,
+          vehiclesSummary: reportVehiclesSummary,
+          topPartsUsage: reportTopPartsUsage,
+          lowStockCurrent: reportLowStock,
+          raw: {
+            transactions: reportTransactions,
+            jobs: reportJobs,
+            vehiclesBuy: reportVehiclesBuy,
+            vehiclesSold: reportVehiclesSold,
+          },
+        };
+
+        const jsonStr = JSON.stringify(payload, null, 2);
+        const filename = `ben-motor-report-${reportRangeStartDate || "start"}-${
+          reportRangeEndDate || "end"
+        }.json`;
+        triggerDownloadFile(filename, jsonStr, "application/json");
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Export CSV สรุปรายวัน (เงิน)
+      // ============================================================
+      function handleExportReportCsv() {
+        if (!reportRangeStartDate || !reportRangeEndDate) {
+          showToast("กรุณาโหลดรายงานช่วงใดช่วงหนึ่งก่อน Export", "warning");
+          return;
+        }
+
+        if (!reportDailyStats || reportDailyStats.length === 0) {
+          showToast("ไม่มีข้อมูลรายวันให้ Export ในช่วงนี้", "warning");
+          return;
+        }
+
+        const header = ["date", "income", "expense", "net"];
+        const rows = reportDailyStats.map((d) => [
+          d.date || "",
+          String(d.income || 0),
+          String(d.expense || 0),
+          String((d.income || 0) - (d.expense || 0)),
+        ]);
+
+        const csvLines = [];
+        csvLines.push(header.join(","));
+        rows.forEach((row) => {
+          const line = row
+            .map((value) => {
+              if (value.includes(",") || value.includes('"') || value.includes("\n")) {
+                return `"${value.replace(/"/g, '""')}"`;
+              }
+              return value;
+            })
+            .join(",");
+          csvLines.push(line);
+        });
+
+        const csvContent = csvLines.join("\r\n");
+        const filename = `ben-motor-report-daily-${reportRangeStartDate || "start"}-${
+          reportRangeEndDate || "end"
+        }.csv`;
+        triggerDownloadFile(csvContent ? filename : "report.csv", csvContent, "text/csv;charset=utf-8;");
+      }
+
+      // ============================================================
+      // Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้านี้
+      // ============================================================
+      function setupEventListenersForPage() {
+        // ปุ่ม Logout
+        logoutBtn?.addEventListener("click", () => {
+          handleLogout();
+        });
+
+        // ปุ่มสลับธีม
+        themeToggleBtn?.addEventListener("click", async () => {
+          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+            ? "dark"
+            : "light";
+          const nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+          if (currentUser) {
+            saveThemeForUser(currentUser.uid, nextTheme);
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          }
+        });
+
+        // ปุ่ม preset ช่วงวันที่ของรายงาน
+        [
+          presetTodayBtn,
+          preset7dBtn,
+          preset14dBtn,
+          preset30dBtn,
+          preset3mBtn,
+          preset6mBtn,
+          preset1yBtn,
+        ].forEach((btn) => {
+          btn?.addEventListener("click", async (event) => {
+            const presetKey = event.currentTarget.getAttribute("data-range");
+            const { start, end } = createDateRangePreset(presetKey);
+            reportStartDateInput.value = start;
+            reportEndDateInput.value = end;
+            await loadReportsForRange(start, end);
+          });
+        });
+
+        // ปุ่มโหลดรายงานตามช่วง custom
+        loadReportBtn?.addEventListener("click", async () => {
+          const startStr = reportStartDateInput.value;
+          const endStr = reportEndDateInput.value;
+          await loadReportsForRange(startStr, endStr);
+        });
+
+        // กด Enter ใน input range เพื่อโหลดรายงาน
+        [reportStartDateInput, reportEndDateInput].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              const startStr = reportStartDateInput.value;
+              const endStr = reportEndDateInput.value;
+              loadReportsForRange(startStr, endStr);
+            }
+          });
+        });
+
+        // Export
+        exportReportJsonBtn?.addEventListener("click", () => {
+          handleExportReportJson();
+        });
+        exportReportCsvBtn?.addEventListener("click", () => {
+          handleExportReportCsv();
+        });
+
+        // FAB เมนูด่วน
+        fabOpenBillBtn?.addEventListener("click", () => {
+          window.location.href = "open-bill.html";
+        });
+        fabAddTxnBtn?.addEventListener("click", () => {
+          window.location.href = "finance.html";
+        });
+        fabStockInBtn?.addEventListener("click", () => {
+          window.location.href = "stock.html";
+        });
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้า reports.html
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // เมนูตั้งค่าระบบเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่าช่วงเริ่มต้น เป็น 7 วันที่ผ่านมา
+          const { start, end } = createDateRangePreset("7d");
+          reportRangeStartDate = start;
+          reportRangeEndDate = end;
+          if (reportStartDateInput) reportStartDateInput.value = start;
+          if (reportEndDateInput) reportEndDateInput.value = end;
+
+          // ตั้งค่า Event listeners
+          setupEventListenersForPage();
+
+          // โหลดรายงานครั้งแรก (7 วันล่าสุด)
+          await loadReportsForRange(start, end);
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/รายงาน:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายงานได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

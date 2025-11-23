@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า "เงินเข้าออก" -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – เงินเข้าออก</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "เงินเข้าออก"
+         ฟิลเตอร์ช่วงวันที่ + สรุปยอดเงิน + ฟอร์มบันทึก manual
+         + ตารางรายการ + ปุ่ม Export
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">เงินเข้าออก</h1>
+            <p class="small text-muted mb-0">
+              ดูรายการรายรับ/รายจ่ายตามช่วงวันที่ บันทึกเงินเข้าออกแบบ Manual
+              และดูยอดเงินคงเหลือจากรายการทั้งหมด
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= ฟิลเตอร์ช่วงวันที่ + ปุ่ม Preset ================= -->
+        <!-- คอมเมนต์: ส่วนนี้ใช้เลือกช่วงวันที่ และมีปุ่มลัดสำหรับช่วงที่ใช้บ่อย -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <div class="row g-2 align-items-center mb-2">
+                <div class="col-12 col-md-7">
+                  <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="text-muted">ช่วงวันที่:</span>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-range-preset-btn"
+                        data-range="today"
+                        id="rangePresetTodayBtn"
+                      >
+                        วันนี้
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-range-preset-btn"
+                        data-range="7d"
+                        id="rangePreset7dBtn"
+                      >
+                        7 วันล่าสุด
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-range-preset-btn"
+                        data-range="month"
+                        id="rangePresetMonthBtn"
+                      >
+                        เดือนนี้
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm bm-range-preset-btn"
+                        data-range="year"
+                        id="rangePresetYearBtn"
+                      >
+                        ปีนี้
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-5 text-md-end">
+                  <span class="small text-muted" id="transactionsLoadingState">
+                    กำลังโหลดรายการเงินจากฐานข้อมูล...
+                  </span>
+                </div>
+              </div>
+
+              <div class="row g-2 align-items-end">
+                <div class="col-6 col-md-3">
+                  <label for="dateRangeStartInput" class="form-label small mb-1">
+                    วันที่เริ่มต้น
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="dateRangeStartInput"
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="dateRangeEndInput" class="form-label small mb-1">
+                    วันที่สิ้นสุด
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="dateRangeEndInput"
+                  />
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm mt-2 mt-md-0"
+                    id="applyDateRangeBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="applyDateRangeSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="applyDateRangeBtnText">ดูรายการช่วงนี้</span>
+                  </button>
+                </div>
+              </div>
+
+              <p class="small text-muted mt-2 mb-0">
+                รายการเงินที่แสดงด้านล่างจะอิงจากช่วงวันที่ที่เลือก
+                โดยไม่นับรายการที่ถูกซ่อน (isDeleted = true)
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= การ์ดสรุปยอดเงิน ================= -->
+        <!-- คอมเมนต์: แสดงรายรับ/รายจ่าย/กำไรสุทธิในช่วง และยอดเงินคงเหลือทั้งหมด -->
+        <section class="mb-3">
+          <div class="row g-2 small">
+            <div class="col-12 col-md-3">
+              <div class="card bm-stat-card h-100">
+                <div class="card-body py-2">
+                  <div class="text-muted small">รายรับรวม (ช่วงที่เลือก)</div>
+                  <div class="h5 mb-0 fw-bold text-success" id="summaryIncomeText">
+                    0.00 ฿
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="card bm-stat-card h-100">
+                <div class="card-body py-2">
+                  <div class="text-muted small">รายจ่ายรวม (ช่วงที่เลือก)</div>
+                  <div class="h5 mb-0 fw-bold text-danger" id="summaryExpenseText">
+                    0.00 ฿
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="card bm-stat-card h-100">
+                <div class="card-body py-2">
+                  <div class="text-muted small">กำไรสุทธิ (ช่วงที่เลือก)</div>
+                  <div class="h5 mb-0 fw-bold" id="summaryNetText">
+                    0.00 ฿
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="card bm-stat-card h-100">
+                <div class="card-body py-2">
+                  <div class="text-muted small">
+                    ยอดเงินคงเหลือทั้งหมด (จากทุกเวลา)
+                  </div>
+                  <div class="h5 mb-0 fw-bold" id="summaryBalanceText">
+                    0.00 ฿
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="small text-muted mt-2 mb-0">
+            ยอดเงินคงเหลือ = รายรับทั้งหมด − รายจ่ายทั้งหมด จากทุกรายการใน
+            <code>transactions</code> ที่ยังไม่ถูกซ่อน
+          </p>
+        </section>
+
+        <!-- ================= ฟอร์มเพิ่มรายการเงินแบบ Manual ================= -->
+        <!-- คอมเมนต์: ใช้บันทึกเงินเข้า/ออกที่ไม่ได้ผูกกับบิลซ่อมหรือขายรถ -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 fw-semibold mb-0">
+                  <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+                </h2>
+              </div>
+              <form id="manualTxnForm" class="row g-2">
+                <div class="col-6 col-md-3">
+                  <label for="manualDateInput" class="form-label small mb-1">
+                    วันที่
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="manualDateInput"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="manualTypeSelect" class="form-label small mb-1">
+                    ประเภท
+                  </label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="manualTypeSelect"
+                    required
+                  >
+                    <option value="income" selected>รายรับ</option>
+                    <option value="expense">รายจ่าย</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="manualCategorySelect" class="form-label small mb-1">
+                    หมวดหมู่
+                  </label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="manualCategorySelect"
+                    required
+                  >
+                    <option value="ค่าซ่อม">ค่าซ่อม</option>
+                    <option value="ขายรถ">ขายรถ</option>
+                    <option value="ซื้ออะไหล่">ซื้ออะไหล่</option>
+                    <option value="ค่าเช่า">ค่าเช่า</option>
+                    <option value="ค่าน้ำไฟ">ค่าน้ำไฟ</option>
+                    <option value="ค่าแรง">ค่าแรง</option>
+                    <option value="อื่น ๆ">อื่น ๆ</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="manualMethodSelect" class="form-label small mb-1">
+                    วิธีรับ/จ่าย
+                  </label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="manualMethodSelect"
+                    required
+                  >
+                    <option value="cash" selected>เงินสด</option>
+                    <option value="transfer">โอน</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="manualDescriptionInput" class="form-label small mb-1">
+                    รายละเอียด
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="manualDescriptionInput"
+                    placeholder="เช่น จ่ายค่าเช่าอู่, รับเงินค่าซ่อมจากลูกค้า"
+                    required
+                  />
+                </div>
+                <div class="col-12 col-md-3">
+                  <label for="manualAmountInput" class="form-label small mb-1">
+                    จำนวนเงิน (บาท)
+                  </label>
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      id="manualAmountInput"
+                      placeholder="0.00"
+                      required
+                    />
+                    <span class="input-group-text">฿</span>
+                  </div>
+                  <div class="d-flex gap-1 mt-1">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-xs flex-fill manual-amount-quick-btn"
+                      data-amount="100"
+                    >
+                      +100
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-xs flex-fill manual-amount-quick-btn"
+                      data-amount="500"
+                    >
+                      +500
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-xs flex-fill manual-amount-quick-btn"
+                      data-amount="1000"
+                    >
+                      +1000
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-3 d-flex align-items-end justify-content-end">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-sm w-100"
+                    id="manualTxnSaveBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="manualTxnSaveSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="manualTxnSaveBtnText">บันทึกรายการเงิน</span>
+                  </button>
+                </div>
+              </form>
+              <p class="small text-muted mt-2 mb-0">
+                รายการเงินแบบ Manual จะถูกเก็บใน <code>transactions</code> โดยมี
+                <code>sourceType = "manual"</code> และถูกบันทึกเหตุการณ์ใน
+                <code>activityLogs</code> ด้วยชนิด <code>transaction_manual</code>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ตารางรายการเงินเข้าออก + ปุ่ม Export ================= -->
+        <!-- คอมเมนต์: แสดงรายการเงินเข้าออกตามช่วงวันที่ และสามารถ Export -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body small">
+              <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2"
+              >
+                <div class="text-muted">
+                  รายการเงินเข้าออกตามช่วงวันที่ที่เลือก
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    id="exportJsonBtn"
+                  >
+                    <i class="bi bi-filetype-json me-1"></i> Export JSON
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    id="exportCsvBtn"
+                  >
+                    <i class="bi bi-filetype-csv me-1"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="small text-muted">
+                    <tr>
+                      <th style="min-width: 110px;">วันที่</th>
+                      <th style="min-width: 90px;">ประเภท</th>
+                      <th style="min-width: 120px;">หมวดหมู่</th>
+                      <th style="min-width: 200px;">รายละเอียด</th>
+                      <th class="text-end" style="min-width: 110px;">จำนวนเงิน</th>
+                      <th style="min-width: 90px;">วิธี</th>
+                      <th style="min-width: 110px;">แหล่งที่มา</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transactionsTableBody">
+                    <!-- แถวของรายการเงินจะถูกเติมจาก JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="small text-muted d-none" id="transactionsCountInfo">
+                  พบรายการเงินทั้งหมด
+                  <span id="transactionsCountNumber">0</span> รายการในช่วงนี้
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm d-none"
+                  id="loadMoreTransactionsBtn"
+                >
+                  <span
+                    class="spinner-border spinner-border-sm me-2 d-none"
+                    id="loadMoreTransactionsSpinner"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  <span id="loadMoreTransactionsBtnText">โหลดรายการเพิ่ม</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         หน้าปัจจุบัน: เงินเข้าออก
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link active">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ลิงก์ซ่อนสำหรับดาวน์โหลดไฟล์ Export -->
+    <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า finance.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // ฟิลเตอร์ช่วงวันที่
+      const transactionsLoadingState = document.getElementById("transactionsLoadingState");
+      const dateRangeStartInput = document.getElementById("dateRangeStartInput");
+      const dateRangeEndInput = document.getElementById("dateRangeEndInput");
+      const applyDateRangeBtn = document.getElementById("applyDateRangeBtn");
+      const applyDateRangeSpinner = document.getElementById("applyDateRangeSpinner");
+      const applyDateRangeBtnText = document.getElementById("applyDateRangeBtnText");
+
+      const rangePresetTodayBtn = document.getElementById("rangePresetTodayBtn");
+      const rangePreset7dBtn = document.getElementById("rangePreset7dBtn");
+      const rangePresetMonthBtn = document.getElementById("rangePresetMonthBtn");
+      const rangePresetYearBtn = document.getElementById("rangePresetYearBtn");
+
+      // การ์ดสรุป
+      const summaryIncomeText = document.getElementById("summaryIncomeText");
+      const summaryExpenseText = document.getElementById("summaryExpenseText");
+      const summaryNetText = document.getElementById("summaryNetText");
+      const summaryBalanceText = document.getElementById("summaryBalanceText");
+
+      // ฟอร์ม Manual Transaction
+      const manualTxnForm = document.getElementById("manualTxnForm");
+      const manualDateInput = document.getElementById("manualDateInput");
+      const manualTypeSelect = document.getElementById("manualTypeSelect");
+      const manualCategorySelect = document.getElementById("manualCategorySelect");
+      const manualMethodSelect = document.getElementById("manualMethodSelect");
+      const manualDescriptionInput = document.getElementById("manualDescriptionInput");
+      const manualAmountInput = document.getElementById("manualAmountInput");
+      const manualAmountQuickButtons = document.querySelectorAll(
+        ".manual-amount-quick-btn"
+      );
+      const manualTxnSaveBtn = document.getElementById("manualTxnSaveBtn");
+      const manualTxnSaveSpinner = document.getElementById("manualTxnSaveSpinner");
+      const manualTxnSaveBtnText = document.getElementById("manualTxnSaveBtnText");
+
+      // ตารางรายการเงิน
+      const transactionsTableBody = document.getElementById("transactionsTableBody");
+      const transactionsCountInfo = document.getElementById("transactionsCountInfo");
+      const transactionsCountNumber = document.getElementById("transactionsCountNumber");
+
+      const loadMoreTransactionsBtn = document.getElementById("loadMoreTransactionsBtn");
+      const loadMoreTransactionsSpinner = document.getElementById(
+        "loadMoreTransactionsSpinner"
+      );
+      const loadMoreTransactionsBtnText = document.getElementById(
+        "loadMoreTransactionsBtnText"
+      );
+
+      // Export
+      const exportJsonBtn = document.getElementById("exportJsonBtn");
+      const exportCsvBtn = document.getElementById("exportCsvBtn");
+      const hiddenDownloadLink = document.getElementById("hiddenDownloadLink");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // ============================================================
+      // สถานะภายในหน้า
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      // ช่วงวันที่ของรายการเงินที่แสดงในตาราง
+      let txnRangeStartDate = null; // "YYYY-MM-DD"
+      let txnRangeEndDate = null; // "YYYY-MM-DD"
+
+      // ขนาดหน้าและ pagination ของ transactions
+      const TXN_PAGE_SIZE = 30;
+      let lastVisibleTxn = null;
+      let isLoadingTransactions = false;
+
+      // รายการ transactions ที่โหลดตามช่วง
+      let transactionsInRange = [];
+
+      // สรุปยอดในช่วง
+      let rangeIncomeTotal = 0;
+      let rangeExpenseTotal = 0;
+
+      // ยอดเงินคงเหลือทั้งหมด
+      let balanceAllTime = 0;
+
+      // สถานะการบันทึก manual transaction
+      let isSavingManualTxn = false;
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: ตัวเลข + วันที่แบบไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function formatIntegerNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0";
+        return value.toLocaleString("th-TH", {
+          maximumFractionDigits: 0,
+        });
+      }
+
+      function parseNumberFromInput(inputEl) {
+        if (!inputEl) return 0;
+        const value = inputEl.value;
+        if (!value) return 0;
+        const num = parseFloat(value);
+        if (isNaN(num)) return 0;
+        return num;
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      function createDateRangePreset(rangeKey) {
+        const today = new Date();
+        const todayStr = getTodayISODateString();
+
+        if (rangeKey === "today") {
+          return { start: todayStr, end: todayStr };
+        }
+
+        if (rangeKey === "7d") {
+          const startDate = new Date(today);
+          startDate.setDate(startDate.getDate() - 6);
+          const year = startDate.getFullYear();
+          const month = String(startDate.getMonth() + 1).padStart(2, "0");
+          const day = String(startDate.getDate()).padStart(2, "0");
+          return {
+            start: `${year}-${month}-${day}`,
+            end: todayStr,
+          };
+        }
+
+        if (rangeKey === "month") {
+          const year = today.getFullYear();
+          const month = today.getMonth() + 1;
+          const startStr = `${year}-${String(month).padStart(2, "0")}-01`;
+
+          const nextMonth = month === 12 ? 1 : month + 1;
+          const nextYear = month === 12 ? year + 1 : year;
+          const nextMonthDate = new Date(nextYear, nextMonth - 1, 1);
+          const lastDayDate = new Date(nextMonthDate - 1);
+          const lastDay = String(lastDayDate.getDate()).padStart(2, "0");
+          const endStr = `${year}-${String(month).padStart(2, "0")}-${lastDay}`;
+
+          return { start: startStr, end: endStr };
+        }
+
+        if (rangeKey === "year") {
+          const year = today.getFullYear();
+          return {
+            start: `${year}-01-01`,
+            end: `${year}-12-31`,
+          };
+        }
+
+        return { start: todayStr, end: todayStr };
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตั้งค่าสถานะ Loading ของรายการเงิน
+      // ============================================================
+      function setTransactionsLoadingState(isLoading, isFirstPage = false) {
+        isLoadingTransactions = isLoading;
+
+        if (transactionsLoadingState) {
+          if (isLoading && isFirstPage) {
+            transactionsLoadingState.textContent =
+              "กำลังโหลดรายการเงินจากฐานข้อมูล...";
+            transactionsLoadingState.classList.remove("text-danger");
+            transactionsLoadingState.classList.remove("text-success");
+          } else if (!isLoading && transactionsInRange.length === 0) {
+            transactionsLoadingState.textContent =
+              "ไม่พบรายการเงินในช่วงวันที่ที่เลือก";
+            transactionsLoadingState.classList.add("text-danger");
+            transactionsLoadingState.classList.remove("text-success");
+          } else if (!isLoading) {
+            transactionsLoadingState.textContent = "โหลดข้อมูลล่าสุดแล้ว";
+            transactionsLoadingState.classList.add("text-success");
+            transactionsLoadingState.classList.remove("text-danger");
+          }
+        }
+
+        if (loadMoreTransactionsBtn && loadMoreTransactionsSpinner && loadMoreTransactionsBtnText) {
+          if (isLoading && !isFirstPage) {
+            loadMoreTransactionsSpinner.classList.remove("d-none");
+            loadMoreTransactionsBtnText.textContent = "กำลังโหลดรายการเพิ่ม...";
+            loadMoreTransactionsBtn.disabled = true;
+          } else {
+            loadMoreTransactionsSpinner.classList.add("d-none");
+            loadMoreTransactionsBtnText.textContent = "โหลดรายการเพิ่ม";
+            loadMoreTransactionsBtn.disabled = false;
+          }
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: คำนวณสรุปยอดในช่วงจาก transactionsInRange
+      // ============================================================
+      function recalculateRangeSummary() {
+        let income = 0;
+        let expense = 0;
+
+        transactionsInRange.forEach((txn) => {
+          const amount = Number(txn.amount) || 0;
+          if (txn.type === "income") {
+            income += amount;
+          } else if (txn.type === "expense") {
+            expense += amount;
+          }
+        });
+
+        rangeIncomeTotal = income;
+        rangeExpenseTotal = expense;
+
+        if (summaryIncomeText) {
+          summaryIncomeText.textContent = formatNumber(income) + " ฿";
+        }
+        if (summaryExpenseText) {
+          summaryExpenseText.textContent = formatNumber(expense) + " ฿";
+        }
+        if (summaryNetText) {
+          const net = income - expense;
+          const prefix = net >= 0 ? "" : "-";
+          summaryNetText.textContent = prefix + formatNumber(Math.abs(net)) + " ฿";
+          summaryNetText.classList.toggle("text-success", net >= 0);
+          summaryNetText.classList.toggle("text-danger", net < 0);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดยอดเงินคงเหลือทั้งหมด (จากทุกเวลา)
+      // ============================================================
+      async function loadBalanceAllTime() {
+        if (!currentUserProfile) return;
+
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const constraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+
+          const txCol = collection(db, "transactions");
+          const qAll = query(
+            txCol,
+            ...constraints,
+            orderBy("date", "asc")
+          );
+
+          // หมายเหตุ: หาก Firestore แจ้งว่าต้องสร้างดัชนี (index)
+          // ให้สร้าง index ตามลิงก์ที่ Firestore แจ้งครั้งแรกเท่านั้น
+          const snap = await getDocs(qAll);
+
+          let income = 0;
+          let expense = 0;
+
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const amount = Number(data.amount) || 0;
+            const type = data.type || "income";
+            if (type === "income") {
+              income += amount;
+            } else if (type === "expense") {
+              expense += amount;
+            }
+          });
+
+          balanceAllTime = income - expense;
+          if (summaryBalanceText) {
+            const prefix = balanceAllTime >= 0 ? "" : "-";
+            summaryBalanceText.textContent =
+              prefix + formatNumber(Math.abs(balanceAllTime)) + " ฿";
+            summaryBalanceText.classList.toggle("text-success", balanceAllTime >= 0);
+            summaryBalanceText.classList.toggle("text-danger", balanceAllTime < 0);
+          }
+        } catch (error) {
+          console.error("โหลดยอดเงินคงเหลือทั้งหมดไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดยอดเงินคงเหลือได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Render ตารางรายการเงินจาก transactionsInRange
+      // ============================================================
+      function renderTransactionsTable() {
+        if (!transactionsTableBody) return;
+
+        transactionsTableBody.innerHTML = "";
+
+        if (transactionsInRange.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="7" class="text-center small text-muted">
+              ไม่พบรายการเงินในช่วงวันที่ที่เลือก
+            </td>
+          `;
+          transactionsTableBody.appendChild(tr);
+        } else {
+          transactionsInRange.forEach((txn) => {
+            const tr = document.createElement("tr");
+
+            const type = txn.type || "income";
+            const amount = Number(txn.amount) || 0;
+            const amountText = formatNumber(amount) + " ฿";
+
+            const isIncome = type === "income";
+
+            const methodLabel =
+              txn.method === "transfer"
+                ? "โอน"
+                : txn.method === "cash"
+                ? "เงินสด"
+                : txn.method || "-";
+
+            let sourceLabel = "-";
+            if (txn.sourceType === "job") {
+              sourceLabel = "ค่าซ่อม (Job)";
+            } else if (txn.sourceType === "vehicle") {
+              sourceLabel = "ขายรถ (Vehicle)";
+            } else if (txn.sourceType === "stock") {
+              sourceLabel = "ซื้ออะไหล่ (Stock)";
+            } else if (txn.sourceType === "manual") {
+              sourceLabel = "บันทึกเอง (Manual)";
+            }
+
+            tr.innerHTML = `
+              <td class="small">
+                ${formatDateThaiFromString(txn.date || "")}
+              </td>
+              <td class="small">
+                <span class="badge ${
+                  isIncome ? "bg-success" : "bg-danger"
+                }">${isIncome ? "รายรับ" : "รายจ่าย"}</span>
+              </td>
+              <td class="small">
+                ${txn.category || "-"}
+              </td>
+              <td class="small">
+                ${txn.description || "-"}
+              </td>
+              <td class="small text-end ${
+                isIncome ? "text-success" : "text-danger"
+              }">
+                ${isIncome ? "+" : "-"}${amountText}
+              </td>
+              <td class="small">
+                ${methodLabel}
+              </td>
+              <td class="small">
+                ${sourceLabel}
+              </td>
+            `;
+
+            transactionsTableBody.appendChild(tr);
+          });
+        }
+
+        if (transactionsCountInfo && transactionsCountNumber) {
+          transactionsCountInfo.classList.remove("d-none");
+          transactionsCountNumber.textContent = String(transactionsInRange.length);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดรายการเงินตามช่วงวันที่ + pagination
+      // ============================================================
+      async function loadTransactions(reset = false) {
+        if (!currentUserProfile) return;
+        if (isLoadingTransactions) return;
+
+        if (!txnRangeStartDate || !txnRangeEndDate) {
+          txnRangeStartDate = getTodayISODateString();
+          txnRangeEndDate = getTodayISODateString();
+        }
+
+        const startDateStr = txnRangeStartDate;
+        const endDateStr = txnRangeEndDate;
+
+        if (reset) {
+          transactionsInRange = [];
+          lastVisibleTxn = null;
+        }
+
+        const isFirstPage = reset || !lastVisibleTxn;
+        setTransactionsLoadingState(true, isFirstPage);
+
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const txCol = collection(db, "transactions");
+
+          const constraints = [
+            where("isDeleted", "==", false),
+            where("date", ">=", startDateStr),
+            where("date", "<=", endDateStr),
+          ];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+
+          let qTx = query(
+            txCol,
+            ...constraints,
+            orderBy("date", "desc"),
+            limit(TXN_PAGE_SIZE)
+          );
+
+          if (!isFirstPage && lastVisibleTxn) {
+            qTx = query(
+              txCol,
+              ...constraints,
+              orderBy("date", "desc"),
+              startAfter(lastVisibleTxn),
+              limit(TXN_PAGE_SIZE)
+            );
+          }
+
+          // หมายเหตุ: หาก Firestore แจ้งว่าต้องสร้างดัชนี (index)
+          // ให้สร้าง index ตามลิงก์ที่ Firestore แจ้งครั้งแรกเท่านั้น
+          const snap = await getDocs(qTx);
+
+          const newTxns = [];
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            newTxns.push({
+              id: docSnap.id,
+              date: data.date || "",
+              createdAt: data.createdAt || null,
+              updatedAt: data.updatedAt || null,
+              type: data.type || "income",
+              category: data.category || "",
+              description: data.description || "",
+              amount: Number(data.amount) || 0,
+              method: data.method || "cash",
+              sourceType: data.sourceType || "manual",
+              sourceId: data.sourceId || null,
+              createdBy: data.createdBy || "",
+              createdByName: data.createdByName || "",
+              isDeleted: data.isDeleted || false,
+              branchId: data.branchId || null,
+            });
+          });
+
+          if (reset) {
+            transactionsInRange = newTxns;
+          } else {
+            transactionsInRange = transactionsInRange.concat(newTxns);
+          }
+
+          if (!snap.empty) {
+            lastVisibleTxn = snap.docs[snap.docs.length - 1];
+          }
+
+          // แสดง/ซ่อนปุ่มโหลดเพิ่ม
+          if (loadMoreTransactionsBtn) {
+            if (snap.size === TXN_PAGE_SIZE) {
+              loadMoreTransactionsBtn.classList.remove("d-none");
+            } else {
+              loadMoreTransactionsBtn.classList.add("d-none");
+            }
+          }
+
+          // คำนวณสรุป + Render ตาราง
+          recalculateRangeSummary();
+          renderTransactionsTable();
+        } catch (error) {
+          console.error("โหลดรายการเงินไม่สำเร็จ:", error);
+          if (transactionsLoadingState) {
+            transactionsLoadingState.textContent =
+              "ไม่สามารถโหลดรายการเงินได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")";
+            transactionsLoadingState.classList.add("text-danger");
+          }
+          showToast(
+            "ไม่สามารถโหลดรายการเงินได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          setTransactionsLoadingState(false, isFirstPage);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตั้งค่าช่วงวันที่ และโหลดรายการใหม่
+      // ============================================================
+      async function setDateRangeAndReload(startStr, endStr) {
+        txnRangeStartDate = startStr;
+        txnRangeEndDate = endStr;
+
+        if (dateRangeStartInput) dateRangeStartInput.value = startStr;
+        if (dateRangeEndInput) dateRangeEndInput.value = endStr;
+
+        await loadTransactions(true);
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: handle การกดปุ่ม "ดูรายการช่วงนี้"
+      // ============================================================
+      async function handleApplyDateRange() {
+        if (!dateRangeStartInput || !dateRangeEndInput) return;
+
+        const startStr = dateRangeStartInput.value;
+        const endStr = dateRangeEndInput.value;
+
+        if (!startStr || !endStr) {
+          showToast("กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน", "warning");
+          return;
+        }
+
+        if (startStr > endStr) {
+          showToast("วันที่เริ่มต้นต้องไม่น้อยกว่าวันที่สิ้นสุด", "warning");
+          return;
+        }
+
+        applyDateRangeSpinner.classList.remove("d-none");
+        applyDateRangeBtnText.textContent = "กำลังโหลด...";
+        applyDateRangeBtn.disabled = true;
+
+        try {
+          await setDateRangeAndReload(startStr, endStr);
+        } finally {
+          applyDateRangeSpinner.classList.add("d-none");
+          applyDateRangeBtnText.textContent = "ดูรายการช่วงนี้";
+          applyDateRangeBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: handle บันทึกรายการเงิน Manual
+      // ============================================================
+      async function handleSaveManualTransaction(event) {
+        event.preventDefault();
+        if (!currentUser || !currentUserProfile) return;
+        if (isSavingManualTxn) return;
+
+        const date = manualDateInput.value || getTodayISODateString();
+        const type = manualTypeSelect.value || "income";
+        const category = manualCategorySelect.value || "อื่น ๆ";
+        const method = manualMethodSelect.value || "cash";
+        const description = (manualDescriptionInput.value || "").trim();
+        const amount = parseNumberFromInput(manualAmountInput);
+
+        if (!date || !description || amount <= 0) {
+          showToast(
+            "กรุณากรอกวันที่ รายละเอียด และจำนวนเงินให้ถูกต้อง",
+            "warning"
+          );
+          return;
+        }
+
+        isSavingManualTxn = true;
+        manualTxnSaveSpinner.classList.remove("d-none");
+        manualTxnSaveBtnText.textContent = "กำลังบันทึก...";
+        manualTxnSaveBtn.disabled = true;
+
+        const branchId = currentUserProfile.branchId || null;
+
+        try {
+          // บันทึกลง transactions
+          const newTxn = {
+            date,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            type,
+            category,
+            description,
+            amount,
+            method,
+            sourceType: "manual",
+            sourceId: null,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          };
+
+          const docRef = await addDoc(collection(db, "transactions"), newTxn);
+
+          // บันทึก activityLogs
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "transaction_manual",
+            message: `บันทึก${
+              type === "income" ? "รายรับ" : "รายจ่าย"
+            }แบบ Manual หมวดหมู่ ${category} จำนวน ${amount.toLocaleString(
+              "th-TH"
+            )} บาท`,
+            refType: "transaction",
+            refId: docRef.id,
+            branchId,
+          });
+
+          // หากรายการใหม่นี้อยู่ในช่วงวันที่ปัจจุบัน ให้เพิ่มเข้า state
+          if (date >= txnRangeStartDate && date <= txnRangeEndDate) {
+            transactionsInRange.unshift({
+              id: docRef.id,
+              ...newTxn,
+            });
+          }
+
+          // คำนวณสรุปใหม่
+          recalculateRangeSummary();
+          renderTransactionsTable();
+
+          // โหลดยอดเงินคงเหลือทั้งหมดใหม่
+          await loadBalanceAllTime();
+
+          // รีเซ็ตฟอร์ม
+          manualDateInput.value = date;
+          manualTypeSelect.value = "income";
+          manualCategorySelect.value = "ค่าซ่อม";
+          manualMethodSelect.value = "cash";
+          manualDescriptionInput.value = "";
+          manualAmountInput.value = "";
+
+          showToast("บันทึกรายการเงินเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("บันทึกรายการเงิน Manual ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกรายการเงินได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isSavingManualTxn = false;
+          manualTxnSaveSpinner.classList.add("d-none");
+          manualTxnSaveBtnText.textContent = "บันทึกรายการเงิน";
+          manualTxnSaveBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: สร้างไฟล์ Export และให้ผู้ใช้ดาวน์โหลด
+      // ============================================================
+      function triggerDownloadFile(filename, content, mimeType) {
+        if (!hiddenDownloadLink) return;
+
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+
+        hiddenDownloadLink.href = url;
+        hiddenDownloadLink.download = filename;
+        hiddenDownloadLink.click();
+
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 1000);
+      }
+
+      function handleExportJson() {
+        const data = transactionsInRange.map((txn) => ({
+          id: txn.id,
+          date: txn.date,
+          type: txn.type,
+          category: txn.category,
+          description: txn.description,
+          amount: txn.amount,
+          method: txn.method,
+          sourceType: txn.sourceType,
+          sourceId: txn.sourceId,
+          createdBy: txn.createdBy,
+          createdByName: txn.createdByName,
+          branchId: txn.branchId,
+        }));
+
+        const jsonStr = JSON.stringify(data, null, 2);
+        const filename = `ben-motor-transactions-${txnRangeStartDate || "start"}-${
+          txnRangeEndDate || "end"
+        }.json`;
+        triggerDownloadFile(filename, jsonStr, "application/json");
+      }
+
+      function handleExportCsv() {
+        const header = [
+          "id",
+          "date",
+          "type",
+          "category",
+          "description",
+          "amount",
+          "method",
+          "sourceType",
+          "sourceId",
+          "createdBy",
+          "createdByName",
+          "branchId",
+        ];
+
+        const rows = transactionsInRange.map((txn) => [
+          txn.id || "",
+          txn.date || "",
+          txn.type || "",
+          txn.category || "",
+          (txn.description || "").replace(/"/g, '""'),
+          String(txn.amount || 0),
+          txn.method || "",
+          txn.sourceType || "",
+          txn.sourceId || "",
+          txn.createdBy || "",
+          txn.createdByName || "",
+          txn.branchId || "",
+        ]);
+
+        const csvLines = [];
+        csvLines.push(header.join(","));
+        rows.forEach((row) => {
+          const line = row
+            .map((value) => {
+              if (value.includes(",") || value.includes('"') || value.includes("\n")) {
+                return `"${value.replace(/"/g, '""')}"`;
+              }
+              return value;
+            })
+            .join(",");
+          csvLines.push(line);
+        });
+
+        const csvContent = csvLines.join("\r\n");
+        const filename = `ben-motor-transactions-${txnRangeStartDate || "start"}-${
+          txnRangeEndDate || "end"
+        }.csv`;
+        triggerDownloadFile(filename, csvContent, "text/csv;charset=utf-8;");
+      }
+
+      // ============================================================
+      // Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้านี้
+      // ============================================================
+      function setupEventListenersForPage() {
+        // Logout
+        logoutBtn?.addEventListener("click", () => {
+          handleLogout();
+        });
+
+        // ปุ่มสลับธีม
+        themeToggleBtn?.addEventListener("click", async () => {
+          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+            ? "dark"
+            : "light";
+          const nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+          if (currentUser) {
+            saveThemeForUser(currentUser.uid, nextTheme);
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          }
+        });
+
+        // ปุ่ม preset ช่วงวันที่
+        [rangePresetTodayBtn, rangePreset7dBtn, rangePresetMonthBtn, rangePresetYearBtn].forEach(
+          (btn) => {
+            btn?.addEventListener("click", async (event) => {
+              const rangeKey = event.currentTarget.getAttribute("data-range");
+              const { start, end } = createDateRangePreset(rangeKey);
+              await setDateRangeAndReload(start, end);
+            });
+          }
+        );
+
+        // ปุ่ม "ดูรายการช่วงนี้"
+        applyDateRangeBtn?.addEventListener("click", () => {
+          handleApplyDateRange();
+        });
+
+        // กด Enter ใน input วันที่ให้ apply
+        [dateRangeStartInput, dateRangeEndInput].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleApplyDateRange();
+            }
+          });
+        });
+
+        // ฟอร์ม Manual Txn
+        manualTxnForm?.addEventListener("submit", handleSaveManualTransaction);
+
+        // Quick amount buttons
+        manualAmountQuickButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const amountToAdd = parseFloat(btn.getAttribute("data-amount") || "0");
+            const current = parseNumberFromInput(manualAmountInput);
+            const newAmount = current + amountToAdd;
+            manualAmountInput.value = String(newAmount);
+          });
+        });
+
+        // Enter ในช่องรายละเอียด/จำนวนเงิน = submit ฟอร์ม
+        [manualDescriptionInput, manualAmountInput].forEach((input) => {
+          input?.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              manualTxnForm?.dispatchEvent(new Event("submit"));
+            }
+          });
+        });
+
+        // ปุ่มโหลดเพิ่มเติม
+        loadMoreTransactionsBtn?.addEventListener("click", () => {
+          loadTransactions(false);
+        });
+
+        // Export
+        exportJsonBtn?.addEventListener("click", () => {
+          if (transactionsInRange.length === 0) {
+            showToast("ไม่มีรายการให้ Export ในช่วงนี้", "warning");
+            return;
+          }
+          handleExportJson();
+        });
+
+        exportCsvBtn?.addEventListener("click", () => {
+          if (transactionsInRange.length === 0) {
+            showToast("ไม่มีรายการให้ Export ในช่วงนี้", "warning");
+            return;
+          }
+          handleExportCsv();
+        });
+
+        // FAB เมนูด่วน
+        fabOpenBillBtn?.addEventListener("click", () => {
+          window.location.href = "open-bill.html";
+        });
+        fabAddTxnBtn?.addEventListener("click", () => {
+          const rect = manualTxnForm?.getBoundingClientRect();
+          if (rect) {
+            window.scrollTo({
+              top: window.scrollY + rect.top - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+        fabStockInBtn?.addEventListener("click", () => {
+          window.location.href = "stock.html";
+        });
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้า finance.html
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // เมนูตั้งค่าเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // กำหนดช่วงวันที่เริ่มต้น = วันนี้
+          const todayStr = getTodayISODateString();
+          txnRangeStartDate = todayStr;
+          txnRangeEndDate = todayStr;
+          if (dateRangeStartInput) dateRangeStartInput.value = todayStr;
+          if (dateRangeEndInput) dateRangeEndInput.value = todayStr;
+
+          // ตั้งค่า Event listeners
+          setupEventListenersForPage();
+
+          // โหลดยอดเงินคงเหลือทั้งหมด
+          await loadBalanceAllTime();
+
+          // โหลดรายการเงินชุดแรกสำหรับวันนี้
+          await loadTransactions(true);
+
+          // ตั้งค่าวันเริ่มต้นของ Manual Txn
+          if (manualDateInput) {
+            manualDateInput.value = todayStr;
+          }
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/รายการเงิน:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายการเงินได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

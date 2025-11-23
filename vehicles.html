@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า "รถรับซื้อเข้า/ขายออก" -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – รถรับซื้อเข้า / ขายออก</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "รถรับซื้อเข้า/ขายออก"
+         แสดงฟอร์มรับซื้อรถ + รายการรถ + สรุป/กรองสถานะ
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">รถรับซื้อเข้า / ขายออก</h1>
+            <p class="small text-muted mb-0">
+              บันทึกการซื้อรถเข้าอู่ ขายรถออก และดูสถานะพร้อมกำไรรวม
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= ฟอร์มเพิ่มรถรับซื้อเข้า ================= -->
+        <!-- คอมเมนต์: ฟอร์มส่วนบนใช้เพิ่มรถที่รับซื้อเข้าใหม่ -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="h6 fw-semibold mb-3">
+                <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+              </h2>
+              <form id="addVehicleForm" class="row g-2">
+                <div class="col-6 col-md-3">
+                  <label for="buyDateInput" class="form-label small mb-1">
+                    วันที่ซื้อเข้า
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="buyDateInput"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="brandInput" class="form-label small mb-1">
+                    ยี่ห้อรถ
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="brandInput"
+                    placeholder="เช่น Honda"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="modelInput" class="form-label small mb-1">
+                    รุ่นรถ
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="modelInput"
+                    placeholder="เช่น Click 125i"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="plateInput" class="form-label small mb-1">
+                    ทะเบียนรถ
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="plateInput"
+                    placeholder="เช่น 1กข 1234"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="mileageInput" class="form-label small mb-1">
+                    เลขไมล์ (กม.)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="mileageInput"
+                    placeholder="ใส่เป็นตัวเลข หรือเว้นว่าง"
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="buyPriceInput" class="form-label small mb-1">
+                    ราคาซื้อเข้า (บาท)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="buyPriceInput"
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="noteInput" class="form-label small mb-1">
+                    หมายเหตุเพิ่มเติม
+                  </label>
+                  <textarea
+                    id="noteInput"
+                    class="form-control form-control-sm"
+                    rows="2"
+                    placeholder="จดรายละเอียดเพิ่มเติม เช่น สภาพรถที่รับซื้อเข้า"
+                  ></textarea>
+                </div>
+                <div class="col-12 mt-1 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-sm"
+                    id="addVehicleBtn"
+                  >
+                    <span
+                      class="spinner-border spinner-border-sm me-2 d-none"
+                      id="addVehicleSpinner"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span id="addVehicleBtnText">บันทึกรถที่ซื้อเข้า</span>
+                  </button>
+                </div>
+              </form>
+              <p class="small text-muted mb-0 mt-2">
+                ระบบจะสร้างรายการในฐานข้อมูล Firestore (collection
+                <code>vehicles</code>) และบันทึกธุรกรรมค่าใช้จ่ายซื้อรถใน
+                <code>transactions</code> พร้อมสร้างบันทึกกิจกรรมใน
+                <code>activityLogs</code> อัตโนมัติ
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= แถบกรองสถานะ + สรุปสถิติ ================= -->
+        <!-- คอมเมนต์: ส่วนนี้ใช้เลือกสถานะ และดูสรุปจำนวน/กำไรรวม -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2"
+              >
+                <div class="d-flex align-items-center gap-2">
+                  <label
+                    for="vehicleStatusFilter"
+                    class="form-label small mb-0 me-2"
+                  >
+                    สถานะรถที่ต้องการดู:
+                  </label>
+                  <select
+                    id="vehicleStatusFilter"
+                    class="form-select form-select-sm"
+                    style="min-width: 150px;"
+                  >
+                    <option value="all" selected>ทั้งหมด</option>
+                    <option value="in_stock">พร้อมขาย (อยู่ในสต๊อก)</option>
+                    <option value="sold">ขายแล้ว</option>
+                  </select>
+                </div>
+                <div class="small text-muted" id="vehiclesLoadingState">
+                  กำลังโหลดรายการรถจากฐานข้อมูล...
+                </div>
+              </div>
+              <hr class="my-2" />
+              <div class="row g-2 small">
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">รถคงเหลือในสต๊อก</div>
+                      <div class="h5 mb-0 fw-bold" id="vehicleInStockCount">
+                        0 คัน
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">รถที่ขายไปแล้ว</div>
+                      <div class="h5 mb-0 fw-bold" id="vehicleSoldCount">
+                        0 คัน
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="card bm-stat-card h-100">
+                    <div class="card-body py-2">
+                      <div class="text-muted small">กำไรรวมจากการขายรถ</div>
+                      <div class="h5 mb-0 fw-bold text-success" id="vehicleTotalProfit">
+                        0.00 ฿
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                ตัวเลขสรุปอ้างอิงจากข้อมูลจริงใน Firestore
+                แยกตามสาขาที่ผู้ใช้สังกัด (branchId) และไม่รวมรายการที่ถูกซ่อน
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ตารางรายการรถรับซื้อ/ขาย ================= -->
+        <!-- คอมเมนต์: แสดงรายการรถที่อยู่ในระบบ ตามสถานะที่เลือก -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="small text-muted">
+                  รายการรถตามสถานะที่เลือก
+                </div>
+                <div
+                  class="small text-muted d-none"
+                  id="vehiclesCountInfo"
+                >
+                  พบรถทั้งหมด
+                  <span id="vehiclesCountNumber">0</span> คัน
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="small text-muted">
+                    <tr>
+                      <th style="min-width: 110px;">วันที่ซื้อเข้า</th>
+                      <th style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
+                      <th style="min-width: 110px;">ทะเบียน</th>
+                      <th class="text-end" style="min-width: 120px;">ราคาซื้อ (฿)</th>
+                      <th class="text-end" style="min-width: 120px;">ราคาขาย (฿)</th>
+                      <th style="min-width: 110px;">สถานะ</th>
+                      <th class="text-end" style="min-width: 120px;">กำไร (฿)</th>
+                      <th class="text-center" style="min-width: 140px;">การทำงาน</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vehiclesTableBody">
+                    <!-- แถวรถแต่ละคันจะแสดงด้วย JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ปุ่มโหลดเพิ่ม (Pagination) -->
+        <section class="mb-5 text-center">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm d-none"
+            id="loadMoreVehiclesBtn"
+          >
+            <span
+              class="spinner-border spinner-border-sm me-2 d-none"
+              id="loadMoreVehiclesSpinner"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span id="loadMoreVehiclesBtnText">โหลดรายการรถเพิ่ม</span>
+          </button>
+        </section>
+
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
+    <div class="bm-fab-container">
+      <div class="dropdown dropup">
+        <button
+          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          type="button"
+          id="fabDropdownButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i class="bi bi-plus"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            </button>
+          </li>
+          <li>
+            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddVehicleBtn">
+              <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         หน้าปัจจุบัน: รถรับซื้อ
+    ============================================================ -->
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link active">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         Modal ขายรถ / ดูรายละเอียดรถ
+         แสดงข้อมูลรถ และบันทึกข้อมูลขายรถพร้อมกำไร
+    ============================================================ -->
+    <div
+      class="modal fade"
+      id="sellVehicleModal"
+      tabindex="-1"
+      aria-labelledby="sellVehicleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-6" id="sellVehicleModalLabel">
+              ขายรถ / ดูรายละเอียดรถ
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="ปิด"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- สถานะโหลดข้อมูล -->
+            <div
+              id="sellVehicleLoadingState"
+              class="alert alert-light border small py-2 mb-3 d-none"
+            >
+              กำลังโหลดข้อมูลรถ...
+            </div>
+
+            <!-- ข้อมูลรถ -->
+            <section class="mb-3">
+              <h2 class="h6 fw-semibold mb-2">ข้อมูลรถ</h2>
+              <div class="small">
+                <div>
+                  <span class="fw-semibold">ยี่ห้อ / รุ่น:</span>
+                  <span id="sellVehicleBrandModelText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">ทะเบียน:</span>
+                  <span id="sellVehiclePlateText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">เลขไมล์:</span>
+                  <span id="sellVehicleMileageText">-</span>
+                </div>
+                <div class="mt-1">
+                  <span class="fw-semibold">ข้อมูลการซื้อเข้า:</span>
+                  <div id="sellVehicleBuyInfo" class="border rounded p-2 bg-body-tertiary mt-1">
+                    -
+                  </div>
+                </div>
+                <div class="mt-1">
+                  <span class="fw-semibold">หมายเหตุ:</span>
+                  <div id="sellVehicleNoteText" class="border rounded p-2 bg-body-tertiary mt-1">
+                    -
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ข้อมูลการขาย (ฟอร์มขายรถ) -->
+            <section class="mb-2" id="sellVehicleFormSection">
+              <h2 class="h6 fw-semibold mb-2">ข้อมูลการขายรถ</h2>
+              <form id="sellVehicleForm" class="row g-2 small">
+                <div class="col-6">
+                  <label for="sellVehicleDateInput" class="form-label small mb-1">
+                    วันที่ขาย
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    id="sellVehicleDateInput"
+                  />
+                </div>
+                <div class="col-6">
+                  <label for="sellVehiclePriceInput" class="form-label small mb-1">
+                    ราคาขาย (บาท)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control form-control-sm"
+                    id="sellVehiclePriceInput"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div class="col-12">
+                  <div class="alert alert-secondary py-2 mb-0 small" id="sellVehicleProfitPreview">
+                    กำไรโดยประมาณ: 0.00 ฿
+                  </div>
+                </div>
+              </form>
+              <p class="small text-muted mt-2 mb-0">
+                ระบบจะอัปเดตสถานะรถเป็น "ขายแล้ว" บันทึกกำไร
+                และสร้างรายการรายรับใน <code>transactions</code> พร้อมบันทึกเหตุการณ์ใน
+                <code>activityLogs</code> อัตโนมัติ
+              </p>
+            </section>
+
+            <!-- ข้อมูลการขายแบบอ่านอย่างเดียว เมื่อขายไปแล้ว -->
+            <section class="mb-2 d-none" id="sellVehicleSoldInfoSection">
+              <h2 class="h6 fw-semibold mb-2">ข้อมูลการขาย (อ่านอย่างเดียว)</h2>
+              <div class="small">
+                <div>
+                  <span class="fw-semibold">วันที่ขาย:</span>
+                  <span id="sellVehicleSoldDateText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">ราคาขาย:</span>
+                  <span id="sellVehicleSoldPriceText">-</span>
+                </div>
+                <div>
+                  <span class="fw-semibold">กำไรจากการขาย:</span>
+                  <span id="sellVehicleSoldProfitText">-</span>
+                </div>
+              </div>
+              <p class="small text-muted mt-2 mb-0">
+                รถคันนี้ถูกขายไปแล้ว
+                หากต้องการแก้ไขข้อมูลอย่างละเอียดควรดำเนินการจาก Firestore โดยตรง
+              </p>
+            </section>
+          </div>
+          <div class="modal-footer">
+            <div class="me-auto">
+              <!-- พื้นที่สำหรับปุ่มอื่นในอนาคต เช่น ซ่อนรถ/ลบ (เฉพาะ admin) -->
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm"
+              data-bs-dismiss="modal"
+            >
+              ปิด
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              id="sellVehicleSaveBtn"
+            >
+              <span
+                class="spinner-border spinner-border-sm me-2 d-none"
+                id="sellVehicleSaveSpinner"
+                role="status"
+                aria-hidden="true"
+              ></span>
+              <span id="sellVehicleSaveBtnText">บันทึกการขายรถ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า vehicles.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // ฟอร์มเพิ่มรถรับซื้อเข้า
+      const addVehicleForm = document.getElementById("addVehicleForm");
+      const buyDateInput = document.getElementById("buyDateInput");
+      const brandInput = document.getElementById("brandInput");
+      const modelInput = document.getElementById("modelInput");
+      const plateInput = document.getElementById("plateInput");
+      const mileageInput = document.getElementById("mileageInput");
+      const buyPriceInput = document.getElementById("buyPriceInput");
+      const noteInput = document.getElementById("noteInput");
+      const addVehicleBtn = document.getElementById("addVehicleBtn");
+      const addVehicleSpinner = document.getElementById("addVehicleSpinner");
+      const addVehicleBtnText = document.getElementById("addVehicleBtnText");
+
+      // Filter + Summary
+      const vehicleStatusFilter = document.getElementById("vehicleStatusFilter");
+      const vehiclesLoadingState = document.getElementById("vehiclesLoadingState");
+      const vehicleInStockCount = document.getElementById("vehicleInStockCount");
+      const vehicleSoldCount = document.getElementById("vehicleSoldCount");
+      const vehicleTotalProfit = document.getElementById("vehicleTotalProfit");
+      const vehiclesCountInfo = document.getElementById("vehiclesCountInfo");
+      const vehiclesCountNumber = document.getElementById("vehiclesCountNumber");
+
+      // ตารางรายการรถ
+      const vehiclesTableBody = document.getElementById("vehiclesTableBody");
+      const loadMoreVehiclesBtn = document.getElementById("loadMoreVehiclesBtn");
+      const loadMoreVehiclesSpinner = document.getElementById("loadMoreVehiclesSpinner");
+      const loadMoreVehiclesBtnText = document.getElementById("loadMoreVehiclesBtnText");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
+
+      // Modal ขายรถ
+      const sellVehicleModalEl = document.getElementById("sellVehicleModal");
+      const sellVehicleModalLabel = document.getElementById("sellVehicleModalLabel");
+      const sellVehicleLoadingState = document.getElementById("sellVehicleLoadingState");
+      const sellVehicleBrandModelText = document.getElementById("sellVehicleBrandModelText");
+      const sellVehiclePlateText = document.getElementById("sellVehiclePlateText");
+      const sellVehicleMileageText = document.getElementById("sellVehicleMileageText");
+      const sellVehicleBuyInfo = document.getElementById("sellVehicleBuyInfo");
+      const sellVehicleNoteText = document.getElementById("sellVehicleNoteText");
+      const sellVehicleFormSection = document.getElementById("sellVehicleFormSection");
+      const sellVehicleForm = document.getElementById("sellVehicleForm");
+      const sellVehicleDateInput = document.getElementById("sellVehicleDateInput");
+      const sellVehiclePriceInput = document.getElementById("sellVehiclePriceInput");
+      const sellVehicleProfitPreview = document.getElementById("sellVehicleProfitPreview");
+      const sellVehicleSoldInfoSection = document.getElementById("sellVehicleSoldInfoSection");
+      const sellVehicleSoldDateText = document.getElementById("sellVehicleSoldDateText");
+      const sellVehicleSoldPriceText = document.getElementById("sellVehicleSoldPriceText");
+      const sellVehicleSoldProfitText = document.getElementById("sellVehicleSoldProfitText");
+      const sellVehicleSaveBtn = document.getElementById("sellVehicleSaveBtn");
+      const sellVehicleSaveSpinner = document.getElementById("sellVehicleSaveSpinner");
+      const sellVehicleSaveBtnText = document.getElementById("sellVehicleSaveBtnText");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // Modal instance
+      const sellVehicleModal = bootstrap.Modal.getOrCreateInstance(sellVehicleModalEl);
+
+      // ============================================================
+      // สถานะภายในหน้า
+      // ============================================================
+      let currentUser = null;
+      let currentUserProfile = null;
+
+      // สำหรับรายการรถ (pagination)
+      const VEHICLES_PAGE_SIZE = 20;
+      let vehiclesLastVisible = null;
+      let isLoadingVehicles = false;
+      let loadedVehicles = []; // รถที่โหลดมาแสดงในตาราง (ตามสถานะ filter ปัจจุบัน)
+
+      // สำหรับสรุปสถิติ (ข้าม filter สถานะ)
+      let summaryInStockCount = 0;
+      let summarySoldCount = 0;
+      let summaryTotalProfit = 0;
+
+      // filter ปัจจุบัน
+      let currentStatusFilter = "all";
+
+      // สำหรับ modal ขายรถ
+      let currentSellVehicleId = null;
+      let currentSellVehicleData = null;
+      let isSavingSellVehicle = false;
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: รูปแบบตัวเลขและวันที่แบบไทย
+      // ============================================================
+      function formatNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function formatIntegerNumber(value) {
+        if (typeof value !== "number" || isNaN(value)) return "0";
+        return value.toLocaleString("th-TH", {
+          maximumFractionDigits: 0,
+        });
+      }
+
+      function formatDateThaiFromString(dateStr) {
+        if (!dateStr) return "-";
+        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
+        if (!year || !month || !day) return dateStr;
+        const d = new Date(year, month - 1, day);
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const thaiYear = d.getFullYear() + 543;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      }
+
+      function getTodayISODateString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function parseNumberFromInput(inputEl) {
+        if (!inputEl) return 0;
+        const value = inputEl.value;
+        if (!value) return 0;
+        const num = parseFloat(value);
+        if (isNaN(num)) return 0;
+        return num;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        const usersCol = collection(db, "users");
+        const qUsers = query(usersCol, limit(1));
+        const existingSnap = await getDocs(qUsers);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+        const defaultDisplayName =
+          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: ตั้งค่า Loading ของรายการรถ
+      // ============================================================
+      function setVehiclesLoadingState(isLoading, isFirstPage = false) {
+        isLoadingVehicles = isLoading;
+
+        if (vehiclesLoadingState) {
+          if (isLoading && isFirstPage) {
+            vehiclesLoadingState.textContent =
+              "กำลังโหลดรายการรถจากฐานข้อมูล...";
+            vehiclesLoadingState.classList.remove("text-danger");
+            vehiclesLoadingState.classList.remove("text-success");
+          } else if (!isLoading && loadedVehicles.length === 0) {
+            vehiclesLoadingState.textContent = "ไม่พบรายการรถในระบบตามสถานะที่เลือก";
+            vehiclesLoadingState.classList.remove("text-success");
+            vehiclesLoadingState.classList.remove("d-none");
+          } else if (!isLoading) {
+            vehiclesLoadingState.textContent = "โหลดข้อมูลล่าสุดแล้ว";
+            vehiclesLoadingState.classList.add("text-success");
+          }
+        }
+
+        if (loadMoreVehiclesBtn && loadMoreVehiclesSpinner && loadMoreVehiclesBtnText) {
+          if (isLoading && !isFirstPage) {
+            loadMoreVehiclesSpinner.classList.remove("d-none");
+            loadMoreVehiclesBtnText.textContent = "กำลังโหลดรายการรถเพิ่ม...";
+            loadMoreVehiclesBtn.disabled = true;
+          } else {
+            loadMoreVehiclesSpinner.classList.add("d-none");
+            loadMoreVehiclesBtnText.textContent = "โหลดรายการรถเพิ่ม";
+            loadMoreVehiclesBtn.disabled = false;
+          }
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Render สรุปสถิติบนการ์ด
+      // ============================================================
+      function renderVehicleSummary() {
+        if (vehicleInStockCount) {
+          vehicleInStockCount.textContent =
+            formatIntegerNumber(summaryInStockCount) + " คัน";
+        }
+        if (vehicleSoldCount) {
+          vehicleSoldCount.textContent =
+            formatIntegerNumber(summarySoldCount) + " คัน";
+        }
+        if (vehicleTotalProfit) {
+          vehicleTotalProfit.textContent = formatNumber(summaryTotalProfit) + " ฿";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดสรุปสถิติรถทั้งหมด (ไม่ขึ้นกับ filter สถานะ)
+      // ============================================================
+      async function loadVehicleSummary() {
+        if (!currentUserProfile) return;
+
+        try {
+          const branchId = currentUserProfile.branchId || null;
+          const vehiclesCol = collection(db, "vehicles");
+          const constraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+
+          // หมายเหตุ: หากมีข้อมูลจำนวนมาก อาจต้องเพิ่ม pagination/aggregation ฝั่ง backend
+          const summaryQuery = query(vehiclesCol, ...constraints);
+          const snap = await getDocs(summaryQuery);
+
+          let inStock = 0;
+          let sold = 0;
+          let totalProfit = 0;
+
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            const status = data.status || "in_stock";
+            if (status === "in_stock") {
+              inStock += 1;
+            } else if (status === "sold") {
+              sold += 1;
+            }
+            if (status === "sold") {
+              const profit = Number(data.profit) || 0;
+              totalProfit += profit;
+            }
+          });
+
+          summaryInStockCount = inStock;
+          summarySoldCount = sold;
+          summaryTotalProfit = totalProfit;
+          renderVehicleSummary();
+        } catch (error) {
+          console.error("โหลดสรุปสถิติรถไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดสรุปสถิติรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: Render รายการรถในตาราง
+      // ============================================================
+      function renderVehiclesTable() {
+        if (!vehiclesTableBody) return;
+
+        vehiclesTableBody.innerHTML = "";
+
+        if (loadedVehicles.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="8" class="text-center small text-muted">
+              ไม่พบรายการรถในระบบตามสถานะที่เลือก
+            </td>
+          `;
+          vehiclesTableBody.appendChild(tr);
+        } else {
+          loadedVehicles.forEach((vehicle) => {
+            const tr = document.createElement("tr");
+
+            const status = vehicle.status || "in_stock";
+            let statusLabel = "พร้อมขาย";
+            let statusClass = "bg-primary";
+            if (status === "sold") {
+              statusLabel = "ขายแล้ว";
+              statusClass = "bg-success";
+            }
+
+            const buyPrice = Number(vehicle.buyPrice) || 0;
+            const sellPrice = vehicle.sellPrice != null ? Number(vehicle.sellPrice) : null;
+            const profit = vehicle.profit != null ? Number(vehicle.profit) : null;
+
+            const sellPriceText =
+              sellPrice != null ? `${formatNumber(sellPrice)} ฿` : "-";
+            const profitText =
+              profit != null ? `${formatNumber(profit)} ฿` : status === "sold"
+                ? "0.00 ฿"
+                : "-";
+
+            const canSell = status === "in_stock";
+
+            tr.innerHTML = `
+              <td class="small">
+                ${formatDateThaiFromString(vehicle.buyDate || "")}
+              </td>
+              <td class="small">
+                ${(vehicle.brand || "-") + " / " + (vehicle.model || "-")}
+              </td>
+              <td class="small">
+                ${vehicle.plate || "-"}
+              </td>
+              <td class="small text-end">
+                ${formatNumber(buyPrice)} ฿
+              </td>
+              <td class="small text-end">
+                ${sellPriceText}
+              </td>
+              <td class="small">
+                <span class="badge ${statusClass}">${statusLabel}</span>
+              </td>
+              <td class="small text-end">
+                ${profitText}
+              </td>
+              <td class="small text-center">
+                ${
+                  canSell
+                    ? `<button
+                        type="button"
+                        class="btn btn-outline-success btn-sm me-1 sell-vehicle-btn"
+                        data-vehicle-id="${vehicle.id}"
+                      >
+                        ขายรถ
+                      </button>`
+                    : `<button
+                        type="button"
+                        class="btn btn-outline-secondary btn-sm me-1 sell-vehicle-btn"
+                        data-vehicle-id="${vehicle.id}"
+                      >
+                        ดูการขาย
+                      </button>`
+                }
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm vehicle-detail-btn"
+                  data-vehicle-id="${vehicle.id}"
+                >
+                  รายละเอียด
+                </button>
+              </td>
+            `;
+            vehiclesTableBody.appendChild(tr);
+          });
+        }
+
+        // จำนวนรายการที่โหลด
+        if (vehiclesCountInfo && vehiclesCountNumber) {
+          vehiclesCountInfo.classList.remove("d-none");
+          vehiclesCountNumber.textContent = String(loadedVehicles.length);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: โหลดรายการรถตามสถานะ (พร้อม pagination)
+      // ============================================================
+      async function loadVehiclesWithFilter(reset = false) {
+        if (isLoadingVehicles) return;
+        if (!currentUserProfile) return;
+
+        const branchId = currentUserProfile.branchId || null;
+        const status = currentStatusFilter;
+
+        if (reset) {
+          loadedVehicles = [];
+          vehiclesLastVisible = null;
+        }
+
+        const isFirstPage = reset || !vehiclesLastVisible;
+        setVehiclesLoadingState(true, isFirstPage);
+
+        try {
+          const vehiclesCol = collection(db, "vehicles");
+          const constraints = [where("isDeleted", "==", false)];
+          if (branchId) {
+            constraints.push(where("branchId", "==", branchId));
+          }
+          if (status && status !== "all") {
+            constraints.push(where("status", "==", status));
+          }
+
+          let qVehicles = query(
+            vehiclesCol,
+            ...constraints,
+            orderBy("buyDate", "desc"),
+            limit(VEHICLES_PAGE_SIZE)
+          );
+
+          if (!isFirstPage && vehiclesLastVisible) {
+            qVehicles = query(
+              vehiclesCol,
+              ...constraints,
+              orderBy("buyDate", "desc"),
+              startAfter(vehiclesLastVisible),
+              limit(VEHICLES_PAGE_SIZE)
+            );
+          }
+
+          // หมายเหตุ: หาก Firestore แจ้งให้สร้าง index สำหรับ where+orderBy
+          // ให้สร้าง index ตามลิงก์ที่ Firestore ขึ้นให้ครั้งแรกเท่านั้น
+          const snap = await getDocs(qVehicles);
+
+          const newVehicles = [];
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+            newVehicles.push({
+              id: docSnap.id,
+              buyDate: data.buyDate || "",
+              sellDate: data.sellDate || null,
+              brand: data.brand || "",
+              model: data.model || "",
+              plate: data.plate || "",
+              mileage: data.mileage ?? null,
+              buyPrice: Number(data.buyPrice) || 0,
+              sellPrice:
+                data.sellPrice !== null && data.sellPrice !== undefined
+                  ? Number(data.sellPrice)
+                  : null,
+              status: data.status || "in_stock",
+              note: data.note || "",
+              imageUrl: data.imageUrl || null,
+              profit:
+                data.profit !== null && data.profit !== undefined
+                  ? Number(data.profit)
+                  : null,
+              createdAt: data.createdAt || null,
+              updatedAt: data.updatedAt || null,
+              createdBy: data.createdBy || "",
+              createdByName: data.createdByName || "",
+              branchId: data.branchId || null,
+            });
+          });
+
+          if (reset) {
+            loadedVehicles = newVehicles;
+          } else {
+            loadedVehicles = loadedVehicles.concat(newVehicles);
+          }
+
+          if (!snap.empty) {
+            vehiclesLastVisible = snap.docs[snap.docs.length - 1];
+          }
+
+          // ปุ่มโหลดเพิ่ม
+          if (loadMoreVehiclesBtn) {
+            if (snap.size === VEHICLES_PAGE_SIZE) {
+              loadMoreVehiclesBtn.classList.remove("d-none");
+            } else {
+              loadMoreVehiclesBtn.classList.add("d-none");
+            }
+          }
+
+          renderVehiclesTable();
+        } catch (error) {
+          console.error("โหลดรายการรถไม่สำเร็จ:", error);
+          if (vehiclesLoadingState) {
+            vehiclesLoadingState.textContent =
+              "ไม่สามารถโหลดรายการรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")";
+            vehiclesLoadingState.classList.add("text-danger");
+          }
+          showToast(
+            "ไม่สามารถโหลดรายการรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          setVehiclesLoadingState(false, isFirstPage);
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: จัดการเพิ่มรถรับซื้อเข้าใหม่
+      // ============================================================
+      async function handleAddVehicle(event) {
+        event.preventDefault();
+        if (!currentUser || !currentUserProfile) return;
+
+        const brand = (brandInput.value || "").trim();
+        const model = (modelInput.value || "").trim();
+        const plate = (plateInput.value || "").trim();
+        const buyDate = buyDateInput.value || getTodayISODateString();
+        const buyPrice = parseNumberFromInput(buyPriceInput);
+        const mileageRaw = mileageInput.value;
+        const note = (noteInput.value || "").trim();
+
+        if (!brand || !model || !plate || !buyDate || buyPrice <= 0) {
+          showToast(
+            "กรุณากรอกข้อมูลยี่ห้อ รุ่น ทะเบียน วันที่ และราคาซื้อเข้าให้ครบถ้วน",
+            "warning"
+          );
+          return;
+        }
+
+        const mileage =
+          mileageRaw && mileageRaw !== ""
+            ? Math.max(0, parseInt(mileageRaw, 10) || 0)
+            : null;
+
+        // staff ก็สามารถเพิ่มรถได้ตามสเปก
+        addVehicleSpinner.classList.remove("d-none");
+        addVehicleBtnText.textContent = "กำลังบันทึก...";
+        addVehicleBtn.disabled = true;
+
+        try {
+          const branchId = currentUserProfile.branchId || null;
+
+          const vehicleData = {
+            buyDate,
+            sellDate: null,
+            brand,
+            model,
+            plate,
+            mileage,
+            buyPrice,
+            sellPrice: null,
+            status: "in_stock",
+            note,
+            imageUrl: null,
+            profit: null,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          };
+
+          // บันทึกรถเข้า collection vehicles
+          const vehicleRef = await addDoc(collection(db, "vehicles"), vehicleData);
+
+          // บันทึกธุรกรรมค่าใช้จ่ายซื้อรถ (ออปชันในสเปก แต่ที่นี่ทำให้ครบ)
+          await addDoc(collection(db, "transactions"), {
+            date: buyDate,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            type: "expense",
+            category: "ซื้อรถ",
+            description: `ซื้อรถ ${brand} ${model} ทะเบียน ${plate}`,
+            amount: buyPrice,
+            method: "cash",
+            sourceType: "vehicle",
+            sourceId: vehicleRef.id,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          });
+
+          // บันทึก activityLogs
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "vehicle_buy",
+            message: `บันทึกรถรับซื้อเข้า ยี่ห้อ ${brand} รุ่น ${model} ทะเบียน ${plate} ราคาซื้อเข้า ${buyPrice.toLocaleString(
+              "th-TH"
+            )} บาท`,
+            refType: "vehicle",
+            refId: vehicleRef.id,
+            branchId,
+          });
+
+          showToast("บันทึกข้อมูลรถที่ซื้อเข้าเรียบร้อยแล้ว", "success");
+
+          // เคลียร์ฟอร์มบางส่วน (เก็บวันที่เดิมไว้)
+          brandInput.value = "";
+          modelInput.value = "";
+          plateInput.value = "";
+          mileageInput.value = "";
+          buyPriceInput.value = "";
+          noteInput.value = "";
+
+          // โหลดสรุปใหม่ + รายการใหม่
+          await loadVehicleSummary();
+          await loadVehiclesWithFilter(true);
+        } catch (error) {
+          console.error("บันทึกรถรับซื้อเข้าไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกรถรับซื้อเข้าได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          addVehicleSpinner.classList.add("d-none");
+          addVehicleBtnText.textContent = "บันทึกรถที่ซื้อเข้า";
+          addVehicleBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: เปิด Modal ขายรถ / ดูรายละเอียดรถ
+      // ============================================================
+      async function openSellVehicleModal(vehicleId) {
+        if (!vehicleId) return;
+        if (!currentUserProfile) return;
+
+        currentSellVehicleId = vehicleId;
+        currentSellVehicleData = null;
+
+        if (sellVehicleLoadingState) {
+          sellVehicleLoadingState.classList.remove("d-none");
+          sellVehicleLoadingState.textContent = "กำลังโหลดข้อมูลรถ...";
+        }
+
+        sellVehicleModalLabel.textContent = "ขายรถ / ดูรายละเอียดรถ";
+        sellVehicleBrandModelText.textContent = "-";
+        sellVehiclePlateText.textContent = "-";
+        sellVehicleMileageText.textContent = "-";
+        sellVehicleBuyInfo.textContent = "-";
+        sellVehicleNoteText.textContent = "-";
+        sellVehicleProfitPreview.textContent = "กำไรโดยประมาณ: 0.00 ฿";
+        sellVehicleSoldInfoSection.classList.add("d-none");
+        sellVehicleFormSection.classList.remove("d-none");
+        sellVehicleSaveBtn.classList.remove("d-none");
+        sellVehicleSaveBtn.disabled = false;
+
+        sellVehicleDateInput.value = getTodayISODateString();
+        sellVehiclePriceInput.value = "";
+
+        sellVehicleModal.show();
+
+        try {
+          let vehicle =
+            loadedVehicles.find((v) => v.id === vehicleId) || null;
+
+          if (!vehicle) {
+            const vehicleRef = doc(db, "vehicles", vehicleId);
+            const vehicleSnap = await getDoc(vehicleRef);
+            if (!vehicleSnap.exists()) {
+              showToast("ไม่พบข้อมูลรถคันนี้ในระบบ", "warning");
+              sellVehicleModal.hide();
+              return;
+            }
+            const data = vehicleSnap.data();
+            vehicle = {
+              id: vehicleSnap.id,
+              buyDate: data.buyDate || "",
+              sellDate: data.sellDate || null,
+              brand: data.brand || "",
+              model: data.model || "",
+              plate: data.plate || "",
+              mileage: data.mileage ?? null,
+              buyPrice: Number(data.buyPrice) || 0,
+              sellPrice:
+                data.sellPrice !== null && data.sellPrice !== undefined
+                  ? Number(data.sellPrice)
+                  : null,
+              status: data.status || "in_stock",
+              note: data.note || "",
+              imageUrl: data.imageUrl || null,
+              profit:
+                data.profit !== null && data.profit !== undefined
+                  ? Number(data.profit)
+                  : null,
+              createdAt: data.createdAt || null,
+              updatedAt: data.updatedAt || null,
+              createdBy: data.createdBy || "",
+              createdByName: data.createdByName || "",
+              branchId: data.branchId || null,
+            };
+          }
+
+          currentSellVehicleData = vehicle;
+
+          // เติมข้อมูลบน modal
+          sellVehicleBrandModelText.textContent =
+            (vehicle.brand || "-") + " / " + (vehicle.model || "-");
+          sellVehiclePlateText.textContent = vehicle.plate || "-";
+          sellVehicleMileageText.textContent =
+            vehicle.mileage != null ? `${vehicle.mileage} กม.` : "-";
+
+          const buyInfoText = `ซื้อเข้าเมื่อ ${formatDateThaiFromString(
+            vehicle.buyDate || ""
+          )} ด้วยราคาซื้อเข้า ${formatNumber(vehicle.buyPrice || 0)} บาท`;
+          sellVehicleBuyInfo.textContent = buyInfoText;
+
+          sellVehicleNoteText.textContent = vehicle.note || "-";
+
+          const status = vehicle.status || "in_stock";
+
+          if (status === "sold") {
+            // แสดงข้อมูลขายแบบอ่านอย่างเดียว
+            sellVehicleFormSection.classList.add("d-none");
+            sellVehicleSoldInfoSection.classList.remove("d-none");
+            sellVehicleSaveBtn.classList.add("d-none");
+
+            const sellDateThai = formatDateThaiFromString(vehicle.sellDate || "");
+            const sellPrice = vehicle.sellPrice != null ? vehicle.sellPrice : 0;
+            const profit = vehicle.profit != null ? vehicle.profit : 0;
+
+            sellVehicleSoldDateText.textContent = sellDateThai;
+            sellVehicleSoldPriceText.textContent =
+              formatNumber(sellPrice) + " ฿";
+            sellVehicleSoldProfitText.textContent =
+              formatNumber(profit) + " ฿";
+          } else {
+            // ยังไม่ขาย ให้ผู้ใช้กรอกข้อมูลการขายได้
+            sellVehicleFormSection.classList.remove("d-none");
+            sellVehicleSoldInfoSection.classList.add("d-none");
+            sellVehicleSaveBtn.classList.remove("d-none");
+            sellVehicleSaveBtn.disabled = false;
+
+            sellVehicleDateInput.value = getTodayISODateString();
+            sellVehiclePriceInput.value = "";
+            updateSellVehicleProfitPreview();
+          }
+        } catch (error) {
+          console.error("โหลดข้อมูลรถไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+          sellVehicleModal.hide();
+        } finally {
+          if (sellVehicleLoadingState) {
+            sellVehicleLoadingState.classList.add("d-none");
+          }
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: อัปเดตข้อความกำไรโดยประมาณใน modal ขายรถ
+      // ============================================================
+      function updateSellVehicleProfitPreview() {
+        if (!currentSellVehicleData || !sellVehicleProfitPreview) return;
+        const sellPrice = parseNumberFromInput(sellVehiclePriceInput);
+        const buyPrice = Number(currentSellVehicleData.buyPrice) || 0;
+        const profit = sellPrice - buyPrice;
+        sellVehicleProfitPreview.textContent =
+          "กำไรโดยประมาณ: " + formatNumber(profit) + " ฿";
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: บันทึกการขายรถ (update vehicles + transaction + log)
+      // ============================================================
+      async function handleSaveSellVehicle() {
+        if (!currentSellVehicleId || !currentSellVehicleData) return;
+        if (!currentUser || !currentUserProfile) return;
+        if (isSavingSellVehicle) return;
+
+        const status = currentSellVehicleData.status || "in_stock";
+        if (status === "sold") {
+          showToast(
+            "รถคันนี้ถูกบันทึกว่าขายไปแล้ว หากต้องการแก้ไขกรุณาจัดการจาก Firestore",
+            "info"
+          );
+          return;
+        }
+
+        const sellDate = sellVehicleDateInput.value || getTodayISODateString();
+        const sellPrice = parseNumberFromInput(sellVehiclePriceInput);
+
+        if (!sellDate || sellPrice <= 0) {
+          showToast(
+            "กรุณากรอกวันที่ขายและราคาขายให้ถูกต้อง ก่อนบันทึกการขาย",
+            "warning"
+          );
+          return;
+        }
+
+        const buyPrice = Number(currentSellVehicleData.buyPrice) || 0;
+        const profit = sellPrice - buyPrice;
+        const branchId = currentUserProfile.branchId || null;
+
+        isSavingSellVehicle = true;
+        sellVehicleSaveSpinner.classList.remove("d-none");
+        sellVehicleSaveBtnText.textContent = "กำลังบันทึก...";
+        sellVehicleSaveBtn.disabled = true;
+
+        try {
+          // อัปเดตรถใน collection vehicles
+          const vehicleRef = doc(db, "vehicles", currentSellVehicleId);
+          await updateDoc(vehicleRef, {
+            sellDate,
+            sellPrice,
+            profit,
+            status: "sold",
+            updatedAt: serverTimestamp(),
+          });
+
+          // บันทึกธุรกรรมรายรับ "ขายรถ"
+          await addDoc(collection(db, "transactions"), {
+            date: sellDate,
+            createdAt: serverTimestamp(),
+            updatedAt: null,
+            type: "income",
+            category: "ขายรถ",
+            description: `ขายรถ ${currentSellVehicleData.brand || ""} ${
+              currentSellVehicleData.model || ""
+            } ทะเบียน ${currentSellVehicleData.plate || ""}`,
+            amount: sellPrice,
+            method: "cash",
+            sourceType: "vehicle",
+            sourceId: currentSellVehicleId,
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            isDeleted: false,
+            branchId,
+          });
+
+          // บันทึก activityLogs "vehicle_sell"
+          const message = `ขายรถ ${currentSellVehicleData.brand || ""} ${
+            currentSellVehicleData.model || ""
+          } ทะเบียน ${currentSellVehicleData.plate || ""} ราคาขาย ${sellPrice.toLocaleString(
+            "th-TH"
+          )} บาท กำไร ${profit.toLocaleString("th-TH")} บาท`;
+
+          await addDoc(collection(db, "activityLogs"), {
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid,
+            createdByName: currentUserProfile.displayName || "",
+            type: "vehicle_sell",
+            message,
+            refType: "vehicle",
+            refId: currentSellVehicleId,
+            branchId,
+          });
+
+          showToast("บันทึกการขายรถเรียบร้อยแล้ว", "success");
+
+          // อัปเดตข้อมูลใน loadedVehicles
+          loadedVehicles = loadedVehicles.map((v) =>
+            v.id === currentSellVehicleId
+              ? {
+                  ...v,
+                  sellDate,
+                  sellPrice,
+                  profit,
+                  status: "sold",
+                }
+              : v
+          );
+          renderVehiclesTable();
+
+          // โหลดสรุปใหม่
+          await loadVehicleSummary();
+
+          sellVehicleModal.hide();
+        } catch (error) {
+          console.error("บันทึกการขายรถไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกการขายรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isSavingSellVehicle = false;
+          sellVehicleSaveSpinner.classList.add("d-none");
+          sellVehicleSaveBtnText.textContent = "บันทึกการขายรถ";
+          sellVehicleSaveBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // Logout
+      // ============================================================
+      async function handleLogout() {
+        try {
+          await signOut(auth);
+          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Logout error:", error);
+          showToast(
+            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners สำหรับหน้านี้
+      // ============================================================
+      function setupEventListenersForPage() {
+        // ปุ่ม Logout
+        logoutBtn?.addEventListener("click", () => {
+          handleLogout();
+        });
+
+        // ปุ่มสลับธีม
+        themeToggleBtn?.addEventListener("click", async () => {
+          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+            ? "dark"
+            : "light";
+          const nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyTheme(nextTheme);
+          if (currentUser) {
+            saveThemeForUser(currentUser.uid, nextTheme);
+            try {
+              const userRef = doc(db, "users", currentUser.uid);
+              await updateDoc(userRef, { theme: nextTheme });
+            } catch (error) {
+              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+            }
+          }
+        });
+
+        // FAB เมนูด่วน
+        fabOpenBillBtn?.addEventListener("click", () => {
+          window.location.href = "open-bill.html";
+        });
+        fabAddTxnBtn?.addEventListener("click", () => {
+          window.location.href = "finance.html";
+        });
+        fabStockInBtn?.addEventListener("click", () => {
+          window.location.href = "stock.html";
+        });
+        fabAddVehicleBtn?.addEventListener("click", () => {
+          // เลื่อนจอไปยังฟอร์มเพิ่มรถ
+          const rect = addVehicleForm?.getBoundingClientRect();
+          if (rect) {
+            window.scrollTo({
+              top: window.scrollY + rect.top - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+
+        // ฟอร์มเพิ่มรถรับซื้อเข้า
+        addVehicleForm?.addEventListener("submit", handleAddVehicle);
+
+        // Enter ใน input ต่าง ๆ แล้วส่งฟอร์มได้
+        [brandInput, modelInput, plateInput, mileageInput, buyPriceInput].forEach(
+          (input) => {
+            input?.addEventListener("keypress", (event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addVehicleForm?.dispatchEvent(new Event("submit"));
+              }
+            });
+          }
+        );
+
+        // เปลี่ยนสถานะ filter
+        vehicleStatusFilter?.addEventListener("change", () => {
+          currentStatusFilter = vehicleStatusFilter.value || "all";
+          loadVehiclesWithFilter(true);
+        });
+
+        // ปุ่มโหลดเพิ่ม
+        loadMoreVehiclesBtn?.addEventListener("click", () => {
+          loadVehiclesWithFilter(false);
+        });
+
+        // ตาราง: ปุ่มขายรถ / รายละเอียด (ใช้ event delegation)
+        vehiclesTableBody?.addEventListener("click", (event) => {
+          const sellBtn = event.target.closest(".sell-vehicle-btn");
+          if (sellBtn) {
+            const vehicleId = sellBtn.getAttribute("data-vehicle-id");
+            openSellVehicleModal(vehicleId);
+            return;
+          }
+          const detailBtn = event.target.closest(".vehicle-detail-btn");
+          if (detailBtn) {
+            const vehicleId = detailBtn.getAttribute("data-vehicle-id");
+            openSellVehicleModal(vehicleId);
+          }
+        });
+
+        // Form ใน modal ขายรถ: อัปเดตกำไรโดยประมาณเมื่อเปลี่ยนราคาขาย
+        sellVehiclePriceInput?.addEventListener("input", () => {
+          updateSellVehicleProfitPreview();
+        });
+        sellVehicleForm?.addEventListener("submit", (event) => {
+          event.preventDefault();
+          handleSaveSellVehicle();
+        });
+        sellVehicleSaveBtn?.addEventListener("click", () => {
+          handleSaveSellVehicle();
+        });
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้า vehicles.html
+      // - ถ้าไม่ได้ล็อกอิน → redirect ไป index.html
+      // - ถ้าล็อกอินแล้ว → โหลด users/{uid} เช็ค role/theme/disabled
+      //   แล้วโหลดสรุป/รายการรถ
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUser = user;
+
+        try {
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // เมนูตั้งค่าเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ธีม
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่า default buyDate เป็นวันนี้
+          if (buyDateInput) {
+            buyDateInput.value = getTodayISODateString();
+          }
+
+          // ตั้งค่า Event listeners
+          setupEventListenersForPage();
+
+          // โหลดสรุปสถิติ และรายการรถ
+          await loadVehicleSummary();
+          await loadVehiclesWithFilter(true);
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/รถ:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายการรถได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

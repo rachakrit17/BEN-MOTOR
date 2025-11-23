@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้า -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – เข้าสู่ระบบ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-auth-page bm-theme-light">
+    <!-- พื้นหลัง + layout หน้าเข้าสู่ระบบ -->
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="row w-100 justify-content-center">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+          <!-- การ์ดฟอร์มเข้าสู่ระบบ -->
+          <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body p-4">
+              <!-- ส่วนหัวของระบบ -->
+              <div class="text-center mb-4">
+                <h1 class="h4 mb-1 fw-bold">BEN MOTOR</h1>
+                <p class="text-muted mb-0">ระบบจัดการอู่ซ่อมมอเตอร์ไซค์ &amp; รับซื้อ-ขายรถ</p>
+              </div>
+
+              <!-- ฟอร์มเข้าสู่ระบบ -->
+              <!-- ฟอร์มเข้าสู่ระบบ -->
+              <form id="loginForm" novalidate>
+                <!-- อีเมล -->
+                <div class="mb-3">
+                  <label for="loginEmail" class="form-label">อีเมล</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="loginEmail"
+                    placeholder="กรอกอีเมลสำหรับเข้าสู่ระบบ"
+                    autocomplete="email"
+                    required
+                  />
+                  <div class="invalid-feedback">กรุณากรอกอีเมลให้ถูกต้อง</div>
+                </div>
+
+                <!-- รหัสผ่าน + ปุ่มแสดง/ซ่อน -->
+                <div class="mb-3">
+                  <label for="loginPassword" class="form-label">รหัสผ่าน</label>
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="loginPassword"
+                      placeholder="กรอกรหัสผ่าน"
+                      autocomplete="current-password"
+                      required
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      id="togglePassword"
+                      aria-label="แสดงหรือซ่อนรหัสผ่าน"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <div class="invalid-feedback">กรุณากรอกรหัสผ่าน</div>
+                  </div>
+                </div>
+
+                <!-- ปุ่มเข้าสู่ระบบ -->
+                <div class="d-grid mb-2">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="loginSubmitBtn"
+                  >
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loginSpinner" role="status" aria-hidden="true"></span>
+                    <span id="loginBtnText">เข้าสู่ระบบ</span>
+                  </button>
+                </div>
+
+                <!-- ลิงก์ลืมรหัสผ่าน -->
+                <div class="text-center">
+                  <button
+                    type="button"
+                    class="btn btn-link p-0"
+                    id="toggleForgotPassword"
+                  >
+                    ลืมรหัสผ่าน?
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- การ์ดฟอร์มลืมรหัสผ่าน (ซ่อน/แสดงได้) -->
+          <!-- ฟอร์มส่งลิงก์รีเซ็ตรหัสผ่าน -->
+          <div class="card shadow-sm border-0 d-none" id="forgotPasswordCard">
+            <div class="card-body p-4">
+              <h2 class="h6 mb-3 fw-semibold">ลืมรหัสผ่าน</h2>
+              <p class="small text-muted">
+                กรอกอีเมลที่ใช้สมัคร ระบบจะส่งลิงก์สำหรับตั้งรหัสผ่านใหม่ไปให้
+              </p>
+              <form id="forgotPasswordForm" novalidate>
+                <div class="mb-3">
+                  <label for="forgotEmail" class="form-label">อีเมล</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="forgotEmail"
+                    placeholder="กรอกอีเมลของคุณ"
+                    autocomplete="email"
+                    required
+                  />
+                  <div class="invalid-feedback">กรุณากรอกอีเมลให้ถูกต้อง</div>
+                </div>
+                <div class="d-grid">
+                  <button
+                    type="submit"
+                    class="btn btn-outline-primary"
+                    id="forgotSubmitBtn"
+                  >
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="forgotSpinner" role="status" aria-hidden="true"></span>
+                    <span id="forgotBtnText">ส่งลิงก์รีเซ็ตรหัสผ่าน</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- ข้อความลิขสิทธิ์เล็ก ๆ ด้านล่าง -->
+          <div class="text-center mt-3 mb-4">
+            <small class="text-muted">&copy; <span id="currentYear"></span> BEN MOTOR – ระบบจัดการอู่ซ่อมมอเตอร์ไซค์</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <!-- ใช้ร่วมกันทั้งหน้า เช่น แจ้งเตือน error / success -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS (Bundle) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- สคริปต์หลักของหน้า index.html (ใช้ ES Modules) -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signInWithEmailAndPassword,
+        signOut,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        startAfter,
+        serverTimestamp,
+        onSnapshot
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // ตัวแปรอ้างอิง DOM ของหน้า index.html
+      // ============================================================
+      // ฟอร์มเข้าสู่ระบบ
+      const loginForm = document.getElementById("loginForm");
+      const loginEmailInput = document.getElementById("loginEmail");
+      const loginPasswordInput = document.getElementById("loginPassword");
+      const loginSubmitBtn = document.getElementById("loginSubmitBtn");
+      const loginSpinner = document.getElementById("loginSpinner");
+      const loginBtnText = document.getElementById("loginBtnText");
+
+      // ฟอร์มลืมรหัสผ่าน
+      const forgotPasswordCard = document.getElementById("forgotPasswordCard");
+      const toggleForgotPasswordBtn = document.getElementById("toggleForgotPassword");
+      const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+      const forgotEmailInput = document.getElementById("forgotEmail");
+      const forgotSubmitBtn = document.getElementById("forgotSubmitBtn");
+      const forgotSpinner = document.getElementById("forgotSpinner");
+      const forgotBtnText = document.getElementById("forgotBtnText");
+
+      // ปุ่ม toggle แสดง/ซ่อนรหัสผ่าน
+      const togglePasswordBtn = document.getElementById("togglePassword");
+
+      // Toast แจ้งเตือนหลักของหน้า
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // แสดงปีปัจจุบันด้านล่าง
+      const currentYearSpan = document.getElementById("currentYear");
+      if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear().toString();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: แสดง Toast ภาษาไทย
+      // ============================================================
+      /**
+       * แสดง toast แจ้งเตือน
+       * @param {string} message - ข้อความภาษาไทยที่ต้องการแสดง
+       * @param {"primary"|"success"|"danger"|"warning"|"info"} variant - สีของ toast
+       */
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+
+        // เปลี่ยนสีพื้นหลังตาม variant ที่ส่งมา
+        mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: แปลง error code ของ Firebase Auth เป็นข้อความไทย
+      // ============================================================
+      /**
+       * แปลง error code ของ Firebase เป็นข้อความภาษาไทยที่อ่านง่าย
+       * @param {string} code - error.code จาก Firebase
+       * @returns {string}
+       */
+      function translateAuthError(code) {
+        switch (code) {
+          case "auth/invalid-email":
+            return "อีเมลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง";
+          case "auth/user-disabled":
+            return "บัญชีนี้ถูกปิดใช้งาน กรุณาติดต่อผู้ดูแลระบบ";
+          case "auth/user-not-found":
+            return "ไม่พบบัญชีผู้ใช้ตามอีเมลนี้";
+          case "auth/wrong-password":
+            return "รหัสผ่านไม่ถูกต้อง";
+          case "auth/too-many-requests":
+            return "พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณาลองใหม่ภายหลัง";
+          case "auth/network-request-failed":
+            return "ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้ กรุณาตรวจสอบเครือข่ายของคุณ";
+          case "auth/missing-email":
+            return "กรุณากรอกอีเมล";
+          default:
+            return "เกิดข้อผิดพลาดในการเข้าสู่ระบบ (" + code + ")";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชันช่วย: จัดการ state Loading ของปุ่ม (login/forgot)
+      // ============================================================
+      /**
+       * เปิด/ปิดสถานะกำลังโหลดของปุ่ม
+       * @param {HTMLButtonElement} button - ปุ่มเป้าหมาย
+       * @param {HTMLElement} spinner - element spinner
+       * @param {HTMLElement} textSpan - span ข้อความในปุ่ม
+       * @param {boolean} isLoading - กำลังโหลดหรือไม่
+       * @param {string} labelWhenIdle - ข้อความปกติของปุ่ม
+       * @param {string} labelWhenLoading - ข้อความตอนกำลังโหลด
+       */
+      function setButtonLoading(button, spinner, textSpan, isLoading, labelWhenIdle, labelWhenLoading) {
+        if (!button || !spinner || !textSpan) return;
+
+        if (isLoading) {
+          button.disabled = true;
+          spinner.classList.remove("d-none");
+          textSpan.textContent = labelWhenLoading;
+        } else {
+          button.disabled = false;
+          spinner.classList.add("d-none");
+          textSpan.textContent = labelWhenIdle;
+        }
+      }
+
+      // ============================================================
+      // การเฝ้าดูสถานะผู้ใช้ (Auth Guard ของหน้า index)
+      // ============================================================
+      // ถ้าผู้ใช้ล็อกอินอยู่แล้วให้ redirect ไปหน้าแดชบอร์ดทันที
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // ผู้ใช้ล็อกอินแล้ว → ไปหน้า dashboard ได้เลย
+          window.location.href = "dashboard.html";
+        }
+      });
+
+      // ============================================================
+      // การจัดการฟอร์มเข้าสู่ระบบ
+      // ============================================================
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          // ล้าง state invalid เดิม
+          loginEmailInput.classList.remove("is-invalid");
+          loginPasswordInput.classList.remove("is-invalid");
+
+          const email = (loginEmailInput.value || "").trim();
+          const password = (loginPasswordInput.value || "").trim();
+
+          let hasError = false;
+
+          // ตรวจสอบความถูกต้องเบื้องต้น
+          if (!email) {
+            loginEmailInput.classList.add("is-invalid");
+            hasError = true;
+          }
+
+          if (!password) {
+            loginPasswordInput.classList.add("is-invalid");
+            hasError = true;
+          }
+
+          if (hasError) {
+            showToast("กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน", "warning");
+            return;
+          }
+
+          try {
+            // เปิดสถานะกำลังเข้าสู่ระบบ
+            setButtonLoading(
+              loginSubmitBtn,
+              loginSpinner,
+              loginBtnText,
+              true,
+              "เข้าสู่ระบบ",
+              "กำลังเข้าสู่ระบบ..."
+            );
+
+            // เรียก Firebase Auth เพื่อเข้าสู่ระบบ
+            await signInWithEmailAndPassword(auth, email, password);
+
+            // ถ้าสำเร็จ จะมี onAuthStateChanged redirect ให้ แต่เราก็แจ้งผู้ใช้ไว้ก่อน
+            showToast("เข้าสู่ระบบสำเร็จ กำลังนำคุณไปยังแดชบอร์ด...", "success");
+          } catch (error) {
+            console.error("Login error:", error);
+            const message = translateAuthError(error.code);
+            showToast(message, "danger");
+          } finally {
+            // ปิดสถานะ loading
+            setButtonLoading(
+              loginSubmitBtn,
+              loginSpinner,
+              loginBtnText,
+              false,
+              "เข้าสู่ระบบ",
+              "กำลังเข้าสู่ระบบ..."
+            );
+          }
+        });
+      }
+
+      // ============================================================
+      // การจัดการปุ่มแสดง/ซ่อนรหัสผ่าน
+      // ============================================================
+      if (togglePasswordBtn && loginPasswordInput) {
+        togglePasswordBtn.addEventListener("click", () => {
+          const isPassword = loginPasswordInput.type === "password";
+          loginPasswordInput.type = isPassword ? "text" : "password";
+
+          const icon = togglePasswordBtn.querySelector("i");
+          if (icon) {
+            icon.classList.toggle("bi-eye", !isPassword);
+            icon.classList.toggle("bi-eye-slash", isPassword);
+          }
+        });
+      }
+
+      // ============================================================
+      // การจัดการฟอร์มลืมรหัสผ่าน
+      // ============================================================
+      // ปุ่มสลับการแสดงฟอร์มลืมรหัสผ่าน
+      if (toggleForgotPasswordBtn && forgotPasswordCard) {
+        toggleForgotPasswordBtn.addEventListener("click", () => {
+          const isHidden = forgotPasswordCard.classList.contains("d-none");
+          if (isHidden) {
+            // ดึงอีเมลจากฟอร์มเข้าสู่ระบบมาเติมให้ ถ้ามี
+            const loginEmailValue = (loginEmailInput.value || "").trim();
+            if (loginEmailValue) {
+              forgotEmailInput.value = loginEmailValue;
+            }
+            forgotPasswordCard.classList.remove("d-none");
+          } else {
+            forgotPasswordCard.classList.add("d-none");
+          }
+        });
+      }
+
+      // การส่งลิงก์รีเซ็ตรหัสผ่าน
+      if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          forgotEmailInput.classList.remove("is-invalid");
+          const email = (forgotEmailInput.value || "").trim();
+
+          if (!email) {
+            forgotEmailInput.classList.add("is-invalid");
+            showToast("กรุณากรอกอีเมลสำหรับรีเซ็ตรหัสผ่าน", "warning");
+            return;
+          }
+
+          try {
+            setButtonLoading(
+              forgotSubmitBtn,
+              forgotSpinner,
+              forgotBtnText,
+              true,
+              "ส่งลิงก์รีเซ็ตรหัสผ่าน",
+              "กำลังส่งลิงก์..."
+            );
+
+            await sendPasswordResetEmail(auth, email);
+
+            showToast("ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว", "success");
+          } catch (error) {
+            console.error("Forgot password error:", error);
+
+            let message;
+            if (error.code === "auth/user-not-found") {
+              message = "ไม่พบบัญชีผู้ใช้ตามอีเมลนี้";
+            } else if (error.code === "auth/invalid-email") {
+              message = "อีเมลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง";
+            } else if (error.code === "auth/network-request-failed") {
+              message = "ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้ กรุณาตรวจสอบเครือข่ายของคุณ";
+            } else {
+              message = "ไม่สามารถส่งลิงก์รีเซ็ตรหัสผ่านได้ (" + error.code + ")";
+            }
+
+            showToast(message, "danger");
+          } finally {
+            setButtonLoading(
+              forgotSubmitBtn,
+              forgotSpinner,
+              forgotBtnText,
+              false,
+              "ส่งลิงก์รีเซ็ตรหัสผ่าน",
+              "กำลังส่งลิงก์..."
+            );
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
