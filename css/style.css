@@ -1,1396 +1,627 @@
-/* ============================================================
-   /css/style.css – ใช้ไฟล์นี้แทนของเดิมทั้งไฟล์
-   BEN MOTOR POS – Global Theme
-   ============================================================ */
+/* ==========================================================
+   BEN MOTOR – สไตล์หลักของทั้งเว็บ
+   ใช้ร่วมกันทุกหน้า (index, dashboard, open-bill, jobs,
+   vehicles, stock, finance, reports, settings)
+   ฟอนต์: Kanit (โหลดจาก Google Fonts ในแต่ละหน้า HTML)
+========================================================== */
 
+/* ----------------------------------------------------------
+   สไตล์พื้นฐานของทั้งเว็บ
+---------------------------------------------------------- */
 :root {
-  --bm-primary: #9ae6b4;            /* เขียวอ่อนพาสเทล */
-  --bm-primary-strong: #22c55e;     /* เขียวเข้มสำหรับปุ่ม/active */
-  --bm-secondary: #bfdbfe;          /* ฟ้าอ่อน */
-  --bm-secondary-soft: #e0f2fe;     /* ฟ้าจาง พื้นหลัง gradient */
-  --bm-bg: #f3f4f6;                 /* พื้นหลังหลัก */
-  --bm-bg-soft: #f9fafb;            /* พื้นหลังภายใน */
-  --bm-card: #ffffff;               /* การ์ด/กล่อง */
-  --bm-text: #0f172a;               /* ตัวอักษรหลัก */
-  --bm-text-muted: #6b7280;         /* ตัวอักษรรอง */
-  --bm-border: #d1d5db;
-  --bm-warning: #facc15;
-  --bm-success: #4ade80;
-  --bm-danger: #f97373;
-  --bm-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.10);
+  /* สีหลัก (สามารถปรับได้ให้เข้ากับแบรนด์) */
+  --bm-primary: #22c55e;
+  --bm-primary-soft: #bbf7d0;
+  --bm-primary-strong: #16a34a;
 
-  --bm-sidebar-width: 260px;
-  --bm-bottom-nav-height: 64px;
-  --bm-radius-lg: 18px;
-  --bm-radius-md: 12px;
-  --bm-radius-sm: 999px;
+  --bm-danger: #ef4444;
+  --bm-danger-soft: #fee2e2;
+  --bm-warning: #eab308;
+  --bm-warning-soft: #fef9c3;
+  --bm-info: #0ea5e9;
+  --bm-info-soft: #e0f2fe;
+
+  --bm-border-radius: 0.9rem;
+  --bm-card-radius: 1rem;
+  --bm-shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.08);
+
+  --bm-topbar-height: 3.25rem;
+  --bm-bottom-nav-height: 3.75rem;
+  --bm-fab-size: 3.25rem;
 }
 
-/* Dark theme base support */
-.theme-dark {
-  --bm-bg: #020617;
-  --bm-bg-soft: #020617;
-  --bm-card: #020617;
-  --bm-text: #e5e7eb;
-  --bm-text-muted: #9ca3af;
-  --bm-border: #1f2933;
-}
-
-/* =========================
-   Global Base
-   ========================= */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
+/* โหมด Light / Dark (ค่าเริ่มต้น) */
 body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
   font-family: "Kanit", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  background: radial-gradient(
-    circle at top left,
-    var(--bm-secondary-soft) 0,
-    var(--bm-bg) 45%,
-    var(--bm-bg) 100%
-  );
+  font-size: 0.92rem;
+  line-height: 1.5;
+  background-color: #f3f4f6;
+  color: #111827;
+  padding-top: var(--bm-topbar-height);
+  padding-bottom: var(--bm-bottom-nav-height);
+}
+
+/* ----------------------------------------------------------
+   โหมด Light / Dark
+---------------------------------------------------------- */
+body.bm-theme-light {
+  --bm-bg: #f3f4f6;
+  --bm-surface: #ffffff;
+  --bm-elevated: #ffffff;
+  --bm-text: #0f172a;
+  --bm-text-muted: #6b7280;
+  --bm-border-subtle: #e5e7eb;
+  --bm-input-bg: #ffffff;
+  --bm-input-border: #d1d5db;
+  --bm-nav-bg: rgba(255, 255, 255, 0.9);
+  --bm-nav-border: #e5e7eb;
+  --bm-fab-bg: var(--bm-primary);
+  --bm-fab-color: #ffffff;
+  background-color: var(--bm-bg);
   color: var(--bm-text);
-  overflow-x: hidden;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
+body.bm-theme-dark {
+  --bm-bg: #020617;
+  --bm-surface: #020617;
+  --bm-elevated: #020617;
+  --bm-text: #e5e7eb;
+  --bm-text-muted: #9ca3af;
+  --bm-border-subtle: #111827;
+  --bm-input-bg: #020617;
+  --bm-input-border: #1f2937;
+  --bm-nav-bg: rgba(15, 23, 42, 0.96);
+  --bm-nav-border: #111827;
+  --bm-fab-bg: var(--bm-primary-strong);
+  --bm-fab-color: #e5e7eb;
+  background-color: var(--bm-bg);
   color: var(--bm-text);
 }
 
-/* =========================
-   Buttons & Utilities
-   ========================= */
-
-.bm-btn-primary {
-  background-image: linear-gradient(
-    135deg,
-    var(--bm-primary),
-    var(--bm-primary-strong)
-  );
-  border: none;
-  color: #022c22;
-  box-shadow: 0 12px 25px rgba(34, 197, 94, 0.35);
+/* รีเซ็ตสีพื้นฐานขององค์ประกอบทั่วไปให้ใช้ตามธีม */
+body.bm-theme-light .card,
+body.bm-theme-light .modal-content {
+  background-color: var(--bm-surface);
+  color: var(--bm-text);
 }
 
-.bm-btn-primary:hover,
-.bm-btn-primary:focus {
-  background-image: linear-gradient(
-    135deg,
-    var(--bm-primary-strong),
-    #16a34a
-  );
-  color: #022c22;
-  box-shadow: 0 12px 25px rgba(22, 163, 74, 0.45);
+body.bm-theme-dark .card,
+body.bm-theme-dark .modal-content {
+  background-color: #020617;
+  color: var(--bm-text);
+  border-color: var(--bm-border-subtle);
 }
 
-.bm-btn-primary:active {
-  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.60) inset;
+body.bm-theme-dark .form-control,
+body.bm-theme-dark .form-select,
+body.bm-theme-dark .form-control:focus,
+body.bm-theme-dark .form-select:focus {
+  background-color: var(--bm-input-bg);
+  color: var(--bm-text);
+  border-color: var(--bm-input-border);
 }
 
-.bm-empty-state {
-  text-align: center;
-  padding: 1.5rem 1rem;
-  border-radius: 12px;
-  border: 1px dashed var(--bm-border);
-  color: var(--bm-text-muted);
-  font-size: 0.9rem;
+body.bm-theme-dark .table {
+  color: var(--bm-text);
 }
 
-/* Text helpers */
-
-.bm-text-muted {
-  color: var(--bm-text-muted);
+body.bm-theme-dark .table > :not(caption) > * > * {
+  background-color: transparent;
+  border-color: #1e293b;
 }
 
-/* Badge pill custom */
-
-.bm-badge-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  background-color: rgba(148, 163, 184, 0.1);
-  color: var(--bm-text-muted);
+/* ลิงก์ให้ใช้สี primary */
+a {
+  color: var(--bm-primary-strong);
+}
+a:hover {
+  color: #15803d;
 }
 
-/* Scroll area for cards */
-.bm-scroll-y {
-  max-height: 360px;
-  overflow-y: auto;
+/* ==========================================================
+   สไตล์แถบด้านบน (Topbar)
+========================================================== */
+.bm-topbar {
+  height: var(--bm-topbar-height);
+  background-color: var(--bm-nav-bg) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--bm-nav-border);
 }
 
-/* =========================
-   Login Page
-   ========================= */
+.bm-topbar .navbar-brand {
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+}
 
-.bm-login-page {
-  background: radial-gradient(
-    circle at top left,
-    var(--bm-primary) 0,
-    var(--bm-secondary-soft) 30%,
-    var(--bm-bg) 70%
-  );
+/* ปุ่มสลับธีม */
+#themeToggleBtn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+}
+
+/* Avatar วงกลมขนาดเล็ก */
+.bm-avatar-circle {
+  width: 1.9rem;
+  height: 1.9rem;
+  font-size: 0.85rem;
+}
+
+/* ==========================================================
+   สไตล์เมนูด้านล่าง (Bottom Navigation)
+========================================================== */
+.bm-bottom-nav {
+  height: var(--bm-bottom-nav-height);
+  background-color: var(--bm-nav-bg) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--bm-nav-border);
+}
+
+.bm-bottom-nav-link {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: var(--bm-bottom-nav-height);
+  text-decoration: none;
+  font-size: 0.72rem;
+  color: var(--bm-text-muted);
+  transition: all 0.18s ease;
 }
 
-.bm-login-card {
-  border-radius: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  background: radial-gradient(
-      circle at top left,
-      rgba(148, 255, 210, 0.08),
-      transparent 52%
-    ),
-    var(--bm-card);
+.bm-bottom-nav-link i {
+  font-size: 1.05rem;
+  margin-bottom: 0.1rem;
 }
 
-/* =========================
-   App Layout
-   ========================= */
-
-.bm-app {
-  min-height: 100vh;
-  background: radial-gradient(
-    circle at top left,
-    var(--bm-secondary-soft) 0,
-    var(--bm-bg) 50%
-  );
+/* สถานะ Hover / Active */
+.bm-bottom-nav-link:hover {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: var(--bm-text);
 }
 
-.bm-layout {
-  display: flex;
-  min-height: 100vh;
+.bm-bottom-nav-link.active {
+  color: var(--bm-primary-strong);
+  font-weight: 600;
+  position: relative;
 }
 
-/* Sidebar (desktop / tablet) */
+.bm-bottom-nav-link.active::after {
+  content: "";
+  position: absolute;
+  top: 0.15rem;
+  width: 1.1rem;
+  height: 0.2rem;
+  border-radius: 999px;
+  background-color: var(--bm-primary-soft);
+}
 
-.bm-sidebar {
-  width: var(--bm-sidebar-width);
-  padding: 1.25rem 1rem 1rem;
+/* ==========================================================
+   สไตล์พื้นที่เนื้อหาหลัก (Main Content)
+========================================================== */
+.bm-main-content {
+  min-height: calc(100vh - var(--bm-topbar-height) - var(--bm-bottom-nav-height));
   background: radial-gradient(
       circle at top left,
       rgba(34, 197, 94, 0.15),
       transparent 55%
     ),
-    #020617;
-  color: #e5e7eb;
-  flex-shrink: 0;
+    radial-gradient(
+      circle at bottom right,
+      rgba(59, 130, 246, 0.12),
+      transparent 55%
+    );
 }
 
-.bm-sidebar-header {
-  margin-bottom: 1.75rem;
+/* ทำให้ container ภายในไม่ชิดขอบเกินไปบนจอเล็ก */
+.bm-main-content .container {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
-.bm-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.bm-logo-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: linear-gradient(135deg, var(--bm-primary), #4ade80);
-  color: #022c22;
-  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.55);
-  font-size: 1.4rem;
-}
-
-.bm-logo-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-}
-
-.bm-logo-title {
-  font-size: 1rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.bm-logo-subtitle {
-  font-size: 0.8rem;
-  color: #a5b4fc;
-}
-
-/* Sidebar nav */
-
-.bm-sidebar-nav {
-  margin-bottom: 1.5rem;
-}
-
-.bm-nav-item {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #cbd5f5;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  margin-bottom: 0.35rem;
-  text-align: left;
-  transition: background 0.18s ease, color 0.18s ease, transform 0.1s ease;
-}
-
-.bm-nav-item i {
-  font-size: 1.15rem;
-}
-
-.bm-nav-item:hover {
-  background: rgba(148, 163, 184, 0.12);
-  color: #ffffff;
-}
-
-.bm-nav-item.active {
-  background: linear-gradient(
-    135deg,
-    var(--bm-primary-strong),
-    #22c55e
-  );
-  color: #022c22;
-  transform: translateY(-1px);
-}
-
-/* Sidebar footer (user info) */
-
-.bm-sidebar-footer {
-  border-top: 1px solid rgba(148, 163, 184, 0.3);
-  padding-top: 1rem;
-}
-
-.bm-user-mini {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.bm-user-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.bm-user-info {
-  font-size: 0.8rem;
-}
-
-.bm-user-email {
-  max-width: 150px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.bm-link-logout {
-  color: #fca5a5;
-  font-size: 0.78rem;
-}
-
-/* Main column */
-
-.bm-main-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-/* Topbar */
-
-.bm-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 1020;
-  background: rgba(249, 250, 251, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.theme-dark .bm-topbar {
-  background: rgba(15, 23, 42, 0.95);
-}
-
-.bm-topbar .container-fluid {
-  padding: 0.6rem 1rem;
-}
-
-.bm-topbar-title-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.bm-topbar-title {
-  font-size: 1.05rem;
-  margin: 0;
-}
-
-.bm-topbar-subtitle {
-  font-size: 0.8rem;
-  color: var(--bm-text-muted);
-}
-
-/* Mobile home button */
-
-.bm-topbar-home {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: none;
-  background-color: rgba(15, 23, 42, 0.04);
-  color: var(--bm-text);
-}
-
-/* Topbar date/time */
-
-.bm-date-text {
-  font-size: 0.8rem;
-  color: var(--bm-text-muted);
-}
-
-.bm-time-text {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-/* User button */
-
-.bm-user-btn {
-  border-radius: 999px;
-  border-color: rgba(148, 163, 184, 0.6);
-}
-
-/* Main content */
-
-.bm-main {
-  flex: 1;
-  padding: 1rem 0.85rem 0.85rem;
-}
-
-/* Cards */
-
-.bm-card {
-  background: var(--bm-card);
-  border-radius: var(--bm-radius-lg);
-  border: 1px solid rgba(148, 163, 184, 0.45);
+/* ==========================================================
+   การ์ด (Cards) & กล่องข้อมูล
+========================================================== */
+.card {
+  border-radius: var(--bm-card-radius);
+  border: 1px solid var(--bm-border-subtle);
   box-shadow: var(--bm-shadow-soft);
 }
 
-.bm-card-header {
-  padding: 1.1rem 1.25rem 0.6rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
+.card-header {
+  background-color: transparent;
+  border-bottom-color: rgba(148, 163, 184, 0.25);
 }
 
-.bm-card-body {
-  padding: 1rem 1.25rem 1.25rem;
-}
-
-.bm-card-title {
-  font-size: 1rem;
-}
-
-.bm-card-subtitle {
-  font-size: 0.86rem;
-  color: var(--bm-text-muted);
-}
-
-.bm-card-header-meta {
-  white-space: nowrap;
-}
-
-/* Stat cards */
-
+/* การ์ดสรุปค่าแบบตัวเลขใหญ่ */
 .bm-stat-card {
+  border-radius: var(--bm-card-radius);
+  padding: 0.75rem 0.9rem;
   background: linear-gradient(
     135deg,
-    rgba(148, 163, 184, 0.08),
-    rgba(148, 163, 184, 0.02)
+    rgba(34, 197, 94, 0.1),
+    rgba(59, 130, 246, 0.08)
   );
-  border-radius: var(--bm-radius-md);
-  padding: 0.7rem 0.8rem;
   border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
+body.bm-theme-dark .bm-stat-card {
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.25),
+    rgba(15, 23, 42, 0.9)
+  );
+  border-color: rgba(51, 65, 85, 0.9);
+}
+
 .bm-stat-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--bm-text-muted);
 }
 
 .bm-stat-value {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
-.bm-stat-desc {
+.bm-stat-sub {
   font-size: 0.75rem;
-  color: var(--bm-text-muted);
 }
 
-/* Mini cards */
-
-.bm-mini-card {
-  background: var(--bm-bg-soft);
-  border-radius: var(--bm-radius-md);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  padding: 0.75rem 0.85rem;
+/* การ์ดสำหรับ section ในหน้าแดชบอร์ด/รายงาน */
+.bm-section-card {
+  border-radius: var(--bm-card-radius);
+  border: 1px dashed rgba(148, 163, 184, 0.6);
 }
 
-.bm-mini-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+/* ==========================================================
+   สไตล์ Floating Action Button (FAB)
+========================================================== */
+.bm-fab-container {
+  position: fixed;
+  right: 1.2rem;
+  bottom: calc(var(--bm-bottom-nav-height) + 0.75rem);
+  z-index: 1080;
 }
 
-.bm-mini-card-body {
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-/* Sections visibility */
-
-.bm-section {
-  display: none;
-}
-
-.bm-section.active {
-  display: block;
-}
-
-/* Field groups */
-
-.bm-field-group {
-  padding: 0.85rem 0.9rem;
-  border-radius: 14px;
-  background-color: var(--bm-bg-soft);
-  border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.bm-field-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
+.bm-fab-btn {
+  width: var(--bm-fab-size);
+  height: var(--bm-fab-size);
+  border-radius: 999px;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  background-color: var(--bm-fab-bg) !important;
+  color: var(--bm-fab-color) !important;
+  border: none;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.7);
 }
 
-/* POS */
-
-.bm-pos-form .form-label {
-  font-size: 0.82rem;
-  color: var(--bm-text-muted);
+.bm-fab-btn i {
+  font-size: 1.2rem;
 }
 
-/* POS items table */
+/* ดรอปดาวน์ของ FAB */
+.bm-fab-container .dropdown-menu {
+  border-radius: 0.9rem;
+  border-color: var(--bm-border-subtle);
+  box-shadow: var(--bm-shadow-soft);
+}
 
-.bm-pos-items-table table {
+/* ==========================================================
+   ฟอร์ม / Input / ปุ่ม
+========================================================== */
+.form-control,
+.form-select {
+  border-radius: 0.7rem;
+  border-color: var(--bm-input-border);
+  background-color: var(--bm-input-bg);
   font-size: 0.86rem;
 }
 
-.bm-pos-items-table thead th {
-  white-space: nowrap;
-  font-weight: 500;
-  border-bottom-width: 1px;
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
+  border-color: var(--bm-primary-strong);
 }
 
-.bm-pos-items-table tbody td {
-  vertical-align: middle;
-}
-
-.bm-pos-item-type-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.15rem 0.55rem;
+/* ปุ่มหลัก */
+.btn {
+  font-size: 0.86rem;
   border-radius: 999px;
-  font-size: 0.75rem;
-  border: 1px solid rgba(148, 163, 184, 0.5);
 }
 
-.bm-pos-item-type-labor {
-  background-color: rgba(34, 197, 94, 0.12);
+/* ปุ่มสีหลัก */
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #16a34a;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  border-color: #15803d;
+}
+
+/* ปุ่มเส้นขอบสีหลัก */
+.btn-outline-primary {
+  border-color: var(--bm-primary-strong);
+  color: var(--bm-primary-strong);
+}
+.btn-outline-primary:hover {
+  background-color: var(--bm-primary-soft);
+  border-color: var(--bm-primary-strong);
+}
+
+/* ปุ่มเส้นขอบสีอันตราย */
+.btn-outline-danger:hover {
+  background-color: var(--bm-danger-soft);
+}
+
+/* ปุ่ม quick +100 +500 +1000 */
+.bm-quick-amount-btn {
+  padding-inline: 0.65rem;
+  font-size: 0.78rem;
+}
+
+/* ==========================================================
+   ตาราง (Tables)
+========================================================== */
+.table {
+  font-size: 0.8rem;
+}
+
+.table thead {
+  background-color: rgba(148, 163, 184, 0.06);
+}
+
+/* แถวใกล้หมดสต๊อกให้ไฮไลท์ */
+.bm-stock-low {
+  background-color: var(--bm-warning-soft) !important;
+}
+
+/* แถวเน้นพิเศษ เช่น งานเร่งด่วน */
+.bm-row-highlight {
+  background-color: rgba(248, 250, 252, 0.8);
+}
+
+/* ==========================================================
+   Badge / Label
+========================================================== */
+.badge {
+  border-radius: 999px;
+}
+
+/* สถานะงานซ่อม */
+.bm-badge-status-repairing {
+  background-color: var(--bm-warning-soft);
+  color: #92400e;
+}
+.bm-badge-status-done {
+  background-color: var(--bm-info-soft);
+  color: #075985;
+}
+.bm-badge-status-picked {
+  background-color: #dcfce7;
   color: #166534;
 }
 
-.bm-pos-item-type-part {
-  background-color: rgba(37, 99, 235, 0.1);
-  color: #1d4ed8;
+/* Priority */
+.bm-badge-priority-low {
+  background-color: #e0f2fe;
+  color: #0369a1;
 }
-
-/* POS summary */
-
-.bm-pos-summary {
-  background-color: var(--bm-bg-soft);
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  padding: 0.8rem 0.9rem;
-  font-size: 0.9rem;
+.bm-badge-priority-normal {
+  background-color: #dcfce7;
+  color: #166534;
 }
-
-.bm-pos-summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.25rem;
-}
-
-.bm-pos-summary-row:last-child {
-  margin-bottom: 0;
-}
-
-.bm-pos-summary-value {
-  font-variant-numeric: tabular-nums;
-}
-
-.bm-pos-summary-highlight {
-  margin-top: 0.3rem;
-  padding-top: 0.35rem;
-  border-top: 1px dashed rgba(148, 163, 184, 0.7);
-}
-
-.bm-pos-summary-input {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-/* POS presets */
-
-.bm-pos-presets .btn {
-  font-size: 0.8rem;
-}
-
-/* Jobs */
-
-#jobsTable tbody tr {
-  cursor: pointer;
-}
-
-#jobsTable tbody tr:hover {
-  background: rgba(148, 163, 184, 0.09);
-}
-
-/* Stock */
-
-#stockTable tbody tr.low-stock td:nth-child(5) {
+.bm-badge-priority-high {
+  background-color: #fee2e2;
   color: #b91c1c;
-  font-weight: 600;
 }
 
-/* =========================
-   TOPBAR GRADIENT MODE
-   ========================= */
-
-.bm-topbar-gradient {
-  background: linear-gradient(135deg, #22c55e, #38bdf8);
-  border-bottom: none !important;
-  padding: 0.65rem 0;
-  color: #022c22;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
-
-/* Dark mode */
-.theme-dark .bm-topbar-gradient {
-  background: linear-gradient(135deg, #166534, #0ea5e9);
-  color: #ffffff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-}
-
-/* Title */
-.bm-topbar-gradient .bm-topbar-title {
-  color: inherit;
-  font-size: 1.12rem;
-  font-weight: 600;
-}
-
-/* Subtitle */
-.bm-topbar-gradient .bm-topbar-subtitle {
-  color: rgba(255,255,255,0.85);
-  font-size: 0.8rem;
-}
-
-/* DateTime Panel */
-.bm-topbar-datetime-panel {
-  padding: 6px 12px;
-  border-radius: 12px;
-  text-align: right;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  background: rgba(255, 255, 255, 0.25);
-}
-
-/* Dark mode datetime */
-.theme-dark .bm-topbar-datetime-panel {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.bm-topbar-datetime-panel .bm-date-text {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.85);
-}
-
-.bm-topbar-datetime-panel .bm-time-text {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-/* =========================
-   Responsive – Desktop / Large
-   ========================= */
-
-/* Tablet/desktop: ซ่อน bottom nav */
-@media (min-width: 768px) {
-  .bm-bottom-nav {
-    display: none;
-  }
-
-  .bm-topbar .container-fluid {
-    padding-inline: 1.4rem;
-  }
-
-  .bm-main {
-    padding-inline: 1.4rem;
-    padding-bottom: 1.4rem;
-  }
-}
-
-/* Large screen adjustments */
-@media (min-width: 1200px) {
-  .bm-main {
-    padding-inline: 2rem;
-  }
-
-  .bm-card-header,
-  .bm-card-body {
-    padding-inline: 1.5rem;
-  }
-}
-
-/* =========================
-   Bottom Navigation – Gradient Bubble (icon only)
-   ========================= */
-
-@media (max-width: 767.98px) {
-  .bm-sidebar {
-    display: none !important;
-  }
-
-  .bm-main {
-    padding: 0.75rem 0.75rem
-      calc(var(--bm-bottom-nav-height) + 1.5rem);
-  }
-
-  .bm-card-header {
-    padding-inline: 0.9rem;
-  }
-
-  .bm-card-body {
-    padding-inline: 0.9rem;
-  }
-
-  .bm-bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: auto;
-    background: transparent;
-    border-top: none;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding: 0.35rem 0.9rem 0.7rem;
-    z-index: 1030;
-    pointer-events: none;
-  }
-
-  .bm-bottom-nav-inner {
-    pointer-events: auto;
-    width: 100%;
-    max-width: 480px;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    gap: 0.2rem;
-    padding: 0.35rem 0.4rem;
-    border-radius: 999px;
-    background-image: linear-gradient(
-      135deg,
-      var(--bm-primary),
-      var(--bm-primary-strong)
-    );
-    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
-  }
-
-  .bm-bottom-nav-btn {
-    flex: 1;
-    position: relative;
-    border: none;
-    background: transparent;
-    color: rgba(15, 23, 42, 0.6);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.3rem 0.2rem 0.2rem;
-    border-radius: 999px;
-    font-size: 0.7rem;
-    overflow: hidden;
-  }
-
-  .bm-bottom-nav-btn span {
-    display: none;
-  }
-
-  .bm-bottom-nav-btn i,
-  .bm-bottom-nav-btn span {
-    position: relative;
-    z-index: 1;
-  }
-
-  .bm-bottom-nav-btn i {
-    font-size: 1.5rem;
-  }
-
-  .bm-bottom-nav-btn::before {
-    content: "";
-    position: absolute;
-    inset: 3px 5px 6px 5px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.18);
-    opacity: 0.25;
-    transition: all 0.2s ease;
-  }
-
-  .bm-bottom-nav-btn.active {
-    color: #022c22;
-    font-weight: 700;
-  }
-
-  .bm-bottom-nav-btn.active::before {
-    background: rgba(255, 255, 255, 0.96);
-    opacity: 1;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.35);
-    transform: translateY(-1px);
-  }
-}
-
-/* bottom nav: icon only mode */
-.bm-bottom-nav-btn span {
-  display: none !important;
-}
-
-.bm-bottom-nav-btn.active i {
-  font-weight: 900;
-  transform: scale(1.15);
-}
-
-/* =========================
-   Vehicles – Table / Card style
-   ========================= */
-
-#vehicles-stock-pane .table-responsive,
-#vehicles-sold-pane .table-responsive {
-  border: none;
-}
-
-#vehiclesStockTable,
-#vehiclesSoldTable {
-  border-collapse: separate;
-  border-spacing: 0 0.8rem;
-}
-
-#vehiclesStockTable thead tr th,
-#vehiclesSoldTable thead tr th {
-  border: none;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--bm-text-muted);
-}
-
-#vehiclesStockTable tbody tr,
-#vehiclesSoldTable tbody tr {
-  background: var(--bm-card);
-  box-shadow: var(--bm-shadow-soft);
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-#vehiclesStockTable tbody tr td,
-#vehiclesSoldTable tbody tr td {
-  border-top: none;
-  padding-top: 0.55rem;
-  padding-bottom: 0.55rem;
-}
-
-#vehiclesStockTable tbody tr td:first-child,
-#vehiclesSoldTable tbody tr td:first-child {
-  padding-left: 1.1rem;
-}
-
-#vehiclesStockTable tbody tr td:last-child,
-#vehiclesSoldTable tbody tr td:last-child {
-  padding-right: 1.1rem;
-}
-
-/* ช่อง 1: รุ่น / ทะเบียน */
-#vehiclesStockTable tbody td:nth-child(1),
-#vehiclesSoldTable tbody td:nth-child(1) {
-  font-size: 0.95rem;
-  font-weight: 600;
-  white-space: pre-line;
-}
-
-/* ราคาซื้อ – เทาอ่อน */
-#vehiclesStockTable tbody td:nth-child(2),
-#vehiclesSoldTable tbody td:nth-child(2) {
+/* ==========================================================
+   Toast แจ้งเตือนภาษาไทย
+========================================================== */
+#mainToast {
   font-size: 0.85rem;
-  color: var(--bm-text-muted);
+  border-radius: 999px;
+  padding-inline: 0.9rem;
 }
 
-/* รถขายแล้ว: ราคาขาย = เขียวเด่น */
-#vehiclesSoldTable tbody td:nth-child(3) {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #16a34a;
-}
-
-/* รถขายแล้ว: กำไร */
-#vehiclesSoldTable tbody td:nth-child(4) {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #16a34a;
-}
-
-/* วันที่ขาย / สถานะ – เทาเล็ก */
-#vehiclesSoldTable tbody td:nth-child(5),
-#vehiclesStockTable tbody td:nth-child(4) {
-  font-size: 0.8rem;
-  color: var(--bm-text-muted);
-}
-
-/* ปุ่มขายรถ / ปุ่มจัดการ ชิดขวา */
-#vehiclesStockTable tbody td:last-child,
-#vehiclesSoldTable tbody td:last-child {
-  text-align: right;
-}
-
-/* mobile: การ์ดแนวตั้ง */
-@media (max-width: 767.98px) {
-  #vehiclesStockTable,
-  #vehiclesSoldTable {
-    border-spacing: 0 0.6rem;
-  }
-
-  #vehiclesStockTable tbody tr td,
-  #vehiclesSoldTable tbody tr td {
-    display: block;
-    width: 100%;
-  }
-
-  #vehiclesStockTable tbody tr td:last-child,
-  #vehiclesSoldTable tbody tr td:last-child {
-    text-align: left;
-    margin-top: 0.35rem;
-  }
-
-  #vehiclesStockTable tbody td:nth-child(2),
-  #vehiclesSoldTable tbody td:nth-child(2),
-  #vehiclesSoldTable tbody td:nth-child(3),
-  #vehiclesSoldTable tbody td:nth-child(4),
-  #vehiclesSoldTable tbody td:nth-child(5) {
-    font-size: 0.8rem;
-  }
-}
-
-/* ซ่อนหัวตารางรถค้างสต็อก / รถขายแล้ว */
-#vehiclesStockTable thead,
-#vehiclesSoldTable thead {
-  display: none;
-}
-
-/* alignment */
-#vehiclesStockTable tbody td,
-#vehiclesSoldTable tbody td {
-  text-align: left;
-}
-
-/* ช่องราคา ชิดขวา */
-#vehiclesStockTable tbody td:nth-child(2),
-#vehiclesSoldTable tbody td:nth-child(2),
-#vehiclesSoldTable tbody td:nth-child(3),
-#vehiclesSoldTable tbody td:nth-child(4) {
-  text-align: right;
-}
-
-/* ระยะห่างการ์ด */
-#vehiclesStockTable,
-#vehiclesSoldTable {
-  border-spacing: 0 0.5rem;
-}
-
-/* ============================================================
-   BEN MOTOR – VEHICLE CARD STYLES (ใช้สำหรับ render แบบการ์ด)
-   ============================================================ */
-
-.bm-vehicle-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 14px;
-  border: 1px solid #e1e1e1;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: 0.2s;
-  color: #111827;
-}
-
-.bm-vehicle-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* header */
-.bm-vehicle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.bm-vehicle-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: #222;
+/* ==========================================================
+   หน้า Login (index.html) – จัดการตำแหน่งการ์ดกลางจอ
+========================================================== */
+.bm-auth-wrapper {
+  min-height: calc(100vh - var(--bm-topbar-height));
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0.75rem;
 }
 
-/* body */
-.bm-vehicle-body {
-  font-size: 0.95rem;
-  line-height: 1.45rem;
-  color: #444;
-  margin-bottom: 10px;
-}
-
-.bm-vehicle-body strong {
-  color: #222;
-}
-
-/* footer */
-.bm-vehicle-footer {
-  border-top: 1px solid #ececec;
-  padding-top: 10px;
-  text-align: right;
-}
-
-/* status card */
-.bm-vehicle-card.in-stock {
-  background-color: #ffffff;
-  border-color: #e5e7eb;
-}
-
-.bm-vehicle-card.sold {
-  background-color: #ecfdf3;
-  border-color: #4ade80;
-}
-
-/* badge สถานะ */
-.bm-vehicle-status-badge.in-stock {
-  background-color: #6b7280;
-  color: #ffffff;
-}
-
-.bm-vehicle-status-badge.sold {
-  background-color: #16a34a;
-  color: #ffffff;
-}
-
-/* text colors */
-.bm-vehicle-price-buy {
-  color: #111827 !important;
-  font-weight: 600;
-}
-
-.bm-vehicle-price-sell {
-  color: #dc2626 !important;
-  font-weight: 700;
-}
-
-.bm-vehicle-profit-pos,
-.bm-vehicle-price-profit {
-  color: #16a34a !important;
-  font-weight: 700;
-}
-
-.bm-vehicle-profit-neg {
-  color: #dc3545;
-  font-weight: 700;
-}
-
-/* badge in card */
-.bm-vehicle-card .badge {
-  font-size: 0.75rem;
-  padding: 5px 10px;
-  border-radius: 20px;
-}
-
-/* ============================================================
-   FIX: ตัดพื้นหลังแผ่นขาวของหน้า "รถซื้อ–ขาย"
-   ============================================================ */
-
-/* การ์ด wrapper ใหญ่ของ section รถซื้อ–ขาย
-   ใช้พื้นหลังโปร่งใส ไม่เอาแผ่นขาวคลุมทั้งหน้า */
-#section-vehicles .bm-card {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
-
-/* header / body ข้างในให้มี padding เอง */
-#section-vehicles .bm-card-header {
-  padding: 0 0 0.75rem;
-  border: none;
-}
-
-#section-vehicles .bm-card-body {
-  padding: 0.75rem 0 0;
-}
-
-/* เส้นคั่นหัวข้อในการ์ด (เช่น "สรุปยอดรถซื้อ–ขาย") */
-.bm-divider {
-  margin-top: 1rem;
-  margin-bottom: 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--bm-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.bm-divider::before,
-.bm-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: rgba(148, 163, 184, 0.5);
-}
-
-/* ============================================
-   GLOBAL REMOVE WHITE CARD BACKGROUND + BORDER
-   ให้ทุกหน้าไม่มีกรอบเหมือนหน้า "รับซื้อรถ"
-   ============================================ */
-
-.bm-card {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-
-.bm-card-header {
-  border: none !important;
-  padding: 0 0 0.75rem 0 !important;
-}
-
-.bm-card-body {
-  padding: 0.75rem 0 0 !important;
-}
-/* ปุ่มหลัก – เขียวธีม BEN MOTOR */
-.btn-bm-primary {
-  background: linear-gradient(135deg, var(--bm-primary), var(--bm-primary-strong));
-  border: none;
-  color: #022c22;
-  font-weight: 600;
-  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
-}
-.btn-bm-primary:hover {
-  background: linear-gradient(135deg, var(--bm-primary-strong), #16a34a);
-  color: #022c22;
-}
-
-
-/* ระดับงาน */
-.badge-level-easy {
-  background-color: #4ade80 !important;   /* เขียว */
-  color: #022c22 !important;
-}
-
-.badge-level-medium {
-  background-color: #facc15 !important;   /* เหลือง */
-  color: #3a2f00 !important;
-}
-
-.badge-level-hard {
-  background-color: #f87171 !important;   /* แดง */
-  color: #4a0000 !important;
-}
-
-
-.repair-tip-card {
-  background: var(--bm-card);
-  border: 1px solid var(--bm-border);
-  border-radius: 14px;
-  box-shadow: var(--bm-shadow-soft);
-  padding: 16px;
-}
-
-/* ============================
-   DASHBOARD NEW UI
-   ============================ */
-
-.bm-dash-mini {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  text-align: center;
-}
-
-.bm-dash-mini .label {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.bm-dash-mini .value {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.bm-dash-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px 18px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-}
-
-.bm-dash-card .title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.bm-dash-card .item {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-}
-
-.bm-dash-card .item .label {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.bm-dash-card .item .value {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.bm-dash-card .item.total {
-  border-top: 1px solid #e5e7eb;
-  margin-top: 8px;
-  padding-top: 10px;
-}
-
-/* ---- การ์ดรถซื้อเข้า ---- */
-.bm-vehicle-item {
-  border: 1px solid #e5e5e5;
-  border-radius: 14px;
-  padding: 14px;
-  background: #fff;
-  margin-bottom: 12px;
-}
-
-/* ชื่อรุ่นรถ (ให้เด่นขึ้น) */
-.bm-vehicle-item .title {
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 16px;
-  color: #0CAF60; /* เขียว BEN MOTOR */
-}
-
-/* ข้อมูลทะเบียน + เวลา */
-.bm-vehicle-item .subtitle {
-  color: #6F6F6F; /* เทาอ่านง่าย */
-  font-size: 13px;
-  margin-top: 2px;
-}
-
-/* ป้าย “ราคาซื้อ” */
-.bm-vehicle-item .price-label {
-  font-size: 12px;
-  color: #8f8f8f;
-  text-align: right;
-}
-
-/* ราคาจริง (เด่นขึ้น) */
-.bm-vehicle-item .price-value {
-  font-size: 17px;
-  font-weight: 800;
-  text-align: right;
-  color: #007AFF; /* น้ำเงินแบบ iOS */
-}
-
-/* ---- Dashboard Vehicle Colors ---- */
-.bm-vehicle-title {
-  color: #16a34a;  /* เขียว */
-  font-weight: 700;
-}
-
-.bm-vehicle-buyprice {
-  color: #dc2626;  /* แดง */
-  font-weight: 700;
-}
-
-.bm-vehicle-date {
-  color: #64748b;  /* เทา */
-  font-size: 0.8rem;
-}
-
-.bm-stock-row {
-  background: #fff;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  padding: 12px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-}
-
-.bm-stock-row td {
-  border: none !important;
-  padding: 6px 4px !important;
-}
-
-.bm-stock-row .danger {
-  color: #d32f2f;
-  font-weight: 700;
-}
-
-/* ปุ่มแก้ไขในหน้าสต็อก */
-.stock-edit-btn {
-  border-color: #dc3545 !important;  /* เส้นแดง */
-  color: #dc3545 !important;         /* ตัวหนังสือแดง */
-  font-weight: 600;
-}
-
-.stock-edit-btn:hover {
-  background-color: #dc3545 !important; /* พื้นหลังแดงตอน hover */
-  color: #ffffff !important;            /* ตัวหนังสือขาว */
-}
-
-#vehiclesTabs {
-  display: flex;
-  flex-wrap: nowrap;    /* ❗ ไม่ให้ตัดบรรทัด */
-  overflow-x: auto;      /* ❗ เลื่อนได้ถ้ายาวเกิน */
-  gap: 8px;
-  padding-bottom: 4px;
-}
-
-#vehiclesTabs .nav-link {
-  white-space: nowrap;   /* ❗ ไม่ให้ตัดคำลงบรรทัดใหม่ */
-  flex-shrink: 0;        /* ❗ ห้ามปุ่มถูกบีบเล็ก */
-  padding: 10px 18px;
-  border-radius: 14px;
-  font-weight: 600;
-  background: linear-gradient(135deg, var(--bm-primary), var(--bm-primary-strong));
-  color: #022c22 !important;
-  border: none;
-}
-
-/* Active */
-#vehiclesTabs .nav-link.active {
-  background: linear-gradient(135deg, var(--bm-primary-strong), #16a34a);
-  color: #022c22 !important;
-}
-
-#vehiclesTabs {
-  display: flex;
-  gap: 8px;
-}
-
-#vehiclesTabs .nav-item {
-  flex: 1;
-}
-
-#vehiclesTabs .nav-link {
+.bm-auth-card {
+  max-width: 420px;
   width: 100%;
-  text-align: center;
-  padding: 6px 8px;
-  border-radius: 14px;
-  white-space: nowrap;
-  font-size: clamp(12px, 3.8vw, 16px);
 }
 
-/* ===== Reports – สีหัวการ์ด + ตาราง ===== */
-
-.bm-report-section-title {
-  font-weight: 700;
-  color: var(--bm-primary-strong); /* เขียวเข้มตามระบบ */
+/* โลโก้ / ชื่อที่หัวการ์ดในหน้า Login */
+.bm-auth-logo {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at top left,
+    rgba(34, 197, 94, 0.18),
+    rgba(59, 130, 246, 0.15)
+  );
 }
 
-.bm-report-card {
-  border-radius: 18px;
-  border: none;
-  box-shadow: 0 16px 35px rgba(15, 118, 110, 0.12);
+/* ==========================================================
+   หน้าแดชบอร์ด – Layout การ์ดสรุป
+========================================================== */
+.bm-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
-/* หัวตารางให้มีพื้นจาง ๆ เขียวตามระบบ */
-.bm-report-table thead th {
-  background: rgba(16, 185, 129, 0.08);  /* เขียวจาง */
-  color: #022c22;                         /* เขียวเข้มอ่านง่าย */
-  border-bottom: none;
+@media (min-width: 768px) {
+  .bm-dashboard-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
-/* แถวสลับสีอ่อน ๆ */
-.bm-report-table tbody tr:nth-child(even) {
-  background: rgba(15, 118, 110, 0.02);
+/* กล่อง mini section เช่น ความเคลื่อนไหวล่าสุด / สต๊อกใกล้หมด */
+.bm-mini-section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bm-text-muted);
+}
+
+/* พื้นที่กราฟ Canvas */
+.bm-chart-container {
+  position: relative;
+  width: 100%;
+  min-height: 160px;
+}
+
+/* ==========================================================
+   หน้าเปิดบิลซ่อม – ตารางรายการอะไหล่ / ค่าแรง
+========================================================== */
+.bm-bill-table {
+  border-radius: 0.9rem;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.bm-bill-table thead {
+  background-color: rgba(148, 163, 184, 0.1);
+}
+
+.bm-bill-table input,
+.bm-bill-table select {
+  font-size: 0.8rem;
+}
+
+/* ปุ่ม +/- จำนวน */
+.bm-qty-btn {
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  font-size: 0.75rem;
+}
+
+/* ==========================================================
+   หน้า Jobs / Vehicles / Stock / Finance / Reports
+   – ช่วยจัด spacing ให้ใช้งานบนมือถือได้ง่าย
+========================================================== */
+.bm-filter-bar {
+  background-color: rgba(248, 250, 252, 0.9);
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 0.55rem 0.65rem;
+}
+
+body.bm-theme-dark .bm-filter-bar {
+  background-color: rgba(15, 23, 42, 0.9);
+}
+
+/* การ์ดแสดงในมุมมอง Card view ของ Jobs / Vehicles */
+.bm-list-card {
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  padding: 0.75rem 0.8rem;
+}
+
+/* ==========================================================
+   หน้า Settings – แถบ Tabs / พื้นหลัง
+========================================================== */
+#settingsTabs .nav-link {
+  border-radius: 999px;
+  padding-inline: 0.9rem;
+  padding-block: 0.35rem;
+  font-size: 0.82rem;
+}
+
+#settingsTabs .nav-link.active {
+  background-color: var(--bm-primary-soft);
+  color: #166534;
+}
+
+/* ==========================================================
+   ปรับแต่งสำหรับจอขนาดต่าง ๆ (Responsive)
+========================================================== */
+@media (min-width: 576px) {
+  body {
+    font-size: 0.95rem;
+  }
+
+  .bm-topbar .navbar-brand {
+    font-size: 1.05rem;
+  }
+
+  .bm-auth-card {
+    padding: 1.25rem 1.35rem;
+  }
+}
+
+@media (min-width: 768px) {
+  /* จอ Tablet ขึ้นไป – ขยับ FAB ให้เข้าด้านในเล็กน้อย */
+  .bm-fab-container {
+    right: 1.7rem;
+    bottom: calc(var(--bm-bottom-nav-height) + 1.1rem);
+  }
+
+  .bm-main-content .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 992px) {
+  /* จอ Desktop – ให้ container กว้างขึ้น */
+  .bm-main-content .container {
+    max-width: 1120px;
+  }
+}
+
+/* ==========================================================
+   UX เพิ่มเติม – Loading, ข้อความเล็ก, ฯลฯ
+========================================================== */
+
+/* ข้อความโหลดข้อมูล */
+.bm-loading-text {
+  font-size: 0.78rem;
+  color: var(--bm-text-muted);
+}
+
+/* ให้ label ฟอร์มส่วนใหญ่ดูเล็กลง */
+.form-label {
+  font-size: 0.8rem;
+}
+
+/* ตัวอักษรเล็กพิเศษ */
+.text-xs {
+  font-size: 0.72rem;
+}
+
+/* ระยะห่างเล็ก ๆ สำหรับ section */
+.bm-section-spacing {
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================
+   จัดการกรณีจอกว้างมาก – ไม่ให้เนื้อหาดูแบนเกินไป
+========================================================== */
+@media (min-width: 1440px) {
+  .bm-main-content .container {
+    max-width: 1200px;
+  }
 }
