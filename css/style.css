@@ -9,10 +9,14 @@
    สไตล์พื้นฐานของทั้งเว็บ
 ---------------------------------------------------------- */
 :root {
-  /* สีหลัก (สามารถปรับได้ให้เข้ากับแบรนด์) */
+  /* สีหลักโทนเขียวพาสเทล + เขียวเข้ม */
   --bm-primary: #22c55e;
-  --bm-primary-soft: #bbf7d0;
+  --bm-primary-soft: #dcfce7;
   --bm-primary-strong: #16a34a;
+
+  /* สีรองสำหรับกราฟ / แบ็กกราวด์ */
+  --bm-secondary: #38bdf8;
+  --bm-secondary-soft: #e0f2fe;
 
   --bm-danger: #ef4444;
   --bm-danger-soft: #fee2e2;
@@ -23,7 +27,7 @@
 
   --bm-border-radius: 0.9rem;
   --bm-card-radius: 1rem;
-  --bm-shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --bm-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
 
   --bm-topbar-height: 3.25rem;
   --bm-bottom-nav-height: 3.75rem;
@@ -46,7 +50,7 @@ body {
    โหมด Light / Dark
 ---------------------------------------------------------- */
 body.bm-theme-light {
-  --bm-bg: #f3f4f6;
+  --bm-bg: #ecfdf5;              /* พื้นหลังเขียวพาสเทลอ่อน ๆ */
   --bm-surface: #ffffff;
   --bm-elevated: #ffffff;
   --bm-text: #0f172a;
@@ -54,10 +58,11 @@ body.bm-theme-light {
   --bm-border-subtle: #e5e7eb;
   --bm-input-bg: #ffffff;
   --bm-input-border: #d1d5db;
-  --bm-nav-bg: rgba(255, 255, 255, 0.9);
+  --bm-nav-bg: rgba(255, 255, 255, 0.96);
   --bm-nav-border: #e5e7eb;
   --bm-fab-bg: var(--bm-primary);
   --bm-fab-color: #ffffff;
+
   background-color: var(--bm-bg);
   color: var(--bm-text);
 }
@@ -124,15 +129,20 @@ a:hover {
 ========================================================== */
 .bm-topbar {
   height: var(--bm-topbar-height);
-  background-color: var(--bm-nav-bg) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(
+      90deg,
+      rgba(34, 197, 94, 0.12),
+      rgba(255, 255, 255, 0.98)
+    );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--bm-nav-border);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
 }
 
 .bm-topbar .navbar-brand {
   font-size: 1rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
 }
 
 /* ปุ่มสลับธีม */
@@ -155,9 +165,10 @@ a:hover {
 .bm-bottom-nav {
   height: var(--bm-bottom-nav-height);
   background-color: var(--bm-nav-bg) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--bm-nav-border);
+  box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.06);
 }
 
 .bm-bottom-nav-link {
@@ -204,16 +215,10 @@ a:hover {
 ========================================================== */
 .bm-main-content {
   min-height: calc(100vh - var(--bm-topbar-height) - var(--bm-bottom-nav-height));
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 197, 94, 0.15),
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(59, 130, 246, 0.12),
-      transparent 55%
-    );
+  background:
+    radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.15), transparent 55%),
+    linear-gradient(to bottom, #ecfdf5, #f9fafb);
 }
 
 /* ทำให้ container ภายในไม่ชิดขอบเกินไปบนจอเล็ก */
@@ -229,6 +234,7 @@ a:hover {
   border-radius: var(--bm-card-radius);
   border: 1px solid var(--bm-border-subtle);
   box-shadow: var(--bm-shadow-soft);
+  background-color: var(--bm-surface);
 }
 
 .card-header {
@@ -624,4 +630,24 @@ body.bm-theme-dark .bm-filter-bar {
   .bm-main-content .container {
     max-width: 1200px;
   }
+}
+
+/* ปรับขนาดชิพบัญชีผู้ใช้บน Topbar ให้เตี้ยลงพอดีกับแถบ */
+#userMenuButton {
+  padding: 0.2rem 0.75rem;
+  max-height: 2.6rem;
+  border-radius: 999px;
+}
+
+/* ย่อฟอนต์และระยะบรรทัดในชื่อ + role */
+#userMenuButton .small {
+  font-size: 0.72rem;
+  line-height: 1.15;
+}
+
+/* ย่อขนาดวงกลม Avatar นิดหน่อย */
+.bm-avatar-circle {
+  width: 26px;
+  height: 26px;
+  font-size: 0.8rem;
 }
