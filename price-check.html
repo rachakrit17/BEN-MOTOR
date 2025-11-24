@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <!-- เมตาพื้นฐานของหน้าเช็คราคา -->
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – เช็คราคาอะไหล่และค่าแรง</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- ฟอนต์ Kanit -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS หลักของระบบ BEN MOTOR -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้ + ลิงก์เช็คราคา
+    ============================================================ -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar"
+    >
+      <div class="container-fluid">
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
+        </span>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+          >
+            <i class="bi bi-moon"></i>
+          </button>
+
+          <!-- Dropdown ผู้ใช้งาน -->
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
+              <span
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial">U</span>
+              </span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted small" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
+              <!-- เมนูเช็คราคา (หน้าใช้งานปัจจุบัน) -->
+              <li>
+                <a class="dropdown-item active" href="price-check.html">
+                  <i class="bi bi-tags me-2"></i> เช็คราคา
+                </a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  class="dropdown-item text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้าเช็คราคา
+         ใช้ดู/ค้น/เพิ่ม/แก้ไข ราคาทุน + ราคาขาย + ค่าแรง
+    ============================================================ -->
+    <main class="bm-main-content">
+      <div class="container py-3">
+        <!-- ชื่อหน้า + สรุปสั้น -->
+        <div
+          class="d-flex justify-content-between align-items-center mb-3 mt-4"
+        >
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">เช็คราคาอะไหล่และค่าแรง</h1>
+            <p class="small text-muted mb-0">
+              ใช้ดูราคาทุน (ราคาส่ง), ราคาขาย/เปลี่ยน และค่าแรงเมื่อ ลูกค้านำอะไหล่มาเอง
+              เพื่อให้คิดราคาลูกค้าได้สม่ำเสมอ
+            </p>
+          </div>
+          <span
+            class="badge text-bg-secondary text-wrap text-center"
+            id="priceCheckBranchLabel"
+          >
+            กำลังโหลดสาขา...
+          </span>
+        </div>
+
+        <!-- ส่วนค้นหา + ปุ่มรีโหลด + สรุปจำนวนรายการ + อัปเดตล่าสุด -->
+        <section class="mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="row g-2 align-items-center">
+                <!-- ค้นหา -->
+                <div class="col-12 col-lg-5">
+                  <label
+                    for="priceSearchInput"
+                    class="form-label small mb-1"
+                  >
+                    ค้นหาอย่างรวดเร็ว
+                  </label>
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">
+                      <i class="bi bi-search"></i>
+                    </span>
+                    <input
+                      type="search"
+                      id="priceSearchInput"
+                      class="form-control"
+                      placeholder="พิมพ์ชื่ออะไหล่ / บริการ / รุ่นรถ / รหัส ฯลฯ"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="small text-muted mt-1">
+                    ระบบจะค้นหาจากชื่อ, รายละเอียด, รุ่นรถ, รหัส และหน่วยของรายการทั้งหมด
+                  </div>
+                </div>
+
+                <!-- ตัวกรองประเภท -->
+                <div class="col-6 col-lg-2">
+                  <label
+                    for="priceTypeFilter"
+                    class="form-label small mb-1"
+                  >
+                    ประเภท
+                  </label>
+                  <select
+                    id="priceTypeFilter"
+                    class="form-select form-select-sm"
+                  >
+                    <option value="all">ทั้งหมด</option>
+                    <option value="part">อะไหล่</option>
+                    <option value="service">บริการซ่อม</option>
+                    <option value="combo">ชุดงาน + อะไหล่</option>
+                  </select>
+                  <div class="small text-muted mt-1">
+                    ใช้แยกดูตามกลุ่มงาน
+                  </div>
+                </div>
+
+                <!-- ตัวกรองหมวด -->
+                <div class="col-6 col-lg-2">
+                  <label
+                    for="categoryFilter"
+                    class="form-label small mb-1"
+                  >
+                    หมวด
+                  </label>
+                  <select
+                    id="categoryFilter"
+                    class="form-select form-select-sm"
+                  >
+                    <option value="all">ทุกหมวด</option>
+                  </select>
+                  <div class="small text-muted mt-1">
+                    เช่น ยาง, โซ่สเตอร์, น้ำมันเครื่อง ฯลฯ
+                  </div>
+                </div>
+
+                <!-- ปุ่มรีโหลด -->
+                <div class="col-6 col-lg-1">
+                  <label class="form-label small mb-1 d-none d-lg-block">
+                    ดึงข้อมูล
+                  </label>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary w-100"
+                    id="priceReloadBtn"
+                  >
+                    <i class="bi bi-arrow-clockwise"></i>
+                  </button>
+                  <div class="small text-muted mt-1" id="reloadStatusLabel"></div>
+                </div>
+
+                <!-- สรุปจำนวนรายการ + อัปเดตราคา -->
+                <div class="col-6 col-lg-2">
+                  <div class="small text-muted mb-1">
+                    จำนวนรายการที่ตรงเงื่อนไข
+                  </div>
+                  <div class="h5 mb-0 fw-semibold">
+                    <span id="totalItemCount">0</span> รายการ
+                  </div>
+                  <div class="small text-muted mt-1">
+                    อัปเดตล่าสุด:
+                    <span id="lastUpdatedLabel">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ปุ่มเพิ่มรายการราคา (เฉพาะ admin) -->
+        <section class="mb-2">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="small text-muted">
+              เพิ่ม/แก้ไขได้เฉพาะ
+              <span class="fw-semibold">ผู้ดูแลระบบ (Admin)</span>
+            </div>
+            <button
+              type="button"
+              class="btn btn-success btn-sm"
+              id="openAddPriceModalBtn"
+            >
+              <i class="bi bi-plus-lg me-1"></i>
+              เพิ่มรายการราคา
+            </button>
+          </div>
+        </section>
+
+        <!-- ตารางรายการราคาทั้งหมด -->
+        <section>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive bm-scroll-soft">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="small text-muted">
+                    <tr>
+                      <th style="min-width: 90px;">รหัส</th>
+                      <th style="min-width: 170px;">ชื่อรายการ</th>
+                      <th style="min-width: 130px;">หมวด / ประเภท</th>
+                      <th style="min-width: 110px;">รุ่นรถ / รายละเอียด</th>
+                      <th class="text-end" style="min-width: 110px;">
+                        ราคาทุน (ส่ง)
+                      </th>
+                      <th class="text-end" style="min-width: 110px;">
+                        ราคาขาย/เปลี่ยน
+                      </th>
+                      <th class="text-end" style="min-width: 120px;">
+                        ค่าแรง (ลูกค้านำของ)
+                      </th>
+                      <th class="text-nowrap" style="min-width: 80px;">หน่วย</th>
+                      <th class="text-end" style="min-width: 90px;">จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="priceItemsTbody">
+                    <tr>
+                      <td colspan="9" class="text-center small text-muted">
+                        กำลังโหลดข้อมูลราคา...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="small text-muted mt-2">
+                หมายเหตุ: ราคาที่แสดงเป็นราคาที่ใช้ในอู่เท่านั้น
+                ยังไม่รวมส่วนลดพิเศษ/โปรโมชั่น (ถ้ามี)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ระยะห่างด้านล่างไม่ให้เนื้อหาชน Bottom Nav -->
+        <div style="height: 4.5rem;"></div>
+      </div>
+    </main>
+
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
+         1) แดชบอร์ด 2) เปิดบิล 3) งานซ่อม 4) รถรับซื้อ 5) สต๊อก 6) เงินเข้าออก
+    ============================================================ -->
+    <nav
+      class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom"
+    >
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col">
+            <a href="dashboard.html" class="bm-bottom-nav-link">
+              <i class="bi bi-speedometer2 d-block"></i>
+              <span>แดชบอร์ด</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="open-bill.html" class="bm-bottom-nav-link">
+              <i class="bi bi-receipt-cutoff d-block"></i>
+              <span>เปิดบิล</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="jobs.html" class="bm-bottom-nav-link">
+              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <span>งานซ่อม</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="vehicles.html" class="bm-bottom-nav-link">
+              <i class="bi bi-truck-front d-block"></i>
+              <span>รถรับซื้อ</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="stock.html" class="bm-bottom-nav-link">
+              <i class="bi bi-box-seam d-block"></i>
+              <span>สต๊อก</span>
+            </a>
+          </div>
+          <div class="col">
+            <a href="finance.html" class="bm-bottom-nav-link">
+              <i class="bi bi-cash-coin d-block"></i>
+              <span>เงินเข้าออก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===========================================================
+         Modal เพิ่ม/แก้ไขรายการราคา
+         ใช้สำหรับเพิ่มอะไหล่/บริการใหม่ และแก้ไขของเดิม (เฉพาะ admin)
+    ============================================================ -->
+    <div
+      class="modal fade"
+      id="priceItemModal"
+      tabindex="-1"
+      aria-labelledby="priceItemModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-semibold" id="priceItemModalLabel">
+              เพิ่มรายการราคา
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="ปิด"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- ฟอร์มเพิ่ม/แก้ไขราคา -->
+            <form id="priceItemForm">
+              <!-- hidden id สำหรับโหมดแก้ไข -->
+              <input type="hidden" id="priceItemId" />
+
+              <div class="row g-3">
+                <!-- ประเภท + หมวด -->
+                <div class="col-12 col-md-4">
+                  <label for="modalKind" class="form-label small mb-1">
+                    ประเภท <span class="text-danger">*</span>
+                  </label>
+                  <select
+                    id="modalKind"
+                    class="form-select form-select-sm"
+                    required
+                  >
+                    <option value="part">อะไหล่</option>
+                    <option value="service">บริการซ่อม</option>
+                    <option value="combo">ชุดงาน + อะไหล่</option>
+                  </select>
+                  <div class="small text-muted mt-1">
+                    ใช้เพื่อแยกดูในหน้าเช็คราคาเท่านั้น
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <label for="modalCategory" class="form-label small mb-1">
+                    หมวด <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="modalCategory"
+                    class="form-control form-control-sm"
+                    placeholder="เช่น ยาง, โซ่สเตอร์, น้ำมันเครื่อง"
+                    required
+                  />
+                </div>
+                <div class="col-12 col-md-4">
+                  <label for="modalCode" class="form-label small mb-1">
+                    รหัส (ถ้ามี)
+                  </label>
+                  <input
+                    type="text"
+                    id="modalCode"
+                    class="form-control form-control-sm"
+                    placeholder="ใช้รหัสภายในร้าน / รหัสผู้ขาย"
+                  />
+                </div>
+
+                <!-- ชื่อ + รุ่นรถ -->
+                <div class="col-12 col-md-6">
+                  <label for="modalName" class="form-label small mb-1">
+                    ชื่อรายการ <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="modalName"
+                    class="form-control form-control-sm"
+                    placeholder="เช่น ยางนอก 12 นิ้ว, เปลี่ยนน้ำมันเครื่อง"
+                    required
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="modalModel" class="form-label small mb-1">
+                    รุ่นรถ / รายละเอียดเพิ่มเติม
+                  </label>
+                  <input
+                    type="text"
+                    id="modalModel"
+                    class="form-control form-control-sm"
+                    placeholder="เช่น Wave, Click, NMax หรือหมายเหตุอื่น ๆ"
+                  />
+                </div>
+
+                <!-- หน่วย + ราคาต่าง ๆ -->
+                <div class="col-6 col-md-3">
+                  <label for="modalUnit" class="form-label small mb-1">
+                    หน่วย <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="modalUnit"
+                    class="form-control form-control-sm"
+                    placeholder="เช่น ชิ้น, คัน, ล้อ, ชุด"
+                    value="ชิ้น"
+                    required
+                  />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="modalCostPrice" class="form-label small mb-1">
+                    ราคาทุน (ราคาส่ง)
+                  </label>
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      id="modalCostPrice"
+                      class="form-control"
+                      placeholder="0.00"
+                    />
+                    <span class="input-group-text">฿</span>
+                  </div>
+                  <div class="small text-muted mt-1">
+                    ราคาที่ร้านซื้อเข้ามา (ส่ง/ยกกล่อง)
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="modalSellPrice" class="form-label small mb-1">
+                    ราคาขาย / ราคาเปลี่ยน
+                  </label>
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      id="modalSellPrice"
+                      class="form-control"
+                      placeholder="0.00"
+                    />
+                    <span class="input-group-text">฿</span>
+                  </div>
+                  <div class="small text-muted mt-1">
+                    ราคาให้ลูกค้า เมื่อใช้อะไหล่ของร้าน (รวมของ+ค่าแรงได้)
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <label for="modalLaborPrice" class="form-label small mb-1">
+                    ค่าแรง (ลูกค้านำอะไหล่มาเอง)
+                  </label>
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      id="modalLaborPrice"
+                      class="form-control"
+                      placeholder="0.00"
+                    />
+                    <span class="input-group-text">฿</span>
+                  </div>
+                  <div class="small text-muted mt-1">
+                    ใช้เวลาลูกค้าซื้ออะไหล่มาเอง คิดเฉพาะค่าแรง
+                  </div>
+                </div>
+
+                <!-- หมายเหตุ -->
+                <div class="col-12">
+                  <label for="modalNote" class="form-label small mb-1">
+                    หมายเหตุ (ถ้ามี)
+                  </label>
+                  <textarea
+                    id="modalNote"
+                    rows="2"
+                    class="form-control form-control-sm"
+                    placeholder="ใส่รายละเอียดเพิ่มเติม เช่น ราคาเปลี่ยนข้างเดียว/คู่ ขนาดพิเศษ ฯลฯ"
+                  ></textarea>
+                </div>
+
+                <!-- เตือนเรื่องสิทธิ์ -->
+                <div class="col-12">
+                  <div class="alert alert-warning py-2 px-3 small mb-0">
+                    การเพิ่ม/แก้ไขราคานี้จะใช้เป็นข้อมูลอ้างอิงทั้งอู่
+                    กรุณาตรวจสอบตัวเลขให้ถูกต้องก่อนกดบันทึก
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div
+            class="modal-footer d-flex justify-content-between align-items-center"
+          >
+            <div class="small text-muted">
+              <span id="modalAuditLabel">–</span>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                data-bs-dismiss="modal"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                id="savePriceItemBtn"
+              >
+                บันทึกข้อมูล
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
+    <div
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="mainToast"
+        class="toast align-items-center text-bg-primary border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-delay="4000"
+      >
+        <div class="d-flex">
+          <div class="toast-body" id="mainToastBody">
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="ปิด"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- ===========================================================
+         สคริปต์หลักของหน้า price-check.html (ใช้ ES Modules)
+         - ตรวจสอบ auth
+         - โหลด/ค้น/กรอง priceItems จาก Firestore
+         - เพิ่ม/แก้ไขรายการราคา (เฉพาะ admin)
+    ============================================================ -->
+    <script type="module">
+      // ============================================================
+      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+      import {
+        getFirestore,
+        collection,
+        doc,
+        addDoc,
+        setDoc,
+        getDoc,
+        getDocs,
+        updateDoc,
+        query,
+        where,
+        orderBy,
+        limit,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      // ============================================================
+      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ============================================================
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // ============================================================
+      // DOM references
+      // ============================================================
+      const bodyEl = document.body;
+
+      // Topbar
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const userDisplayNameText = document.getElementById("userDisplayNameText");
+      const userRoleText = document.getElementById("userRoleText");
+      const userAvatarInitial = document.getElementById("userAvatarInitial");
+      const settingsMenuItem = document.getElementById("settingsMenuItem");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      // Header/Filter
+      const priceCheckBranchLabel = document.getElementById(
+        "priceCheckBranchLabel"
+      );
+      const priceSearchInput = document.getElementById("priceSearchInput");
+      const priceTypeFilter = document.getElementById("priceTypeFilter");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const priceReloadBtn = document.getElementById("priceReloadBtn");
+      const reloadStatusLabel = document.getElementById("reloadStatusLabel");
+      const totalItemCountEl = document.getElementById("totalItemCount");
+      const lastUpdatedLabel = document.getElementById("lastUpdatedLabel");
+
+      // Table
+      const priceItemsTbody = document.getElementById("priceItemsTbody");
+
+      // Modal + ฟอร์ม
+      const priceItemModalEl = document.getElementById("priceItemModal");
+      const priceItemModal = new bootstrap.Modal(priceItemModalEl);
+      const priceItemModalLabel = document.getElementById("priceItemModalLabel");
+      const priceItemForm = document.getElementById("priceItemForm");
+
+      const priceItemIdInput = document.getElementById("priceItemId");
+      const modalKind = document.getElementById("modalKind");
+      const modalCategory = document.getElementById("modalCategory");
+      const modalCode = document.getElementById("modalCode");
+      const modalName = document.getElementById("modalName");
+      const modalModel = document.getElementById("modalModel");
+      const modalUnit = document.getElementById("modalUnit");
+      const modalCostPrice = document.getElementById("modalCostPrice");
+      const modalSellPrice = document.getElementById("modalSellPrice");
+      const modalLaborPrice = document.getElementById("modalLaborPrice");
+      const modalNote = document.getElementById("modalNote");
+      const modalAuditLabel = document.getElementById("modalAuditLabel");
+
+      const openAddPriceModalBtn = document.getElementById(
+        "openAddPriceModalBtn"
+      );
+      const savePriceItemBtn = document.getElementById("savePriceItemBtn");
+
+      // Toast
+      const mainToastEl = document.getElementById("mainToast");
+      const mainToastBody = document.getElementById("mainToastBody");
+      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+
+      // ============================================================
+      // ตัวแปรสถานะในหน้า
+      // ============================================================
+      let allPriceItems = []; // เก็บรายการทั้งหมดจาก Firestore
+      let currentUserProfile = null; // ข้อมูล users/{uid}
+      let currentUserAuth = null; // object user จาก auth
+      let isReloading = false;
+
+      // ประเภท (kind) แบบ label ภาษาไทย
+      const KIND_LABELS = {
+        part: "อะไหล่",
+        service: "บริการซ่อม",
+        combo: "ชุดงาน + อะไหล่",
+      };
+
+      // ============================================================
+      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // ============================================================
+      function showToast(message, variant = "primary") {
+        if (!mainToastEl || !mainToastBody) return;
+        mainToastEl.className =
+          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastBody.textContent = message;
+        mainToast.show();
+      }
+
+      // ฟังก์ชันช่วย: จัดรูปแบบตัวเลข
+      function formatNumber(value) {
+        const num = typeof value === "number" ? value : Number(value) || 0;
+        return num.toLocaleString("th-TH", {
+          maximumFractionDigits: 2,
+        });
+      }
+
+      // ฟังก์ชันช่วย: escape HTML ในข้อความ
+      function escapeHtml(str) {
+        if (str === null || str === undefined) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // ฟังก์ชันช่วย: วันที่+เวลาแบบไทย
+      function formatDateTimeThai(date) {
+        if (!date) return "-";
+        const thaiMonths = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const d = date;
+        const year = d.getFullYear() + 543;
+        const month = thaiMonths[d.getMonth()];
+        const day = d.getDate();
+        const hh = String(d.getHours()).padStart(2, "0");
+        const mm = String(d.getMinutes()).padStart(2, "0");
+        return `${day} ${month} ${year} ${hh}:${mm} น.`;
+      }
+
+      // ============================================================
+      // ธีม Light / Dark
+      // ============================================================
+      function applyTheme(theme) {
+        const normalized = theme === "dark" ? "dark" : "light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-" + normalized);
+
+        const icon = themeToggleBtn?.querySelector("i");
+        if (icon) {
+          icon.classList.toggle("bi-sun", normalized === "dark");
+          icon.classList.toggle("bi-moon", normalized === "light");
+        }
+      }
+
+      function saveThemeForUser(uid, theme) {
+        if (!uid) return;
+        try {
+          localStorage.setItem("bm-theme-" + uid, theme);
+        } catch (e) {
+          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+        }
+      }
+
+      function readThemeForUser(uid, fallbackTheme) {
+        if (!uid) return fallbackTheme || "light";
+        try {
+          const stored = localStorage.getItem("bm-theme-" + uid);
+          return stored || fallbackTheme || "light";
+        } catch (e) {
+          return fallbackTheme || "light";
+        }
+      }
+
+      // ============================================================
+      // ฟังก์ชัน: สร้าง/อ่านข้อมูลผู้ใช้ใน collection users
+      // ============================================================
+      async function ensureUserProfile(user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists()) {
+          return { id: snap.id, ...snap.data() };
+        }
+
+        // ยังไม่มีเอกสารของ user นี้ → เช็คว่ามี user คนอื่นในระบบไหม
+        const usersCol = collection(db, "users");
+        const q = query(usersCol, limit(1));
+        const existingSnap = await getDocs(q);
+
+        const isFirstUser = existingSnap.empty;
+        const role = isFirstUser ? "admin" : "staff";
+
+        const defaultDisplayName =
+          user.displayName ||
+          (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
+
+        const newUserData = {
+          displayName: defaultDisplayName,
+          role,
+          createdAt: serverTimestamp(),
+          branchId: null,
+          theme: "light",
+          disabled: false,
+        };
+
+        await setDoc(userRef, newUserData);
+        return { id: user.uid, ...newUserData };
+      }
+
+      // ============================================================
+      // โหลดรายการ priceItems จาก Firestore
+      //
+      // โครง collection: priceItems
+      // field ที่ใช้จริง:
+      // - code: string          รหัสภายในร้าน/จากผู้ขาย (optional)
+      // - name: string          ชื่อรายการ (จำเป็น)
+      // - category: string      หมวด เช่น ยาง, โซ่สเตอร์, น้ำมันเครื่อง
+      // - kind: string          "part" | "service" | "combo"
+      // - modelInfo: string     รุ่นรถ / รายละเอียด
+      // - unit: string          หน่วยเช่น ชิ้น, คัน, ล้อ
+      // - costPrice: number     ราคาทุน (ราคาส่ง)
+      // - sellPrice: number     ราคาขาย/ราคาเปลี่ยน (ใช้อะไหล่ร้าน)
+      // - laborPrice: number    ค่าแรงเมื่อลูกค้านำอะไหล่มาเอง
+      // - note: string          หมายเหตุเพิ่มเติม
+      // - branchId: string|null สาขา (null = ทุกสาขา)
+      // - isDeleted: boolean    ซ่อน/ลบแบบ soft delete
+      // - createdAt: Timestamp
+      // - updatedAt: Timestamp
+      // - createdBy: string     uid
+      // - createdByName: string
+      // ============================================================
+      async function loadPriceItems(userProfile) {
+        allPriceItems = [];
+        if (totalItemCountEl) totalItemCountEl.textContent = "0";
+        if (priceItemsTbody) {
+          priceItemsTbody.innerHTML = `
+            <tr>
+              <td colspan="9" class="text-center small text-muted">
+                กำลังโหลดข้อมูลราคา...
+              </td>
+            </tr>
+          `;
+        }
+
+        const constraints = [where("isDeleted", "==", false)];
+        if (userProfile.branchId) {
+          constraints.push(where("branchId", "==", userProfile.branchId));
+        }
+
+        try {
+          const priceQuery = query(
+            collection(db, "priceItems"),
+            ...constraints,
+            orderBy("category"),
+            orderBy("name")
+          );
+
+          const snap = await getDocs(priceQuery);
+
+          let lastUpdated = null;
+          const categoriesSet = new Set();
+
+          snap.forEach((docSnap) => {
+            const data = docSnap.data();
+
+            const updatedAt =
+              data.updatedAt && data.updatedAt.toDate
+                ? data.updatedAt.toDate()
+                : data.createdAt && data.createdAt.toDate
+                ? data.createdAt.toDate()
+                : null;
+
+            const item = {
+              id: docSnap.id,
+              code: data.code || "",
+              name: data.name || "-",
+              category: data.category || "-",
+              kind: data.kind || "part",
+              modelInfo: data.modelInfo || data.model || "",
+              unit: data.unit || "ชิ้น",
+              costPrice: Number(data.costPrice) || 0,
+              sellPrice: Number(data.sellPrice) || 0,
+              laborPrice: Number(data.laborPrice) || 0,
+              note: data.note || "",
+              branchId: data.branchId || null,
+              createdBy: data.createdBy || "",
+              createdByName: data.createdByName || "",
+              createdAt:
+                data.createdAt && data.createdAt.toDate
+                  ? data.createdAt.toDate()
+                  : null,
+              updatedAt,
+            };
+
+            allPriceItems.push(item);
+            categoriesSet.add(item.category);
+
+            if (updatedAt) {
+              if (!lastUpdated || updatedAt > lastUpdated) {
+                lastUpdated = updatedAt;
+              }
+            }
+          });
+
+          // อัปเดต dropdown หมวด
+          updateCategoryFilterOptions(categoriesSet);
+
+          // แสดงผลตารางครั้งแรก (ไม่มีคำค้น)
+          renderPriceTable("", priceTypeFilter.value, categoryFilter.value);
+
+          if (lastUpdatedLabel) {
+            lastUpdatedLabel.textContent = lastUpdated
+              ? formatDateTimeThai(lastUpdated)
+              : "ยังไม่เคยบันทึกเวลาปรับราคา";
+          }
+
+          if (reloadStatusLabel && isReloading) {
+            reloadStatusLabel.textContent =
+              "ดึงข้อมูลสำเร็จแล้ว (" +
+              formatDateTimeThai(new Date()) +
+              ")";
+          }
+        } catch (error) {
+          console.error("โหลด priceItems ไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลราคาได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+
+          if (priceItemsTbody) {
+            priceItemsTbody.innerHTML = `
+              <tr>
+                <td colspan="9" class="text-center small text-danger">
+                  ไม่สามารถโหลดข้อมูลราคาได้
+                </td>
+              </tr>
+            `;
+          }
+        }
+      }
+
+      // อัปเดตตัวเลือกหมวดใน dropdown จากข้อมูลจริง
+      function updateCategoryFilterOptions(categoriesSet) {
+        if (!categoryFilter) return;
+
+        // เก็บค่าที่เลือกอยู่เดิม
+        const prevValue = categoryFilter.value || "all";
+
+        categoryFilter.innerHTML = "";
+        const optAll = document.createElement("option");
+        optAll.value = "all";
+        optAll.textContent = "ทุกหมวด";
+        categoryFilter.appendChild(optAll);
+
+        const sortedCategories = Array.from(categoriesSet).sort((a, b) =>
+          a.localeCompare(b, "th", { sensitivity: "base" })
+        );
+        sortedCategories.forEach((cat) => {
+          const opt = document.createElement("option");
+          opt.value = cat;
+          opt.textContent = cat;
+          categoryFilter.appendChild(opt);
+        });
+
+        if (sortedCategories.includes(prevValue)) {
+          categoryFilter.value = prevValue;
+        } else {
+          categoryFilter.value = "all";
+        }
+      }
+
+      // แสดงผลตารางจาก allPriceItems ตาม search + filter
+      function renderPriceTable(searchTerm, filterKind, filterCategory) {
+        if (!priceItemsTbody) return;
+
+        const term = (searchTerm || "").trim().toLowerCase();
+        const kindFilter = filterKind || "all";
+        const catFilter = filterCategory || "all";
+
+        let filtered = allPriceItems.slice();
+
+        if (term) {
+          filtered = filtered.filter((item) => {
+            const haystack = (
+              item.name +
+              " " +
+              item.code +
+              " " +
+              item.category +
+              " " +
+              item.modelInfo +
+              " " +
+              item.unit
+            )
+              .toLowerCase()
+              .normalize("NFC");
+            return haystack.includes(term);
+          });
+        }
+
+        if (kindFilter !== "all") {
+          filtered = filtered.filter((item) => item.kind === kindFilter);
+        }
+
+        if (catFilter !== "all") {
+          filtered = filtered.filter((item) => item.category === catFilter);
+        }
+
+        priceItemsTbody.innerHTML = "";
+
+        if (filtered.length === 0) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td colspan="9" class="text-center small text-muted">
+              ไม่มีรายการราคาที่ตรงกับเงื่อนไขค้นหา/ตัวกรองในขณะนี้
+            </td>
+          `;
+          priceItemsTbody.appendChild(tr);
+        } else {
+          filtered.forEach((item) => {
+            const tr = document.createElement("tr");
+            const canEdit = currentUserProfile?.role === "admin";
+
+            const kindLabel = KIND_LABELS[item.kind] || "-";
+
+            const profitApprox =
+              item.sellPrice > 0 && item.costPrice > 0
+                ? item.sellPrice - item.costPrice
+                : null;
+
+            const codeText = item.code ? escapeHtml(item.code) : "-";
+
+            tr.innerHTML = `
+              <td class="small text-nowrap">${codeText}</td>
+              <td class="small fw-semibold">
+                ${escapeHtml(item.name)}
+                ${
+                  item.note
+                    ? `<div class="text-muted small">${escapeHtml(
+                        item.note
+                      )}</div>`
+                    : ""
+                }
+              </td>
+              <td class="small">
+                <div>${escapeHtml(item.category)}</div>
+                <div class="small text-muted">${escapeHtml(kindLabel)}</div>
+              </td>
+              <td class="small">
+                ${
+                  item.modelInfo
+                    ? escapeHtml(item.modelInfo)
+                    : '<span class="text-muted">-</span>'
+                }
+              </td>
+              <td class="small text-end">
+                ${
+                  item.costPrice > 0
+                    ? formatNumber(item.costPrice) + " ฿"
+                    : '<span class="text-muted">-</span>'
+                }
+              </td>
+              <td class="small text-end">
+                ${
+                  item.sellPrice > 0
+                    ? formatNumber(item.sellPrice) + " ฿"
+                    : '<span class="text-muted">-</span>'
+                }
+                ${
+                  profitApprox !== null
+                    ? `<div class="small text-muted">กำไรคร่าว ๆ ~ ${formatNumber(
+                        profitApprox
+                      )} ฿</div>`
+                    : ""
+                }
+              </td>
+              <td class="small text-end">
+                ${
+                  item.laborPrice > 0
+                    ? formatNumber(item.laborPrice) + " ฿"
+                    : '<span class="text-muted">-</span>'
+                }
+              </td>
+              <td class="small text-nowrap">
+                ${escapeHtml(item.unit || "ชิ้น")}
+              </td>
+              <td class="small text-end">
+                ${
+                  canEdit
+                    ? `<button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm"
+                        data-action="edit-item"
+                        data-id="${item.id}"
+                      >
+                        แก้ไข
+                      </button>`
+                    : `<span class="text-muted small">อ่านอย่างเดียว</span>`
+                }
+              </td>
+            `;
+            priceItemsTbody.appendChild(tr);
+          });
+        }
+
+        if (totalItemCountEl) {
+          totalItemCountEl.textContent = String(filtered.length);
+        }
+      }
+
+      // ============================================================
+      // รีโหลดข้อมูล priceItems แบบ manual
+      // ============================================================
+      async function reloadPriceItems() {
+        if (!currentUserProfile) return;
+        if (isReloading) return;
+        isReloading = true;
+
+        try {
+          if (priceReloadBtn) priceReloadBtn.disabled = true;
+          if (reloadStatusLabel) {
+            reloadStatusLabel.textContent = "กำลังดึงข้อมูลล่าสุด...";
+          }
+
+          await loadPriceItems(currentUserProfile);
+        } catch (error) {
+          console.error("รีโหลดราคาไม่สำเร็จ:", error);
+          if (reloadStatusLabel) {
+            reloadStatusLabel.textContent =
+              "รีโหลดไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
+          }
+          showToast(
+            "ไม่สามารถดึงข้อมูลล่าสุดได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          isReloading = false;
+          if (priceReloadBtn) priceReloadBtn.disabled = false;
+        }
+      }
+
+      // ============================================================
+      // Modal: เปิด/รีเซ็ต/โหลดข้อมูลเดิม
+      // ============================================================
+      function resetPriceItemForm() {
+        if (!priceItemForm) return;
+        priceItemForm.reset();
+        priceItemIdInput.value = "";
+        modalKind.value = "part";
+        modalUnit.value = "ชิ้น";
+        modalAuditLabel.textContent = "–";
+      }
+
+      function openAddPriceModal() {
+        if (!currentUserProfile || currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์เพิ่ม/แก้ไขรายการราคา", "warning");
+          return;
+        }
+        resetPriceItemForm();
+        priceItemModalLabel.textContent = "เพิ่มรายการราคาใหม่";
+        modalAuditLabel.textContent = "จะบันทึกในชื่อ: " + (currentUserProfile.displayName || "-");
+        priceItemModal.show();
+      }
+
+      function openEditPriceModal(itemId) {
+        if (!currentUserProfile || currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์แก้ไขรายการราคา", "warning");
+          return;
+        }
+
+        const item = allPriceItems.find((p) => p.id === itemId);
+        if (!item) {
+          showToast("ไม่พบรายการราคาที่เลือก", "danger");
+          return;
+        }
+
+        resetPriceItemForm();
+        priceItemModalLabel.textContent = "แก้ไขรายการราคา";
+
+        priceItemIdInput.value = item.id;
+        modalKind.value = item.kind || "part";
+        modalCategory.value = item.category || "";
+        modalCode.value = item.code || "";
+        modalName.value = item.name || "";
+        modalModel.value = item.modelInfo || "";
+        modalUnit.value = item.unit || "ชิ้น";
+        modalCostPrice.value =
+          item.costPrice && item.costPrice > 0 ? item.costPrice : "";
+        modalSellPrice.value =
+          item.sellPrice && item.sellPrice > 0 ? item.sellPrice : "";
+        modalLaborPrice.value =
+          item.laborPrice && item.laborPrice > 0 ? item.laborPrice : "";
+        modalNote.value = item.note || "";
+
+        const auditParts = [];
+        if (item.createdByName) {
+          auditParts.push("สร้างโดย: " + item.createdByName);
+        }
+        if (item.createdAt) {
+          auditParts.push(
+            "เมื่อ: " + formatDateTimeThai(item.createdAt)
+          );
+        }
+        if (item.updatedAt) {
+          auditParts.push(
+            "ปรับล่าสุด: " + formatDateTimeThai(item.updatedAt)
+          );
+        }
+
+        modalAuditLabel.textContent =
+          auditParts.length > 0 ? auditParts.join(" / ") : "–";
+
+        priceItemModal.show();
+      }
+
+      // ============================================================
+      // บันทึกฟอร์มเพิ่ม/แก้ไข priceItem ลง Firestore
+      // ============================================================
+      async function savePriceItem() {
+        if (!currentUserProfile || currentUserProfile.role !== "admin") {
+          showToast("คุณไม่มีสิทธิ์ทำรายการนี้", "warning");
+          return;
+        }
+
+        if (!priceItemForm.reportValidity()) {
+          showToast("กรุณากรอกข้อมูลที่จำเป็นให้ครบ", "warning");
+          return;
+        }
+
+        const id = priceItemIdInput.value || null;
+        const kind = modalKind.value || "part";
+        const category = modalCategory.value.trim();
+        const code = modalCode.value.trim();
+        const name = modalName.value.trim();
+        const modelInfo = modalModel.value.trim();
+        const unit = modalUnit.value.trim() || "ชิ้น";
+        const note = modalNote.value.trim();
+
+        const costPriceNum = Number(modalCostPrice.value || 0);
+        const sellPriceNum = Number(modalSellPrice.value || 0);
+        const laborPriceNum = Number(modalLaborPrice.value || 0);
+
+        if (!name) {
+          showToast("กรุณากรอกชื่อรายการ", "warning");
+          return;
+        }
+
+        if (!category) {
+          showToast("กรุณากรอกหมวดของรายการนี้", "warning");
+          return;
+        }
+
+        if (
+          costPriceNum <= 0 &&
+          sellPriceNum <= 0 &&
+          laborPriceNum <= 0
+        ) {
+          showToast(
+            "กรุณากรอกอย่างน้อย 1 ราคาจาก ราคาทุน / ราคาขาย / ค่าแรง",
+            "warning"
+          );
+          return;
+        }
+
+        const now = serverTimestamp();
+        const dataToSave = {
+          code: code || null,
+          name,
+          category,
+          kind,
+          modelInfo: modelInfo || null,
+          unit,
+          costPrice: costPriceNum > 0 ? costPriceNum : null,
+          sellPrice: sellPriceNum > 0 ? sellPriceNum : null,
+          laborPrice: laborPriceNum > 0 ? laborPriceNum : null,
+          note: note || null,
+          branchId: currentUserProfile.branchId || null,
+          isDeleted: false,
+          updatedAt: now,
+        };
+
+        if (!id) {
+          dataToSave.createdAt = now;
+          dataToSave.createdBy = currentUserAuth.uid;
+          dataToSave.createdByName =
+            currentUserProfile.displayName || currentUserAuth.email || "";
+        }
+
+        try {
+          savePriceItemBtn.disabled = true;
+          savePriceItemBtn.textContent = "กำลังบันทึก...";
+
+          if (id) {
+            const ref = doc(db, "priceItems", id);
+            await updateDoc(ref, dataToSave);
+          } else {
+            await addDoc(collection(db, "priceItems"), dataToSave);
+          }
+
+          showToast("บันทึกรายการราคาเรียบร้อยแล้ว", "success");
+          priceItemModal.hide();
+
+          // รีโหลดข้อมูลใหม่หลังบันทึก
+          await reloadPriceItems();
+        } catch (error) {
+          console.error("บันทึกรายการราคาไม่สำเร็จ:", error);
+          showToast(
+            "ไม่สามารถบันทึกข้อมูลราคาได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        } finally {
+          savePriceItemBtn.disabled = false;
+          savePriceItemBtn.textContent = "บันทึกข้อมูล";
+        }
+      }
+
+      // ============================================================
+      // ตั้งค่า Event Listeners ต่าง ๆ
+      // ============================================================
+      function setupEventListeners() {
+        // ปุ่ม Logout
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", async () => {
+            try {
+              await signOut(auth);
+              showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
+              window.location.href = "index.html";
+            } catch (error) {
+              console.error("Logout error:", error);
+              showToast(
+                "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
+                  (error.code || "error") +
+                  ")",
+                "danger"
+              );
+            }
+          });
+        }
+
+        // ปุ่มสลับธีม
+        if (themeToggleBtn) {
+          themeToggleBtn.addEventListener("click", async () => {
+            const currentTheme = bodyEl.classList.contains("bm-theme-dark")
+              ? "dark"
+              : "light";
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            applyTheme(nextTheme);
+            if (currentUserAuth) {
+              saveThemeForUser(currentUserAuth.uid, nextTheme);
+              try {
+                const userRef = doc(db, "users", currentUserAuth.uid);
+                await setDoc(
+                  userRef,
+                  {
+                    theme: nextTheme,
+                  },
+                  { merge: true }
+                );
+              } catch (error) {
+                console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
+              }
+            }
+          });
+        }
+
+        // ปุ่มเปิด Modal เพิ่มรายการ
+        if (openAddPriceModalBtn) {
+          openAddPriceModalBtn.addEventListener("click", () => {
+            openAddPriceModal();
+          });
+        }
+
+        // ปุ่มบันทึกใน Modal
+        if (savePriceItemBtn) {
+          savePriceItemBtn.addEventListener("click", () => {
+            savePriceItem();
+          });
+        }
+
+        // ปุ่มรีโหลดข้อมูลราคา
+        if (priceReloadBtn) {
+          priceReloadBtn.addEventListener("click", () => {
+            reloadPriceItems();
+          });
+        }
+
+        // ค้นหา + ฟิลเตอร์
+        if (priceSearchInput) {
+          priceSearchInput.addEventListener("input", (e) => {
+            renderPriceTable(
+              e.target.value || "",
+              priceTypeFilter?.value || "all",
+              categoryFilter?.value || "all"
+            );
+          });
+        }
+
+        if (priceTypeFilter) {
+          priceTypeFilter.addEventListener("change", (e) => {
+            renderPriceTable(
+              priceSearchInput?.value || "",
+              e.target.value || "all",
+              categoryFilter?.value || "all"
+            );
+          });
+        }
+
+        if (categoryFilter) {
+          categoryFilter.addEventListener("change", (e) => {
+            renderPriceTable(
+              priceSearchInput?.value || "",
+              priceTypeFilter?.value || "all",
+              e.target.value || "all"
+            );
+          });
+        }
+
+        // คลิกปุ่มแก้ไขในตาราง (ใช้ event delegation)
+        if (priceItemsTbody) {
+          priceItemsTbody.addEventListener("click", (e) => {
+            const btn = e.target.closest("button[data-action='edit-item']");
+            if (!btn) return;
+            const id = btn.getAttribute("data-id");
+            if (!id) return;
+            openEditPriceModal(id);
+          });
+        }
+      }
+
+      // ============================================================
+      // Auth Guard ของหน้าเช็คราคา
+      // - ถ้าไม่ได้ล็อกอิน → redirect ไปหน้า index.html
+      // - ถ้าล็อกอินแล้ว → โหลด users/{uid} เพื่อตรวจสอบ role/theme/disabled
+      // ============================================================
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        currentUserAuth = user;
+
+        try {
+          // โหลดหรือสร้างโปรไฟล์ผู้ใช้ใน collection users
+          const userProfile = await ensureUserProfile(user);
+          currentUserProfile = userProfile;
+
+          // ถ้า disabled ให้บังคับออกจากระบบ
+          if (userProfile.disabled === true) {
+            await signOut(auth);
+            showToast(
+              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
+              "danger"
+            );
+            window.location.href = "index.html";
+            return;
+          }
+
+          // อัปเดต Topbar
+          if (userDisplayNameText) {
+            userDisplayNameText.textContent = userProfile.displayName || "-";
+          }
+          if (userRoleText) {
+            const roleLabel =
+              userProfile.role === "admin"
+                ? "ผู้ดูแลระบบ (Admin)"
+                : "พนักงาน (Staff)";
+            userRoleText.textContent = roleLabel;
+          }
+          if (userAvatarInitial) {
+            const dn = userProfile.displayName || "U";
+            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
+          }
+
+          // แสดงเมนูตั้งค่าระบบเฉพาะ admin
+          if (settingsMenuItem) {
+            if (userProfile.role === "admin") {
+              settingsMenuItem.classList.remove("d-none");
+            } else {
+              settingsMenuItem.classList.add("d-none");
+            }
+          }
+
+          // ถ้าไม่ใช่ admin ซ่อนปุ่มเพิ่มรายการ
+          if (openAddPriceModalBtn) {
+            if (userProfile.role === "admin") {
+              openAddPriceModalBtn.classList.remove("d-none");
+            } else {
+              openAddPriceModalBtn.classList.add("d-none");
+            }
+          }
+
+          // แสดง label สาขา
+          if (priceCheckBranchLabel) {
+            if (userProfile.branchId) {
+              priceCheckBranchLabel.textContent =
+                "ข้อมูลราคาของสาขา: " + userProfile.branchId;
+            } else {
+              priceCheckBranchLabel.textContent = "ข้อมูลราคาทุกสาขา";
+            }
+          }
+
+          // ตั้งค่า Theme
+          const baseTheme = userProfile.theme || "light";
+          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          applyTheme(themeToUse);
+
+          // ตั้งค่า Event handlers
+          setupEventListeners();
+
+          // โหลดข้อมูล priceItems ครั้งแรก (อัตโนมัติ)
+          await loadPriceItems(userProfile);
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในหน้าเช็คราคา:", error);
+          showToast(
+            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือข้อมูลราคาได้ กรุณาลองใหม่อีกครั้ง (" +
+              (error.code || "error") +
+              ")",
+            "danger"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
