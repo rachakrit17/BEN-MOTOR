@@ -651,3 +651,189 @@ body.bm-theme-dark .bm-filter-bar {
   height: 26px;
   font-size: 0.8rem;
 }
+
+/* ============================
+   ปรับหน้าประวัติลูกค้า & รถ ให้ดูอ่านง่ายขึ้น
+   วางต่อท้ายไฟล์ css/style.css ได้เลย
+   (ไม่ไปยุ่งหน้าอื่น เพราะผูกกับ id / class หน้านี้เท่านั้น)
+   ============================ */
+
+/* กล่องข้อความแนะนำตอนเริ่มต้น */
+#initialStateBox .alert {
+  border-radius: 14px;
+  border: 1px solid #bbf7d0;
+  background: #ecfdf3;
+  color: #14532d;
+}
+
+/* การ์ดค้นหา */
+#searchForm .form-control {
+  border-radius: 999px;
+  padding-inline: 1.2rem;
+}
+
+#searchForm .form-control:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 0.15rem rgba(22, 163, 74, 0.15);
+}
+
+#searchBtn {
+  border-radius: 999px;
+  background: #16a34a;
+  border-color: #16a34a;
+  font-weight: 600;
+}
+
+#searchBtn:hover {
+  background: #15803d;
+  border-color: #15803d;
+}
+
+#resetBtn {
+  border-radius: 999px;
+  border-color: #d1d5db;
+  color: #4b5563;
+}
+
+#resetBtn:hover {
+  background: #f3f4f6;
+}
+
+/* การ์ดสรุปโปรไฟล์ลูกค้า */
+#customerSummarySection .card.bm-card-summary {
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg, #ecfdf3, #f9fafb);
+  box-shadow: 0 10px 30px rgba(15, 118, 110, 0.16);
+}
+
+/* วงกลม Avatar ลูกค้า */
+#customerSummarySection .bm-avatar-circle-lg {
+  width: 52px;
+  height: 52px;
+  background: #16a34a;
+  box-shadow: 0 6px 14px rgba(22, 163, 74, 0.35);
+}
+
+/* ระยะห่างระหว่างการ์ดสถิติ 4 ช่อง */
+#customerSummarySection .row.g-3 {
+  --bs-gutter-x: 1.4rem;
+  --bs-gutter-y: 1.4rem;
+}
+
+/* กล่องสรุป 4 ช่อง (จำนวนงาน / ยอดใช้จ่าย / ค่าเฉลี่ย / จำนวนทะเบียน) */
+#customerSummarySection .row.g-3 > .col-6.col-md-3 {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+
+  /* สีพื้นหลังการ์ด */
+  background: #ffffff;
+
+  /* เส้นขอบบาง ๆ สีเทาอ่อน */
+  border: 1px solid #e5e7eb;
+
+  /* เงาจาง ๆ ให้ลอยขึ้นนิดหน่อย */
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.04);
+}
+
+#customerSummarySection .row.g-3 > .col-6.col-md-3 .small.text-muted.mb-1 {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+#customerSummarySection .row.g-3 > .col-6.col-md-3 .h5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+#customerSummarySection .row.g-3 > .col-6.col-md-3 .small.text-muted:last-child {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* แถบ “ผลการค้นหาจาก …” */
+#summarySearchTypeLabel {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+/* ------------------------------------------------
+   ไทม์ไลน์ประวัติการใช้บริการทั้งหมด
+   ------------------------------------------------ */
+
+/* กล่องเมื่อว่าง */
+#historyEmptyBox {
+  border-radius: 14px;
+  border-color: #e5e7eb;
+  background: #f9fafb;
+}
+
+/* รายการใน list-group ให้เป็นการ์ดลอย ๆ */
+#historyTimeline .list-group-item {
+  border: none;
+  margin-bottom: 0.75rem;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+/* ไอคอนด้านซ้ายให้เด่นขึ้นนิดหน่อย */
+#historyTimeline .list-group-item i.bi-wrench-adjustable-circle {
+  font-size: 1.1rem;
+}
+
+#historyTimeline .list-group-item i.bi-truck-front,
+#historyTimeline .list-group-item i.bi-truck-front-fill {
+  font-size: 1.1rem;
+}
+
+/* ยอดเงินในงานซ่อม / ขายรถ */
+#historyTimeline .list-group-item .fw-semibold.text-success {
+  color: #16a34a !important;
+}
+
+/* footer ด้านล่างของแต่ละรายการ (โดย: / บันทึกเมื่อ:) */
+#historyTimeline .list-group-item .d-flex.justify-content-between.align-items-center.mt-2.text-muted {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.45rem;
+  margin-top: 0.55rem;
+  font-size: 0.75rem;
+}
+
+/* ------------------------------------------------
+   สีของ Badge สถานะงานซ่อม (ใช้ class เดิมของคุณ)
+   ------------------------------------------------ */
+#historyTimeline .badge.bg-warning.text-dark {
+  background-color: #facc15 !important;  /* กำลังซ่อม */
+  color: #78350f !important;
+}
+
+#historyTimeline .badge.bg-info.text-dark {
+  background-color: #38bdf8 !important;  /* ซ่อมเสร็จ */
+  color: #0f172a !important;
+}
+
+#historyTimeline .badge.bg-success {
+  background-color: #22c55e !important;  /* รับรถแล้ว / ขายรถ */
+}
+
+/* ------------------------------------------------
+   ส่วนหัวของหน้า + ข้อความย่อย
+   ------------------------------------------------ */
+.bm-main-content h1.h5.fw-semibold {
+  color: #022c22;
+}
+
+.bm-main-content p.small.text-muted {
+  color: #6b7280;
+}
+
+/* ------------------------------------------------
+   ปรับพื้นหลังเบา ๆ เฉพาะส่วนเนื้อหาหลัก (ไม่ยุ่งทั้งหน้า)
+   ------------------------------------------------ */
+.bm-main-content > .container {
+  background: radial-gradient(circle at top, #ecfdf3 0, #f9fafb 55%, #ffffff 100%);
+  border-radius: 24px 24px 0 0;
+  padding-top: 1rem;
+}
