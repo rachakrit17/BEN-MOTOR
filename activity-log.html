@@ -5,17 +5,25 @@
     <title>BEN MOTOR – ประวัติการทำรายการ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <link rel="icon" type="image/x-icon" href="img/icon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
-    <link rel="manifest" href="img/site.webmanifest" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
 
     <link rel="stylesheet" href="css/style.css" />
   </head>
@@ -26,84 +34,33 @@
         <span class="navbar-brand mb-0 h1 fw-bold text-success">
           <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
-
         <div class="d-flex align-items-center gap-2">
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
+            class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
           >
             <i class="bi bi-moon fs-5"></i>
           </button>
-
           <div class="dropdown">
             <button
               class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
             >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
-              <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+               <li><a class="dropdown-item py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i> แดชบอร์ด</a></li>
+               <li><hr class="dropdown-divider" /></li>
+               <li><button class="dropdown-item py-2 text-danger" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
@@ -116,42 +73,57 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-3">
           <div class="mb-3 mb-md-0">
             <h1 class="h5 mb-1 fw-bold text-dark">
-                <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการทำรายการในระบบ
+                <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการทำรายการ (Audit Log)
             </h1>
-            <p class="small text-muted mb-0 ms-1">ตรวจสอบกิจกรรม (Audit Log) ย้อนหลังเพื่อความโปร่งใส</p>
+            <p class="small text-muted mb-0 ms-1">ตรวจสอบกิจกรรมย้อนหลังเพื่อความโปร่งใสและความปลอดภัย</p>
           </div>
-          <div>
-            <button class="btn btn-outline-secondary btn-sm bg-white" type="button" id="refreshLogBtn">
-              <i class="bi bi-arrow-clockwise me-1"></i> รีโหลดข้อมูล
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-success btn-sm bg-white" type="button" id="exportBtn">
+              <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+            </button>
+            <button class="btn btn-primary btn-sm" type="button" id="refreshLogBtn">
+              <i class="bi bi-arrow-clockwise me-1"></i> รีโหลด
             </button>
           </div>
         </div>
 
         <div class="bm-filter-bar mb-3">
-            <div class="row g-2 align-items-center">
-              <div class="col-12 col-md-3">
-                <div class="input-group input-group-sm">
-                    <label class="input-group-text bg-transparent border-end-0 text-muted" for="refTypeFilter"><i class="bi bi-filter"></i></label>
-                    <select class="form-select border-start-0 ps-0" id="refTypeFilter">
-                        <option value="">ทุกประเภทรายการ</option>
-                        <option value="job">งานซ่อม (Job)</option>
-                        <option value="stock">สต๊อก (Stock)</option>
-                        <option value="vehicle">ซื้อ–ขายรถ (Vehicle)</option>
-                        <option value="transaction">การเงิน (Finance)</option>
-                        <option value="settings">ตั้งค่า (Settings)</option>
-                    </select>
-                </div>
+            <div class="row g-2">
+              <div class="col-6 col-md-2">
+                <label class="form-label text-muted small mb-1">ประเภท</label>
+                <select class="form-select form-select-sm" id="refTypeFilter">
+                    <option value="">ทั้งหมด</option>
+                    <option value="job">งานซ่อม</option>
+                    <option value="stock">สต๊อก</option>
+                    <option value="vehicle">ซื้อ-ขายรถ</option>
+                    <option value="transaction">การเงิน</option>
+                    <option value="settings">ตั้งค่า/ระบบ</option>
+                </select>
               </div>
-              <div class="col-12 col-md-5">
+
+              <div class="col-6 col-md-4">
+                 <label class="form-label text-muted small mb-1">ช่วงวันที่</label>
+                 <div class="input-group input-group-sm">
+                    <input type="date" class="form-control" id="startDateInput">
+                    <span class="input-group-text bg-light text-muted border-start-0 border-end-0">ถึง</span>
+                    <input type="date" class="form-control" id="endDateInput">
+                 </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label text-muted small mb-1">ค้นหา</label>
                 <div class="input-group input-group-sm">
                     <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control border-start-0 ps-1" id="searchTextInput" placeholder="ค้นหา: ทะเบียนรถ, ชื่อลูกค้า, หรือเลขบิล..." />
+                    <input type="text" class="form-control border-start-0 ps-1" id="searchTextInput" placeholder="ชื่อ, ทะเบียนรถ, เลขบิล..." />
                 </div>
               </div>
-              <div class="col-12 col-md-4 text-md-end">
-                <span class="badge bg-secondary bg-opacity-10 text-secondary fw-normal px-3 py-2 rounded-pill" id="logSummaryText">
-                    <i class="bi bi-check-circle me-1"></i> ระบบพร้อมใช้งาน
-                </span>
+
+              <div class="col-12 col-md-2 d-flex align-items-end justify-content-md-end">
+                 <div class="w-100 text-end">
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary fw-normal px-3 py-2 rounded-pill w-100" id="logSummaryText">
+                        พร้อมใช้งาน
+                    </span>
+                 </div>
               </div>
             </div>
         </div>
@@ -162,11 +134,11 @@
               <table class="table table-hover mb-0 align-middle text-nowrap">
                 <thead class="table-light text-muted small text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">
                   <tr>
-                    <th class="ps-3 py-3" style="width: 160px;">วัน-เวลา</th>
-                    <th class="py-3" style="width: 160px;">ผู้ทำรายการ</th>
+                    <th class="ps-3 py-3" style="width: 150px;">วัน-เวลา</th>
+                    <th class="py-3" style="width: 180px;">ผู้ทำรายการ</th>
                     <th class="py-3" style="width: 140px;">กิจกรรม</th>
                     <th class="py-3">รายละเอียด</th>
-                    <th class="pe-3 py-3 text-end" style="width: 120px;">Ref ID</th>
+                    <th class="pe-3 py-3 text-end" style="width: 100px;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="activityTableBody" class="small text-secondary">
@@ -205,7 +177,7 @@
         </div>
     </nav>
 
-    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080">
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090">
       <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
         <div class="d-flex">
           <div class="toast-body" id="mainToastBody"></div>
@@ -214,15 +186,63 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <div class="modal fade" id="logDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold text-primary" id="logDetailTitle">รายละเอียด Log</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="p-3 bg-light rounded border mb-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small text-muted">ID: <span id="mdLogId" class="font-monospace user-select-all"></span></span>
+                    <span class="badge bg-secondary" id="mdLogType">-</span>
+                </div>
+                <div class="h6 mb-0 text-dark" id="mdLogMessage">-</div>
+            </div>
+            
+            <h6 class="small fw-bold text-muted mb-2">ข้อมูลบันทึก (Payload)</h6>
+            <div class="bg-dark text-light p-3 rounded overflow-auto" style="max-height: 250px;">
+                <pre class="mb-0 small" id="mdLogJson" style="font-size: 0.75rem;">-</pre>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+             <button type="button" class="btn btn-light rounded-pill w-100" data-bs-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script type="module">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<script type="module">
+      // ============================================================
+      // Import Firebase SDK
+      // ============================================================
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-      import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy, limit, startAfter, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        doc,
+        getDoc,
+        getDocs,
+        query,
+        orderBy,
+        limit,
+        startAfter,
+        where,
+        updateDoc
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      // Config
+      // ============================================================
+      // Firebase Configuration
+      // ============================================================
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -237,7 +257,9 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
+      // ============================================================
       // DOM Elements
+      // ============================================================
       const bodyEl = document.body;
       const themeToggleBtn = document.getElementById("themeToggleBtn");
       const userDisplayNameText = document.getElementById("userDisplayNameText");
@@ -246,39 +268,56 @@
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
+      // Filter & Table Elements
       const activityTableBody = document.getElementById("activityTableBody");
       const loadMoreBtn = document.getElementById("loadMoreBtn");
       const refTypeFilter = document.getElementById("refTypeFilter");
       const searchTextInput = document.getElementById("searchTextInput");
+      const startDateInput = document.getElementById("startDateInput");
+      const endDateInput = document.getElementById("endDateInput");
       const logSummaryText = document.getElementById("logSummaryText");
       const refreshLogBtn = document.getElementById("refreshLogBtn");
+      const exportBtn = document.getElementById("exportBtn");
+
+      // Modal Elements
+      const logDetailModalEl = document.getElementById("logDetailModal");
+      const logDetailModal = new bootstrap.Modal(logDetailModalEl);
+      const mdLogId = document.getElementById("mdLogId");
+      const mdLogType = document.getElementById("mdLogType");
+      const mdLogMessage = document.getElementById("mdLogMessage");
+      const mdLogJson = document.getElementById("mdLogJson");
       
+      // Toast
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
+      // State Variables
       let currentUser = null;
       let lastVisible = null;
       let isLogsLoading = false;
+      let currentLogData = []; // Store currently fetched data for export
       const pageSize = 20;
 
       // ==========================================
-      // Badge Configuration
+      // Badge & Config Map
       // ==========================================
       const LOG_TYPES = {
-        'job_created':       { text: 'เปิดบิลซ่อม', color: 'bg-primary' },
-        'job_updated':       { text: 'อัปเดตงาน',   color: 'bg-info text-dark' },
-        'job_deleted':       { text: 'ลบ/ซ่อนงาน',  color: 'bg-danger' },
-        'stock_in':          { text: 'รับของเข้า',  color: 'bg-success' },
-        'stock_created':     { text: 'เพิ่มสินค้า',  color: 'bg-success' },
-        'stock_updated':     { text: 'แก้ไขสินค้า',  color: 'bg-warning text-dark' },
-        'stock_deleted':     { text: 'ลบสินค้า',    color: 'bg-danger' },
-        'vehicle_buy':       { text: 'รับซื้อรถ',    color: 'bg-primary' },
-        'vehicle_sell':      { text: 'ขายรถออก',   color: 'bg-success' },
-        'transaction_manual':{ text: 'บันทึกเงิน',   color: 'bg-secondary' },
+        'job_created':       { text: 'เปิดบิลซ่อม', icon: 'bi-wrench', color: 'bg-primary' },
+        'job_updated':       { text: 'อัปเดตงาน',   icon: 'bi-pencil', color: 'bg-info text-dark' },
+        'job_deleted':       { text: 'ลบ/ซ่อนงาน',  icon: 'bi-trash', color: 'bg-danger' },
+        'stock_in':          { text: 'รับของเข้า',  icon: 'bi-box-arrow-in-down', color: 'bg-success' },
+        'stock_created':     { text: 'เพิ่มสินค้า',  icon: 'bi-plus-circle', color: 'bg-success' },
+        'stock_updated':     { text: 'แก้ไขสินค้า',  icon: 'bi-pencil-square', color: 'bg-warning text-dark' },
+        'stock_deleted':     { text: 'ลบสินค้า',    icon: 'bi-trash', color: 'bg-danger' },
+        'vehicle_buy':       { text: 'รับซื้อรถ',    icon: 'bi-truck', color: 'bg-info' },
+        'vehicle_sell':      { text: 'ขายรถออก',   icon: 'bi-cash', color: 'bg-success' },
+        'transaction_manual':{ text: 'บันทึกเงิน',   icon: 'bi-wallet2', color: 'bg-secondary' },
       };
 
-      // Helper: Toast
+      // ==========================================
+      // Helper Functions
+      // ==========================================
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className = "toast align-items-center shadow text-bg-" + variant + " border-0";
@@ -286,7 +325,6 @@
         mainToast.show();
       }
 
-      // Helper: Format Date Thai
       function formatDateTimeThai(date) {
         if (!date) return "-";
         const d = date.getDate();
@@ -296,42 +334,43 @@
         return `<div class="d-flex flex-column lh-sm"><span class="fw-semibold text-dark">${d} ${m} ${y}</span><span class="text-muted small" style="font-size: 0.75rem;">${time} น.</span></div>`;
       }
 
-      // Helper: Create Table Row
-      function createRow(data) {
+      function createRow(data, index) {
         const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : null;
-        const typeInfo = LOG_TYPES[data.type] || { text: data.type || 'ทั่วไป', color: 'bg-light text-dark border' };
-        const refIdShort = (data.refId || '').length > 8 ? (data.refId || '').slice(0, 8) + '..' : (data.refId || '-');
+        const typeInfo = LOG_TYPES[data.type] || { text: data.type || 'ทั่วไป', icon: 'bi-circle', color: 'bg-light text-dark border' };
+        
+        // Escape content to prevent XSS
+        const safeMessage = (data.message || '-').replace(/</g, "&lt;").replace(/>/g, "&gt;");
         
         return `
-          <tr class="align-middle">
+          <tr class="align-middle" style="cursor: pointer;" onclick="window.viewLogDetail(${index})">
             <td class="ps-3">${formatDateTimeThai(createdAt)}</td>
             <td>
                 <div class="d-flex align-items-center">
-                    <div class="bm-avatar-circle bg-light text-secondary me-2 d-flex align-items-center justify-content-center small fw-bold" style="width: 24px; height: 24px; font-size: 0.7rem;">
+                    <div class="bm-avatar-circle bg-light text-secondary me-2 d-flex align-items-center justify-content-center small fw-bold" style="width: 28px; height: 28px;">
                         ${(data.createdByName || 'U').charAt(0).toUpperCase()}
                     </div>
-                    <span class="fw-medium text-dark">${data.createdByName || 'ไม่ระบุ'}</span>
+                    <span class="fw-medium text-dark small">${data.createdByName || 'ไม่ระบุ'}</span>
                 </div>
             </td>
             <td>
-                <span class="badge ${typeInfo.color} fw-normal px-2 py-1 rounded-pill bg-opacity-75">
-                    ${typeInfo.text}
+                <span class="badge ${typeInfo.color} fw-normal px-2 py-1 rounded-pill bg-opacity-75 d-inline-flex align-items-center gap-1">
+                    <i class="bi ${typeInfo.icon}"></i> ${typeInfo.text}
                 </span>
             </td>
             <td class="text-wrap" style="min-width: 200px; max-width: 350px;">
-                <span class="d-block lh-sm text-dark">${data.message || '-'}</span>
+                <span class="d-block lh-sm text-dark small">${safeMessage}</span>
             </td>
             <td class="text-end pe-3">
-                <span class="badge bg-light text-secondary border font-monospace fw-normal">
-                   ${refIdShort}
-                </span>
+                <button class="btn btn-sm btn-light text-muted border-0 rounded-circle" type="button" title="ดูรายละเอียด">
+                   <i class="bi bi-eye"></i>
+                </button>
             </td>
           </tr>
         `;
       }
 
       // ==========================================
-      // Load Logs Function
+      // Main Logic: Load Logs
       // ==========================================
       async function loadLogs(reset = false) {
         if (isLogsLoading) return;
@@ -339,9 +378,9 @@
 
         if (reset) {
             lastVisible = null;
+            currentLogData = [];
             activityTableBody.innerHTML = '';
             loadMoreBtn.classList.add('d-none');
-            // แสดง Loading
             activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-primary mb-2"></div><div class="small">กำลังโหลดข้อมูล...</div></td></tr>`;
         } else {
             loadMoreBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> กำลังโหลด...`;
@@ -349,15 +388,30 @@
         }
 
         try {
+            // Build Query
             let constraints = [
                 orderBy("createdAt", "desc"),
                 limit(pageSize)
             ];
 
-            if (refTypeFilter.value) {
-                constraints.unshift(where("refType", "==", refTypeFilter.value));
+            // 1. Date Range Filter
+            if (startDateInput.value) {
+                const start = new Date(startDateInput.value);
+                start.setHours(0,0,0,0);
+                constraints.push(where("createdAt", ">=", start));
+            }
+            if (endDateInput.value) {
+                const end = new Date(endDateInput.value);
+                end.setHours(23,59,59,999);
+                constraints.push(where("createdAt", "<=", end));
             }
 
+            // 2. Type Filter (Warning: Requires Composite Index with Date)
+            if (refTypeFilter.value) {
+                constraints.push(where("refType", "==", refTypeFilter.value));
+            }
+
+            // 3. Pagination
             if (lastVisible) {
                 constraints.push(startAfter(lastVisible));
             }
@@ -365,36 +419,44 @@
             const q = query(collection(db, "activityLogs"), ...constraints);
             const snapshot = await getDocs(q);
 
-            // Clear loading if reset
             if (reset) {
                 activityTableBody.innerHTML = '';
             }
 
             if (snapshot.empty) {
                 if (reset) {
-                    activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-25"></i><span class="small">ไม่พบประวัติการทำรายการ</span></td></tr>`;
+                    activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-25"></i><span class="small">ไม่พบประวัติการทำรายการตามเงื่อนไข</span></td></tr>`;
                 }
                 loadMoreBtn.classList.add('d-none');
             } else {
                 lastVisible = snapshot.docs[snapshot.docs.length - 1];
                 let rowsHtml = '';
                 
-                // Client-side Search Logic
+                // Client-side Search (Simple text match within the fetched batch)
                 const searchText = searchTextInput.value.toLowerCase().trim();
 
                 snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const searchContent = (data.message + " " + data.createdByName + " " + data.type).toLowerCase();
+                    const data = { id: doc.id, ...doc.data() };
+                    
+                    const searchContent = (
+                        (data.message || "") + " " + 
+                        (data.createdByName || "") + " " + 
+                        (data.refId || "") + " " + 
+                        (data.plate || "")
+                    ).toLowerCase();
                     
                     if (!searchText || searchContent.includes(searchText)) {
-                        rowsHtml += createRow(data);
+                        // Global Index for onClick mapping
+                        const globalIndex = currentLogData.length;
+                        currentLogData.push(data);
+                        rowsHtml += createRow(data, globalIndex);
                     }
                 });
 
                 if (rowsHtml) {
                     activityTableBody.insertAdjacentHTML('beforeend', rowsHtml);
                 } else if (reset) {
-                     activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-search fs-4 d-block mb-2"></i>ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+                     activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-search fs-4 d-block mb-2"></i>ไม่พบข้อมูลที่ค้นหาในรอบนี้</td></tr>`;
                 }
                 
                 // Show/Hide Load More
@@ -407,28 +469,88 @@
                 }
             }
             
+            // Update Summary
             if(reset) {
-                logSummaryText.innerHTML = `<i class="bi bi-check-circle me-1"></i> แสดงผลล่าสุด`;
-                logSummaryText.className = "badge bg-success bg-opacity-10 text-success fw-normal px-3 py-2 rounded-pill";
+                const count = currentLogData.length;
+                logSummaryText.innerHTML = count > 0 
+                    ? `<i class="bi bi-check-circle me-1"></i> แสดง ${count} รายการ`
+                    : `พร้อมใช้งาน`;
+                logSummaryText.className = "badge bg-success bg-opacity-10 text-success fw-normal px-3 py-2 rounded-pill w-100";
             }
 
         } catch (error) {
             console.error(error);
-            if (reset) activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4"><i class="bi bi-exclamation-circle me-1"></i> เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>`;
-            showToast("โหลดข้อมูลไม่สำเร็จ: " + error.message, "danger");
+            if (reset) activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4"><i class="bi bi-exclamation-circle me-1"></i> ${error.message.includes("index") ? "ระบบกำลังสร้างดัชนีข้อมูล (รอ 1-2 นาที)" : "โหลดข้อมูลไม่สำเร็จ"}</td></tr>`;
+            showToast("Error: " + error.message, "danger");
         } finally {
             isLogsLoading = false;
         }
       }
 
       // ==========================================
-      // Theme & User Profile
+      // Logic: Modal & Export
+      // ==========================================
+      window.viewLogDetail = function(index) {
+          const data = currentLogData[index];
+          if(!data) return;
+
+          mdLogId.textContent = data.id || '-';
+          const typeInfo = LOG_TYPES[data.type] || { text: data.type, color: 'bg-secondary' };
+          mdLogType.textContent = typeInfo.text;
+          mdLogType.className = "badge " + typeInfo.color;
+          mdLogMessage.textContent = data.message || '-';
+
+          // Pretty Print JSON
+          try {
+             const cleanData = { ...data };
+             delete cleanData.createdAt; // Remove raw timestamp object for readability
+             cleanData.createdAt_formatted = data.createdAt?.toDate ? data.createdAt.toDate().toLocaleString('th-TH') : '-';
+             
+             mdLogJson.textContent = JSON.stringify(cleanData, null, 2);
+          } catch(e) {
+             mdLogJson.textContent = "Error parsing data";
+          }
+
+          logDetailModal.show();
+      };
+
+      function exportToCSV() {
+          if(!currentLogData || currentLogData.length === 0) {
+              showToast("ไม่มีข้อมูลให้ Export", "warning");
+              return;
+          }
+
+          let csvContent = "\uFEFFDate,User,Type,Message,RefID\n"; // Add BOM for Excel Thai support
+
+          currentLogData.forEach(row => {
+              const dateStr = row.createdAt?.toDate ? row.createdAt.toDate().toLocaleString('th-TH').replace(/,/g, ' ') : '-';
+              const user = (row.createdByName || '-').replace(/,/g, ' ');
+              const type = (row.type || '-');
+              const msg = (row.message || '-').replace(/,/g, ' ').replace(/\n/g, ' ');
+              const ref = (row.refId || '-');
+              
+              csvContent += `${dateStr},${user},${type},${msg},${ref}\n`;
+          });
+
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.setAttribute("href", url);
+          link.setAttribute("download", `activity_log_${new Date().toISOString().slice(0,10)}.csv`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+      }
+
+      // ==========================================
+      // Theme & User Logic
       // ==========================================
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
         bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
         bodyEl.classList.add("bm-theme-" + normalized);
-        themeToggleBtn.querySelector("i").className = normalized === "dark" ? "bi bi-sun" : "bi bi-moon";
+        const icon = themeToggleBtn.querySelector("i");
+        if(icon) icon.className = normalized === "dark" ? "bi bi-sun" : "bi bi-moon";
       }
 
       async function loadUserProfile(user) {
@@ -442,9 +564,9 @@
             profile = { displayName: user.displayName || user.email, role: 'staff', theme: 'light' };
         }
 
-        userDisplayNameText.textContent = profile.displayName || user.email;
-        userRoleText.textContent = profile.role === 'admin' ? 'Admin' : 'Staff';
-        userAvatarInitial.textContent = (profile.displayName || 'U').charAt(0).toUpperCase();
+        if(userDisplayNameText) userDisplayNameText.textContent = profile.displayName || user.email;
+        if(userRoleText) userRoleText.textContent = profile.role === 'admin' ? 'Admin' : 'Staff';
+        if(userAvatarInitial) userAvatarInitial.textContent = (profile.displayName || 'U').charAt(0).toUpperCase();
 
         if (settingsMenuItem && profile.role === 'admin') {
             settingsMenuItem.classList.remove('d-none');
@@ -457,30 +579,39 @@
       // ==========================================
       // Event Listeners
       // ==========================================
+      // Refresh when filters change
       refTypeFilter.addEventListener('change', () => loadLogs(true));
-      loadMoreBtn.addEventListener('click', () => loadLogs(false));
-      refreshLogBtn.addEventListener('click', () => loadLogs(true));
+      startDateInput.addEventListener('change', () => loadLogs(true));
+      endDateInput.addEventListener('change', () => loadLogs(true));
       
+      loadMoreBtn.addEventListener('click', () => loadLogs(false));
+      refreshLogBtn.addEventListener('click', () => {
+          showToast("กำลังรีโหลดข้อมูล...", "info");
+          loadLogs(true);
+      });
+      exportBtn.addEventListener('click', exportToCSV);
+
+      // Debounce Search
       let searchTimeout;
       searchTextInput.addEventListener('input', () => {
           clearTimeout(searchTimeout);
           searchTimeout = setTimeout(() => {
               loadLogs(true);
-          }, 500);
+          }, 600);
       });
 
+      // Theme Toggle
       themeToggleBtn.addEventListener("click", async () => {
           const isDark = bodyEl.classList.contains("bm-theme-dark");
           const next = isDark ? "light" : "dark";
           applyTheme(next);
           if (currentUser) {
               localStorage.setItem("bm-theme-" + currentUser.uid, next);
-              try {
-                  await updateDoc(doc(db, "users", currentUser.uid), { theme: next });
-              } catch(e) {}
+              try { await updateDoc(doc(db, "users", currentUser.uid), { theme: next }); } catch(e) {}
           }
       });
 
+      // Logout
       logoutBtn.addEventListener('click', async () => {
         try {
             await signOut(auth);
@@ -491,7 +622,7 @@
       });
 
       // ==========================================
-      // Auth Guard
+      // Auth Guard & Init
       // ==========================================
       onAuthStateChanged(auth, (user) => {
         if (!user) {
@@ -500,9 +631,10 @@
         }
         currentUser = user;
         loadUserProfile(user);
+        
+        // Initial Load
         loadLogs(true);
       });
-
     </script>
   </body>
 </html>

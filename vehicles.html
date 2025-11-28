@@ -13,9 +13,7 @@
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-
     <link rel="manifest" href="img/site.webmanifest">
     
     <link
@@ -125,7 +123,7 @@
     <main class="bm-main-content">
       <div class="container py-4">
         
-        <div class="row align-items-center mb-4 mt-2">
+        <div class="row align-items-end mb-4 mt-2">
           <div class="col-12 col-md-8">
             <h1 class="h5 mb-1 fw-bold text-dark">
               <i class="bi bi-truck-front-fill text-primary me-2"></i>รถรับซื้อเข้า / ขายออก
@@ -137,214 +135,173 @@
         </div>
 
         <section class="mb-4">
-          <div class="card shadow-sm border-0">
+          <div class="card shadow-sm border-0 rounded-4">
             <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0">
-                <h2 class="h6 fw-semibold text-primary mb-0">
-                  <i class="bi bi-plus-circle me-2"></i>บันทึกรถรับซื้อเข้าใหม่
-                </h2>
+                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center fw-semibold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddVehicle" aria-expanded="false">
+                  <i class="bi bi-plus-circle-fill me-2 fs-5"></i> บันทึกรถรับซื้อเข้าใหม่
+                  <i class="bi bi-chevron-down ms-2 small"></i>
+                </button>
             </div>
-            <div class="card-body">
-              <form id="addVehicleForm" class="row g-3">
-                <div class="col-6 col-md-3">
-                  <label for="buyDateInput" class="form-label small mb-1 text-muted">
-                    <i class="bi bi-calendar-event me-1"></i>วันที่ซื้อเข้า
-                  </label>
-                  <input
-                    type="date"
-                    class="form-control"
-                    id="buyDateInput"
-                    required
-                  />
-                </div>
-                <div class="col-6 col-md-3">
-                    <label for="plateInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-card-heading me-1"></i>ทะเบียนรถ
+            <div class="collapse show" id="collapseAddVehicle">
+              <div class="card-body pt-2">
+                <form id="addVehicleForm" class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <label for="buyDateInput" class="form-label small mb-1 text-muted">
+                      <i class="bi bi-calendar-event me-1"></i>วันที่ซื้อเข้า
                     </label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="plateInput"
-                      placeholder="เช่น 1กข 1234"
-                      required
-                    />
-                </div>
-                <div class="col-6 col-md-3">
-                  <label for="brandInput" class="form-label small mb-1 text-muted">
-                    <i class="bi bi-tag me-1"></i>ยี่ห้อ
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="brandInput"
-                    placeholder="เช่น Honda"
-                    required
-                  />
-                </div>
-                <div class="col-6 col-md-3">
-                  <label for="modelInput" class="form-label small mb-1 text-muted">
-                    <i class="bi bi-bicycle me-1"></i>รุ่นรถ
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="modelInput"
-                    placeholder="เช่น Click 125i"
-                    required
-                  />
-                </div>
+                    <input type="date" class="form-control" id="buyDateInput" required />
+                  </div>
+                  <div class="col-6 col-md-3">
+                      <label for="plateInput" class="form-label small mb-1 text-muted">
+                        <i class="bi bi-card-heading me-1"></i>ทะเบียนรถ
+                      </label>
+                      <input type="text" class="form-control" id="plateInput" placeholder="เช่น 1กข 1234" required />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <label for="brandInput" class="form-label small mb-1 text-muted">
+                      <i class="bi bi-tag me-1"></i>ยี่ห้อ
+                    </label>
+                    <input type="text" class="form-control" id="brandInput" placeholder="เช่น Honda" required />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <label for="modelInput" class="form-label small mb-1 text-muted">
+                      <i class="bi bi-bicycle me-1"></i>รุ่นรถ
+                    </label>
+                    <input type="text" class="form-control" id="modelInput" placeholder="เช่น Click 125i" required />
+                  </div>
 
-                <div class="col-6 col-md-3">
-                  <label for="mileageInput" class="form-label small mb-1 text-muted">
-                    <i class="bi bi-speedometer2 me-1"></i>เลขไมล์ (กม.)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    class="form-control"
-                    id="mileageInput"
-                    placeholder="ระบุเลขไมล์"
-                  />
-                </div>
-                <div class="col-6 col-md-3">
-                  <label for="buyPriceInput" class="form-label small mb-1 text-primary fw-semibold">
-                    <i class="bi bi-cash me-1"></i>ราคาซื้อเข้า (บาท)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    class="form-control border-primary"
-                    id="buyPriceInput"
-                    placeholder="0.00"
-                    required
-                  />
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="noteInput" class="form-label small mb-1 text-muted">
-                    <i class="bi bi-sticky me-1"></i>หมายเหตุ
-                  </label>
-                  <textarea
-                    id="noteInput"
-                    class="form-control"
-                    rows="1"
-                    placeholder="รายละเอียดเพิ่มเติม เช่น สภาพรถ, รอยตำหนิ"
-                  ></textarea>
-                </div>
+                  <div class="col-6 col-md-3">
+                    <label for="mileageInput" class="form-label small mb-1 text-muted">
+                      <i class="bi bi-speedometer2 me-1"></i>เลขไมล์ (กม.)
+                    </label>
+                    <input type="number" min="0" class="form-control" id="mileageInput" placeholder="ระบุเลขไมล์" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <label for="buyPriceInput" class="form-label small mb-1 text-primary fw-semibold">
+                      <i class="bi bi-cash me-1"></i>ราคาซื้อเข้า (บาท)
+                    </label>
+                    <input type="number" min="0" class="form-control border-primary" id="buyPriceInput" placeholder="0.00" required />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="noteInput" class="form-label small mb-1 text-muted">
+                      <i class="bi bi-sticky me-1"></i>หมายเหตุ
+                    </label>
+                    <textarea id="noteInput" class="form-control" rows="1" placeholder="รายละเอียดเพิ่มเติม เช่น สภาพรถ, รอยตำหนิ"></textarea>
+                  </div>
 
-                <div class="col-12 d-flex justify-content-end align-items-center pt-2">
-                  <button
-                    type="submit"
-                    class="btn btn-primary px-4 shadow-sm"
-                    id="addVehicleBtn"
-                  >
-                    <span
-                      class="spinner-border spinner-border-sm me-2 d-none"
-                      id="addVehicleSpinner"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <i class="bi bi-save2 me-2"></i><span id="addVehicleBtnText">บันทึกรถเข้าสต๊อก</span>
-                  </button>
-                </div>
-              </form>
-              
-              <div class="d-flex align-items-center mt-3 text-muted" style="font-size: 0.75rem;">
-                <i class="bi bi-info-circle me-2"></i>
-                <span>ระบบจะบันทึกรายจ่ายลงในธุรกรรม (Transactions) และบันทึกกิจกรรม (Activity Log) ให้อัตโนมัติ</span>
+                  <div class="col-12 d-flex justify-content-end align-items-center pt-2">
+                    <button type="submit" class="btn btn-primary px-4 shadow-sm" id="addVehicleBtn">
+                      <span class="spinner-border spinner-border-sm me-2 d-none" id="addVehicleSpinner" role="status" aria-hidden="true"></span>
+                      <i class="bi bi-save2 me-2"></i><span id="addVehicleBtnText">บันทึกรถเข้าสต๊อก</span>
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </section>
 
         <section class="mb-4">
-          <div class="row g-3">
-             <div class="col-12">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body py-2 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-                        <div class="d-flex align-items-center w-100 w-md-auto">
-                            <span class="small text-muted me-2 text-nowrap"><i class="bi bi-funnel me-1"></i>สถานะ:</span>
-                            <select
-                                id="vehicleStatusFilter"
-                                class="form-select form-select-sm border-secondary-subtle"
-                                style="max-width: 200px;"
-                            >
-                                <option value="all" selected>ทั้งหมด</option>
-                                <option value="in_stock">พร้อมขาย (In Stock)</option>
-                                <option value="sold">ขายแล้ว (Sold)</option>
-                            </select>
-                        </div>
-                        <div class="small" id="vehiclesLoadingState">
-                            <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status" aria-hidden="true"></span>
-                            กำลังโหลด...
+           <div class="bm-dashboard-grid">
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">รถในสต๊อก (In Stock)</div>
+                 <div class="bm-stat-value text-dark" id="vehicleInStockCount">0</div>
+                 <div class="bm-stat-sub text-muted">คัน</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">ขายแล้ว (Sold)</div>
+                 <div class="bm-stat-value text-success" id="vehicleSoldCount">0</div>
+                 <div class="bm-stat-sub text-muted">คัน</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">กำไรรวม (เฉพาะที่ขาย)</div>
+                 <div class="bm-stat-value text-primary" id="vehicleTotalProfit">0.00</div>
+                 <div class="bm-stat-sub text-muted">บาท</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">จำนวนที่แสดงผล</div>
+                 <div class="bm-stat-value text-secondary" id="vehiclesCountNumber">0</div>
+                 <div class="bm-stat-sub text-muted">รายการ</div>
+              </div>
+           </div>
+        </section>
+
+        <section class="mb-4">
+          <div class="card border-0 shadow-sm rounded-4">
+             <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                   <h2 class="h6 fw-bold text-primary mb-0">
+                      <i class="bi bi-funnel-fill me-2"></i> ตัวกรองค้นหา
+                   </h2>
+                   <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="exportCsvBtn">
+                      <i class="bi bi-file-earmark-spreadsheet me-1"></i> ส่งออก CSV
+                   </button>
+                </div>
+
+                <div class="row g-3 align-items-end">
+                   <div class="col-6 col-md-3">
+                      <label class="form-label small text-muted mb-1">ตั้งแต่วันที่</label>
+                      <input type="date" class="form-control form-control-sm bg-light" id="filterStartDate">
+                   </div>
+                   <div class="col-6 col-md-3">
+                      <label class="form-label small text-muted mb-1">ถึงวันที่</label>
+                      <input type="date" class="form-control form-control-sm bg-light" id="filterEndDate">
+                   </div>
+                   <div class="col-6 col-md-2">
+                      <label class="form-label small text-muted mb-1">สถานะ</label>
+                      <select id="vehicleStatusFilter" class="form-select form-select-sm bg-light">
+                          <option value="all">ทั้งหมด</option>
+                          <option value="in_stock" selected>พร้อมขาย</option>
+                          <option value="sold">ขายแล้ว</option>
+                      </select>
+                   </div>
+                   <div class="col-12 col-md-4">
+                      <label class="form-label small text-muted mb-1">ค้นหา (ทะเบียน, ยี่ห้อ, รุ่น)</label>
+                      <div class="input-group input-group-sm">
+                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                         <input type="text" class="form-control bg-light border-start-0 ps-0" id="searchTextInput" placeholder="พิมพ์คำค้น...">
+                         <button class="btn btn-primary" type="button" id="searchBtn">ค้นหา</button>
+                      </div>
+                   </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3 pt-2 border-top">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small text-muted me-1">มุมมอง:</span>
+                        <div class="btn-group btn-group-sm bg-light p-1 rounded-pill border" role="group">
+                            <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 active text-primary fw-bold" id="tableViewBtn">
+                                <i class="bi bi-table"></i> ตาราง
+                            </button>
+                            <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 text-secondary" id="cardViewBtn">
+                                <i class="bi bi-grid-fill"></i> การ์ด
+                            </button>
                         </div>
                     </div>
                 </div>
              </div>
-
-             <div class="col-6 col-md-4">
-                <div class="card bm-stat-card h-100 shadow-sm">
-                  <div class="d-flex align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-muted small mb-1">รถในสต๊อก</div>
-                        <div class="h4 mb-0 fw-bold text-dark" id="vehicleInStockCount">0 คัน</div>
-                    </div>
-                    <div class="text-primary opacity-25">
-                        <i class="bi bi-box-seam-fill fs-1"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-6 col-md-4">
-                <div class="card bm-stat-card h-100 shadow-sm">
-                  <div class="d-flex align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-muted small mb-1">ขายไปแล้ว</div>
-                        <div class="h4 mb-0 fw-bold text-dark" id="vehicleSoldCount">0 คัน</div>
-                    </div>
-                    <div class="text-success opacity-25">
-                        <i class="bi bi-check-circle-fill fs-1"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="card bm-stat-card h-100 shadow-sm">
-                  <div class="d-flex align-items-center justify-content-between h-100">
-                    <div>
-                        <div class="text-muted small mb-1">กำไรรวม (เฉพาะที่ขาย)</div>
-                        <div class="h4 mb-0 fw-bold text-success" id="vehicleTotalProfit">0.00 ฿</div>
-                    </div>
-                    <div class="text-warning opacity-50">
-                        <i class="bi bi-cash-coin fs-1"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
           </div>
         </section>
 
-        <section class="mb-3">
-          <div class="card shadow-sm border-0 overflow-hidden">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                <h3 class="h6 fw-bold mb-0 text-secondary">
-                    <i class="bi bi-list-ul me-2"></i>รายการรถตามสถานะ
-                </h3>
-                <div class="badge bg-light text-dark border d-none" id="vehiclesCountInfo">
-                  รวม <span id="vehiclesCountNumber" class="fw-bold">0</span> คัน
-                </div>
-            </div>
+        <div id="vehiclesLoadingState" class="text-center py-3 d-none">
+           <span class="spinner-grow spinner-grow-sm text-primary me-2" role="status" aria-hidden="true"></span>
+           <span class="text-muted small">กำลังโหลดข้อมูล...</span>
+        </div>
+
+        <section id="vehiclesTableView" class="mb-3">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
             <div class="card-body p-0">
               <div class="table-responsive">
-                <table class="table table-hover table-sm align-middle mb-0">
-                  <thead class="bg-light text-muted small text-uppercase">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="bg-light text-secondary small text-uppercase">
                     <tr>
-                      <th class="ps-3 py-2 text-nowrap" style="min-width: 100px;">วันที่ซื้อ</th>
-                      <th class="py-2" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
-                      <th class="py-2 text-nowrap" style="min-width: 100px;">ทะเบียน</th>
-                      <th class="py-2 text-end text-nowrap" style="min-width: 110px;">ซื้อเข้า</th>
-                      <th class="py-2 text-end text-nowrap" style="min-width: 110px;">ขายออก</th>
-                      <th class="py-2 text-center" style="min-width: 100px;">สถานะ</th>
-                      <th class="py-2 text-end text-nowrap" style="min-width: 100px;">กำไร</th>
-                      <th class="py-2 text-center" style="min-width: 150px;">จัดการ</th>
+                      <th class="ps-3 py-3 fw-normal" style="min-width: 100px;">วันที่ซื้อ</th>
+                      <th class="py-3 fw-normal" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
+                      <th class="py-3 fw-normal" style="min-width: 100px;">ทะเบียน</th>
+                      <th class="py-3 fw-normal text-end" style="min-width: 100px;">ซื้อเข้า</th>
+                      <th class="py-3 fw-normal text-end" style="min-width: 100px;">ขายออก</th>
+                      <th class="py-3 fw-normal text-center" style="min-width: 100px;">สถานะ</th>
+                      <th class="py-3 fw-normal text-end" style="min-width: 100px;">กำไร</th>
+                      <th class="py-3 fw-normal text-center" style="min-width: 120px;">จัดการ</th>
                     </tr>
                   </thead>
                   <tbody id="vehiclesTableBody" class="border-top-0">
@@ -355,19 +312,19 @@
           </div>
         </section>
 
+        <section id="vehiclesCardView" class="mb-3 d-none">
+           <div id="vehiclesCardContainer" class="row g-3">
+              </div>
+        </section>
+
         <section class="mb-5 text-center">
           <button
             type="button"
-            class="btn btn-outline-secondary btn-sm rounded-pill px-4 d-none"
+            class="btn btn-white border shadow-sm rounded-pill px-4 py-2 text-muted d-none"
             id="loadMoreVehiclesBtn"
           >
-            <span
-              class="spinner-border spinner-border-sm me-2 d-none"
-              id="loadMoreVehiclesSpinner"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            <span id="loadMoreVehiclesBtnText">โหลดรายการเพิ่ม</span> <i class="bi bi-chevron-down ms-1"></i>
+            <span class="spinner-border spinner-border-sm me-2 d-none" id="loadMoreVehiclesSpinner"></span>
+            <span id="loadMoreVehiclesBtnText">โหลดเพิ่มเติม</span> <i class="bi bi-chevron-down ms-1"></i>
           </button>
         </section>
 
@@ -377,15 +334,7 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
+
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0" aria-labelledby="fabDropdownButton">
           <li>
             <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
@@ -463,176 +412,178 @@
       aria-hidden="true"
     >
       <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content shadow border-0">
+        <div class="modal-content shadow border-0 rounded-4">
           <div class="modal-header border-bottom-0 pb-0">
             <h1 class="modal-title fs-5 fw-bold" id="sellVehicleModalLabel">
               <i class="bi bi-card-text me-2 text-primary"></i>รายละเอียดรถ
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="ปิด"
-            ></button>
+            <div class="ms-auto">
+               <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle me-1" id="vehicleEditBtn" title="แก้ไขข้อมูล">
+                  <i class="bi bi-pencil"></i>
+               </button>
+               <button
+                 type="button"
+                 class="btn-close"
+                 data-bs-dismiss="modal"
+                 aria-label="ปิด"
+               ></button>
+            </div>
           </div>
           <div class="modal-body pt-3">
-            
-            <div
-              id="sellVehicleLoadingState"
-              class="alert alert-light border small py-2 mb-3 d-none text-center text-muted"
-            >
-              <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลดข้อมูลรถ...
+            <div id="sellVehicleLoadingState" class="text-center py-4 d-none">
+              <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลด...
             </div>
 
-            <div class="bg-body-tertiary p-3 rounded-3 mb-3 border">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                 <h2 class="h6 fw-semibold text-secondary mb-0">ข้อมูลรถ</h2>
-                 <span class="badge bg-secondary" id="sellVehiclePlateText">-</span>
-              </div>
-              <div class="small text-dark">
-                <div class="row g-2">
-                    <div class="col-12">
-                        <span class="text-muted"><i class="bi bi-bicycle me-1"></i>รุ่น:</span> 
-                        <span id="sellVehicleBrandModelText" class="fw-medium">-</span>
-                    </div>
-                    <div class="col-12">
-                        <span class="text-muted"><i class="bi bi-speedometer2 me-1"></i>ไมล์:</span> 
-                        <span id="sellVehicleMileageText">-</span>
-                    </div>
-                    <div class="col-12 mt-2">
-                        <div id="sellVehicleBuyInfo" class="p-2 bg-white rounded border text-secondary" style="font-size: 0.8rem;">
-                            -
+            <div id="vehicleViewMode">
+                <div class="bg-light p-3 rounded-4 mb-3 border">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                     <h2 class="h6 fw-bold text-secondary mb-0">ข้อมูลทั่วไป</h2>
+                     <span class="badge bg-secondary rounded-pill" id="sellVehiclePlateText">-</span>
+                  </div>
+                  <div class="small text-dark">
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <span class="text-muted w-25 d-inline-block">รุ่น:</span> 
+                            <span id="sellVehicleBrandModelText" class="fw-medium">-</span>
+                        </div>
+                        <div class="col-12">
+                            <span class="text-muted w-25 d-inline-block">เลขไมล์:</span> 
+                            <span id="sellVehicleMileageText">-</span>
+                        </div>
+                        <div class="col-12 mt-2 pt-2 border-top">
+                             <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">วันที่ซื้อ:</span>
+                                <span id="sellVehicleBuyDateText" class="fw-medium">-</span>
+                             </div>
+                             <div class="d-flex justify-content-between align-items-center mt-1">
+                                <span class="text-muted">ราคาซื้อเข้า:</span>
+                                <span id="sellVehicleBuyPriceText" class="fw-bold text-dark">-</span>
+                             </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <span class="text-muted small d-block">หมายเหตุ:</span>
+                            <div id="sellVehicleNoteText" class="p-2 bg-white rounded border-start border-3 border-secondary text-muted small fst-italic">
+                                -
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 mt-1">
-                        <span class="text-muted small">หมายเหตุ:</span>
-                        <div id="sellVehicleNoteText" class="text-muted fst-italic ps-2 border-start border-3">
-                            -
-                        </div>
-                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <section class="mb-2" id="sellVehicleFormSection">
-              <div class="card border-primary shadow-sm">
-                  <div class="card-header bg-primary text-white py-2">
-                      <h2 class="h6 fw-semibold mb-0"><i class="bi bi-cash-coin me-2"></i>บันทึกการขาย</h2>
-                  </div>
-                  <div class="card-body">
-                      <form id="sellVehicleForm" class="row g-2">
-                        <div class="col-6">
-                          <label for="sellVehicleDateInput" class="form-label small mb-1 fw-medium">
-                            วันที่ขาย
-                          </label>
-                          <input
-                            type="date"
-                            class="form-control form-control-sm"
-                            id="sellVehicleDateInput"
-                          />
-                        </div>
-                        <div class="col-6">
-                          <label for="sellVehiclePriceInput" class="form-label small mb-1 fw-medium text-success">
-                            ราคาขาย (บาท)
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            class="form-control form-control-sm border-success"
-                            id="sellVehiclePriceInput"
-                            placeholder="0.00"
-                          />
-                        </div>
-                        <div class="col-12 mt-3">
-                          <div class="alert alert-success d-flex justify-content-between align-items-center py-2 mb-0" id="sellVehicleProfitPreview">
-                             <span><i class="bi bi-graph-up-arrow me-2"></i>กำไรโดยประมาณ:</span>
-                             <span class="fw-bold">0.00 ฿</span>
-                          </div>
-                        </div>
-                      </form>
-                      <p class="small text-muted mt-2 mb-0 text-center" style="font-size: 0.7rem;">
-                        *ระบบจะเปลี่ยนสถานะเป็น "ขายแล้ว" และบันทึกรายรับให้อัตโนมัติ
-                      </p>
-                  </div>
-              </div>
-            </section>
-
-            <section class="mb-2 d-none" id="sellVehicleSoldInfoSection">
-              <div class="card border-success shadow-sm">
-                  <div class="card-header bg-success text-white py-2">
-                      <h2 class="h6 fw-semibold mb-0"><i class="bi bi-check-circle-fill me-2"></i>ข้อมูลการขาย (ขายแล้ว)</h2>
-                  </div>
-                  <div class="card-body bg-success-subtle">
-                      <div class="row g-2 small">
-                        <div class="col-6">
-                            <span class="text-secondary d-block">วันที่ขาย</span>
-                            <span id="sellVehicleSoldDateText" class="fw-bold fs-6">-</span>
-                        </div>
-                        <div class="col-6 text-end">
-                            <span class="text-secondary d-block">ราคาขาย</span>
-                            <span id="sellVehicleSoldPriceText" class="fw-bold fs-6 text-success">-</span>
-                        </div>
-                        <div class="col-12"><hr class="my-1 border-secondary"></div>
-                        <div class="col-12 text-center py-2">
-                            <span class="text-secondary me-2">กำไรสุทธิ:</span>
-                            <span id="sellVehicleSoldProfitText" class="h4 fw-bold text-success mb-0">-</span>
-                        </div>
+                <section class="mb-2" id="sellVehicleFormSection">
+                  <div class="card border-primary shadow-sm rounded-4 overflow-hidden">
+                      <div class="card-header bg-primary text-white py-2">
+                          <h2 class="h6 fw-semibold mb-0"><i class="bi bi-cash-coin me-2"></i>บันทึกการขาย</h2>
+                      </div>
+                      <div class="card-body">
+                          <form id="sellVehicleForm" class="row g-2">
+                            <div class="col-6">
+                              <label class="form-label small mb-1 fw-medium">วันที่ขาย</label>
+                              <input type="date" class="form-control form-control-sm" id="sellVehicleDateInput"/>
+                            </div>
+                            <div class="col-6">
+                              <label class="form-label small mb-1 fw-medium text-success">ราคาขาย (บาท)</label>
+                              <input type="number" min="0" class="form-control form-control-sm border-success" id="sellVehiclePriceInput" placeholder="0.00"/>
+                            </div>
+                            <div class="col-12 mt-3">
+                              <div class="alert alert-light border d-flex justify-content-between align-items-center py-2 mb-0" id="sellVehicleProfitPreview">
+                                 <span class="small text-muted">กำไรโดยประมาณ:</span>
+                                 <span class="fw-bold text-success">0.00 ฿</span>
+                              </div>
+                            </div>
+                          </form>
                       </div>
                   </div>
-              </div>
-              <p class="small text-muted mt-2 mb-0 text-center">
-                *หากต้องการแก้ไขข้อมูล ให้ไปที่หน้าจัดการฐานข้อมูล
-              </p>
-            </section>
+                </section>
+
+                <section class="mb-2 d-none" id="sellVehicleSoldInfoSection">
+                  <div class="card border-success shadow-sm rounded-4 overflow-hidden">
+                      <div class="card-header bg-success text-white py-2">
+                          <h2 class="h6 fw-semibold mb-0"><i class="bi bi-check-circle-fill me-2"></i>ขายแล้ว</h2>
+                      </div>
+                      <div class="card-body bg-success-subtle">
+                          <div class="row g-2 small">
+                            <div class="col-6">
+                                <span class="text-secondary d-block">วันที่ขาย</span>
+                                <span id="sellVehicleSoldDateText" class="fw-bold fs-6">-</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="text-secondary d-block">ราคาขาย</span>
+                                <span id="sellVehicleSoldPriceText" class="fw-bold fs-6 text-success">-</span>
+                            </div>
+                            <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
+                            <div class="col-12 text-center py-2">
+                                <span class="text-secondary me-2">กำไรสุทธิ:</span>
+                                <span id="sellVehicleSoldProfitText" class="h4 fw-bold text-success mb-0">-</span>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                </section>
+            </div>
+
+            <div id="vehicleEditMode" class="d-none">
+                <form id="vehicleEditForm" class="row g-3">
+                   <div class="col-6">
+                      <label class="form-label small">ทะเบียน</label>
+                      <input type="text" class="form-control form-control-sm" id="editPlateInput">
+                   </div>
+                   <div class="col-6">
+                      <label class="form-label small">เลขไมล์</label>
+                      <input type="number" class="form-control form-control-sm" id="editMileageInput">
+                   </div>
+                   <div class="col-6">
+                      <label class="form-label small">ยี่ห้อ</label>
+                      <input type="text" class="form-control form-control-sm" id="editBrandInput">
+                   </div>
+                   <div class="col-6">
+                      <label class="form-label small">รุ่น</label>
+                      <input type="text" class="form-control form-control-sm" id="editModelInput">
+                   </div>
+                   <div class="col-12">
+                      <label class="form-label small text-primary fw-bold">ราคาซื้อเข้า (Admin เท่านั้น)</label>
+                      <input type="number" class="form-control form-control-sm border-primary" id="editBuyPriceInput" readonly>
+                   </div>
+                   <div class="col-12">
+                      <label class="form-label small">หมายเหตุ</label>
+                      <textarea class="form-control form-control-sm" id="editNoteInput" rows="2"></textarea>
+                   </div>
+                </form>
+            </div>
 
           </div>
-          <div class="modal-footer border-top-0 pt-0">
-            <button
-              type="button"
-              class="btn btn-secondary btn-sm px-4"
-              data-bs-dismiss="modal"
-            >
-              ปิด
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary btn-sm px-4 shadow-sm"
-              id="sellVehicleSaveBtn"
-            >
-              <span
-                class="spinner-border spinner-border-sm me-2 d-none"
-                id="sellVehicleSaveSpinner"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              <span id="sellVehicleSaveBtnText">ยืนยันการขาย</span>
-            </button>
+          <div class="modal-footer border-top-0 pt-0 pb-3">
+            <div id="vehicleViewButtons" class="w-100 d-flex justify-content-end gap-2">
+                 <button
+                   type="button"
+                   class="btn btn-link text-danger text-decoration-none btn-sm me-auto d-none"
+                   id="vehicleDeleteBtn"
+                 >
+                   <i class="bi bi-trash"></i> ลบรถ
+                 </button>
+                <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">ปิด</button>
+                <button type="button" class="btn btn-primary btn-sm px-4 shadow-sm rounded-pill" id="sellVehicleSaveBtn">
+                  <span class="spinner-border spinner-border-sm me-2 d-none" id="sellVehicleSaveSpinner"></span>
+                  <span id="sellVehicleSaveBtnText">ยืนยันการขาย</span>
+                </button>
+            </div>
+            <div id="vehicleEditButtons" class="w-100 d-flex justify-content-end gap-2 d-none">
+                <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" id="cancelEditBtn">ยกเลิก</button>
+                <button type="button" class="btn btn-primary btn-sm px-4 shadow-sm rounded-pill" id="saveEditBtn">
+                   <span class="spinner-border spinner-border-sm me-2 d-none" id="saveEditSpinner"></span>
+                   บันทึกแก้ไข
+                </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1090;"
-    >
-      <div
-        id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow-lg"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="4000"
-      >
-        <div class="d-flex">
-          <div class="toast-body d-flex align-items-center" id="mainToastBody">
-            </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="ปิด"
-          ></button>
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
+      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex px-2">
+          <div class="toast-body d-flex align-items-center" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
@@ -644,43 +595,15 @@
     ></script>
 
     <script type="module">
-      // ============================================================
-      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
-      // ============================================================
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
       import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        sendPasswordResetEmail
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-      import {
-        getFirestore,
-        collection,
-        doc,
-        addDoc,
-        setDoc,
-        getDoc,
-        getDocs,
-        updateDoc,
-        deleteDoc,
-        query,
-        where,
-        orderBy,
-        limit,
-        startAfter,
-        serverTimestamp,
-        onSnapshot
+        getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc,
+        query, where, orderBy, limit, startAfter, serverTimestamp
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      // ============================================================
-      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
-      // ============================================================
+      // --- Firebase Config ---
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -692,16 +615,11 @@
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // ============================================================
-      // ตัวแปรอ้างอิง DOM
-      // ============================================================
+      // --- DOM Elements ---
       const bodyEl = document.body;
-
-      // Topbar
       const themeToggleBtn = document.getElementById("themeToggleBtn");
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
@@ -709,33 +627,76 @@
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // ฟอร์มเพิ่มรถรับซื้อเข้า
-      const addVehicleForm = document.getElementById("addVehicleForm");
-      const buyDateInput = document.getElementById("buyDateInput");
-      const brandInput = document.getElementById("brandInput");
-      const modelInput = document.getElementById("modelInput");
-      const plateInput = document.getElementById("plateInput");
-      const mileageInput = document.getElementById("mileageInput");
-      const buyPriceInput = document.getElementById("buyPriceInput");
-      const noteInput = document.getElementById("noteInput");
-      const addVehicleBtn = document.getElementById("addVehicleBtn");
-      const addVehicleSpinner = document.getElementById("addVehicleSpinner");
-      const addVehicleBtnText = document.getElementById("addVehicleBtnText");
-
-      // Filter + Summary
+      // Filters
+      const filterStartDate = document.getElementById("filterStartDate");
+      const filterEndDate = document.getElementById("filterEndDate");
       const vehicleStatusFilter = document.getElementById("vehicleStatusFilter");
+      const searchTextInput = document.getElementById("searchTextInput");
+      const searchBtn = document.getElementById("searchBtn");
+      const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+      // Views
+      const tableViewBtn = document.getElementById("tableViewBtn");
+      const cardViewBtn = document.getElementById("cardViewBtn");
+      const vehiclesTableView = document.getElementById("vehiclesTableView");
+      const vehiclesCardView = document.getElementById("vehiclesCardView");
+      const vehiclesTableBody = document.getElementById("vehiclesTableBody");
+      const vehiclesCardContainer = document.getElementById("vehiclesCardContainer");
+      
       const vehiclesLoadingState = document.getElementById("vehiclesLoadingState");
+      const loadMoreVehiclesBtn = document.getElementById("loadMoreVehiclesBtn");
+      
+      // Stats
       const vehicleInStockCount = document.getElementById("vehicleInStockCount");
       const vehicleSoldCount = document.getElementById("vehicleSoldCount");
       const vehicleTotalProfit = document.getElementById("vehicleTotalProfit");
-      const vehiclesCountInfo = document.getElementById("vehiclesCountInfo");
       const vehiclesCountNumber = document.getElementById("vehiclesCountNumber");
 
-      // ตารางรายการรถ
-      const vehiclesTableBody = document.getElementById("vehiclesTableBody");
-      const loadMoreVehiclesBtn = document.getElementById("loadMoreVehiclesBtn");
-      const loadMoreVehiclesSpinner = document.getElementById("loadMoreVehiclesSpinner");
-      const loadMoreVehiclesBtnText = document.getElementById("loadMoreVehiclesBtnText");
+      // Add Form
+      const addVehicleForm = document.getElementById("addVehicleForm");
+      
+      // Modal
+      const sellVehicleModalEl = document.getElementById("sellVehicleModal");
+      const sellVehicleModal = bootstrap.Modal.getOrCreateInstance(sellVehicleModalEl);
+      const vehicleEditBtn = document.getElementById("vehicleEditBtn");
+      const vehicleViewMode = document.getElementById("vehicleViewMode");
+      const vehicleEditMode = document.getElementById("vehicleEditMode");
+      const vehicleViewButtons = document.getElementById("vehicleViewButtons");
+      const vehicleEditButtons = document.getElementById("vehicleEditButtons");
+      const vehicleDeleteBtn = document.getElementById("vehicleDeleteBtn");
+      
+      // Modal: View Inputs
+      const sellVehiclePlateText = document.getElementById("sellVehiclePlateText");
+      const sellVehicleBrandModelText = document.getElementById("sellVehicleBrandModelText");
+      const sellVehicleMileageText = document.getElementById("sellVehicleMileageText");
+      const sellVehicleBuyDateText = document.getElementById("sellVehicleBuyDateText");
+      const sellVehicleBuyPriceText = document.getElementById("sellVehicleBuyPriceText");
+      const sellVehicleNoteText = document.getElementById("sellVehicleNoteText");
+      
+      // Modal: Sell Form
+      const sellVehicleFormSection = document.getElementById("sellVehicleFormSection");
+      const sellVehicleSoldInfoSection = document.getElementById("sellVehicleSoldInfoSection");
+      const sellVehicleDateInput = document.getElementById("sellVehicleDateInput");
+      const sellVehiclePriceInput = document.getElementById("sellVehiclePriceInput");
+      const sellVehicleProfitPreview = document.getElementById("sellVehicleProfitPreview");
+      const sellVehicleSaveBtn = document.getElementById("sellVehicleSaveBtn");
+      const sellVehicleSaveSpinner = document.getElementById("sellVehicleSaveSpinner");
+
+      // Modal: Sold Info
+      const sellVehicleSoldDateText = document.getElementById("sellVehicleSoldDateText");
+      const sellVehicleSoldPriceText = document.getElementById("sellVehicleSoldPriceText");
+      const sellVehicleSoldProfitText = document.getElementById("sellVehicleSoldProfitText");
+
+      // Modal: Edit Form
+      const vehicleEditForm = document.getElementById("vehicleEditForm");
+      const editPlateInput = document.getElementById("editPlateInput");
+      const editBrandInput = document.getElementById("editBrandInput");
+      const editModelInput = document.getElementById("editModelInput");
+      const editMileageInput = document.getElementById("editMileageInput");
+      const editBuyPriceInput = document.getElementById("editBuyPriceInput");
+      const editNoteInput = document.getElementById("editNoteInput");
+      const saveEditBtn = document.getElementById("saveEditBtn");
+      const cancelEditBtn = document.getElementById("cancelEditBtn");
 
       // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
@@ -743,1122 +704,511 @@
       const fabStockInBtn = document.getElementById("fabStockInBtn");
       const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
-      // Modal ขายรถ
-      const sellVehicleModalEl = document.getElementById("sellVehicleModal");
-      const sellVehicleModalLabel = document.getElementById("sellVehicleModalLabel");
-      const sellVehicleLoadingState = document.getElementById("sellVehicleLoadingState");
-      const sellVehicleBrandModelText = document.getElementById("sellVehicleBrandModelText");
-      const sellVehiclePlateText = document.getElementById("sellVehiclePlateText");
-      const sellVehicleMileageText = document.getElementById("sellVehicleMileageText");
-      const sellVehicleBuyInfo = document.getElementById("sellVehicleBuyInfo");
-      const sellVehicleNoteText = document.getElementById("sellVehicleNoteText");
-      const sellVehicleFormSection = document.getElementById("sellVehicleFormSection");
-      const sellVehicleForm = document.getElementById("sellVehicleForm");
-      const sellVehicleDateInput = document.getElementById("sellVehicleDateInput");
-      const sellVehiclePriceInput = document.getElementById("sellVehiclePriceInput");
-      const sellVehicleProfitPreview = document.getElementById("sellVehicleProfitPreview");
-      const sellVehicleSoldInfoSection = document.getElementById("sellVehicleSoldInfoSection");
-      const sellVehicleSoldDateText = document.getElementById("sellVehicleSoldDateText");
-      const sellVehicleSoldPriceText = document.getElementById("sellVehicleSoldPriceText");
-      const sellVehicleSoldProfitText = document.getElementById("sellVehicleSoldProfitText");
-      const sellVehicleSaveBtn = document.getElementById("sellVehicleSaveBtn");
-      const sellVehicleSaveSpinner = document.getElementById("sellVehicleSaveSpinner");
-      const sellVehicleSaveBtnText = document.getElementById("sellVehicleSaveBtnText");
-
       // Toast
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
-      // Modal instance
-      const sellVehicleModal = bootstrap.Modal.getOrCreateInstance(sellVehicleModalEl);
-
-      // ============================================================
-      // สถานะภายในหน้า
-      // ============================================================
+      // --- Variables ---
       let currentUser = null;
       let currentUserProfile = null;
-
-      // สำหรับรายการรถ (pagination)
-      const VEHICLES_PAGE_SIZE = 20;
+      const PAGE_SIZE = 25;
       let vehiclesLastVisible = null;
       let isLoadingVehicles = false;
-      let loadedVehicles = []; // รถที่โหลดมาแสดงในตาราง (ตามสถานะ filter ปัจจุบัน)
-
-      // สำหรับสรุปสถิติ (ข้าม filter สถานะ)
-      let summaryInStockCount = 0;
-      let summarySoldCount = 0;
-      let summaryTotalProfit = 0;
-
-      // filter ปัจจุบัน
-      let currentStatusFilter = "all";
-
-      // สำหรับ modal ขายรถ
+      let loadedVehicles = [];
+      let currentFilter = { startDate: "", endDate: "", status: "in_stock", searchText: "" };
       let currentSellVehicleId = null;
       let currentSellVehicleData = null;
-      let isSavingSellVehicle = false;
 
-      // ============================================================
-      // ฟังก์ชันช่วย: Toast ภาษาไทย
-      // ============================================================
+      // --- Helpers ---
       function showToast(message, variant = "primary") {
-        if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0 shadow-lg";
-        // ใส่ icon ตาม variant
-        let iconHtml = "";
-        if (variant === "success") iconHtml = '<i class="bi bi-check-circle-fill me-2"></i>';
-        else if (variant === "danger") iconHtml = '<i class="bi bi-exclamation-circle-fill me-2"></i>';
-        else if (variant === "warning") iconHtml = '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
-        else iconHtml = '<i class="bi bi-info-circle-fill me-2"></i>';
-        
-        mainToastBody.innerHTML = iconHtml + message;
-        mainToast.show();
+         mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
+         mainToastBody.innerHTML = message;
+         mainToast.show();
       }
-
-      // ============================================================
-      // ฟังก์ชันช่วย: รูปแบบตัวเลขและวันที่แบบไทย
-      // ============================================================
-      function formatNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0.00";
-        return value.toLocaleString("th-TH", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
+      function formatNumber(val) {
+         return (typeof val === "number" && !isNaN(val)) ? val.toLocaleString("th-TH", {minimumFractionDigits:2, maximumFractionDigits:2}) : "0.00";
       }
-
-      function formatIntegerNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0";
-        return value.toLocaleString("th-TH", {
-          maximumFractionDigits: 0,
-        });
+      function formatDateThai(dateStr) {
+         if (!dateStr) return "-";
+         const [y, m, d] = dateStr.split("-").map(Number);
+         if (!y) return dateStr;
+         const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+         return `${d} ${months[m-1]} ${y+543}`;
       }
-
-      function formatDateThaiFromString(dateStr) {
-        if (!dateStr) return "-";
-        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
-        if (!year || !month || !day) return dateStr;
-        const d = new Date(year, month - 1, day);
-        const thaiMonths = [
-          "ม.ค.",
-          "ก.พ.",
-          "มี.ค.",
-          "เม.ย.",
-          "พ.ค.",
-          "มิ.ย.",
-          "ก.ค.",
-          "ส.ค.",
-          "ก.ย.",
-          "ต.ค.",
-          "พ.ย.",
-          "ธ.ค.",
-        ];
-        const thaiYear = d.getFullYear() + 543;
-        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+      function getTodayISO() {
+         return new Date().toISOString().split("T")[0];
       }
-
-      function getTodayISODateString() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      function parseNumberFromInput(inputEl) {
-        if (!inputEl) return 0;
-        const value = inputEl.value;
-        if (!value) return 0;
-        const num = parseFloat(value);
-        if (isNaN(num)) return 0;
-        return num;
-      }
-
-      // ============================================================
-      // ธีม Light / Dark
-      // ============================================================
       function applyTheme(theme) {
-        const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
-
-        const icon = themeToggleBtn?.querySelector("i");
-        if (icon) {
-          icon.classList.toggle("bi-sun", normalized === "dark");
-          icon.classList.toggle("bi-moon", normalized === "light");
-        }
+         bodyEl.className = theme === "dark" ? "bm-theme-dark" : "bm-theme-light";
+         const icon = themeToggleBtn.querySelector("i");
+         icon.className = theme === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
       }
 
-      function saveThemeForUser(uid, theme) {
-        if (!uid) return;
-        try {
-          localStorage.setItem("bm-theme-" + uid, theme);
-        } catch (e) {
-          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
-        }
-      }
-
-      function readThemeForUser(uid, fallbackTheme) {
-        if (!uid) return fallbackTheme || "light";
-        try {
-          const stored = localStorage.getItem("bm-theme-" + uid);
-          return stored || fallbackTheme || "light";
-        } catch (e) {
-          return fallbackTheme || "light";
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
-      // ============================================================
-      async function ensureUserProfile(user) {
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (snap.exists()) {
-          return { id: snap.id, ...snap.data() };
-        }
-
-        const usersCol = collection(db, "users");
-        const qUsers = query(usersCol, limit(1));
-        const existingSnap = await getDocs(qUsers);
-
-        const isFirstUser = existingSnap.empty;
-        const role = isFirstUser ? "admin" : "staff";
-        const defaultDisplayName =
-          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
-
-        const newUserData = {
-          displayName: defaultDisplayName,
-          role,
-          createdAt: serverTimestamp(),
-          branchId: null,
-          theme: "light",
-          disabled: false,
-        };
-
-        await setDoc(userRef, newUserData);
-        return { id: user.uid, ...newUserData };
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: ตั้งค่า Loading ของรายการรถ
-      // ============================================================
-      function setVehiclesLoadingState(isLoading, isFirstPage = false) {
-        isLoadingVehicles = isLoading;
-
-        if (vehiclesLoadingState) {
-          if (isLoading && isFirstPage) {
-            vehiclesLoadingState.innerHTML =
-              '<span class="spinner-grow spinner-grow-sm text-primary me-1" role="status" aria-hidden="true"></span> กำลังโหลด...';
-            vehiclesLoadingState.classList.remove("text-danger");
-            vehiclesLoadingState.classList.remove("text-success");
-          } else if (!isLoading && loadedVehicles.length === 0) {
-            vehiclesLoadingState.textContent = "ไม่พบรายการรถ";
-            vehiclesLoadingState.classList.remove("text-success");
-            vehiclesLoadingState.classList.remove("d-none");
-          } else if (!isLoading) {
-            vehiclesLoadingState.innerHTML = '<i class="bi bi-check2-all me-1"></i>อัปเดตแล้ว';
-            vehiclesLoadingState.classList.add("text-success");
-          }
-        }
-
-        if (loadMoreVehiclesBtn && loadMoreVehiclesSpinner && loadMoreVehiclesBtnText) {
-          if (isLoading && !isFirstPage) {
-            loadMoreVehiclesSpinner.classList.remove("d-none");
-            loadMoreVehiclesBtnText.textContent = "กำลังโหลด...";
-            loadMoreVehiclesBtn.disabled = true;
-          } else {
-            loadMoreVehiclesSpinner.classList.add("d-none");
-            loadMoreVehiclesBtnText.textContent = "โหลดรายการเพิ่ม";
-            loadMoreVehiclesBtn.disabled = false;
-          }
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: Render สรุปสถิติบนการ์ด
-      // ============================================================
-      function renderVehicleSummary() {
-        if (vehicleInStockCount) {
-          vehicleInStockCount.textContent =
-            formatIntegerNumber(summaryInStockCount) + " คัน";
-        }
-        if (vehicleSoldCount) {
-          vehicleSoldCount.textContent =
-            formatIntegerNumber(summarySoldCount) + " คัน";
-        }
-        if (vehicleTotalProfit) {
-          vehicleTotalProfit.textContent = formatNumber(summaryTotalProfit) + " ฿";
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: โหลดสรุปสถิติรถทั้งหมด (ไม่ขึ้นกับ filter สถานะ)
-      // ============================================================
-      async function loadVehicleSummary() {
-        if (!currentUserProfile) return;
-
-        try {
-          const branchId = currentUserProfile.branchId || null;
-          const vehiclesCol = collection(db, "vehicles");
-          const constraints = [where("isDeleted", "==", false)];
-          if (branchId) {
-            constraints.push(where("branchId", "==", branchId));
-          }
-
-          // หมายเหตุ: หากมีข้อมูลจำนวนมาก อาจต้องเพิ่ม pagination/aggregation ฝั่ง backend
-          const summaryQuery = query(vehiclesCol, ...constraints);
-          const snap = await getDocs(summaryQuery);
-
-          let inStock = 0;
-          let sold = 0;
-          let totalProfit = 0;
-
-          snap.forEach((docSnap) => {
-            const data = docSnap.data();
-            const status = data.status || "in_stock";
-            if (status === "in_stock") {
-              inStock += 1;
-            } else if (status === "sold") {
-              sold += 1;
-            }
-            if (status === "sold") {
-              const profit = Number(data.profit) || 0;
-              totalProfit += profit;
-            }
-          });
-
-          summaryInStockCount = inStock;
-          summarySoldCount = sold;
-          summaryTotalProfit = totalProfit;
-          renderVehicleSummary();
-        } catch (error) {
-          console.error("โหลดสรุปสถิติรถไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถโหลดสรุปสถิติรถได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: Render รายการรถในตาราง
-      // ============================================================
-      function renderVehiclesTable() {
-        if (!vehiclesTableBody) return;
-
-        vehiclesTableBody.innerHTML = "";
-
-        if (loadedVehicles.length === 0) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td colspan="8" class="text-center py-5 text-muted">
-              <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary opacity-50"></i>
-              ไม่พบรายการรถในระบบตามสถานะที่เลือก
-            </td>
-          `;
-          vehiclesTableBody.appendChild(tr);
-        } else {
-          loadedVehicles.forEach((vehicle) => {
-            const tr = document.createElement("tr");
-
-            const status = vehicle.status || "in_stock";
-            let statusLabel = '<i class="bi bi-box-seam me-1"></i>พร้อมขาย';
-            let statusClass = "bg-primary-subtle text-primary border border-primary-subtle";
-            if (status === "sold") {
-              statusLabel = '<i class="bi bi-check me-1"></i>ขายแล้ว';
-              statusClass = "bg-success-subtle text-success border border-success-subtle";
-            }
-
-            const buyPrice = Number(vehicle.buyPrice) || 0;
-            const sellPrice = vehicle.sellPrice != null ? Number(vehicle.sellPrice) : null;
-            const profit = vehicle.profit != null ? Number(vehicle.profit) : null;
-
-            const sellPriceText =
-              sellPrice != null ? `${formatNumber(sellPrice)}` : "-";
-            const profitText =
-              profit != null 
-                ? `<span class="${profit >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold'}">${formatNumber(profit)}</span>` 
-                : (status === "sold" ? "0.00" : "-");
-
-            const canSell = status === "in_stock";
-
-            tr.innerHTML = `
-              <td class="small ps-3 text-nowrap">
-                ${formatDateThaiFromString(vehicle.buyDate || "")}
-              </td>
-              <td class="small fw-medium text-dark">
-                ${(vehicle.brand || "-") + " " + (vehicle.model || "-")}
-              </td>
-              <td class="small text-nowrap">
-                <span class="badge bg-light text-dark border">${vehicle.plate || "-"}</span>
-              </td>
-              <td class="small text-end text-nowrap">
-                ${formatNumber(buyPrice)}
-              </td>
-              <td class="small text-end text-nowrap">
-                ${sellPriceText}
-              </td>
-              <td class="small text-center">
-                <span class="badge rounded-pill ${statusClass}">${statusLabel}</span>
-              </td>
-              <td class="small text-end text-nowrap">
-                ${profitText}
-              </td>
-              <td class="small text-center">
-                <div class="btn-group btn-group-sm" role="group">
-                    ${
-                      canSell
-                        ? `<button
-                            type="button"
-                            class="btn btn-outline-success sell-vehicle-btn"
-                            data-vehicle-id="${vehicle.id}"
-                            title="ขายรถคันนี้"
-                          >
-                            <i class="bi bi-currency-dollar"></i> ขาย
-                          </button>`
-                        : `<button
-                            type="button"
-                            class="btn btn-outline-secondary sell-vehicle-btn"
-                            data-vehicle-id="${vehicle.id}"
-                            title="ดูข้อมูลการขาย"
-                          >
-                            <i class="bi bi-eye"></i> ดูขาย
-                          </button>`
-                    }
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary vehicle-detail-btn"
-                      data-vehicle-id="${vehicle.id}"
-                      title="ดูรายละเอียด"
-                    >
-                      <i class="bi bi-info-circle"></i>
-                    </button>
-                </div>
-              </td>
-            `;
-            vehiclesTableBody.appendChild(tr);
-          });
-        }
-
-        // จำนวนรายการที่โหลด
-        if (vehiclesCountInfo && vehiclesCountNumber) {
-          vehiclesCountInfo.classList.remove("d-none");
-          vehiclesCountNumber.textContent = String(loadedVehicles.length);
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: โหลดรายการรถตามสถานะ (พร้อม pagination)
-      // ============================================================
-      async function loadVehiclesWithFilter(reset = false) {
-        if (isLoadingVehicles) return;
-        if (!currentUserProfile) return;
-
-        const branchId = currentUserProfile.branchId || null;
-        const status = currentStatusFilter;
-
-        if (reset) {
-          loadedVehicles = [];
-          vehiclesLastVisible = null;
-        }
-
-        const isFirstPage = reset || !vehiclesLastVisible;
-        setVehiclesLoadingState(true, isFirstPage);
-
-        try {
-          const vehiclesCol = collection(db, "vehicles");
-          const constraints = [where("isDeleted", "==", false)];
-          if (branchId) {
-            constraints.push(where("branchId", "==", branchId));
-          }
-          if (status && status !== "all") {
-            constraints.push(where("status", "==", status));
-          }
-
-          let qVehicles = query(
-            vehiclesCol,
-            ...constraints,
-            orderBy("buyDate", "desc"),
-            limit(VEHICLES_PAGE_SIZE)
-          );
-
-          if (!isFirstPage && vehiclesLastVisible) {
-            qVehicles = query(
-              vehiclesCol,
-              ...constraints,
-              orderBy("buyDate", "desc"),
-              startAfter(vehiclesLastVisible),
-              limit(VEHICLES_PAGE_SIZE)
-            );
-          }
-
-          // หมายเหตุ: หาก Firestore แจ้งให้สร้าง index สำหรับ where+orderBy
-          // ให้สร้าง index ตามลิงก์ที่ Firestore ขึ้นให้ครั้งแรกเท่านั้น
-          const snap = await getDocs(qVehicles);
-
-          const newVehicles = [];
-          snap.forEach((docSnap) => {
-            const data = docSnap.data();
-            newVehicles.push({
-              id: docSnap.id,
-              buyDate: data.buyDate || "",
-              sellDate: data.sellDate || null,
-              brand: data.brand || "",
-              model: data.model || "",
-              plate: data.plate || "",
-              mileage: data.mileage ?? null,
-              buyPrice: Number(data.buyPrice) || 0,
-              sellPrice:
-                data.sellPrice !== null && data.sellPrice !== undefined
-                  ? Number(data.sellPrice)
-                  : null,
-              status: data.status || "in_stock",
-              note: data.note || "",
-              imageUrl: data.imageUrl || null,
-              profit:
-                data.profit !== null && data.profit !== undefined
-                  ? Number(data.profit)
-                  : null,
-              createdAt: data.createdAt || null,
-              updatedAt: data.updatedAt || null,
-              createdBy: data.createdBy || "",
-              createdByName: data.createdByName || "",
-              branchId: data.branchId || null,
-            });
-          });
-
-          if (reset) {
-            loadedVehicles = newVehicles;
-          } else {
-            loadedVehicles = loadedVehicles.concat(newVehicles);
-          }
-
-          if (!snap.empty) {
-            vehiclesLastVisible = snap.docs[snap.docs.length - 1];
-          }
-
-          // ปุ่มโหลดเพิ่ม
-          if (loadMoreVehiclesBtn) {
-            if (snap.size === VEHICLES_PAGE_SIZE) {
-              loadMoreVehiclesBtn.classList.remove("d-none");
+      // --- Stats Logic ---
+      function calculateStats(vehicles) {
+         let inStock = 0, sold = 0, profit = 0;
+         vehicles.forEach(v => {
+            if(v.status === 'sold') {
+               sold++;
+               profit += (Number(v.profit) || 0);
             } else {
-              loadMoreVehiclesBtn.classList.add("d-none");
+               inStock++;
             }
-          }
-
-          renderVehiclesTable();
-        } catch (error) {
-          console.error("โหลดรายการรถไม่สำเร็จ:", error);
-          if (vehiclesLoadingState) {
-            vehiclesLoadingState.textContent =
-              "ผิดพลาด: " + (error.code || "unknown");
-            vehiclesLoadingState.classList.add("text-danger");
-          }
-          showToast(
-            "ไม่สามารถโหลดรายการรถได้ (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        } finally {
-          setVehiclesLoadingState(false, isFirstPage);
-        }
+         });
+         vehicleInStockCount.textContent = inStock.toLocaleString();
+         vehicleSoldCount.textContent = sold.toLocaleString();
+         vehicleTotalProfit.textContent = formatNumber(profit);
+         vehiclesCountNumber.textContent = vehicles.length.toLocaleString();
       }
 
-      // ============================================================
-      // ฟังก์ชัน: จัดการเพิ่มรถรับซื้อเข้าใหม่
-      // ============================================================
-      async function handleAddVehicle(event) {
-        event.preventDefault();
-        if (!currentUser || !currentUserProfile) return;
+      // --- Render Logic ---
+      function renderVehicles() {
+         // Filter by search text on client side for loaded batch
+         const kw = (currentFilter.searchText || "").toLowerCase();
+         const displayList = loadedVehicles.filter(v => 
+            (v.plate||"").toLowerCase().includes(kw) || 
+            (v.brand||"").toLowerCase().includes(kw) || 
+            (v.model||"").toLowerCase().includes(kw)
+         );
 
-        const brand = (brandInput.value || "").trim();
-        const model = (modelInput.value || "").trim();
-        const plate = (plateInput.value || "").trim();
-        const buyDate = buyDateInput.value || getTodayISODateString();
-        const buyPrice = parseNumberFromInput(buyPriceInput);
-        const mileageRaw = mileageInput.value;
-        const note = (noteInput.value || "").trim();
+         calculateStats(displayList);
 
-        if (!brand || !model || !plate || !buyDate || buyPrice <= 0) {
-          showToast(
-            "กรุณากรอกข้อมูลยี่ห้อ รุ่น ทะเบียน วันที่ และราคาซื้อเข้าให้ครบถ้วน",
-            "warning"
-          );
-          return;
-        }
+         // Render Table
+         vehiclesTableBody.innerHTML = "";
+         if(displayList.length === 0) {
+            vehiclesTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>`;
+         } else {
+            displayList.forEach(v => {
+               const isSold = v.status === "sold";
+               const profitClass = (v.profit || 0) >= 0 ? "text-success" : "text-danger";
+               const tr = document.createElement("tr");
+               tr.innerHTML = `
+                  <td class="ps-3 text-muted small">${formatDateThai(v.buyDate)}</td>
+                  <td class="fw-medium">${v.brand} ${v.model}</td>
+                  <td><span class="badge bg-light text-dark border fw-normal">${v.plate}</span></td>
+                  <td class="text-end text-muted small">${formatNumber(v.buyPrice)}</td>
+                  <td class="text-end fw-medium ${isSold?'text-success':''}">${isSold ? formatNumber(v.sellPrice) : '-'}</td>
+                  <td class="text-center"><span class="badge rounded-pill ${isSold?'bg-success-subtle text-success':'bg-primary-subtle text-primary'} border border-${isSold?'success':'primary'}-subtle">${isSold?'ขายแล้ว':'พร้อมขาย'}</span></td>
+                  <td class="text-end fw-bold ${profitClass}">${isSold ? formatNumber(v.profit) : '-'}</td>
+                  <td class="text-center">
+                     <button class="btn btn-sm btn-light border text-primary rounded-circle detail-btn" data-id="${v.id}"><i class="bi bi-chevron-right"></i></button>
+                  </td>
+               `;
+               vehiclesTableBody.appendChild(tr);
+            });
+         }
 
-        const mileage =
-          mileageRaw && mileageRaw !== ""
-            ? Math.max(0, parseInt(mileageRaw, 10) || 0)
-            : null;
-
-        // staff ก็สามารถเพิ่มรถได้ตามสเปก
-        addVehicleSpinner.classList.remove("d-none");
-        addVehicleBtnText.textContent = "กำลังบันทึก...";
-        addVehicleBtn.disabled = true;
-
-        try {
-          const branchId = currentUserProfile.branchId || null;
-
-          const vehicleData = {
-            buyDate,
-            sellDate: null,
-            brand,
-            model,
-            plate,
-            mileage,
-            buyPrice,
-            sellPrice: null,
-            status: "in_stock",
-            note,
-            imageUrl: null,
-            profit: null,
-            createdAt: serverTimestamp(),
-            updatedAt: null,
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            isDeleted: false,
-            branchId,
-          };
-
-          // บันทึกรถเข้า collection vehicles
-          const vehicleRef = await addDoc(collection(db, "vehicles"), vehicleData);
-
-          // บันทึกธุรกรรมค่าใช้จ่ายซื้อรถ (ออปชันในสเปก แต่ที่นี่ทำให้ครบ)
-          await addDoc(collection(db, "transactions"), {
-            date: buyDate,
-            createdAt: serverTimestamp(),
-            updatedAt: null,
-            type: "expense",
-            category: "ซื้อรถ",
-            description: `ซื้อรถ ${brand} ${model} ทะเบียน ${plate}`,
-            amount: buyPrice,
-            method: "cash",
-            sourceType: "vehicle",
-            sourceId: vehicleRef.id,
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            isDeleted: false,
-            branchId,
-          });
-
-          // บันทึก activityLogs
-          await addDoc(collection(db, "activityLogs"), {
-            createdAt: serverTimestamp(),
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            type: "vehicle_buy",
-            message: `บันทึกรถรับซื้อเข้า ยี่ห้อ ${brand} รุ่น ${model} ทะเบียน ${plate} ราคาซื้อเข้า ${buyPrice.toLocaleString(
-              "th-TH"
-            )} บาท`,
-            refType: "vehicle",
-            refId: vehicleRef.id,
-            branchId,
-          });
-
-          showToast("บันทึกข้อมูลรถที่ซื้อเข้าเรียบร้อยแล้ว", "success");
-
-          // เคลียร์ฟอร์มบางส่วน (เก็บวันที่เดิมไว้)
-          brandInput.value = "";
-          modelInput.value = "";
-          plateInput.value = "";
-          mileageInput.value = "";
-          buyPriceInput.value = "";
-          noteInput.value = "";
-
-          // โหลดสรุปใหม่ + รายการใหม่
-          await loadVehicleSummary();
-          await loadVehiclesWithFilter(true);
-        } catch (error) {
-          console.error("บันทึกรถรับซื้อเข้าไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถบันทึกรถรับซื้อเข้าได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        } finally {
-          addVehicleSpinner.classList.add("d-none");
-          addVehicleBtnText.textContent = "บันทึกรถที่ซื้อเข้า";
-          addVehicleBtn.disabled = false;
-        }
+         // Render Cards (Mobile)
+         vehiclesCardContainer.innerHTML = "";
+         if(displayList.length === 0) {
+             vehiclesCardContainer.innerHTML = `<div class="col-12 text-center text-muted py-5">ไม่พบข้อมูล</div>`;
+         } else {
+             displayList.forEach(v => {
+                const isSold = v.status === "sold";
+                const profitClass = (v.profit || 0) >= 0 ? "text-success" : "text-danger";
+                const col = document.createElement("div");
+                col.className = "col-12 col-md-6 col-lg-4";
+                col.innerHTML = `
+                   <div class="card h-100 border shadow-sm rounded-4 bm-list-card detail-btn cursor-pointer position-relative overflow-hidden" data-id="${v.id}" style="cursor:pointer">
+                      <div class="card-body p-3">
+                         <div class="d-flex justify-content-between align-items-start mb-2">
+                             <h6 class="fw-bold text-primary mb-0 fs-5">${v.plate}</h6>
+                             <span class="badge rounded-pill ${isSold?'bg-success-subtle text-success':'bg-primary-subtle text-primary'}">${isSold?'ขายแล้ว':'พร้อมขาย'}</span>
+                         </div>
+                         <div class="small text-dark fw-medium mb-1">${v.brand} ${v.model}</div>
+                         <div class="d-flex justify-content-between text-muted small mt-2">
+                             <span>ซื้อ: ${formatNumber(v.buyPrice)}</span>
+                             ${isSold ? `<span class="fw-bold ${profitClass}">กำไร: ${formatNumber(v.profit)}</span>` : ''}
+                         </div>
+                      </div>
+                   </div>
+                `;
+                vehiclesCardContainer.appendChild(col);
+             });
+         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: เปิด Modal ขายรถ / ดูรายละเอียดรถ
-      // ============================================================
-      async function openSellVehicleModal(vehicleId) {
-        if (!vehicleId) return;
-        if (!currentUserProfile) return;
+      // --- Data Loading ---
+      async function loadVehicles(reset = false) {
+         if(isLoadingVehicles) return;
+         if(!currentUserProfile) return;
 
-        currentSellVehicleId = vehicleId;
-        currentSellVehicleData = null;
+         if(reset) {
+            loadedVehicles = [];
+            vehiclesLastVisible = null;
+            currentFilter.startDate = filterStartDate.value;
+            currentFilter.endDate = filterEndDate.value;
+            currentFilter.status = vehicleStatusFilter.value;
+            currentFilter.searchText = searchTextInput.value;
+         }
 
-        if (sellVehicleLoadingState) {
-          sellVehicleLoadingState.classList.remove("d-none");
-          sellVehicleLoadingState.textContent = "กำลังโหลดข้อมูลรถ...";
-        }
+         isLoadingVehicles = true;
+         vehiclesLoadingState.classList.remove("d-none");
+         if(reset && loadMoreVehiclesBtn) loadMoreVehiclesBtn.classList.add("d-none");
 
-        sellVehicleModalLabel.innerHTML = '<i class="bi bi-card-text me-2 text-primary"></i>รายละเอียดรถ';
-        sellVehicleBrandModelText.textContent = "-";
-        sellVehiclePlateText.textContent = "-";
-        sellVehicleMileageText.textContent = "-";
-        sellVehicleBuyInfo.textContent = "-";
-        sellVehicleNoteText.textContent = "-";
-        sellVehicleProfitPreview.innerHTML = '<span><i class="bi bi-graph-up-arrow me-2"></i>กำไรโดยประมาณ:</span><span class="fw-bold">0.00 ฿</span>';
-        sellVehicleSoldInfoSection.classList.add("d-none");
-        sellVehicleFormSection.classList.remove("d-none");
-        sellVehicleSaveBtn.classList.remove("d-none");
-        sellVehicleSaveBtn.disabled = false;
+         try {
+            const constraints = [where("isDeleted", "==", false)];
+            if(currentUserProfile.branchId) constraints.push(where("branchId", "==", currentUserProfile.branchId));
+            
+            // Apply Filters (Date & Status)
+            if(currentFilter.status !== "all") constraints.push(where("status", "==", currentFilter.status));
+            if(currentFilter.startDate) constraints.push(where("buyDate", ">=", currentFilter.startDate));
+            if(currentFilter.endDate) constraints.push(where("buyDate", "<=", currentFilter.endDate));
 
-        sellVehicleDateInput.value = getTodayISODateString();
-        sellVehiclePriceInput.value = "";
-
-        sellVehicleModal.show();
-
-        try {
-          let vehicle =
-            loadedVehicles.find((v) => v.id === vehicleId) || null;
-
-          if (!vehicle) {
-            const vehicleRef = doc(db, "vehicles", vehicleId);
-            const vehicleSnap = await getDoc(vehicleRef);
-            if (!vehicleSnap.exists()) {
-              showToast("ไม่พบข้อมูลรถคันนี้ในระบบ", "warning");
-              sellVehicleModal.hide();
-              return;
+            let q = query(collection(db, "vehicles"), ...constraints, orderBy("buyDate", "desc"), limit(PAGE_SIZE));
+            if(!reset && vehiclesLastVisible) {
+               q = query(collection(db, "vehicles"), ...constraints, orderBy("buyDate", "desc"), startAfter(vehiclesLastVisible), limit(PAGE_SIZE));
             }
-            const data = vehicleSnap.data();
-            vehicle = {
-              id: vehicleSnap.id,
-              buyDate: data.buyDate || "",
-              sellDate: data.sellDate || null,
-              brand: data.brand || "",
-              model: data.model || "",
-              plate: data.plate || "",
-              mileage: data.mileage ?? null,
-              buyPrice: Number(data.buyPrice) || 0,
-              sellPrice:
-                data.sellPrice !== null && data.sellPrice !== undefined
-                  ? Number(data.sellPrice)
-                  : null,
-              status: data.status || "in_stock",
-              note: data.note || "",
-              imageUrl: data.imageUrl || null,
-              profit:
-                data.profit !== null && data.profit !== undefined
-                  ? Number(data.profit)
-                  : null,
-              createdAt: data.createdAt || null,
-              updatedAt: data.updatedAt || null,
-              createdBy: data.createdBy || "",
-              createdByName: data.createdByName || "",
-              branchId: data.branchId || null,
+
+            const snap = await getDocs(q);
+            const items = [];
+            snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+
+            if(reset) loadedVehicles = items;
+            else loadedVehicles = loadedVehicles.concat(items);
+
+            if(!snap.empty) vehiclesLastVisible = snap.docs[snap.docs.length-1];
+
+            if(snap.size === PAGE_SIZE) loadMoreVehiclesBtn.classList.remove("d-none");
+            else loadMoreVehiclesBtn.classList.add("d-none");
+
+            renderVehicles();
+
+         } catch(e) {
+            console.error(e);
+            showToast("โหลดข้อมูลไม่สำเร็จ (อาจต้องสร้าง Index)", "danger");
+         } finally {
+            isLoadingVehicles = false;
+            vehiclesLoadingState.classList.add("d-none");
+         }
+      }
+
+      // --- Actions ---
+      async function handleAddVehicle(e) {
+         e.preventDefault();
+         const btn = document.getElementById("addVehicleBtn");
+         const spinner = document.getElementById("addVehicleSpinner");
+         
+         const brand = document.getElementById("brandInput").value.trim();
+         const model = document.getElementById("modelInput").value.trim();
+         const plate = document.getElementById("plateInput").value.trim();
+         const buyPrice = parseFloat(document.getElementById("buyPriceInput").value);
+         const buyDate = document.getElementById("buyDateInput").value;
+         
+         if(!brand || !model || !plate || !buyPrice) { showToast("กรุณากรอกข้อมูลให้ครบ", "warning"); return; }
+
+         btn.disabled = true; spinner.classList.remove("d-none");
+
+         try {
+            const data = {
+               brand, model, plate, buyPrice, buyDate,
+               mileage: parseInt(document.getElementById("mileageInput").value)||0,
+               note: document.getElementById("noteInput").value.trim(),
+               status: "in_stock", isDeleted: false,
+               createdAt: serverTimestamp(), createdBy: currentUser.uid,
+               branchId: currentUserProfile.branchId
             };
-          }
 
-          currentSellVehicleData = vehicle;
-
-          // เติมข้อมูลบน modal
-          sellVehicleBrandModelText.textContent =
-            (vehicle.brand || "-") + " " + (vehicle.model || "-");
-          sellVehiclePlateText.textContent = vehicle.plate || "-";
-          sellVehicleMileageText.textContent =
-            vehicle.mileage != null ? `${formatIntegerNumber(vehicle.mileage)} กม.` : "-";
-
-          const buyInfoText = `ซื้อเข้าเมื่อ ${formatDateThaiFromString(
-            vehicle.buyDate || ""
-          )} | ราคาต้นทุน: ${formatNumber(vehicle.buyPrice || 0)} บาท`;
-          sellVehicleBuyInfo.textContent = buyInfoText;
-
-          sellVehicleNoteText.textContent = vehicle.note || "-";
-
-          const status = vehicle.status || "in_stock";
-
-          if (status === "sold") {
-            // แสดงข้อมูลขายแบบอ่านอย่างเดียว
-            sellVehicleFormSection.classList.add("d-none");
-            sellVehicleSoldInfoSection.classList.remove("d-none");
-            sellVehicleSaveBtn.classList.add("d-none");
-
-            const sellDateThai = formatDateThaiFromString(vehicle.sellDate || "");
-            const sellPrice = vehicle.sellPrice != null ? vehicle.sellPrice : 0;
-            const profit = vehicle.profit != null ? vehicle.profit : 0;
-
-            sellVehicleSoldDateText.textContent = sellDateThai;
-            sellVehicleSoldPriceText.textContent =
-              formatNumber(sellPrice) + " ฿";
-            sellVehicleSoldProfitText.textContent =
-              formatNumber(profit) + " ฿";
-          } else {
-            // ยังไม่ขาย ให้ผู้ใช้กรอกข้อมูลการขายได้
-            sellVehicleFormSection.classList.remove("d-none");
-            sellVehicleSoldInfoSection.classList.add("d-none");
-            sellVehicleSaveBtn.classList.remove("d-none");
-            sellVehicleSaveBtn.disabled = false;
-
-            sellVehicleDateInput.value = getTodayISODateString();
-            sellVehiclePriceInput.value = "";
-            updateSellVehicleProfitPreview();
-          }
-        } catch (error) {
-          console.error("โหลดข้อมูลรถไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลรถได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-          sellVehicleModal.hide();
-        } finally {
-          if (sellVehicleLoadingState) {
-            sellVehicleLoadingState.classList.add("d-none");
-          }
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: อัปเดตข้อความกำไรโดยประมาณใน modal ขายรถ
-      // ============================================================
-      function updateSellVehicleProfitPreview() {
-        if (!currentSellVehicleData || !sellVehicleProfitPreview) return;
-        const sellPrice = parseNumberFromInput(sellVehiclePriceInput);
-        const buyPrice = Number(currentSellVehicleData.buyPrice) || 0;
-        const profit = sellPrice - buyPrice;
-        
-        const profitColor = profit >= 0 ? "text-success" : "text-danger";
-        
-        sellVehicleProfitPreview.className = `alert ${profit >= 0 ? 'alert-success' : 'alert-danger'} d-flex justify-content-between align-items-center py-2 mb-0`;
-        sellVehicleProfitPreview.innerHTML =
-          `<span><i class="bi bi-graph-up-arrow me-2"></i>กำไรโดยประมาณ:</span><span class="fw-bold ${profitColor}">${formatNumber(profit)} ฿</span>`;
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: บันทึกการขายรถ (update vehicles + transaction + log)
-      // ============================================================
-      async function handleSaveSellVehicle() {
-        if (!currentSellVehicleId || !currentSellVehicleData) return;
-        if (!currentUser || !currentUserProfile) return;
-        if (isSavingSellVehicle) return;
-
-        const status = currentSellVehicleData.status || "in_stock";
-        if (status === "sold") {
-          showToast(
-            "รถคันนี้ถูกบันทึกว่าขายไปแล้ว หากต้องการแก้ไขกรุณาจัดการจาก Firestore",
-            "info"
-          );
-          return;
-        }
-
-        const sellDate = sellVehicleDateInput.value || getTodayISODateString();
-        const sellPrice = parseNumberFromInput(sellVehiclePriceInput);
-
-        if (!sellDate || sellPrice <= 0) {
-          showToast(
-            "กรุณากรอกวันที่ขายและราคาขายให้ถูกต้อง ก่อนบันทึกการขาย",
-            "warning"
-          );
-          return;
-        }
-
-        const buyPrice = Number(currentSellVehicleData.buyPrice) || 0;
-        const profit = sellPrice - buyPrice;
-        const branchId = currentUserProfile.branchId || null;
-
-        isSavingSellVehicle = true;
-        sellVehicleSaveSpinner.classList.remove("d-none");
-        sellVehicleSaveBtnText.textContent = "กำลังบันทึก...";
-        sellVehicleSaveBtn.disabled = true;
-
-        try {
-          // อัปเดตรถใน collection vehicles
-          const vehicleRef = doc(db, "vehicles", currentSellVehicleId);
-          await updateDoc(vehicleRef, {
-            sellDate,
-            sellPrice,
-            profit,
-            status: "sold",
-            updatedAt: serverTimestamp(),
-          });
-
-          // บันทึกธุรกรรมรายรับ "ขายรถ"
-          await addDoc(collection(db, "transactions"), {
-            date: sellDate,
-            createdAt: serverTimestamp(),
-            updatedAt: null,
-            type: "income",
-            category: "ขายรถ",
-            description: `ขายรถ ${currentSellVehicleData.brand || ""} ${
-              currentSellVehicleData.model || ""
-            } ทะเบียน ${currentSellVehicleData.plate || ""}`,
-            amount: sellPrice,
-            method: "cash",
-            sourceType: "vehicle",
-            sourceId: currentSellVehicleId,
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            isDeleted: false,
-            branchId,
-          });
-
-          // บันทึก activityLogs "vehicle_sell"
-          const message = `ขายรถ ${currentSellVehicleData.brand || ""} ${
-            currentSellVehicleData.model || ""
-          } ทะเบียน ${currentSellVehicleData.plate || ""} ราคาขาย ${sellPrice.toLocaleString(
-            "th-TH"
-          )} บาท กำไร ${profit.toLocaleString("th-TH")} บาท`;
-
-          await addDoc(collection(db, "activityLogs"), {
-            createdAt: serverTimestamp(),
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            type: "vehicle_sell",
-            message,
-            refType: "vehicle",
-            refId: currentSellVehicleId,
-            branchId,
-          });
-
-          showToast("บันทึกการขายรถเรียบร้อยแล้ว", "success");
-
-          // อัปเดตข้อมูลใน loadedVehicles
-          loadedVehicles = loadedVehicles.map((v) =>
-            v.id === currentSellVehicleId
-              ? {
-                  ...v,
-                  sellDate,
-                  sellPrice,
-                  profit,
-                  status: "sold",
-                }
-              : v
-          );
-          renderVehiclesTable();
-
-          // โหลดสรุปใหม่
-          await loadVehicleSummary();
-
-          sellVehicleModal.hide();
-        } catch (error) {
-          console.error("บันทึกการขายรถไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถบันทึกการขายรถได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        } finally {
-          isSavingSellVehicle = false;
-          sellVehicleSaveSpinner.classList.add("d-none");
-          sellVehicleSaveBtnText.textContent = "ยืนยันการขาย";
-          sellVehicleSaveBtn.disabled = false;
-        }
-      }
-
-      // ============================================================
-      // Logout
-      // ============================================================
-      async function handleLogout() {
-        try {
-          await signOut(auth);
-          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Logout error:", error);
-          showToast(
-            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
-      }
-
-      // ============================================================
-      // ตั้งค่า Event Listeners สำหรับหน้านี้
-      // ============================================================
-      function setupEventListenersForPage() {
-        // ปุ่ม Logout
-        logoutBtn?.addEventListener("click", () => {
-          handleLogout();
-        });
-
-        // ปุ่มสลับธีม
-        themeToggleBtn?.addEventListener("click", async () => {
-          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
-            ? "dark"
-            : "light";
-          const nextTheme = currentTheme === "dark" ? "light" : "dark";
-          applyTheme(nextTheme);
-          if (currentUser) {
-            saveThemeForUser(currentUser.uid, nextTheme);
-            try {
-              const userRef = doc(db, "users", currentUser.uid);
-              await updateDoc(userRef, { theme: nextTheme });
-            } catch (error) {
-              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
-            }
-          }
-        });
-
-        // FAB เมนูด่วน
-        fabOpenBillBtn?.addEventListener("click", () => {
-          window.location.href = "open-bill.html";
-        });
-        fabAddTxnBtn?.addEventListener("click", () => {
-          window.location.href = "finance.html";
-        });
-        fabStockInBtn?.addEventListener("click", () => {
-          window.location.href = "stock.html";
-        });
-        fabAddVehicleBtn?.addEventListener("click", () => {
-          // เลื่อนจอไปยังฟอร์มเพิ่มรถ
-          const rect = addVehicleForm?.getBoundingClientRect();
-          if (rect) {
-            window.scrollTo({
-              top: window.scrollY + rect.top - 120, // offset for fixed topbar
-              behavior: "smooth",
+            const ref = await addDoc(collection(db, "vehicles"), data);
+            
+            // Transaction & Log
+            await addDoc(collection(db, "transactions"), {
+               date: buyDate, type: "expense", category: "ซื้อรถ", amount: buyPrice,
+               description: `ซื้อรถ ${plate}`, sourceType: "vehicle", sourceId: ref.id,
+               branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), isDeleted: false
             });
-            // highlight form slightly
-            addVehicleForm.closest('.card').classList.add('border-primary');
-            setTimeout(() => addVehicleForm.closest('.card').classList.remove('border-primary'), 2000);
-          }
-        });
+await addDoc(collection(db, "activityLogs"), {
+   type: "vehicle_buy", message: `รับซื้อรถ ${plate}`, refId: ref.id, refType: "vehicle",
+   branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+   createdBy: currentUser.uid,
+   createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
+});
 
-        // ฟอร์มเพิ่มรถรับซื้อเข้า
-        addVehicleForm?.addEventListener("submit", handleAddVehicle);
+            showToast("เพิ่มรถสำเร็จ", "success");
+            e.target.reset();
+            document.getElementById("buyDateInput").value = getTodayISO();
+            loadVehicles(true);
 
-        // Enter ใน input ต่าง ๆ แล้วส่งฟอร์มได้
-        [brandInput, modelInput, plateInput, mileageInput, buyPriceInput].forEach(
-          (input) => {
-            input?.addEventListener("keypress", (event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                addVehicleForm?.dispatchEvent(new Event("submit"));
-              }
-            });
-          }
-        );
-
-        // เปลี่ยนสถานะ filter
-        vehicleStatusFilter?.addEventListener("change", () => {
-          currentStatusFilter = vehicleStatusFilter.value || "all";
-          loadVehiclesWithFilter(true);
-        });
-
-        // ปุ่มโหลดเพิ่ม
-        loadMoreVehiclesBtn?.addEventListener("click", () => {
-          loadVehiclesWithFilter(false);
-        });
-
-        // ตาราง: ปุ่มขายรถ / รายละเอียด (ใช้ event delegation)
-        vehiclesTableBody?.addEventListener("click", (event) => {
-          const sellBtn = event.target.closest(".sell-vehicle-btn");
-          if (sellBtn) {
-            const vehicleId = sellBtn.getAttribute("data-vehicle-id");
-            openSellVehicleModal(vehicleId);
-            return;
-          }
-          const detailBtn = event.target.closest(".vehicle-detail-btn");
-          if (detailBtn) {
-            const vehicleId = detailBtn.getAttribute("data-vehicle-id");
-            openSellVehicleModal(vehicleId);
-          }
-        });
-
-        // Form ใน modal ขายรถ: อัปเดตกำไรโดยประมาณเมื่อเปลี่ยนราคาขาย
-        sellVehiclePriceInput?.addEventListener("input", () => {
-          updateSellVehicleProfitPreview();
-        });
-        sellVehicleForm?.addEventListener("submit", (event) => {
-          event.preventDefault();
-          handleSaveSellVehicle();
-        });
-        sellVehicleSaveBtn?.addEventListener("click", () => {
-          handleSaveSellVehicle();
-        });
+         } catch(err) {
+            console.error(err);
+            showToast("บันทึกไม่สำเร็จ", "danger");
+         } finally {
+            btn.disabled = false; spinner.classList.add("d-none");
+         }
       }
 
-      // ============================================================
-      // Auth Guard ของหน้า vehicles.html
-      // - ถ้าไม่ได้ล็อกอิน → redirect ไป index.html
-      // - ถ้าล็อกอินแล้ว → โหลด users/{uid} เช็ค role/theme/disabled
-      //   แล้วโหลดสรุป/รายการรถ
-      // ============================================================
+      async function openDetailModal(id) {
+         currentSellVehicleId = id;
+         currentSellVehicleData = loadedVehicles.find(v => v.id === id);
+         if(!currentSellVehicleData) return;
+         
+         // Set Data to View
+         const v = currentSellVehicleData;
+         sellVehiclePlateText.textContent = v.plate;
+         sellVehicleBrandModelText.textContent = `${v.brand} ${v.model}`;
+         sellVehicleMileageText.textContent = (v.mileage || 0).toLocaleString();
+         sellVehicleBuyDateText.textContent = formatDateThai(v.buyDate);
+         sellVehicleBuyPriceText.textContent = formatNumber(v.buyPrice);
+         sellVehicleNoteText.textContent = v.note || "-";
+
+         // Reset Modes
+         vehicleViewMode.classList.remove("d-none");
+         vehicleViewButtons.classList.remove("d-none");
+         vehicleEditMode.classList.add("d-none");
+         vehicleEditButtons.classList.add("d-none");
+
+         // Status Logic
+         if(v.status === "sold") {
+             sellVehicleFormSection.classList.add("d-none");
+             sellVehicleSoldInfoSection.classList.remove("d-none");
+             sellVehicleSaveBtn.classList.add("d-none");
+             
+             sellVehicleSoldDateText.textContent = formatDateThai(v.sellDate);
+             sellVehicleSoldPriceText.textContent = formatNumber(v.sellPrice);
+             sellVehicleSoldProfitText.textContent = formatNumber(v.profit);
+         } else {
+             sellVehicleFormSection.classList.remove("d-none");
+             sellVehicleSoldInfoSection.classList.add("d-none");
+             sellVehicleSaveBtn.classList.remove("d-none");
+             
+             sellVehicleDateInput.value = getTodayISO();
+             sellVehiclePriceInput.value = "";
+             sellVehicleProfitPreview.innerHTML = `<span class="small text-muted">กำไรโดยประมาณ:</span><span class="fw-bold text-success">0.00 ฿</span>`;
+         }
+
+         // Admin Delete Btn
+         if(currentUserProfile.role === 'admin') {
+             vehicleDeleteBtn.classList.remove("d-none");
+         }
+
+         sellVehicleModal.show();
+      }
+
+      function enableEditMode() {
+         const v = currentSellVehicleData;
+         if(!v) return;
+
+         editPlateInput.value = v.plate;
+         editBrandInput.value = v.brand;
+         editModelInput.value = v.model;
+         editMileageInput.value = v.mileage;
+         editNoteInput.value = v.note;
+         editBuyPriceInput.value = v.buyPrice;
+
+         // Admin check for buy price editing
+         editBuyPriceInput.readOnly = (currentUserProfile.role !== 'admin');
+
+         vehicleViewMode.classList.add("d-none");
+         vehicleViewButtons.classList.add("d-none");
+         vehicleEditMode.classList.remove("d-none");
+         vehicleEditButtons.classList.remove("d-none");
+      }
+
+      async function saveEdit() {
+         const btn = document.getElementById("saveEditBtn");
+         const spinner = document.getElementById("saveEditSpinner");
+         btn.disabled = true; spinner.classList.remove("d-none");
+
+         try {
+             const updates = {
+                 plate: editPlateInput.value.trim(),
+                 brand: editBrandInput.value.trim(),
+                 model: editModelInput.value.trim(),
+                 mileage: parseInt(editMileageInput.value)||0,
+                 note: editNoteInput.value.trim(),
+                 updatedAt: serverTimestamp()
+             };
+             
+             if(currentUserProfile.role === 'admin') {
+                 updates.buyPrice = parseFloat(editBuyPriceInput.value) || 0;
+                 // Recalculate profit if already sold
+                 if(currentSellVehicleData.status === 'sold') {
+                     updates.profit = (currentSellVehicleData.sellPrice || 0) - updates.buyPrice;
+                 }
+             }
+
+             await updateDoc(doc(db, "vehicles", currentSellVehicleId), updates);
+             
+             // Update Local
+             Object.assign(currentSellVehicleData, updates);
+             // Re-render modal view
+             openDetailModal(currentSellVehicleId); // refresh view
+             loadVehicles(true); // refresh list
+             showToast("แก้ไขข้อมูลเรียบร้อย", "success");
+
+         } catch(e) {
+             console.error(e);
+             showToast("แก้ไขไม่สำเร็จ", "danger");
+         } finally {
+             btn.disabled = false; spinner.classList.add("d-none");
+         }
+      }
+
+      async function deleteVehicle() {
+         if(!confirm("ต้องการลบรถคันนี้ใช่หรือไม่? (Soft Delete)")) return;
+         try {
+             await updateDoc(doc(db, "vehicles", currentSellVehicleId), {
+                 isDeleted: true, updatedAt: serverTimestamp()
+             });
+await addDoc(collection(db, "activityLogs"), {
+    type: "vehicle_delete", message: `ลบรถ ${currentSellVehicleData.plate}`, 
+    refId: currentSellVehicleId, refType: "vehicle", branchId: currentUserProfile.branchId,
+    createdAt: serverTimestamp(), 
+    createdBy: currentUser.uid,
+    createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
+});
+             showToast("ลบข้อมูลเรียบร้อย", "success");
+             sellVehicleModal.hide();
+             loadVehicles(true);
+         } catch(e) {
+             showToast("ลบไม่สำเร็จ", "danger");
+         }
+      }
+
+      async function sellVehicle() {
+         const sellPrice = parseFloat(sellVehiclePriceInput.value);
+         const sellDate = sellVehicleDateInput.value;
+         if(!sellPrice || !sellDate) { showToast("กรุณาระบุราคาและวันที่", "warning"); return; }
+         
+         sellVehicleSaveBtn.disabled = true; sellVehicleSaveSpinner.classList.remove("d-none");
+         
+         try {
+             const profit = sellPrice - (currentSellVehicleData.buyPrice || 0);
+             await updateDoc(doc(db, "vehicles", currentSellVehicleId), {
+                 status: "sold", sellPrice, sellDate, profit, updatedAt: serverTimestamp()
+             });
+             
+             await addDoc(collection(db, "transactions"), {
+                 date: sellDate, type: "income", category: "ขายรถ", amount: sellPrice,
+                 description: `ขายรถ ${currentSellVehicleData.plate}`, sourceType: "vehicle", sourceId: currentSellVehicleId,
+                 branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), isDeleted: false
+             });
+             
+await addDoc(collection(db, "activityLogs"), {
+    type: "vehicle_sell", message: `ขายรถ ${currentSellVehicleData.plate}`, refId: currentSellVehicleId, refType: "vehicle",
+    branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+    createdBy: currentUser.uid,
+    createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
+});
+
+             showToast("บันทึกการขายสำเร็จ", "success");
+             sellVehicleModal.hide();
+             loadVehicles(true);
+         } catch(e) {
+             console.error(e);
+             showToast("บันทึกไม่สำเร็จ", "danger");
+         } finally {
+             sellVehicleSaveBtn.disabled = false; sellVehicleSaveSpinner.classList.add("d-none");
+         }
+      }
+
+      function exportToCSV() {
+         if(!loadedVehicles.length) { showToast("ไม่มีข้อมูลให้ส่งออก", "warning"); return; }
+         let csv = "\uFEFFวันที่ซื้อ,ยี่ห้อ/รุ่น,ทะเบียน,ราคาซื้อ,ราคาขาย,กำไร,สถานะ\n";
+         loadedVehicles.forEach(v => {
+             csv += `${v.buyDate},"${v.brand} ${v.model}","${v.plate}",${v.buyPrice},${v.sellPrice||0},${v.profit||0},${v.status}\n`;
+         });
+         const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+         const link = document.createElement("a");
+         link.href = URL.createObjectURL(blob);
+         link.download = `vehicles_export_${getTodayISO()}.csv`;
+         link.click();
+      }
+
+      // --- Setup ---
+      function setupEvents() {
+         // View Toggles
+         tableViewBtn.onclick = () => {
+             tableViewBtn.classList.add("active","text-primary","fw-bold"); tableViewBtn.classList.remove("text-secondary");
+             cardViewBtn.classList.remove("active","text-primary","fw-bold"); cardViewBtn.classList.add("text-secondary");
+             vehiclesTableView.classList.remove("d-none"); vehiclesCardView.classList.add("d-none");
+         };
+         cardViewBtn.onclick = () => {
+             cardViewBtn.classList.add("active","text-primary","fw-bold"); cardViewBtn.classList.remove("text-secondary");
+             tableViewBtn.classList.remove("active","text-primary","fw-bold"); tableViewBtn.classList.add("text-secondary");
+             vehiclesCardView.classList.remove("d-none"); vehiclesTableView.classList.add("d-none");
+         };
+
+         // Listeners
+         searchBtn.onclick = () => loadVehicles(true);
+         loadMoreVehiclesBtn.onclick = () => loadVehicles(false);
+         addVehicleForm.onsubmit = handleAddVehicle;
+         exportCsvBtn.onclick = exportToCSV;
+         
+         // Filters
+         vehicleStatusFilter.onchange = () => loadVehicles(true);
+         filterStartDate.onchange = () => loadVehicles(true);
+         filterEndDate.onchange = () => loadVehicles(true);
+         searchTextInput.addEventListener("keyup", (e) => {
+             if(e.key === 'Enter') loadVehicles(true);
+         });
+
+         // Modal delegation
+         const handleDetailClick = (e) => {
+             const btn = e.target.closest(".detail-btn");
+             if(btn) openDetailModal(btn.dataset.id);
+         };
+         vehiclesTableBody.onclick = handleDetailClick;
+         vehiclesCardContainer.onclick = handleDetailClick;
+
+         // Modal Actions
+         vehicleEditBtn.onclick = enableEditMode;
+         cancelEditBtn.onclick = () => openDetailModal(currentSellVehicleId); // Reset to view
+         saveEditBtn.onclick = saveEdit;
+         vehicleDeleteBtn.onclick = deleteVehicle;
+         sellVehicleSaveBtn.onclick = sellVehicle;
+         
+         // Profit Calc Preview
+         sellVehiclePriceInput.addEventListener("input", () => {
+             const price = parseFloat(sellVehiclePriceInput.value) || 0;
+             const buy = currentSellVehicleData ? currentSellVehicleData.buyPrice : 0;
+             const p = price - buy;
+             sellVehicleProfitPreview.innerHTML = `<span class="small text-muted">กำไรโดยประมาณ:</span><span class="fw-bold ${p>=0?'text-success':'text-danger'}">${formatNumber(p)} ฿</span>`;
+         });
+
+         // Nav
+         logoutBtn.onclick = () => signOut(auth).then(() => window.location.href="index.html");
+         if(themeToggleBtn) themeToggleBtn.onclick = () => {
+             const t = bodyEl.classList.contains("bm-theme-dark") ? "light" : "dark";
+             applyTheme(t);
+             localStorage.setItem("bm-theme-" + currentUser.uid, t);
+         };
+         
+         // FAB
+         fabOpenBillBtn.onclick = () => window.location.href="open-bill.html";
+         fabAddTxnBtn.onclick = () => window.location.href="finance.html";
+         fabStockInBtn.onclick = () => window.location.href="stock.html";
+         fabAddVehicleBtn.onclick = () => {
+             document.getElementById("addVehicleForm").scrollIntoView({behavior:"smooth"});
+             document.getElementById("collapseAddVehicle").classList.add("show");
+         };
+      }
+
+      // --- Main Execution ---
       onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
+         if(!user) { window.location.href = "index.html"; return; }
+         currentUser = user;
+         
+         const userRef = doc(db, "users", user.uid);
+         const snap = await getDoc(userRef);
+         if(snap.exists()) currentUserProfile = { id: snap.id, ...snap.data() };
+         else currentUserProfile = { role: 'staff', branchId: null, theme: 'light' }; // fallback
 
-        currentUser = user;
+         if(currentUserProfile.disabled) { signOut(auth); return; }
 
-        try {
-          const userProfile = await ensureUserProfile(user);
-          currentUserProfile = userProfile;
-
-          if (userProfile.disabled === true) {
-            await signOut(auth);
-            showToast(
-              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
-              "danger"
-            );
-            window.location.href = "index.html";
-            return;
-          }
-
-          // อัปเดต Topbar
-          if (userDisplayNameText) {
-            userDisplayNameText.textContent = userProfile.displayName || "-";
-          }
-          if (userRoleText) {
-            const roleLabel =
-              userProfile.role === "admin" ? "Admin" : "Staff";
-            userRoleText.textContent = roleLabel;
-          }
-          if (userAvatarInitial) {
-            const dn = userProfile.displayName || "U";
-            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
-          }
-
-          // เมนูตั้งค่าเฉพาะ admin
-          if (settingsMenuItem) {
-            if (userProfile.role === "admin") {
-              settingsMenuItem.classList.remove("d-none");
-            } else {
-              settingsMenuItem.classList.add("d-none");
-            }
-          }
-
-          // ธีม
-          const baseTheme = userProfile.theme || "light";
-          const themeToUse = readThemeForUser(user.uid, baseTheme);
-          applyTheme(themeToUse);
-
-          // ตั้งค่า default buyDate เป็นวันนี้
-          if (buyDateInput) {
-            buyDateInput.value = getTodayISODateString();
-          }
-
-          // ตั้งค่า Event listeners
-          setupEventListenersForPage();
-
-          // โหลดสรุปสถิติ และรายการรถ
-          await loadVehicleSummary();
-          await loadVehiclesWithFilter(true);
-        } catch (error) {
-          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/รถ:", error);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายการรถได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
+         // UI Init
+         userDisplayNameText.textContent = currentUserProfile.displayName || user.email;
+         userRoleText.textContent = currentUserProfile.role === 'admin' ? "Admin" : "Staff";
+         userAvatarInitial.textContent = (currentUserProfile.displayName||"U")[0].toUpperCase();
+         if(settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== 'admin');
+         
+         applyTheme(localStorage.getItem("bm-theme-"+user.uid) || currentUserProfile.theme);
+         
+         document.getElementById("buyDateInput").value = getTodayISO();
+         
+         setupEvents();
+         loadVehicles(true);
       });
     </script>
   </body>

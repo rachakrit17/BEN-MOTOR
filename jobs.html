@@ -2,7 +2,7 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>BEN MOTOR – งานซ่อมย้อนหลัง</title>
+    <title>BEN MOTOR – รายการงานซ่อม (Full Version)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link
@@ -13,9 +13,7 @@
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-
     <link rel="manifest" href="img/site.webmanifest">
     
     <link
@@ -122,7 +120,7 @@
           <div>
             <h1 class="h4 mb-1 fw-bold text-dark">งานซ่อมย้อนหลัง</h1>
             <p class="small text-muted mb-0">
-              ประวัติงานซ่อมทั้งหมด ค้นหาและจัดการสถานะใบงาน
+              จัดการรายการซ่อม ตรวจสอบสถานะ และดูยอดเงินรวม
             </p>
           </div>
           <div class="text-end">
@@ -133,11 +131,42 @@
         </div>
 
         <section class="mb-4">
+           <div class="bm-dashboard-grid">
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">จำนวนงานที่พบ</div>
+                 <div class="bm-stat-value text-primary" id="statTotalJobs">0</div>
+                 <div class="bm-stat-sub text-muted">รายการ</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">ยอดรวมทั้งหมด</div>
+                 <div class="bm-stat-value text-success" id="statTotalRevenue">0</div>
+                 <div class="bm-stat-sub text-muted">บาท</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">เฉลี่ยต่อคัน</div>
+                 <div class="bm-stat-value text-dark" id="statAvgRevenue">0</div>
+                 <div class="bm-stat-sub text-muted">บาท/คัน</div>
+              </div>
+              <div class="bm-stat-card shadow-sm">
+                 <div class="bm-stat-label mb-1">กำลังซ่อม</div>
+                 <div class="bm-stat-value text-warning" id="statPendingJobs">0</div>
+                 <div class="bm-stat-sub text-muted">คัน</div>
+              </div>
+           </div>
+        </section>
+
+        <section class="mb-4">
           <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
-              <h2 class="h6 fw-bold text-primary mb-3">
-                <i class="bi bi-funnel-fill me-2"></i> ตัวกรองค้นหา
-              </h2>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                 <h2 class="h6 fw-bold text-primary mb-0">
+                   <i class="bi bi-funnel-fill me-2"></i> ตัวกรองค้นหา
+                 </h2>
+                 <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="exportCsvBtn">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> ส่งออก CSV
+                 </button>
+              </div>
+              
               <form id="jobsFilterForm" class="row g-3 align-items-end">
                 <div class="col-6 col-md-3">
                   <label for="jobsStartDate" class="form-label small text-muted mb-1">วันที่เริ่มต้น</label>
@@ -157,7 +186,7 @@
                   </select>
                 </div>
                 <div class="col-12 col-md-4">
-                  <label for="jobsSearchInput" class="form-label small text-muted mb-1">ค้นหา (ชื่อ, ทะเบียน, ยี่ห้อ)</label>
+                  <label for="jobsSearchInput" class="form-label small text-muted mb-1">ค้นหา (ชื่อ, ทะเบียน, ยี่ห้อ, ปัญหา)</label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control bg-light border-start-0 ps-0" id="jobsSearchInput" placeholder="พิมพ์คำค้น..." />
@@ -167,12 +196,12 @@
               </form>
 
               <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-2 border-top gap-3">
-                
-                <div class="d-flex align-items-center gap-2 w-100 w-md-auto">
-                   <span class="small text-muted me-1">ช่วงเวลา:</span>
-                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="presetTodayBtn">วันนี้</button>
-                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="preset7DaysBtn">7 วัน</button>
-                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="preset30DaysBtn">30 วัน</button>
+                <div class="d-flex align-items-center gap-2 w-100 w-md-auto overflow-auto pb-1 pb-md-0">
+                   <span class="small text-muted me-1 text-nowrap">ช่วงเวลา:</span>
+                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="presetTodayBtn">วันนี้</button>
+                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="preset7DaysBtn">7 วัน</button>
+                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="preset30DaysBtn">30 วัน</button>
+                   <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="presetAllBtn">ทั้งหมด</button>
                 </div>
 
                 <div class="d-flex align-items-center gap-2 ms-md-auto">
@@ -194,8 +223,7 @@
 
         <section class="mb-3 d-flex justify-content-between align-items-center px-2">
            <div id="jobsCountInfo" class="small text-muted d-none">
-              <i class="bi bi-info-circle me-1"></i> พบงานซ่อม <span id="jobsCountNumber" class="fw-bold text-dark">0</span> งาน
-           </div>
+              </div>
            <div id="jobsLoadingState" class="small text-primary d-none">
               <span class="spinner-border spinner-border-sm me-2" role="status"></span> กำลังโหลดข้อมูล...
            </div>
@@ -214,7 +242,7 @@
                       <th class="py-3 fw-normal" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
                       <th class="py-3 fw-normal" style="min-width: 130px;">สถานะ</th>
                       <th class="text-end py-3 fw-normal" style="min-width: 110px;">ยอดรวม (฿)</th>
-                      <th class="text-center py-3 fw-normal" style="min-width: 100px;">จัดการ</th>
+                      <th class="text-center py-3 fw-normal" style="min-width: 80px;">จัดการ</th>
                     </tr>
                   </thead>
                   <tbody id="jobsTableBody" class="border-top-0">
@@ -253,15 +281,7 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow-lg bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
+
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li>
             <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabOpenBillBtn">
@@ -347,12 +367,17 @@
             <h1 class="modal-title fs-5 fw-bold text-primary" id="jobDetailModalLabel">
               <i class="bi bi-file-earmark-text me-2"></i> รายละเอียดงานซ่อม
             </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="ปิด"
-            ></button>
+            <div class="ms-auto d-flex gap-2">
+                 <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" id="jobDetailPrintBtn" title="พิมพ์ใบงาน">
+                    <i class="bi bi-printer-fill"></i> <span class="d-none d-sm-inline ms-1">พิมพ์</span>
+                 </button>
+                 <button
+                   type="button"
+                   class="btn-close ms-0"
+                   data-bs-dismiss="modal"
+                   aria-label="ปิด"
+                 ></button>
+            </div>
           </div>
           <div class="modal-body pt-3">
             <div id="jobDetailLoadingState" class="alert alert-light border text-center text-muted small py-3 d-none">
@@ -425,10 +450,8 @@
                            <th class="text-end pe-3 border-0 fw-normal">รวม</th>
                         </tr>
                      </thead>
-                     <tbody id="jobDetailPartsTbody">
-                        </tbody>
-                     <tbody id="jobDetailLaborTbody" class="border-top-0">
-                        </tbody>
+                     <tbody id="jobDetailPartsTbody"></tbody>
+                     <tbody id="jobDetailLaborTbody" class="border-top-0"></tbody>
                      <tfoot class="bg-light">
                         <tr>
                            <td colspan="3" class="text-end small text-muted py-2">รวมค่าอะไหล่</td>
@@ -473,6 +496,11 @@
              >
                <i class="bi bi-trash me-1"></i> ซ่อนบิล (Admin)
              </button>
+             
+             <button type="button" class="btn btn-sm btn-outline-primary rounded-pill d-none" id="jobDetailEditBtn">
+                <i class="bi bi-pencil-square me-1"></i> แก้ไข
+             </button>
+
             <button
               type="button"
               class="btn btn-light rounded-pill px-4"
@@ -526,6 +554,7 @@
         getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, limit, startAfter, serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+      // --- Firebase Config ---
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -541,49 +570,66 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // DOM Elements
+      // --- DOM Elements ---
       const bodyEl = document.body;
       const themeToggleBtn = document.getElementById("themeToggleBtn");
+      
+      // User Menu
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
       const userAvatarInitial = document.getElementById("userAvatarInitial");
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
+      // Filter Inputs
       const jobsFilterForm = document.getElementById("jobsFilterForm");
       const jobsStartDateInput = document.getElementById("jobsStartDate");
       const jobsEndDateInput = document.getElementById("jobsEndDate");
       const jobsStatusFilterSelect = document.getElementById("jobsStatusFilter");
       const jobsSearchInput = document.getElementById("jobsSearchInput");
       const jobsSearchBtn = document.getElementById("jobsSearchBtn");
+      const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+      // Presets
       const presetTodayBtn = document.getElementById("presetTodayBtn");
       const preset7DaysBtn = document.getElementById("preset7DaysBtn");
       const preset30DaysBtn = document.getElementById("preset30DaysBtn");
+      const presetAllBtn = document.getElementById("presetAllBtn");
       const jobsDateRangeSummary = document.getElementById("jobsDateRangeSummary");
 
+      // Stats Elements
+      const statTotalJobs = document.getElementById("statTotalJobs");
+      const statTotalRevenue = document.getElementById("statTotalRevenue");
+      const statAvgRevenue = document.getElementById("statAvgRevenue");
+      const statPendingJobs = document.getElementById("statPendingJobs");
+
+      // View Toggles
       const tableViewBtn = document.getElementById("tableViewBtn");
       const cardViewBtn = document.getElementById("cardViewBtn");
       const jobsTableView = document.getElementById("jobsTableView");
       const jobsCardView = document.getElementById("jobsCardView");
 
+      // List Rendering
       const jobsLoadingState = document.getElementById("jobsLoadingState");
       const jobsCountInfo = document.getElementById("jobsCountInfo");
-      const jobsCountNumber = document.getElementById("jobsCountNumber");
       const jobsTableBody = document.getElementById("jobsTableBody");
       const jobsCardContainer = document.getElementById("jobsCardContainer");
       const loadMoreJobsBtn = document.getElementById("loadMoreJobsBtn");
       const loadMoreJobsSpinner = document.getElementById("loadMoreJobsSpinner");
       const loadMoreJobsBtnText = document.getElementById("loadMoreJobsBtnText");
 
+      // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
       const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
       const fabStockInBtn = document.getElementById("fabStockInBtn");
       const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
-      // Modal
+      // Modal Elements
       const jobDetailModalEl = document.getElementById("jobDetailModal");
       const jobDetailModalLabel = document.getElementById("jobDetailModalLabel");
       const jobDetailLoadingState = document.getElementById("jobDetailLoadingState");
+      const jobDetailPrintBtn = document.getElementById("jobDetailPrintBtn");
+      
       const jobDetailDate = document.getElementById("jobDetailDate");
       const jobDetailCustomerName = document.getElementById("jobDetailCustomerName");
       const jobDetailCustomerPhone = document.getElementById("jobDetailCustomerPhone");
@@ -591,38 +637,44 @@
       const jobDetailBrandModel = document.getElementById("jobDetailBrandModel");
       const jobDetailMileage = document.getElementById("jobDetailMileage");
       const jobDetailProblem = document.getElementById("jobDetailProblem");
+      
       const jobDetailStatusBadge = document.getElementById("jobDetailStatusBadge");
       const jobDetailPriorityBadge = document.getElementById("jobDetailPriorityBadge");
       const jobDetailCreatedBy = document.getElementById("jobDetailCreatedBy");
       const jobDetailStatusSelect = document.getElementById("jobDetailStatusSelect");
+      
       const jobDetailPartsTbody = document.getElementById("jobDetailPartsTbody");
       const jobDetailLaborTbody = document.getElementById("jobDetailLaborTbody");
       const jobDetailPartsTotal = document.getElementById("jobDetailPartsTotal");
       const jobDetailLaborTotal = document.getElementById("jobDetailLaborTotal");
       const jobDetailGrandTotal = document.getElementById("jobDetailGrandTotal");
+      
       const jobDetailLogsList = document.getElementById("jobDetailLogsList");
       const jobDetailSaveStatusBtn = document.getElementById("jobDetailSaveStatusBtn");
       const jobDetailSaveStatusSpinner = document.getElementById("jobDetailSaveStatusSpinner");
       const jobDetailSaveStatusBtnText = document.getElementById("jobDetailSaveStatusBtnText");
+      
       const jobDetailSoftDeleteBtn = document.getElementById("jobDetailSoftDeleteBtn");
+      const jobDetailEditBtn = document.getElementById("jobDetailEditBtn");
 
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
       const jobDetailModal = bootstrap.Modal.getOrCreateInstance(jobDetailModalEl);
 
+      // --- Variables ---
       let currentUser = null;
       let currentUserProfile = null;
-      const JOBS_PAGE_SIZE = 20;
+      const JOBS_PAGE_SIZE = 25; // เพิ่มจำนวนต่อหน้าเล็กน้อย
       let jobsLastVisible = null;
       let isLoadingJobs = false;
-      let loadedJobs = [];
+      let loadedJobs = []; // เก็บข้อมูลทั้งหมดที่โหลดมาแล้วใน session นี้
       let currentFilter = { startDate: "", endDate: "", status: "all", searchText: "" };
       let currentJobDetailId = null;
       let currentJobDetailData = null;
       let isSavingJobStatus = false;
 
-      // Helpers
+      // --- Helpers ---
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
@@ -660,6 +712,7 @@
         const day = String(now.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
       }
+
       function getPastISODateString(daysAgo) {
         const now = new Date();
         now.setDate(now.getDate() - daysAgo);
@@ -669,6 +722,7 @@
         return `${year}-${month}-${day}`;
       }
 
+      // --- Theme ---
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
         bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
@@ -679,7 +733,6 @@
           icon.classList.toggle("bi-moon", normalized === "light");
         }
       }
-
       function saveThemeForUser(uid, theme) {
         if (!uid) return;
         try { localStorage.setItem("bm-theme-" + uid, theme); } catch (e) {}
@@ -689,6 +742,7 @@
         try { return localStorage.getItem("bm-theme-" + uid) || fallbackTheme || "light"; } catch (e) { return fallbackTheme || "light"; }
       }
 
+      // --- Auth / Profile ---
       async function ensureUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
         const snap = await getDoc(userRef);
@@ -706,12 +760,13 @@
         return { id: user.uid, ...newUserData };
       }
 
+      // --- Status & UI Helpers ---
       function getStatusInfo(status) {
         switch (status) {
-          case "repairing": return { text: "กำลังซ่อม", className: "bg-warning-subtle text-warning-emphasis fw-medium border border-warning-subtle" };
-          case "done": return { text: "ซ่อมเสร็จ", className: "bg-info-subtle text-info-emphasis fw-medium border border-info-subtle" };
-          case "picked_up": return { text: "รับรถแล้ว", className: "bg-success-subtle text-success-emphasis fw-medium border border-success-subtle" };
-          default: return { text: "ไม่ทราบ", className: "bg-secondary" };
+          case "repairing": return { text: "กำลังซ่อม", className: "bg-warning-subtle text-warning-emphasis fw-medium border border-warning-subtle", icon: "bi-wrench" };
+          case "done": return { text: "ซ่อมเสร็จ", className: "bg-info-subtle text-info-emphasis fw-medium border border-info-subtle", icon: "bi-check-circle" };
+          case "picked_up": return { text: "รับรถแล้ว", className: "bg-success-subtle text-success-emphasis fw-medium border border-success-subtle", icon: "bi-emoji-smile" };
+          default: return { text: "ไม่ทราบ", className: "bg-secondary", icon: "bi-question" };
         }
       }
       function getPriorityInfo(priority) {
@@ -723,13 +778,20 @@
         }
       }
 
+      // --- Filter Logic ---
       function setDatePreset(days) {
         const today = getTodayISODateString();
-        const start = getPastISODateString(days - 1);
-        if (jobsStartDateInput) jobsStartDateInput.value = start;
-        if (jobsEndDateInput) jobsEndDateInput.value = today;
+        if (days === 'all') {
+          jobsStartDateInput.value = "";
+          jobsEndDateInput.value = "";
+        } else {
+          const start = getPastISODateString(days - 1);
+          jobsStartDateInput.value = start;
+          jobsEndDateInput.value = today;
+        }
         updateDateRangeSummary();
       }
+
       function updateDateRangeSummary() {
         const start = jobsStartDateInput.value;
         const end = jobsEndDateInput.value;
@@ -739,6 +801,7 @@
         else if (end) jobsDateRangeSummary.textContent = "ถึง " + formatDateThaiFromString(end);
       }
 
+      // --- Render Logic ---
       function setJobsLoadingState(isLoading, isFirstPage = false) {
         isLoadingJobs = isLoading;
         if (jobsLoadingState) {
@@ -762,42 +825,72 @@
         }
       }
 
+      // NEW: Calculate Stats based on Loaded Jobs
+      function calculateStats(jobs) {
+         let total = 0;
+         let revenue = 0;
+         let pending = 0;
+         
+         total = jobs.length;
+         jobs.forEach(j => {
+            revenue += Number(j.totalAmount) || 0;
+            if (j.status === "repairing") pending++;
+         });
+         
+         const avg = total > 0 ? revenue / total : 0;
+         
+         statTotalJobs.textContent = total.toLocaleString();
+         statTotalRevenue.textContent = formatNumber(revenue);
+         statAvgRevenue.textContent = formatNumber(avg);
+         statPendingJobs.textContent = pending.toLocaleString();
+      }
+
       function renderJobs(searchText) {
         const keyword = (searchText || "").trim().toLowerCase();
         let filteredJobs = loadedJobs;
+
+        // Client-side filtering for search text
         if (keyword) {
           filteredJobs = loadedJobs.filter((job) => [
              job.customerName, job.customerPhone, job.plate, job.brand, job.model, job.problem
           ].some(f => (f||"").toLowerCase().includes(keyword)));
         }
 
-        if (jobsCountInfo && jobsCountNumber) {
+        // Update counts and stats
+        if (jobsCountInfo) {
           jobsCountInfo.classList.remove("d-none");
-          jobsCountNumber.textContent = String(filteredJobs.length);
+          jobsCountInfo.innerHTML = `<i class="bi bi-info-circle me-1"></i> พบงานซ่อม <span class="fw-bold text-dark">${filteredJobs.length}</span> งาน`;
         }
+        calculateStats(filteredJobs);
 
+        // Render Table
         if (jobsTableBody) {
           jobsTableBody.innerHTML = "";
           if (filteredJobs.length === 0) {
-            jobsTableBody.innerHTML = `<tr><td colspan="7" class="text-center small text-muted py-4">ไม่พบข้อมูลงานซ่อม</td></tr>`;
+            jobsTableBody.innerHTML = `<tr><td colspan="7" class="text-center small text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>ไม่พบข้อมูลงานซ่อมตามเงื่อนไข</td></tr>`;
           } else {
             filteredJobs.forEach((job) => {
               const statusInfo = getStatusInfo(job.status);
               const priorityInfo = getPriorityInfo(job.priority);
               const tr = document.createElement("tr");
+              
+              // Hightlight row logic can be added here
+              
               tr.innerHTML = `
                 <td class="ps-4 text-muted small">${formatDateThaiFromString(job.date)}</td>
-                <td class="fw-medium">${job.customerName || "-"}</td>
-                <td class="text-primary fw-semibold">${job.plate || "-"}</td>
+                <td class="fw-medium text-dark">${job.customerName || "-"}</td>
+                <td><span class="badge bg-light text-dark border fw-normal">${job.plate || "-"}</span></td>
                 <td class="small text-muted">${(job.brand || "-") + " " + (job.model || "-")}</td>
                 <td>
-                  <span class="badge ${statusInfo.className} rounded-pill px-2 py-1 small fw-normal">${statusInfo.text}</span>
-                  ${job.priority === 'high' ? `<span class="badge ${priorityInfo.className} rounded-pill ms-1 small">!</span>` : ""}
+                  <span class="badge ${statusInfo.className} rounded-pill px-2 py-1 small fw-normal">
+                     <i class="bi ${statusInfo.icon} me-1"></i>${statusInfo.text}
+                  </span>
+                  ${job.priority === 'high' ? `<span class="badge ${priorityInfo.className} rounded-pill ms-1 small">ด่วน</span>` : ""}
                 </td>
                 <td class="text-end fw-bold text-dark">${formatNumber(job.totalAmount || 0)}</td>
                 <td class="text-center">
-                  <button type="button" class="btn btn-sm btn-light border text-primary job-detail-btn" data-job-id="${job.id}">
-                    <i class="bi bi-file-text"></i>
+                  <button type="button" class="btn btn-sm btn-light border text-primary job-detail-btn rounded-circle" data-job-id="${job.id}" title="ดูรายละเอียด">
+                    <i class="bi bi-chevron-right"></i>
                   </button>
                 </td>
               `;
@@ -806,30 +899,32 @@
           }
         }
 
+        // Render Cards
         if (jobsCardContainer) {
           jobsCardContainer.innerHTML = "";
           if (filteredJobs.length === 0) {
-            jobsCardContainer.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border">ไม่พบข้อมูล</div></div>`;
+            jobsCardContainer.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border py-4 text-muted">ไม่พบข้อมูล</div></div>`;
           } else {
             filteredJobs.forEach((job) => {
               const statusInfo = getStatusInfo(job.status);
               const col = document.createElement("div");
               col.className = "col-12 col-md-6 col-lg-4";
               col.innerHTML = `
-                <div class="card h-100 border shadow-sm rounded-4 bm-list-card job-detail-btn cursor-pointer" data-job-id="${job.id}" style="cursor: pointer;">
+                <div class="card h-100 border shadow-sm rounded-4 bm-list-card job-detail-btn cursor-pointer position-relative overflow-hidden" data-job-id="${job.id}" style="cursor: pointer;">
+                  ${job.priority === 'high' ? '<div class="position-absolute top-0 end-0 p-2"><span class="badge bg-danger rounded-circle p-1" style="width:10px;height:10px;"> </span></div>' : ''}
                   <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h6 class="fw-bold text-primary mb-0">${job.plate || "-"}</h6>
+                      <h6 class="fw-bold text-primary mb-0 fs-5">${job.plate || "-"}</h6>
                       <span class="badge ${statusInfo.className} rounded-pill">${statusInfo.text}</span>
                     </div>
-                    <div class="small text-dark fw-medium mb-1">${job.customerName || "-"}</div>
-                    <div class="small text-muted mb-2">${(job.brand || "-")} ${(job.model || "-")}</div>
+                    <div class="small text-dark fw-medium mb-1"><i class="bi bi-person me-1 text-muted"></i> ${job.customerName || "-"}</div>
+                    <div class="small text-muted mb-2 ps-3">${(job.brand || "-")} ${(job.model || "-")}</div>
                     
-                    <div class="bg-light rounded p-2 small text-muted mb-2 text-truncate">
+                    <div class="bg-light rounded p-2 small text-muted mb-2 text-truncate border border-light">
                        <i class="bi bi-wrench me-1"></i> ${job.problem || "-"}
                     </div>
                     
-                    <div class="d-flex justify-content-between align-items-end mt-2 pt-2 border-top border-light">
+                    <div class="d-flex justify-content-between align-items-end mt-2 pt-2 border-top border-light opacity-75">
                        <span class="small text-muted"><i class="bi bi-calendar3"></i> ${formatDateThaiFromString(job.date)}</span>
                        <span class="fw-bold text-dark fs-6">${formatNumber(job.totalAmount)} ฿</span>
                     </div>
@@ -842,6 +937,7 @@
         }
       }
 
+      // --- Data Loading ---
       async function loadJobsWithFilter(reset = false) {
         if (isLoadingJobs) return;
         if (!currentUserProfile) return;
@@ -876,6 +972,7 @@
           }
 
           const snap = await getDocs(qJobs);
+          
           if (snap.empty && isFirstPage) {
             loadedJobs = [];
             renderJobs(currentFilter.searchText);
@@ -895,6 +992,7 @@
           if (!snap.empty) jobsLastVisible = snap.docs[snap.docs.length - 1];
 
           if (loadMoreJobsBtn) {
+            // Check if we likely have more by seeing if we got a full page
             if (snap.size === JOBS_PAGE_SIZE) loadMoreJobsBtn.classList.remove("d-none");
             else loadMoreJobsBtn.classList.add("d-none");
           }
@@ -902,12 +1000,47 @@
           renderJobs(currentFilter.searchText);
         } catch (error) {
           console.error("Load Jobs Error:", error);
-          showToast("โหลดข้อมูลล้มเหลว", "danger");
+          showToast("โหลดข้อมูลล้มเหลว กรุณาลองใหม่", "danger");
         } finally {
           setJobsLoadingState(false, isFirstPage);
         }
       }
 
+      // --- Export CSV ---
+      function exportToCSV() {
+         if(!loadedJobs || loadedJobs.length === 0) {
+            showToast("ไม่มีข้อมูลสำหรับส่งออก", "warning");
+            return;
+         }
+
+         const bom = "\uFEFF";
+         let csvContent = "data:text/csv;charset=utf-8," + bom;
+         csvContent += "วันที่,ลูกค้า,เบอร์โทร,ทะเบียน,ยี่ห้อ/รุ่น,อาการ,สถานะ,ยอดรวม\n";
+
+         loadedJobs.forEach(job => {
+            const row = [
+               job.date || "",
+               `"${(job.customerName || "").replace(/"/g, '""')}"`,
+               `"${(job.customerPhone || "").replace(/"/g, '""')}"`,
+               `"${(job.plate || "").replace(/"/g, '""')}"`,
+               `"${(job.brand || "")} ${(job.model || "")}"`,
+               `"${(job.problem || "").replace(/"/g, '""')}"`,
+               getStatusInfo(job.status).text,
+               job.totalAmount || 0
+            ];
+            csvContent += row.join(",") + "\n";
+         });
+
+         const encodedUri = encodeURI(csvContent);
+         const link = document.createElement("a");
+         link.setAttribute("href", encodedUri);
+         link.setAttribute("download", `job_report_${getTodayISODateString()}.csv`);
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+      }
+
+      // --- Detail Modal ---
       async function openJobDetail(jobId) {
         if (!jobId || !currentUserProfile) return;
         currentJobDetailId = jobId;
@@ -915,7 +1048,7 @@
 
         if (jobDetailLoadingState) jobDetailLoadingState.classList.remove("d-none");
         
-        // Clear old data
+        // Reset UI
         jobDetailModalLabel.innerHTML = `<i class="bi bi-file-earmark-text me-2"></i> รายละเอียดงานซ่อม`;
         jobDetailDate.textContent = "-";
         jobDetailCustomerName.textContent = "-";
@@ -924,16 +1057,21 @@
         jobDetailBrandModel.textContent = "-";
         jobDetailMileage.textContent = "-";
         jobDetailProblem.textContent = "-";
+        
         jobDetailStatusBadge.textContent = "-";
         jobDetailStatusBadge.className = "badge bg-secondary rounded-pill px-3 py-2";
         jobDetailPriorityBadge.textContent = "";
+        
         jobDetailCreatedBy.textContent = "-";
+        
         jobDetailPartsTbody.innerHTML = "";
         jobDetailLaborTbody.innerHTML = "";
         jobDetailPartsTotal.textContent = "0.00 ฿";
         jobDetailLaborTotal.textContent = "0.00 ฿";
         jobDetailGrandTotal.textContent = "0.00 ฿";
         jobDetailLogsList.innerHTML = `<li class="list-group-item text-center small text-muted">กำลังโหลด...</li>`;
+
+        if (jobDetailEditBtn) jobDetailEditBtn.classList.add("d-none"); // Hide first
 
         jobDetailModal.show();
 
@@ -950,15 +1088,14 @@
 
           const dateThai = formatDateThaiFromString(data.date);
           const statusInfo = getStatusInfo(data.status || "repairing");
-          const priorityInfo = getPriorityInfo(data.priority || "normal");
-
+          
           jobDetailModalLabel.innerHTML = `<i class="bi bi-file-earmark-text me-2"></i> ใบงาน: ${data.plate || "-"}`;
           jobDetailDate.textContent = dateThai;
           jobDetailCustomerName.textContent = data.customerName || "-";
           jobDetailCustomerPhone.textContent = data.customerPhone || "-";
           jobDetailPlate.textContent = data.plate || "-";
           jobDetailBrandModel.textContent = (data.brand || "-") + " " + (data.model || "-");
-          jobDetailMileage.textContent = data.mileage ? `${data.mileage} กม.` : "-";
+          jobDetailMileage.textContent = data.mileage ? `${Number(data.mileage).toLocaleString()} กม.` : "-";
           jobDetailProblem.textContent = data.problem || "-";
 
           jobDetailStatusBadge.textContent = statusInfo.text;
@@ -975,8 +1112,9 @@
           jobDetailCreatedBy.textContent = data.createdByName || "ไม่ทราบ";
           jobDetailStatusSelect.value = data.status || "repairing";
 
+          // Items
           const items = data.items || [];
-          jobDetailPartsTbody.innerHTML = items.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-2">ไม่มีอะไหล่</td></tr>`;
+          jobDetailPartsTbody.innerHTML = items.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-2">ไม่มีรายการอะไหล่</td></tr>`;
           items.forEach(item => {
              jobDetailPartsTbody.innerHTML += `
                 <tr>
@@ -987,6 +1125,7 @@
                 </tr>`;
           });
 
+          // Labor
           const laborItems = data.laborItems || [];
           jobDetailLaborTbody.innerHTML = laborItems.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-2">ไม่มีค่าแรง</td></tr>`;
           laborItems.forEach(li => {
@@ -1002,8 +1141,17 @@
           jobDetailLaborTotal.textContent = formatNumber(Number(data.laborTotal) || 0) + " ฿";
           jobDetailGrandTotal.textContent = formatNumber(Number(data.totalAmount) || 0) + " ฿";
 
+          // Admin Controls
           if (jobDetailSoftDeleteBtn) {
             jobDetailSoftDeleteBtn.classList.toggle("d-none", currentUserProfile.role !== "admin");
+          }
+          
+          // Edit Button (Link to open-bill)
+          if (jobDetailEditBtn) {
+             jobDetailEditBtn.classList.remove("d-none");
+             jobDetailEditBtn.onclick = () => {
+                 window.location.href = `open-bill.html?edit=${jobId}`;
+             };
           }
 
           await loadJobActivityLogs(jobId, currentUserProfile.branchId);
@@ -1047,6 +1195,7 @@
         }
       }
 
+      // --- Actions: Status Update ---
       async function handleUpdateJobStatus() {
         if (!currentJobDetailId || !currentJobDetailData || isSavingJobStatus) return;
         const newStatus = jobDetailStatusSelect.value;
@@ -1054,7 +1203,7 @@
 
         if (newStatus === oldStatus) return;
         if (currentUserProfile.role !== "admin" && oldStatus === "picked_up" && newStatus !== "picked_up") {
-          showToast("ไม่มีสิทธิ์เปลี่ยนสถานะนี้", "warning");
+          showToast("ไม่มีสิทธิ์เปลี่ยนสถานะงานที่รับรถแล้ว", "warning");
           return;
         }
 
@@ -1067,12 +1216,14 @@
           
           const statusInfoNew = getStatusInfo(newStatus);
           const statusInfoOld = getStatusInfo(oldStatus);
+          
           await addDoc(collection(db, "activityLogs"), {
             createdAt: serverTimestamp(), createdBy: currentUser.uid, createdByName: currentUserProfile.displayName,
-            type: "job_updated", message: `เปลี่ยนสถานะจาก "${statusInfoOld.text}" เป็น "${statusInfoNew.text}"`,
+            type: "job_updated", message: `เปลี่ยนสถานะ: ${statusInfoOld.text} -> ${statusInfoNew.text}`,
             refType: "job", refId: currentJobDetailId, branchId: currentUserProfile.branchId
           });
 
+          // Update local data
           loadedJobs = loadedJobs.map(j => j.id === currentJobDetailId ? { ...j, status: newStatus } : j);
           currentJobDetailData.status = newStatus;
           
@@ -1080,7 +1231,7 @@
           jobDetailStatusBadge.className = "badge " + statusInfoNew.className + " rounded-pill px-3 py-2";
 
           showToast("บันทึกสถานะเรียบร้อย", "success");
-          renderJobs(currentFilter.searchText);
+          renderJobs(currentFilter.searchText); // Re-render list
           loadJobActivityLogs(currentJobDetailId, currentUserProfile.branchId);
         } catch (error) {
           console.error(error);
@@ -1092,14 +1243,15 @@
         }
       }
 
+      // --- Actions: Delete ---
       async function handleSoftDeleteJob() {
         if (!currentJobDetailId || currentUserProfile.role !== "admin") return;
-        if (!confirm("ต้องการซ่อนบิลนี้?")) return;
+        if (!confirm("ต้องการซ่อนบิลนี้ใช่หรือไม่? \n(สามารถดูได้ในฐานข้อมูลเท่านั้น)")) return;
         try {
           await updateDoc(doc(db, "jobs", currentJobDetailId), { isDeleted: true, updatedAt: serverTimestamp() });
           await addDoc(collection(db, "activityLogs"), {
              createdAt: serverTimestamp(), createdBy: currentUser.uid, createdByName: currentUserProfile.displayName,
-             type: "job_deleted", message: "ซ่อนใบงาน", refType: "job", refId: currentJobDetailId, branchId: currentUserProfile.branchId
+             type: "job_deleted", message: "ลบ/ซ่อน ใบงาน", refType: "job", refId: currentJobDetailId, branchId: currentUserProfile.branchId
           });
           showToast("ซ่อนบิลแล้ว", "success");
           loadedJobs = loadedJobs.filter(j => j.id !== currentJobDetailId);
@@ -1108,6 +1260,73 @@
         } catch (e) { showToast("เกิดข้อผิดพลาด", "danger"); }
       }
 
+      // --- Actions: Print ---
+      function printCurrentJob() {
+         if(!currentJobDetailData) return;
+         const d = currentJobDetailData;
+         
+         const printWindow = window.open('', '_blank');
+         
+         let itemsHtml = '';
+         (d.items || []).forEach(item => {
+             itemsHtml += `<tr><td>${item.stockName}</td><td align="right">${item.qty}</td><td align="right">${formatNumber(item.lineTotal)}</td></tr>`;
+         });
+         (d.laborItems || []).forEach(item => {
+             itemsHtml += `<tr><td>${item.name} (ค่าแรง)</td><td align="right">-</td><td align="right">${formatNumber(item.price)}</td></tr>`;
+         });
+
+         printWindow.document.write(`
+            <html>
+            <head>
+               <title>ใบเสร็จ/ใบงาน - ${d.plate}</title>
+               <style>
+                  body { font-family: 'Sarabun', sans-serif; padding: 20px; color: #000; }
+                  .header { text-align: center; margin-bottom: 20px; }
+                  .h-title { font-size: 1.2rem; font-weight: bold; }
+                  .meta { font-size: 0.9rem; margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
+                  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+                  th { border-bottom: 1px solid #000; text-align: left; padding: 5px 0; }
+                  td { padding: 5px 0; border-bottom: 1px dotted #eee; }
+                  .totals { margin-top: 15px; border-top: 1px solid #000; padding-top: 5px; }
+                  .total-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 1rem; }
+                  .footer { margin-top: 30px; text-align: center; font-size: 0.8rem; color: #555; }
+                  @media print { .no-print { display: none; } }
+               </style>
+            </head>
+            <body>
+               <div class="header">
+                  <div class="h-title">BEN MOTOR</div>
+                  <div>บริการซ่อมรถจักรยานยนต์</div>
+               </div>
+               <div class="meta">
+                  <div><b>วันที่:</b> ${formatDateThaiFromString(d.date)}</div>
+                  <div><b>ลูกค้า:</b> ${d.customerName} (${d.customerPhone})</div>
+                  <div><b>รถ:</b> ${d.plate} ${d.brand} ${d.model}</div>
+                  <div><b>เลขไมล์:</b> ${d.mileage || '-'}</div>
+               </div>
+               <table>
+                  <thead><tr><th>รายการ</th><th align="right">จำนวน</th><th align="right">รวม</th></tr></thead>
+                  <tbody>${itemsHtml}</tbody>
+               </table>
+               <div class="totals">
+                  <div class="total-row">
+                     <span>ยอดรวมสุทธิ</span>
+                     <span>${formatNumber(d.totalAmount)} บาท</span>
+                  </div>
+               </div>
+               <div class="footer">
+                  <p>ขอบคุณที่ใช้บริการ</p>
+               </div>
+               <script>
+                  window.onload = function() { window.print(); window.close(); }
+               <\/script>
+            </body>
+            </html>
+         `);
+         printWindow.document.close();
+      }
+
+      // --- Setup ---
       function setupEventListenersForPage() {
         if (logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
         
@@ -1119,21 +1338,26 @@
           });
         }
 
+        // FAB Navigation
         if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
         if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
         if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
         if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
 
+        // Filter Presets
         presetTodayBtn?.addEventListener("click", () => { setDatePreset(1); loadJobsWithFilter(true); });
         preset7DaysBtn?.addEventListener("click", () => { setDatePreset(7); loadJobsWithFilter(true); });
         preset30DaysBtn?.addEventListener("click", () => { setDatePreset(30); loadJobsWithFilter(true); });
+        presetAllBtn?.addEventListener("click", () => { setDatePreset('all'); loadJobsWithFilter(true); });
 
+        // Filter Form
         jobsFilterForm?.addEventListener("submit", (e) => {
            e.preventDefault();
            updateDateRangeSummary();
            loadJobsWithFilter(true);
         });
 
+        // View Toggles
         tableViewBtn?.addEventListener("click", () => {
            tableViewBtn.classList.add("active", "text-primary", "fw-bold"); tableViewBtn.classList.remove("text-secondary");
            cardViewBtn.classList.remove("active", "text-primary", "fw-bold"); cardViewBtn.classList.add("text-secondary");
@@ -1149,6 +1373,7 @@
 
         loadMoreJobsBtn?.addEventListener("click", () => loadJobsWithFilter(false));
 
+        // Click on Row/Card to open detail
         const handleDetailClick = (e) => {
            const btn = e.target.closest(".job-detail-btn");
            if(btn) openJobDetail(btn.dataset.jobId);
@@ -1156,10 +1381,16 @@
         jobsTableBody?.addEventListener("click", handleDetailClick);
         jobsCardContainer?.addEventListener("click", handleDetailClick);
 
+        // Modal Actions
         jobDetailSaveStatusBtn?.addEventListener("click", handleUpdateJobStatus);
         jobDetailSoftDeleteBtn?.addEventListener("click", handleSoftDeleteJob);
+        jobDetailPrintBtn?.addEventListener("click", printCurrentJob);
+        
+        // Export
+        exportCsvBtn?.addEventListener("click", exportToCSV);
       }
 
+      // --- Main Execution ---
       onAuthStateChanged(auth, async (user) => {
         if (!user) { window.location.href = "index.html"; return; }
         currentUser = user;
@@ -1168,6 +1399,7 @@
            currentUserProfile = profile;
            if (profile.disabled) { await signOut(auth); window.location.href = "index.html"; return; }
            
+           // Set User Info
            if (userDisplayNameText) userDisplayNameText.textContent = profile.displayName || "-";
            if (userRoleText) userRoleText.textContent = profile.role === "admin" ? "Admin" : "Staff";
            if (userAvatarInitial) userAvatarInitial.textContent = (profile.displayName || "U").trim()[0].toUpperCase();
@@ -1176,7 +1408,8 @@
            applyTheme(readThemeForUser(user.uid, profile.theme));
            setupEventListenersForPage();
            
-           setDatePreset(7); 
+           // Initial Load (Default: Last 30 days or 7 days as preferred)
+           setDatePreset(30); 
            loadJobsWithFilter(true);
         } catch (error) {
            console.error(error);

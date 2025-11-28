@@ -2,33 +2,41 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>BEN MOTOR – รายงานทั้งหมด</title>
+    <title>BEN MOTOR – รายงานวิเคราะห์ธุรกิจ (Advanced)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="icon" type="image/x-icon" href="img/icon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
-    <link rel="manifest" href="img/site.webmanifest" />
-
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      @media print {
+        .bm-topbar, .bm-bottom-nav, .bm-fab-container, #themeToggleBtn, .btn-no-print {
+          display: none !important;
+        }
+        body { padding-top: 0; padding-bottom: 0; background-color: #fff; }
+        .bm-main-content { min-height: auto; }
+        .card { border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid; }
+        .nav-pills { display: none !important; }
+        .tab-content > .tab-pane { display: block !important; opacity: 1 !important; margin-bottom: 2rem; }
+        .bm-chart-container { height: 250px !important; }
+      }
+    </style>
   </head>
 
   <body class="bm-theme-light">
@@ -37,84 +45,33 @@
         <span class="navbar-brand mb-0 h1 fw-bold text-success">
           <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
-
         <div class="d-flex align-items-center gap-2">
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
+            class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
           >
             <i class="bi bi-moon fs-5"></i>
           </button>
-
           <div class="dropdown">
             <button
               class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
             >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
-              <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+               <li><a class="dropdown-item py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i> แดชบอร์ด</a></li>
+               <li><hr class="dropdown-divider" /></li>
+               <li><button class="dropdown-item py-2 text-danger" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
@@ -127,456 +84,439 @@
         <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
           <div>
             <h1 class="h5 mb-1 fw-bold text-primary">
-              <i class="bi bi-pie-chart-fill me-2"></i>รายงานทั้งหมด
+              <i class="bi bi-pie-chart-fill me-2"></i>รายงานวิเคราะห์ธุรกิจ
             </h1>
             <p class="small text-muted mb-0">
-              เลือกช่วงวันที่เพื่อดูสรุปภาพรวมเงิน งานซ่อม รถรับซื้อ/ขาย และการใช้อะไหล่
+              วิเคราะห์รายได้, เปรียบเทียบยอดขาย, และพยากรณ์สต๊อก (Full Analytics)
             </p>
           </div>
+          <button class="btn btn-outline-dark btn-sm rounded-pill btn-no-print" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> พิมพ์
+          </button>
         </div>
 
-        <section class="mb-4">
+        <section class="mb-4 btn-no-print">
           <div class="card border-0 shadow-sm">
             <div class="card-body small">
               <div class="row g-2 align-items-center mb-3">
                 <div class="col-12 col-lg-8">
                   <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="fw-semibold text-muted me-1"><i class="bi bi-calendar-range me-1"></i>ช่วงเวลา:</span>
+                    <span class="fw-semibold text-muted me-1"><i class="bi bi-calendar-range me-1"></i>เลือกช่วงเวลา:</span>
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="today" id="presetTodayBtn">วันนี้</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="7d" id="preset7dBtn">7 วัน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="14d" id="preset14dBtn">14 วัน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="30d" id="preset30dBtn">30 วัน</button>
-                    </div>
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="3m" id="preset3mBtn">3 เดือน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="6m" id="preset6mBtn">6 เดือน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="1y" id="preset1yBtn">1 ปี</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="today">วันนี้</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="yesterday">เมื่อวาน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="7d">7 วัน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="30d">30 วัน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="thisMonth">เดือนนี้</button>
                     </div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-4 text-lg-end">
-                  <span class="small fw-medium" id="reportsLoadingState">
-                    ยังไม่ได้โหลดรายงาน
-                  </span>
+                  <span class="badge bg-light text-dark border" id="reportsLoadingState">รอโหลดข้อมูล...</span>
                 </div>
               </div>
 
               <div class="row g-2 align-items-end p-2 bg-light rounded-3 border">
                 <div class="col-6 col-md-3">
-                  <label for="reportStartDateInput" class="form-label small mb-1 fw-bold text-muted">
-                    วันที่เริ่มต้น
-                  </label>
-                  <input
-                    type="date"
-                    class="form-control form-control-sm"
-                    id="reportStartDateInput"
-                  />
+                  <label class="form-label small mb-1 fw-bold text-muted">เริ่มต้น</label>
+                  <input type="date" class="form-control form-control-sm" id="reportStartDateInput" />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="reportEndDateInput" class="form-label small mb-1 fw-bold text-muted">
-                    วันที่สิ้นสุด
-                  </label>
-                  <input
-                    type="date"
-                    class="form-control form-control-sm"
-                    id="reportEndDateInput"
-                  />
+                  <label class="form-label small mb-1 fw-bold text-muted">สิ้นสุด</label>
+                  <input type="date" class="form-control form-control-sm" id="reportEndDateInput" />
                 </div>
                 <div class="col-12 col-md-6 text-md-end">
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm px-4"
-                    id="loadReportBtn"
-                  >
-                    <span
-                      class="spinner-border spinner-border-sm me-2 d-none"
-                      id="loadReportSpinner"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <span id="loadReportBtnText"><i class="bi bi-search me-1"></i> ดูรายงานช่วงนี้</span>
+                  <button type="button" class="btn btn-primary btn-sm px-4" id="loadReportBtn">
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loadReportSpinner"></span>
+                    <span id="loadReportBtnText"><i class="bi bi-search me-1"></i> ประมวลผลรายงาน</span>
                   </button>
                 </div>
               </div>
-
-              <div class="mt-2 text-end">
-                <small class="text-muted text-xs">
-                  <i class="bi bi-info-circle me-1"></i>ระบบจะดึงข้อมูลจาก <code>transactions</code>, <code>jobs</code>, <code>vehicles</code> และ <code>stock</code>
-                </small>
-              </div>
             </div>
           </div>
         </section>
 
-        <section class="mb-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0">
-               <h2 class="h6 fw-bold mb-0 text-dark">
-                <i class="bi bi-wallet2 me-2 text-success"></i> สรุปภาพรวมเงิน
-              </h2>
-            </div>
-            <div class="card-body pt-2 small">
-              <div class="row g-3">
-                <div class="col-12 col-md-4">
-                  <div class="card bm-stat-card h-100 border-0 shadow-sm">
-                    <div class="card-body py-3">
-                      <div class="d-flex align-items-center mb-1">
-                        <i class="bi bi-arrow-down-circle-fill text-success me-2"></i>
-                        <span class="text-muted small fw-semibold">รายรับรวม</span>
-                      </div>
-                      <div class="h4 mb-0 fw-bold text-success" id="reportMoneyIncomeText">0.00 ฿</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="card bm-stat-card h-100 border-0 shadow-sm">
-                    <div class="card-body py-3">
-                      <div class="d-flex align-items-center mb-1">
-                         <i class="bi bi-arrow-up-circle-fill text-danger me-2"></i>
-                         <span class="text-muted small fw-semibold">รายจ่ายรวม</span>
-                      </div>
-                      <div class="h4 mb-0 fw-bold text-danger" id="reportMoneyExpenseText">0.00 ฿</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="card bm-stat-card h-100 border-0 shadow-sm">
-                    <div class="card-body py-3">
-                      <div class="d-flex align-items-center mb-1">
-                        <i class="bi bi- piggy-bank-fill text-primary me-2"></i>
-                        <span class="text-muted small fw-semibold">กำไรสุทธิ</span>
-                      </div>
-                      <div class="h4 mb-0 fw-bold text-primary" id="reportMoneyNetText">0.00 ฿</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="mb-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0">
-              <h2 class="h6 fw-bold mb-0 text-dark">
-                <i class="bi bi-wrench-adjustable-circle me-2 text-warning"></i> สรุปงานซ่อม
-              </h2>
-            </div>
-            <div class="card-body pt-2 small">
-              <div class="row g-3">
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">จำนวนงานซ่อม (บิล)</div>
-                    <div class="h5 mb-0 fw-bold" id="reportJobsCountText">0</div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">ยอดรวมค่าซ่อมทั้งหมด</div>
-                    <div class="h5 mb-0 fw-bold text-dark" id="reportJobsTotalText">0.00 ฿</div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">ค่าเฉลี่ยต่อบิล</div>
-                    <div class="h5 mb-0 fw-bold text-dark" id="reportJobsAvgText">0.00 ฿</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="mb-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0">
-              <h2 class="h6 fw-bold mb-0 text-dark">
-                <i class="bi bi-truck-front me-2 text-info"></i> สรุปรถรับซื้อ/ขาย
-              </h2>
-            </div>
-            <div class="card-body pt-2 small">
-              <div class="row g-3">
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">ซื้อเข้า (คัน)</div>
-                    <div class="h5 mb-0 fw-bold" id="reportVehiclesBuyCountText">0</div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">ขายออก (คัน)</div>
-                    <div class="h5 mb-0 fw-bold" id="reportVehiclesSoldCountText">0</div>
-                  </div>
-                </div>
-                <div class="col-12 col-md-4">
-                  <div class="p-3 bg-light rounded-3 border h-100">
-                    <div class="text-muted small mb-1">กำไรรวมจากการขายรถ</div>
-                    <div class="h5 mb-0 fw-bold text-success" id="reportVehiclesProfitText">0.00 ฿</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="mb-4">
-          <div class="row g-3">
-            <div class="col-12 col-lg-6">
-              <div class="card h-100 shadow-sm border-0">
-                <div class="card-header bg-transparent py-3">
-                  <h2 class="h6 fw-bold mb-0">
-                    <i class="bi bi-tools me-2 text-secondary"></i> Top 5 อะไหล่ที่ใช้เยอะสุด
-                  </h2>
-                </div>
-                <div class="card-body p-0 small">
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                      <thead class="bg-light text-muted">
-                        <tr>
-                          <th class="ps-3">อะไหล่</th>
-                          <th class="text-end pe-3">จำนวนที่ใช้</th>
-                        </tr>
-                      </thead>
-                      <tbody id="topPartsTbody">
-                        <tr>
-                          <td colspan="2" class="text-center py-4 text-muted">
-                            <i class="bi bi-box-seam d-block mb-1 fs-4"></i>
-                            ยังไม่มีข้อมูลการใช้อะไหล่ในช่วงนี้
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-lg-6">
-              <div class="card h-100 shadow-sm border-0">
-                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                  <h2 class="h6 fw-bold mb-0 text-danger">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> สต๊อกใกล้หมด (ปัจจุบัน)
-                  </h2>
-                </div>
-                <div class="card-body p-0 small">
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                      <thead class="bg-light text-muted">
-                        <tr>
-                          <th class="ps-3">รหัส</th>
-                          <th>ชื่ออะไหล่</th>
-                          <th class="text-end">คงเหลือ</th>
-                          <th class="text-end pe-3">ขั้นต่ำ</th>
-                        </tr>
-                      </thead>
-                      <tbody id="lowStockTbody">
-                        <tr>
-                          <td colspan="4" class="text-center py-4 text-muted">
-                            <span class="spinner-border spinner-border-sm me-2"></span>
-                            กำลังโหลดข้อมูล...
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="mb-3">
-          <div class="card shadow-sm border-0">
-            <div class="card-body small">
-              <div
-                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2 border-bottom pb-2"
-              >
-                <h2 class="h6 fw-bold mb-0 text-dark">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> กราฟรายรับ/รายจ่ายต่อวัน
-                </h2>
-                <div class="d-flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary btn-sm"
-                    id="exportReportJsonBtn"
-                  >
-                    <i class="bi bi-filetype-json me-1"></i> JSON
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary btn-sm"
-                    id="exportReportCsvBtn"
-                  >
-                    <i class="bi bi-filetype-csv me-1"></i> CSV (สรุปรายวัน)
-                  </button>
-                </div>
-              </div>
-              
-              <div class="bm-chart-container" style="min-height: 220px;">
-                <canvas
-                  id="incomeExpenseChart"
-                  height="220"
-                  style="width: 100%; max-height: 280px;"
-                ></canvas>
-              </div>
-              
-              <p class="small text-muted mt-2 mb-0 text-center">
-                <i class="bi bi-info-circle me-1"></i>กราฟแสดงแนวโน้มรายรับ-รายจ่ายในช่วงวันที่ที่เลือก
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <div style="height: 5rem;"></div>
-      </div>
-    </main>
-
-    <div class="bm-fab-container">
-      <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow border-0" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-2 text-primary"></i> เปิดบิลซ่อมใหม่
+        <ul class="nav nav-pills mb-4 nav-fill gap-2 p-1 bg-white rounded-3 shadow-sm border" id="reportTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-pane" type="button">
+              <i class="bi bi-wallet2 me-1"></i> การเงิน & ภาพรวม
             </button>
           </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน (Manual)
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="operations-tab" data-bs-toggle="tab" data-bs-target="#operations-pane" type="button">
+              <i class="bi bi-wrench-adjustable me-1"></i> งานซ่อม & ลูกค้า
             </button>
           </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่เข้า
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory-pane" type="button">
+              <i class="bi bi-box-seam me-1"></i> สต๊อก & สินค้า
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="profit-tab" data-bs-toggle="tab" data-bs-target="#profit-pane" type="button">
+              <i class="bi bi-graph-up-arrow me-1"></i> กำไรสุทธิ
             </button>
           </li>
         </ul>
-      </div>
-    </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+        <div class="tab-content" id="reportTabsContent">
+          
+          <div class="tab-pane fade show active" id="overview-pane" role="tabpanel">
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-arrow-down-circle-fill text-success me-2"></i>
+                        <span class="text-muted small fw-semibold">รายรับรวม</span>
+                      </div>
+                      <span class="badge bg-light text-muted border rounded-pill" id="trendIncomeBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-success" id="reportMoneyIncomeText">0.00 ฿</div>
+                    <div class="small text-muted mt-1" id="reportMoneyIncomePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-arrow-up-circle-fill text-danger me-2"></i>
+                        <span class="text-muted small fw-semibold">รายจ่ายรวม</span>
+                      </div>
+                      <span class="badge bg-light text-muted border rounded-pill" id="trendExpenseBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-danger" id="reportMoneyExpenseText">0.00 ฿</div>
+                    <div class="small text-muted mt-1" id="reportMoneyExpensePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm bg-primary-subtle border-primary">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-wallet2 text-primary me-2"></i>
+                        <span class="text-muted small fw-semibold">กระแสเงินสด (Net)</span>
+                      </div>
+                      <span class="badge bg-white text-primary border rounded-pill" id="trendNetBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-primary" id="reportMoneyNetText">0.00 ฿</div>
+                     <div class="small text-primary text-opacity-75 mt-1" id="reportMoneyNetPrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                   <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-bar-chart-line me-2"></i>แนวโน้มรายรับ-รายจ่ายรายวัน</h6>
+                   <div class="btn-group btn-group-sm btn-no-print">
+                      <button class="btn btn-outline-success" id="exportReportCsvBtn"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
+                      <button class="btn btn-outline-secondary" id="exportReportJsonBtn"><i class="bi bi-filetype-json me-1"></i> JSON</button>
+                   </div>
+                </div>
+                <div class="bm-chart-container" style="position: relative; height: 320px; width: 100%;">
+                  <canvas id="incomeExpenseChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="operations-pane" role="tabpanel">
+            <div class="row g-4">
+              
+              <div class="col-12 col-lg-8">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-wrench-adjustable-circle me-2"></i>ประสิทธิภาพงานซ่อม</h6>
+                <div class="row g-3 mb-4">
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">จำนวนบิลซ่อม</div>
+                      <div class="h3 mb-0 fw-bold text-dark" id="reportJobsCountText">0</div>
+                      <div class="text-xs text-muted">บิล</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">รายได้งานซ่อมรวม</div>
+                      <div class="h3 mb-0 fw-bold text-warning" id="reportJobsTotalText">0.00</div>
+                      <div class="text-xs text-muted">บาท</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">เฉลี่ยต่อบิล</div>
+                      <div class="h3 mb-0 fw-bold text-info" id="reportJobsAvgText">0.00</div>
+                      <div class="text-xs text-muted">บาท/บิล</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                  <div class="card-header bg-transparent border-0 pt-3 pb-2">
+                    <h6 class="fw-bold mb-0 text-secondary"><i class="bi bi-people-fill me-2"></i>Top 5 ลูกค้าที่มียอดใช้จ่ายสูงสุด</h6>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-hover align-middle mb-0 small">
+                        <thead class="bg-light text-secondary">
+                          <tr>
+                            <th class="ps-3">#</th>
+                            <th>ชื่อลูกค้า</th>
+                            <th class="text-center">จำนวนบิล</th>
+                            <th class="text-end pe-3">ยอดรวม (บาท)</th>
+                          </tr>
+                        </thead>
+                        <tbody id="topCustomersTbody">
+                          <tr><td colspan="4" class="text-center text-muted py-3">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                 <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                      <h6 class="fw-bold text-center mb-3">โครงสร้างรายได้งานซ่อม</h6>
+                      <div style="height: 220px; position: relative;">
+                        <canvas id="jobStructureChart"></canvas>
+                      </div>
+                      <div class="mt-3 small">
+                        <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                          <span class="text-muted"><i class="bi bi-circle-fill text-primary me-1" style="font-size: 8px;"></i>ค่าอะไหล่</span>
+                          <span class="fw-bold" id="structPartsText">0.00 ฿</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <span class="text-muted"><i class="bi bi-circle-fill text-warning me-1" style="font-size: 8px;"></i>ค่าแรงช่าง</span>
+                          <span class="fw-bold" id="structLaborText">0.00 ฿</span>
+                        </div>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="col-12">
+                <h6 class="fw-bold text-info mb-3"><i class="bi bi-car-front-fill me-2"></i>สรุปธุรกิจซื้อ-ขายรถ</h6>
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <div class="card shadow-sm border-0 bg-info-subtle">
+                      <div class="card-body py-2 px-3">
+                         <div class="small text-muted">ซื้อเข้า (คัน)</div>
+                         <div class="h4 fw-bold text-dark mb-0" id="reportVehiclesBuyCountText">0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="card shadow-sm border-0 bg-success-subtle">
+                      <div class="card-body py-2 px-3">
+                         <div class="small text-muted">ขายออก (คัน)</div>
+                         <div class="h4 fw-bold text-dark mb-0" id="reportVehiclesSoldCountText">0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="card shadow-sm border-0 border-start border-4 border-success">
+                      <div class="card-body py-2 d-flex align-items-center justify-content-between">
+                         <div>
+                           <div class="small text-muted fw-bold">กำไรขั้นต้นจากการขายรถ</div>
+                           <div class="h4 fw-bold text-success mb-0" id="reportVehiclesProfitText">0.00 ฿</div>
+                         </div>
+                         <i class="bi bi-cash-stack fs-1 text-success opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="inventory-pane" role="tabpanel">
+            
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-header bg-white py-3 border-0">
+                <h2 class="h6 fw-bold mb-0 text-primary">
+                  <i class="bi bi-graph-down-arrow me-2"></i>พยากรณ์สต๊อก (Inventory Forecasting)
+                </h2>
+                <p class="text-muted text-xs mb-0 mt-1">
+                  คำนวณจากอัตราการใช้เฉลี่ยรายวันในช่วงเวลาที่เลือก เพื่อคาดการณ์ว่าสินค้าจะหมดในกี่วัน
+                </p>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 400px;">
+                  <table class="table table-hover align-middle mb-0 small">
+                    <thead class="bg-light text-secondary sticky-top">
+                      <tr>
+                        <th class="ps-3">สินค้า</th>
+                        <th class="text-end">คงเหลือ</th>
+                        <th class="text-end">ใช้วันละ (ชิ้น)</th>
+                        <th class="text-center">หมดภายใน (วัน)</th>
+                        <th class="text-center pe-3">ความเสี่ยง</th>
+                      </tr>
+                    </thead>
+                    <tbody id="forecastTbody">
+                      <tr><td colspan="5" class="text-center py-4 text-muted">กำลังประมวลผล...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-12 col-lg-4">
+                 <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-warning bg-opacity-10 py-3 border-0">
+                       <h6 class="fw-bold mb-0 text-warning text-dark-emphasis"><i class="bi bi-exclamation-triangle-fill me-2"></i>ของใกล้หมด (< 5 ชิ้น)</h6>
+                    </div>
+                    <div class="card-body p-0 small">
+                       <div class="table-responsive" style="max-height: 300px;">
+                          <table class="table table-sm table-hover mb-0">
+                             <tbody id="lowStockTbody">
+                                <tr><td class="text-center py-3 text-muted">ไม่มีรายการเตือน</td></tr>
+                             </tbody>
+                          </table>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-header bg-danger bg-opacity-10 py-3 border-0">
+                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-recycle me-2"></i>Dead Stock (>90 วัน)</h6>
+                  </div>
+                  <div class="card-body p-0 small">
+                    <div class="table-responsive" style="max-height: 300px;">
+                      <table class="table table-sm table-hover mb-0">
+                        <thead class="text-muted">
+                           <tr><th class="ps-3">สินค้า</th><th class="text-end pe-3">คงเหลือ</th></tr>
+                        </thead>
+                        <tbody id="deadStockTbody">
+                          <tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-header bg-success bg-opacity-10 py-3 border-0">
+                    <h6 class="fw-bold mb-0 text-success"><i class="bi bi-trophy-fill me-2"></i>สินค้าขายดี (Top 10)</h6>
+                  </div>
+                  <div class="card-body p-0 small">
+                    <div class="table-responsive" style="max-height: 300px;">
+                      <table class="table table-sm table-hover mb-0">
+                        <thead class="text-muted">
+                           <tr><th class="ps-3">สินค้า</th><th class="text-end pe-3">ยอดใช้</th></tr>
+                        </thead>
+                        <tbody id="topSellingTbody">
+                          <tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="profit-pane" role="tabpanel">
+            <div class="row g-4">
+              <div class="col-12 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-body d-flex flex-column align-items-center">
+                    <h6 class="fw-bold text-secondary mb-3 w-100 text-center">สัดส่วนกำไรสุทธิ (Estimated Profit)</h6>
+                    <div style="height: 280px; width: 100%; position: relative;">
+                      <canvas id="profitBreakdownChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-center small text-muted px-4">
+                      *เปรียบเทียบระหว่าง: <strong>รายได้งานซ่อม</strong> และ <strong>กำไรจากการขายรถ</strong> (หมายเหตุ: ยังไม่หักค่าใช้จ่ายดำเนินงานอื่นๆ ของร้าน เช่น ค่าน้ำค่าไฟ)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="d-flex flex-column gap-3 h-100">
+                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-warning">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="text-muted small fw-bold">รายได้จากงานซ่อม (Jobs Revenue)</div>
+                        <div class="h3 fw-bold text-dark mb-0" id="analysisJobRevenue">0.00 ฿</div>
+                        <div class="text-xs text-muted mt-1">จากทั้งหมด <span id="analysisJobCount" class="fw-bold">0</span> บิล</div>
+                      </div>
+                      <i class="bi bi-wrench-adjustable-circle fs-1 text-warning opacity-25"></i>
+                    </div>
+                  </div>
+
+                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="text-muted small fw-bold">กำไรจากการขายรถ (Vehicles Profit)</div>
+                        <div class="h3 fw-bold text-success mb-0" id="analysisVehicleProfit">0.00 ฿</div>
+                        <div class="text-xs text-muted mt-1">คำนวณจาก (ราคาขาย - ราคาซื้อ)</div>
+                      </div>
+                      <i class="bi bi-car-front-fill fs-1 text-info opacity-25"></i>
+                    </div>
+                  </div>
+
+                  <div class="card border-0 shadow-sm p-3 bg-danger-subtle">
+                     <div class="d-flex align-items-center">
+                        <i class="bi bi-wallet2 text-danger fs-3 me-3"></i>
+                        <div>
+                           <div class="small fw-bold text-danger-emphasis">รายจ่ายอื่นๆ (Transactions)</div>
+                           <div class="h5 fw-bold text-danger mb-0" id="analysisOtherExpense">0.00 ฿</div>
+                           <div class="text-xs text-muted">ค่าใช้จ่ายทั่วไปที่บันทึกในระบบ</div>
+                        </div>
+                     </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <div style="height: 5rem;"></div>
+      </div>
+    </main>
+	<nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
       <div class="container-fluid px-0">
         <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link">
-              <i class="bi bi-receipt-cutoff d-block"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+          <div class="col"><a href="dashboard.html" class="bm-bottom-nav-link"><i class="bi bi-speedometer2 d-block fs-5"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col"><a href="open-bill.html" class="bm-bottom-nav-link"><i class="bi bi-receipt-cutoff d-block fs-5"></i><span>เปิดบิล</span></a></div>
+          <div class="col"><a href="jobs.html" class="bm-bottom-nav-link"><i class="bi bi-wrench-adjustable-circle d-block fs-5"></i><span>งานซ่อม</span></a></div>
+          <div class="col"><a href="vehicles.html" class="bm-bottom-nav-link"><i class="bi bi-truck-front d-block fs-5"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col"><a href="stock.html" class="bm-bottom-nav-link"><i class="bi bi-box-seam d-block fs-5"></i><span>สต๊อก</span></a></div>
+          <div class="col"><a href="finance.html" class="bm-bottom-nav-link"><i class="bi bi-cash-coin d-block fs-5"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1090;"
-    >
-      <div
-        id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="4000"
-      >
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
+      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
         <div class="d-flex">
-          <div class="toast-body fw-medium" id="mainToastBody">
-            </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="ปิด"
-          ></button>
+          <div class="toast-body fw-medium" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
     <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script type="module">
-      // ============================================================
-      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
-      // ============================================================
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, getDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        sendPasswordResetEmail
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-      import {
-        getFirestore,
-        collection,
-        doc,
-        addDoc,
-        setDoc,
-        getDoc,
-        getDocs,
-        updateDoc,
-        deleteDoc,
-        query,
-        where,
-        orderBy,
-        limit,
-        startAfter,
-        serverTimestamp,
-        onSnapshot
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-      // ============================================================
-      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
-      // ============================================================
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -588,24 +528,15 @@
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // ============================================================
-      // ตัวแปรอ้างอิง DOM
-      // ============================================================
+      // --- DOM Elements ---
       const bodyEl = document.body;
-
-      // Topbar
       const themeToggleBtn = document.getElementById("themeToggleBtn");
-      const userDisplayNameText = document.getElementById("userDisplayNameText");
-      const userRoleText = document.getElementById("userRoleText");
-      const userAvatarInitial = document.getElementById("userAvatarInitial");
-      const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
-
-      // ฟิลเตอร์ช่วงวันที่
+      
+      // Filter Elements
       const reportsLoadingState = document.getElementById("reportsLoadingState");
       const reportStartDateInput = document.getElementById("reportStartDateInput");
       const reportEndDateInput = document.getElementById("reportEndDateInput");
@@ -613,1176 +544,494 @@
       const loadReportSpinner = document.getElementById("loadReportSpinner");
       const loadReportBtnText = document.getElementById("loadReportBtnText");
 
-      // ปุ่ม preset
-      const presetTodayBtn = document.getElementById("presetTodayBtn");
-      const preset7dBtn = document.getElementById("preset7dBtn");
-      const preset14dBtn = document.getElementById("preset14dBtn");
-      const preset30dBtn = document.getElementById("preset30dBtn");
-      const preset3mBtn = document.getElementById("preset3mBtn");
-      const preset6mBtn = document.getElementById("preset6mBtn");
-      const preset1yBtn = document.getElementById("preset1yBtn");
-
-      // การ์ดสรุปเงิน
+      // Overview Tab Elements
       const reportMoneyIncomeText = document.getElementById("reportMoneyIncomeText");
       const reportMoneyExpenseText = document.getElementById("reportMoneyExpenseText");
       const reportMoneyNetText = document.getElementById("reportMoneyNetText");
-
-      // การ์ดสรุปงานซ่อม
-      const reportJobsCountText = document.getElementById("reportJobsCountText");
-      const reportJobsTotalText = document.getElementById("reportJobsTotalText");
-      const reportJobsAvgText = document.getElementById("reportJobsAvgText");
-
-      // การ์ดสรุปรถ
-      const reportVehiclesBuyCountText = document.getElementById(
-        "reportVehiclesBuyCountText"
-      );
-      const reportVehiclesSoldCountText = document.getElementById(
-        "reportVehiclesSoldCountText"
-      );
-      const reportVehiclesProfitText = document.getElementById(
-        "reportVehiclesProfitText"
-      );
-
-      // ตาราง Top Parts และสต๊อกใกล้หมด
-      const topPartsTbody = document.getElementById("topPartsTbody");
-      const lowStockTbody = document.getElementById("lowStockTbody");
-
-      // กราฟ
-      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
-
-      // Export
+      const reportMoneyIncomePrevText = document.getElementById("reportMoneyIncomePrevText");
+      const reportMoneyExpensePrevText = document.getElementById("reportMoneyExpensePrevText");
+      const reportMoneyNetPrevText = document.getElementById("reportMoneyNetPrevText");
+      const trendIncomeBadge = document.getElementById("trendIncomeBadge");
+      const trendExpenseBadge = document.getElementById("trendExpenseBadge");
+      const trendNetBadge = document.getElementById("trendNetBadge");
       const exportReportJsonBtn = document.getElementById("exportReportJsonBtn");
       const exportReportCsvBtn = document.getElementById("exportReportCsvBtn");
       const hiddenDownloadLink = document.getElementById("hiddenDownloadLink");
 
-      // FAB
-      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
-      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
-      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      // Operations Tab Elements
+      const reportJobsCountText = document.getElementById("reportJobsCountText");
+      const reportJobsTotalText = document.getElementById("reportJobsTotalText");
+      const reportJobsAvgText = document.getElementById("reportJobsAvgText");
+      const reportVehiclesBuyCountText = document.getElementById("reportVehiclesBuyCountText");
+      const reportVehiclesSoldCountText = document.getElementById("reportVehiclesSoldCountText");
+      const reportVehiclesProfitText = document.getElementById("reportVehiclesProfitText");
+      const structPartsText = document.getElementById("structPartsText");
+      const structLaborText = document.getElementById("structLaborText");
+      const topCustomersTbody = document.getElementById("topCustomersTbody");
 
-      // Toast
-      const mainToastEl = document.getElementById("mainToast");
-      const mainToastBody = document.getElementById("mainToastBody");
-      const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+      // Inventory Tab Elements
+      const forecastTbody = document.getElementById("forecastTbody");
+      const deadStockTbody = document.getElementById("deadStockTbody");
+      const lowStockTbody = document.getElementById("lowStockTbody");
+      const topSellingTbody = document.getElementById("topSellingTbody");
 
-      // ============================================================
-      // สถานะภายในหน้า
-      // ============================================================
+      // Profit Tab Elements
+      const analysisJobRevenue = document.getElementById("analysisJobRevenue");
+      const analysisVehicleProfit = document.getElementById("analysisVehicleProfit");
+      const analysisOtherExpense = document.getElementById("analysisOtherExpense");
+      const analysisJobCount = document.getElementById("analysisJobCount");
+
+      // Chart Canvases
+      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
+      const profitBreakdownChartCanvas = document.getElementById("profitBreakdownChart");
+      const jobStructureChartCanvas = document.getElementById("jobStructureChart");
+
       let currentUser = null;
-      let currentUserProfile = null;
+      let chartInstances = {};
 
-      // ช่วงวันที่ของรายงาน
-      let reportRangeStartDate = null; // "YYYY-MM-DD"
-      let reportRangeEndDate = null; // "YYYY-MM-DD"
-
-      // ข้อมูลดิบที่ใช้ในรายงาน
-      let reportTransactions = [];
-      let reportJobs = [];
-      let reportVehiclesBuy = [];
-      let reportVehiclesSold = [];
-      let reportLowStock = [];
-      let reportTopPartsUsage = [];
-
-      // ข้อมูลสรุป
-      let reportMoneySummary = {
-        incomeTotal: 0,
-        expenseTotal: 0,
-        net: 0,
+      // Data Stores
+      let currentData = {
+        transactions: [], jobs: [], vehiclesBuy: [], vehiclesSold: [], start: null, end: null
       };
-
-      let reportJobsSummary = {
-        jobsCount: 0,
-        jobsTotalAmount: 0,
-        jobsAvgAmount: 0,
+      let previousData = {
+        transactions: [], start: null, end: null
       };
+      let allStockItems = [];
 
-      let reportVehiclesSummary = {
-        buyCount: 0,
-        soldCount: 0,
-        profitTotal: 0,
-      };
-
-      // กราฟ: ข้อมูลสรุปรายวัน
-      let reportDailyStats = []; // [{date, income, expense}]
-
-      // สถานะ loading
-      let isLoadingReport = false;
-
-      // ============================================================
-      // ฟังก์ชันช่วย: Toast ภาษาไทย
-      // ============================================================
-      function showToast(message, variant = "primary") {
-        if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0 shadow";
-        mainToastBody.textContent = message;
-        mainToast.show();
+      // --- Helpers ---
+      function showToast(msg, variant="primary") {
+        const toastEl = document.getElementById("mainToast");
+        const body = document.getElementById("mainToastBody");
+        toastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow`;
+        body.textContent = msg;
+        bootstrap.Toast.getOrCreateInstance(toastEl).show();
       }
 
-      // ============================================================
-      // ฟังก์ชันช่วย: ตัวเลข + วันที่แบบไทย
-      // ============================================================
-      function formatNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0.00";
-        return value.toLocaleString("th-TH", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
+      function formatNumber(num) {
+        return Number(num || 0).toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function formatInt(num) {
+        return Number(num || 0).toLocaleString("th-TH", { maximumFractionDigits: 0 });
+      }
+      function getTodayISO() {
+        return new Date().toISOString().split('T')[0];
       }
 
-      function formatIntegerNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0";
-        return value.toLocaleString("th-TH", {
-          maximumFractionDigits: 0,
-        });
-      }
-
-      function getTodayISODateString() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      function formatDateThaiFromString(dateStr) {
-        if (!dateStr) return "-";
-        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
-        if (!year || !month || !day) return dateStr;
-        const d = new Date(year, month - 1, day);
-        const thaiMonths = [
-          "ม.ค.",
-          "ก.พ.",
-          "มี.ค.",
-          "เม.ย.",
-          "พ.ค.",
-          "มิ.ย.",
-          "ก.ค.",
-          "ส.ค.",
-          "ก.ย.",
-          "ต.ค.",
-          "พ.ย.",
-          "ธ.ค.",
-        ];
-        const thaiYear = d.getFullYear() + 543;
-        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
-      }
-
-      function createDateRangePreset(presetKey) {
-        // คอมเมนต์: คืนค่า {start, end} ตาม preset ที่กำหนด
-        const today = new Date();
-        const todayStr = getTodayISODateString();
-
-        if (presetKey === "today") {
-          return { start: todayStr, end: todayStr };
-        }
-
-        if (presetKey === "7d" || presetKey === "14d" || presetKey === "30d") {
-          const days =
-            presetKey === "7d" ? 7 : presetKey === "14d" ? 14 : presetKey === "30d" ? 30 : 7;
-          const startDate = new Date(today);
-          startDate.setDate(startDate.getDate() - (days - 1));
-          const y = startDate.getFullYear();
-          const m = String(startDate.getMonth() + 1).padStart(2, "0");
-          const d = String(startDate.getDate()).padStart(2, "0");
-          return {
-            start: `${y}-${m}-${d}`,
-            end: todayStr,
-          };
-        }
-
-        if (presetKey === "3m" || presetKey === "6m" || presetKey === "1y") {
-          const months = presetKey === "3m" ? 3 : presetKey === "6m" ? 6 : 12;
-
-          const endDate = today;
-          const startDate = new Date(endDate);
-          startDate.setMonth(startDate.getMonth() - months);
-
-          const yStart = startDate.getFullYear();
-          const mStart = String(startDate.getMonth() + 1).padStart(2, "0");
-          const dStart = String(startDate.getDate()).padStart(2, "0");
-
-          const yEnd = endDate.getFullYear();
-          const mEnd = String(endDate.getMonth() + 1).padStart(2, "0");
-          const dEnd = String(endDate.getDate()).padStart(2, "0");
-
-          return {
-            start: `${yStart}-${mStart}-${dStart}`,
-            end: `${yEnd}-${mEnd}-${dEnd}`,
-          };
-        }
-
-        return { start: todayStr, end: todayStr };
-      }
-
-      function generateDateList(startStr, endStr) {
-        // คอมเมนต์: สร้างรายการวันที่ทั้งหมดระหว่าง start-end (รวมปลาย)
-        const result = [];
-        if (!startStr || !endStr) return result;
-
-        let [sy, sm, sd] = startStr.split("-").map((v) => parseInt(v, 10));
-        const [ey, em, ed] = endStr.split("-").map((v) => parseInt(v, 10));
-
-        let current = new Date(sy, sm - 1, sd);
-        const endDate = new Date(ey, em - 1, ed);
-
-        while (current <= endDate) {
-          const y = current.getFullYear();
-          const m = String(current.getMonth() + 1).padStart(2, "0");
-          const d = String(current.getDate()).padStart(2, "0");
-          result.push(`${y}-${m}-${d}`);
-          current.setDate(current.getDate() + 1);
-        }
-
-        return result;
-      }
-
-      // ============================================================
-      // ธีม Light / Dark
-      // ============================================================
-      function applyTheme(theme) {
-        const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
-
-        const icon = themeToggleBtn?.querySelector("i");
-        if (icon) {
-          icon.classList.toggle("bi-sun", normalized === "dark");
-          icon.classList.toggle("bi-moon", normalized === "light");
-        }
-      }
-
-      function saveThemeForUser(uid, theme) {
-        if (!uid) return;
-        try {
-          localStorage.setItem("bm-theme-" + uid, theme);
-        } catch (e) {
-          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
-        }
-      }
-
-      function readThemeForUser(uid, fallbackTheme) {
-        if (!uid) return fallbackTheme || "light";
-        try {
-          const stored = localStorage.getItem("bm-theme-" + uid);
-          return stored || fallbackTheme || "light";
-        } catch (e) {
-          return fallbackTheme || "light";
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
-      // ============================================================
-      async function ensureUserProfile(user) {
-        // ฟังก์ชันนี้จะตรวจสอบว่า /users/{uid} มีหรือยัง
-        // ถ้ายังไม่มีจะสร้างให้โดยตั้ง role admin ให้คนแรก และ staff ให้คนถัดไป
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (snap.exists()) {
-          return { id: snap.id, ...snap.data() };
-        }
-
-        const usersCol = collection(db, "users");
-        const qUsers = query(usersCol, limit(1));
-        const existingSnap = await getDocs(qUsers);
-
-        const isFirstUser = existingSnap.empty;
-        const role = isFirstUser ? "admin" : "staff";
-        const defaultDisplayName =
-          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
-
-        const newUserData = {
-          displayName: defaultDisplayName,
-          role,
-          createdAt: serverTimestamp(),
-          branchId: null,
-          theme: "light",
-          disabled: false,
+      function calculateTrend(current, previous) {
+        if (!previous || previous === 0) return { percent: 100, isUp: true, text: "+100%" };
+        const diff = current - previous;
+        const percent = (diff / previous) * 100;
+        return { 
+           percent: Math.abs(percent).toFixed(1), 
+           isUp: percent >= 0, 
+           text: (percent >= 0 ? "+" : "") + percent.toFixed(1) + "%" 
         };
-
-        await setDoc(userRef, newUserData);
-        return { id: user.uid, ...newUserData };
       }
 
-      // ============================================================
-      // ฟังก์ชัน: ตั้งค่า Loading ของรายงาน
-      // ============================================================
-      function setReportLoadingState(isLoading) {
-        isLoadingReport = isLoading;
+function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
+         // Base classes (คลาสพื้นฐาน)
+         let finalClass = "badge border rounded-pill";
+         let iconHtml = "";
 
-        if (isLoading) {
-          reportsLoadingState.textContent = "กำลังโหลดรายงานจากฐานข้อมูล...";
-          reportsLoadingState.classList.remove("text-success", "text-danger");
-          loadReportSpinner.classList.remove("d-none");
-          loadReportBtnText.textContent = "กำลังโหลด...";
-          loadReportBtn.disabled = true;
-        } else {
-          loadReportSpinner.classList.add("d-none");
-          loadReportBtnText.innerHTML = '<i class="bi bi-search me-1"></i> ดูรายงานช่วงนี้';
-          loadReportBtn.disabled = false;
+         // ตรวจสอบทิศทาง (ขึ้น/ลง) เพื่อเลือกสีและไอคอน
+         if (trend.isUp) {
+            // ถ้าขึ้น: ดี=สีเขียว / ไม่ดี=สีแดง
+            const colorClass = goodIfUp ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger";
+            finalClass += " " + colorClass; 
+            iconHtml = `<i class="bi bi-arrow-up-short"></i> ${trend.text}`;
+         } else {
+            // ถ้าลง: ดี=สีแดง / ไม่ดี=สีเขียว (เช่น รายจ่ายลดลงถือว่าดี)
+            // *หมายเหตุ: Logic เดิมของคุณกำหนดไว้แบบนี้ (Good if Up)
+            // ถ้า GoodIfUp=true แปลว่า "ขึ้นดี" -> ลงไม่ดี (แดง)
+            // ถ้า GoodIfUp=false แปลว่า "ขึ้นไม่ดี" (แดง) -> ลงดี (เขียว)
+            const colorClass = goodIfUp ? "bg-danger-subtle text-danger" : "bg-success-subtle text-success";
+            finalClass += " " + colorClass;
+            iconHtml = `<i class="bi bi-arrow-down-short"></i> ${trend.text}`;
+         }
 
-          if (reportTransactions.length === 0 && reportJobs.length === 0) {
-            reportsLoadingState.textContent = "ไม่พบข้อมูลรายงานในช่วงวันที่ที่เลือก";
-            reportsLoadingState.classList.add("text-danger");
-            reportsLoadingState.classList.remove("text-success");
-          } else {
-            reportsLoadingState.textContent = "โหลดรายงานล่าสุดแล้ว";
-            reportsLoadingState.classList.add("text-success");
-            reportsLoadingState.classList.remove("text-danger");
-          }
-        }
+         // กำหนดค่ากลับไปที่ Element ทีเดียวจบ (แก้ Error ตรงนี้)
+         badgeEl.className = finalClass;
+         badgeEl.innerHTML = iconHtml;
       }
 
-      // ============================================================
-      // ฟังก์ชัน: โหลด transactions ตามช่วงวันที่
-      // ============================================================
-      async function loadTransactionsForRange(startStr, endStr, branchId) {
-        const constraints = [
-          where("isDeleted", "==", false),
-          where("date", ">=", startStr),
-          where("date", "<=", endStr),
-        ];
-        if (branchId) {
-          constraints.push(where("branchId", "==", branchId));
-        }
+      // --- Main Data Loading ---
+      async function loadReports(startStr, endStr) {
+         if(!currentUser) return;
+         setLoading(true);
+         
+         currentData.start = startStr; currentData.end = endStr;
+         
+         // Calculate Previous Period
+         const d1 = new Date(startStr); const d2 = new Date(endStr);
+         const diffTime = Math.abs(d2 - d1);
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+         
+         const prevEnd = new Date(d1); prevEnd.setDate(prevEnd.getDate() - 1);
+         const prevStart = new Date(prevEnd); prevStart.setDate(prevStart.getDate() - diffDays + 1);
+         
+         previousData.start = prevStart.toISOString().split('T')[0];
+         previousData.end = prevEnd.toISOString().split('T')[0];
 
-        const txCol = collection(db, "transactions");
-        let qTx = query(
-          txCol,
-          ...constraints,
-          orderBy("date", "asc")
-        );
+         try {
+            const branchId = (await getDoc(doc(db, "users", currentUser.uid))).data()?.branchId;
 
-        // หมายเหตุ: หาก Firestore แจ้งให้สร้าง index
-        // ให้สร้าง index ตามลิงก์ที่ Firestore แสดงใน error (ครั้งแรกเท่านั้น)
-        const snap = await getDocs(qTx);
+            // 1. Fetch Current Data
+            const txQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("date","asc"));
+            const jobsQuery = query(collection(db, "jobs"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            const vehBuyQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("buyDate",">=",startStr), where("buyDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            const vehSoldQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("status","==","sold"), where("sellDate",">=",startStr), where("sellDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            
+            // 2. Fetch Previous Data (Only Transactions for Trend)
+            const prevTxQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",previousData.start), where("date","<=",previousData.end), ...(branchId?[where("branchId","==",branchId)]:[]));
 
-        const results = [];
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          results.push({
-            id: docSnap.id,
-            date: data.date || "",
-            type: data.type || "income",
-            category: data.category || "",
-            description: data.description || "",
-            amount: Number(data.amount) || 0,
-            method: data.method || "cash",
-            sourceType: data.sourceType || "manual",
-            sourceId: data.sourceId || null,
-            createdBy: data.createdBy || "",
-            createdByName: data.createdByName || "",
-            branchId: data.branchId || null,
-          });
-        });
+            // 3. Fetch Stock (One time)
+            const stockQuery = query(collection(db, "stock"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
 
-        return results;
+            const [txSnap, jobsSnap, vBuySnap, vSoldSnap, prevTxSnap, stockSnap] = await Promise.all([
+               getDocs(txQuery), getDocs(jobsQuery), getDocs(vehBuyQuery), getDocs(vehSoldQuery), getDocs(prevTxQuery), getDocs(stockQuery)
+            ]);
+
+            currentData.transactions = txSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.jobs = jobsSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.vehiclesBuy = vBuySnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.vehiclesSold = vSoldSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            
+            previousData.transactions = prevTxSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            allStockItems = stockSnap.docs.map(d => ({id:d.id, ...d.data()}));
+
+            // Process All Sections
+            renderOverview();
+            renderOperations();
+            renderInventory();
+            renderProfit();
+            
+            showToast("อัปเดตรายงานเรียบร้อย", "success");
+
+         } catch (error) {
+            console.error(error);
+            showToast("เกิดข้อผิดพลาด: " + error.message, "danger");
+         } finally {
+            setLoading(false);
+         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: โหลด jobs ตามช่วงวันที่
-      // ============================================================
-      async function loadJobsForRange(startStr, endStr, branchId) {
-        const constraints = [
-          where("isDeleted", "==", false),
-          where("date", ">=", startStr),
-          where("date", "<=", endStr),
-        ];
-        if (branchId) {
-          constraints.push(where("branchId", "==", branchId));
-        }
+      // --- Rendering Logic ---
 
-        const jobsCol = collection(db, "jobs");
-        const qJobs = query(
-          jobsCol,
-          ...constraints,
-          orderBy("date", "asc")
-        );
+      function renderOverview() {
+         // Current
+         let inc = 0, exp = 0;
+         const dailyMap = {};
+         
+         // Init date range
+         let curr = new Date(currentData.start);
+         const last = new Date(currentData.end);
+         while(curr <= last){
+            dailyMap[curr.toISOString().split('T')[0]] = { income: 0, expense: 0 };
+            curr.setDate(curr.getDate()+1);
+         }
 
-        // หาก Firestore แจ้ง error ต้องสร้าง index ให้กับ jobs ตามลิงก์
-        const snap = await getDocs(qJobs);
-
-        const results = [];
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          results.push({
-            id: docSnap.id,
-            date: data.date || "",
-            totalAmount: Number(data.totalAmount) || 0,
-            items: Array.isArray(data.items) ? data.items : [],
-            branchId: data.branchId || null,
-          });
-        });
-
-        return results;
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: โหลด vehicles สำหรับสรุปรถในช่วง
-      // ============================================================
-      async function loadVehiclesForRange(startStr, endStr, branchId) {
-        const vehiclesCol = collection(db, "vehicles");
-
-        const constraintsBuy = [
-          where("isDeleted", "==", false),
-          where("buyDate", ">=", startStr),
-          where("buyDate", "<=", endStr),
-        ];
-        if (branchId) {
-          constraintsBuy.push(where("branchId", "==", branchId));
-        }
-
-        const constraintsSold = [
-          where("isDeleted", "==", false),
-          where("status", "==", "sold"),
-          where("sellDate", ">=", startStr),
-          where("sellDate", "<=", endStr),
-        ];
-        if (branchId) {
-          constraintsSold.push(where("branchId", "==", branchId));
-        }
-
-        const qBuy = query(vehiclesCol, ...constraintsBuy);
-        const qSold = query(vehiclesCol, ...constraintsSold);
-
-        // หมายเหตุ: สามารถต้องสร้าง index เพิ่มใน Firestore ตาม error หากมี
-        const [snapBuy, snapSold] = await Promise.all([
-          getDocs(qBuy),
-          getDocs(qSold),
-        ]);
-
-        const buyList = [];
-        snapBuy.forEach((docSnap) => {
-          const data = docSnap.data();
-          buyList.push({
-            id: docSnap.id,
-            buyDate: data.buyDate || "",
-            buyPrice: Number(data.buyPrice) || 0,
-            branchId: data.branchId || null,
-          });
-        });
-
-        const soldList = [];
-        snapSold.forEach((docSnap) => {
-          const data = docSnap.data();
-          soldList.push({
-            id: docSnap.id,
-            sellDate: data.sellDate || "",
-            buyPrice: Number(data.buyPrice) || 0,
-            sellPrice: Number(data.sellPrice) || 0,
-            profit: typeof data.profit === "number"
-              ? data.profit
-              : Number(data.sellPrice || 0) - Number(data.buyPrice || 0),
-            branchId: data.branchId || null,
-          });
-        });
-
-        return { buyList, soldList };
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: โหลดสต๊อกใกล้หมด (ปัจจุบัน)
-      // ============================================================
-      async function loadLowStock(branchId) {
-        const constraints = [where("isDeleted", "==", false)];
-        if (branchId) {
-          constraints.push(where("branchId", "==", branchId));
-        }
-
-        const stockCol = collection(db, "stock");
-        const qStock = query(stockCol, ...constraints);
-
-        const snap = await getDocs(qStock);
-
-        const lowList = [];
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          const qty = Number(data.qty) || 0;
-          const minQty = Number(data.minQty) || 0;
-          if (qty <= minQty) {
-            lowList.push({
-              id: docSnap.id,
-              code: data.code || "",
-              name: data.name || "",
-              qty,
-              minQty,
-            });
-          }
-        });
-
-        return lowList;
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: คำนวณสรุปจากข้อมูลดิบ (buildSummary)
-      // ============================================================
-      function buildSummary() {
-        // ---- สรุปเงินจาก transactions ----
-        let incomeTotal = 0;
-        let expenseTotal = 0;
-        const dailyMap = {}; // {date: {income, expense}}
-
-        reportTransactions.forEach((txn) => {
-          const amount = Number(txn.amount) || 0;
-          const date = txn.date || "";
-          if (!dailyMap[date]) {
-            dailyMap[date] = { income: 0, expense: 0 };
-          }
-
-          if (txn.type === "income") {
-            incomeTotal += amount;
-            dailyMap[date].income += amount;
-          } else if (txn.type === "expense") {
-            expenseTotal += amount;
-            dailyMap[date].expense += amount;
-          }
-        });
-
-        const net = incomeTotal - expenseTotal;
-        reportMoneySummary = { incomeTotal, expenseTotal, net };
-
-        if (reportMoneyIncomeText) {
-          reportMoneyIncomeText.textContent = formatNumber(incomeTotal) + " ฿";
-        }
-        if (reportMoneyExpenseText) {
-          reportMoneyExpenseText.textContent = formatNumber(expenseTotal) + " ฿";
-        }
-        if (reportMoneyNetText) {
-          const prefix = net >= 0 ? "" : "-";
-          reportMoneyNetText.textContent =
-            prefix + formatNumber(Math.abs(net)) + " ฿";
-          reportMoneyNetText.classList.toggle("text-primary", net >= 0);
-          reportMoneyNetText.classList.toggle("text-danger", net < 0);
-        }
-
-        // เตรียมสรุปรายวันสำหรับกราฟ
-        const dateList = generateDateList(reportRangeStartDate, reportRangeEndDate);
-        reportDailyStats = dateList.map((date) => {
-          const m = dailyMap[date] || { income: 0, expense: 0 };
-          return {
-            date,
-            income: m.income,
-            expense: m.expense,
-          };
-        });
-
-        // ---- สรุปงานซ่อมจาก jobs ----
-        let jobsCount = reportJobs.length;
-        let jobsTotalAmount = 0;
-
-        reportJobs.forEach((job) => {
-          const total = Number(job.totalAmount) || 0;
-          jobsTotalAmount += total;
-        });
-
-        const jobsAvgAmount = jobsCount > 0 ? jobsTotalAmount / jobsCount : 0;
-
-        reportJobsSummary = {
-          jobsCount,
-          jobsTotalAmount,
-          jobsAvgAmount,
-        };
-
-        if (reportJobsCountText) {
-          reportJobsCountText.textContent = String(jobsCount);
-        }
-        if (reportJobsTotalText) {
-          reportJobsTotalText.textContent = formatNumber(jobsTotalAmount) + " ฿";
-        }
-        if (reportJobsAvgText) {
-          reportJobsAvgText.textContent = formatNumber(jobsAvgAmount) + " ฿";
-        }
-
-        // ---- สรุปรถจาก vehicles ----
-        const buyCount = reportVehiclesBuy.length;
-        const soldCount = reportVehiclesSold.length;
-        let profitTotal = 0;
-
-        reportVehiclesSold.forEach((v) => {
-          const profit =
-            typeof v.profit === "number"
-              ? v.profit
-              : Number(v.sellPrice || 0) - Number(v.buyPrice || 0);
-          profitTotal += profit;
-        });
-
-        reportVehiclesSummary = {
-          buyCount,
-          soldCount,
-          profitTotal,
-        };
-
-        if (reportVehiclesBuyCountText) {
-          reportVehiclesBuyCountText.textContent = String(buyCount);
-        }
-        if (reportVehiclesSoldCountText) {
-          reportVehiclesSoldCountText.textContent = String(soldCount);
-        }
-        if (reportVehiclesProfitText) {
-          const prefix = profitTotal >= 0 ? "" : "-";
-          reportVehiclesProfitText.textContent =
-            prefix + formatNumber(Math.abs(profitTotal)) + " ฿";
-          reportVehiclesProfitText.classList.toggle("text-success", profitTotal >= 0);
-          reportVehiclesProfitText.classList.toggle("text-danger", profitTotal < 0);
-        }
-
-        // ---- Top 5 อะไหล่ ----
-        const partsUsageMap = {}; // key: stockId หรือชื่อ, value: qty
-
-        reportJobs.forEach((job) => {
-          const items = Array.isArray(job.items) ? job.items : [];
-          items.forEach((item) => {
-            const stockId = item.stockId || "";
-            const stockName = item.stockName || "";
-            const key = stockId || stockName || "";
-            if (!key) return;
-
-            const qty = Number(item.qty) || 0;
-            if (!partsUsageMap[key]) {
-              partsUsageMap[key] = {
-                label: stockName || stockId,
-                totalQty: 0,
-              };
+         currentData.transactions.forEach(t => {
+            const amt = Number(t.amount||0);
+            if(t.type === "income") inc += amt; else exp += amt;
+            if(dailyMap[t.date]) {
+               if(t.type === "income") dailyMap[t.date].income += amt; else dailyMap[t.date].expense += amt;
             }
-            partsUsageMap[key].totalQty += qty;
-          });
-        });
+         });
 
-        const partsArray = Object.values(partsUsageMap);
-        partsArray.sort((a, b) => (b.totalQty || 0) - (a.totalQty || 0));
+         // Previous
+         let prevInc = 0, prevExp = 0;
+         previousData.transactions.forEach(t => {
+            if(t.type === "income") prevInc += Number(t.amount||0); else prevExp += Number(t.amount||0);
+         });
 
-        reportTopPartsUsage = partsArray.slice(0, 5);
+         // Update UI Stats
+         reportMoneyIncomeText.textContent = formatNumber(inc) + " ฿";
+         reportMoneyExpenseText.textContent = formatNumber(exp) + " ฿";
+         reportMoneyNetText.textContent = formatNumber(inc - exp) + " ฿";
 
-        renderTopPartsTable();
-        renderLowStockTable();
+         reportMoneyIncomePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc)} ฿`;
+         reportMoneyExpensePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevExp)} ฿`;
+         reportMoneyNetPrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc - prevExp)} ฿`;
+
+         // Trends
+         renderTrendBadge(trendIncomeBadge, calculateTrend(inc, prevInc), true);
+         renderTrendBadge(trendExpenseBadge, calculateTrend(exp, prevExp), false); // Expense up is bad
+         renderTrendBadge(trendNetBadge, calculateTrend(inc-exp, prevInc-prevExp), true);
+
+         // Chart
+         const labels = Object.keys(dailyMap).sort();
+         const dataInc = labels.map(d => dailyMap[d].income);
+         const dataExp = labels.map(d => dailyMap[d].expense);
+
+         if(chartInstances.line) chartInstances.line.destroy();
+         chartInstances.line = new Chart(incomeExpenseChartCanvas, {
+            type: 'bar',
+            data: {
+               labels: labels.map(d => d.slice(5)), // MM-DD
+               datasets: [
+                  { label: 'รายรับ', data: dataInc, backgroundColor: '#198754', borderRadius: 3 },
+                  { label: 'รายจ่าย', data: dataExp, backgroundColor: '#dc3545', borderRadius: 3 }
+               ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {position:'bottom'} }, scales: { x: { grid: {display: false} } } }
+         });
       }
 
-      // ============================================================
-      // ฟังก์ชัน: วาดกราฟรายรับ/รายจ่าย (drawCharts)
-      // ============================================================
-      function drawCharts() {
-        if (!incomeExpenseChartCanvas) return;
-        const ctx = incomeExpenseChartCanvas.getContext("2d");
-        if (!ctx) return;
+      function renderOperations() {
+         // Jobs Stats
+         const jobs = currentData.jobs;
+         let totalJobRev = 0;
+         let totalPartsRev = 0;
+         let totalLaborRev = 0;
+         const customerMap = {};
 
-        const width = incomeExpenseChartCanvas.width;
-        const height = incomeExpenseChartCanvas.height;
-
-        // ล้างกราฟเดิม
-        ctx.clearRect(0, 0, width, height);
-
-        // ตั้งขอบเขตสำหรับกราฟ
-        const marginLeft = 40;
-        const marginRight = 10;
-        const marginTop = 10;
-        const marginBottom = 30;
-
-        const plotWidth = width - marginLeft - marginRight;
-        const plotHeight = height - marginTop - marginBottom;
-
-        // ถ้าไม่มีข้อมูล ให้แสดงข้อความตรงกลาง
-        if (!reportDailyStats || reportDailyStats.length === 0) {
-          ctx.fillStyle = "#999999";
-          ctx.font = "12px Kanit, sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(
-            "ยังไม่มีข้อมูลเงินเข้าออกในช่วงนี้",
-            width / 2,
-            height / 2
-          );
-          return;
-        }
-
-        // หา max value ของ income/expense
-        let maxVal = 0;
-        reportDailyStats.forEach((d) => {
-          maxVal = Math.max(maxVal, d.income, d.expense);
-        });
-        if (maxVal <= 0) maxVal = 1; // กันหารด้วย 0
-
-        // สเกลตามแนวตั้ง: value -> y
-        function valueToY(value) {
-          const ratio = value / maxVal;
-          return marginTop + (1 - ratio) * plotHeight;
-        }
-
-        const n = reportDailyStats.length;
-        const stepX = n > 1 ? plotWidth / (n - 1) : 0;
-
-        // แกน X / Y
-        ctx.strokeStyle = "#cccccc";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        // แกน Y
-        ctx.moveTo(marginLeft, marginTop);
-        ctx.lineTo(marginLeft, marginTop + plotHeight);
-        // แกน X
-        ctx.lineTo(marginLeft + plotWidth, marginTop + plotHeight);
-        ctx.stroke();
-
-        // วาดเส้นรายรับ (income)
-        ctx.beginPath();
-        reportDailyStats.forEach((d, index) => {
-          const x = marginLeft + index * stepX;
-          const y = valueToY(d.income);
-          if (index === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        });
-        ctx.strokeStyle = "#28a745"; // สีเขียวรายรับ
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // วาดเส้นรายจ่าย (expense)
-        ctx.beginPath();
-        reportDailyStats.forEach((d, index) => {
-          const x = marginLeft + index * stepX;
-          const y = valueToY(d.expense);
-          if (index === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        });
-        ctx.strokeStyle = "#dc3545"; // สีแดงรายจ่าย
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // จุด marker
-        ctx.lineWidth = 1;
-        reportDailyStats.forEach((d, index) => {
-          const x = marginLeft + index * stepX;
-          // income
-          let y = valueToY(d.income);
-          ctx.fillStyle = "#28a745";
-          ctx.beginPath();
-          ctx.arc(x, y, 2, 0, Math.PI * 2);
-          ctx.fill();
-
-          // expense
-          y = valueToY(d.expense);
-          ctx.fillStyle = "#dc3545";
-          ctx.beginPath();
-          ctx.arc(x, y, 2, 0, Math.PI * 2);
-          ctx.fill();
-        });
-
-        // ป้ายวันที่บางจุดบนแกน X
-        ctx.fillStyle = "#666666";
-        ctx.font = "10px Kanit, sans-serif";
-        ctx.textAlign = "center";
-
-        const maxLabels = 8;
-        const stepLabel = Math.ceil(n / maxLabels);
-
-        reportDailyStats.forEach((d, index) => {
-          if (index % stepLabel === 0 || index === n - 1) {
-            const x = marginLeft + index * stepX;
-            const y = marginTop + plotHeight + 12;
-            const label = d.date.slice(5); // MM-DD
-            ctx.fillText(label, x, y);
-          }
-        });
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: แสดงตาราง Top 5 อะไหล่
-      // ============================================================
-      function renderTopPartsTable() {
-        if (!topPartsTbody) return;
-
-        topPartsTbody.innerHTML = "";
-
-        if (!reportTopPartsUsage || reportTopPartsUsage.length === 0) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td colspan="2" class="text-center py-4 text-muted">
-              <i class="bi bi-box-seam d-block mb-1 fs-4"></i>
-              ยังไม่มีข้อมูลการใช้อะไหล่ในช่วงวันที่ที่เลือก
-            </td>
-          `;
-          topPartsTbody.appendChild(tr);
-          return;
-        }
-
-        reportTopPartsUsage.forEach((item) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td class="small ps-3 fw-medium">${item.label || "-"}</td>
-            <td class="small text-end pe-3 text-primary fw-bold">${formatIntegerNumber(item.totalQty || 0)}</td>
-          `;
-          topPartsTbody.appendChild(tr);
-        });
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: แสดงตารางสต๊อกใกล้หมด
-      // ============================================================
-      function renderLowStockTable() {
-        if (!lowStockTbody) return;
-
-        lowStockTbody.innerHTML = "";
-
-        if (!reportLowStock || reportLowStock.length === 0) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td colspan="4" class="text-center py-4 text-muted">
-               <i class="bi bi-check-circle d-block mb-1 fs-4 text-success"></i>
-              ขณะนี้ยังไม่มีรายการสต๊อกที่ใกล้หมด
-            </td>
-          `;
-          lowStockTbody.appendChild(tr);
-          return;
-        }
-
-        reportLowStock.forEach((item) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td class="small ps-3 text-muted">${item.code || "-"}</td>
-            <td class="small fw-medium">${item.name || "-"}</td>
-            <td class="small text-end text-danger fw-bold">${formatIntegerNumber(item.qty || 0)}</td>
-            <td class="small text-end pe-3 text-muted">${formatIntegerNumber(item.minQty || 0)}</td>
-          `;
-          lowStockTbody.appendChild(tr);
-        });
-      }
-
-      // ============================================================
-      // ฟังก์ชันหลัก: โหลดรายงานตามช่วงวันที่ (loadReportsForRange)
-      // ============================================================
-      async function loadReportsForRange(startStr, endStr) {
-        if (!currentUserProfile) return;
-        if (isLoadingReport) return;
-
-        if (!startStr || !endStr) {
-          showToast("กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน", "warning");
-          return;
-        }
-        if (startStr > endStr) {
-          showToast("วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด", "warning");
-          return;
-        }
-
-        reportRangeStartDate = startStr;
-        reportRangeEndDate = endStr;
-
-        if (reportStartDateInput) reportStartDateInput.value = startStr;
-        if (reportEndDateInput) reportEndDateInput.value = endStr;
-
-        setReportLoadingState(true);
-
-        try {
-          const branchId = currentUserProfile.branchId || null;
-
-          // ดึงข้อมูลจากหลาย collection พร้อมกัน
-          const [txns, jobs, vehicles, lowStock] = await Promise.all([
-            loadTransactionsForRange(startStr, endStr, branchId),
-            loadJobsForRange(startStr, endStr, branchId),
-            loadVehiclesForRange(startStr, endStr, branchId),
-            loadLowStock(branchId),
-          ]);
-
-          reportTransactions = txns;
-          reportJobs = jobs;
-          reportVehiclesBuy = vehicles.buyList;
-          reportVehiclesSold = vehicles.soldList;
-          reportLowStock = lowStock;
-
-          // สร้างสรุปและวาดกราฟ
-          buildSummary();
-          drawCharts();
-
-          showToast("โหลดรายงานช่วงที่เลือกเรียบร้อยแล้ว", "success");
-        } catch (error) {
-          console.error("โหลดรายงานไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถโหลดรายงานได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-          reportsLoadingState.textContent =
-            "ไม่สามารถโหลดรายงานได้ (" + (error.code || "error") + ")";
-          reportsLoadingState.classList.add("text-danger");
-          reportsLoadingState.classList.remove("text-success");
-        } finally {
-          setReportLoadingState(false);
-        }
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: Export JSON รายงาน
-      // ============================================================
-      function triggerDownloadFile(filename, content, mimeType) {
-        if (!hiddenDownloadLink) return;
-
-        const blob = new Blob([content], { type: mimeType });
-        const url = URL.createObjectURL(blob);
-
-        hiddenDownloadLink.href = url;
-        hiddenDownloadLink.download = filename;
-        hiddenDownloadLink.click();
-
-        setTimeout(() => {
-          URL.revokeObjectURL(url);
-        }, 1000);
-      }
-
-      function handleExportReportJson() {
-        if (!reportRangeStartDate || !reportRangeEndDate) {
-          showToast("กรุณาโหลดรายงานช่วงใดช่วงหนึ่งก่อน Export", "warning");
-          return;
-        }
-
-        const payload = {
-          range: {
-            startDate: reportRangeStartDate,
-            endDate: reportRangeEndDate,
-          },
-          moneySummary: reportMoneySummary,
-          jobsSummary: reportJobsSummary,
-          vehiclesSummary: reportVehiclesSummary,
-          topPartsUsage: reportTopPartsUsage,
-          lowStockCurrent: reportLowStock,
-          raw: {
-            transactions: reportTransactions,
-            jobs: reportJobs,
-            vehiclesBuy: reportVehiclesBuy,
-            vehiclesSold: reportVehiclesSold,
-          },
-        };
-
-        const jsonStr = JSON.stringify(payload, null, 2);
-        const filename = `ben-motor-report-${reportRangeStartDate || "start"}-${
-          reportRangeEndDate || "end"
-        }.json`;
-        triggerDownloadFile(filename, jsonStr, "application/json");
-      }
-
-      // ============================================================
-      // ฟังก์ชัน: Export CSV สรุปรายวัน (เงิน)
-      // ============================================================
-      function handleExportReportCsv() {
-        if (!reportRangeStartDate || !reportRangeEndDate) {
-          showToast("กรุณาโหลดรายงานช่วงใดช่วงหนึ่งก่อน Export", "warning");
-          return;
-        }
-
-        if (!reportDailyStats || reportDailyStats.length === 0) {
-          showToast("ไม่มีข้อมูลรายวันให้ Export ในช่วงนี้", "warning");
-          return;
-        }
-
-        const header = ["date", "income", "expense", "net"];
-        const rows = reportDailyStats.map((d) => [
-          d.date || "",
-          String(d.income || 0),
-          String(d.expense || 0),
-          String((d.income || 0) - (d.expense || 0)),
-        ]);
-
-        const csvLines = [];
-        csvLines.push(header.join(","));
-        rows.forEach((row) => {
-          const line = row
-            .map((value) => {
-              if (value.includes(",") || value.includes('"') || value.includes("\n")) {
-                return `"${value.replace(/"/g, '""')}"`;
-              }
-              return value;
-            })
-            .join(",");
-          csvLines.push(line);
-        });
-
-        const csvContent = csvLines.join("\r\n");
-        const filename = `ben-motor-report-daily-${reportRangeStartDate || "start"}-${
-          reportRangeEndDate || "end"
-        }.csv`;
-        triggerDownloadFile(csvContent ? filename : "report.csv", csvContent, "text/csv;charset=utf-8;");
-      }
-
-      // ============================================================
-      // Logout
-      // ============================================================
-      async function handleLogout() {
-        try {
-          await signOut(auth);
-          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Logout error:", error);
-          showToast(
-            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
-      }
-
-      // ============================================================
-      // ตั้งค่า Event Listeners สำหรับหน้านี้
-      // ============================================================
-      function setupEventListenersForPage() {
-        // ปุ่ม Logout
-        logoutBtn?.addEventListener("click", () => {
-          handleLogout();
-        });
-
-        // ปุ่มสลับธีม
-        themeToggleBtn?.addEventListener("click", async () => {
-          const currentTheme = bodyEl.classList.contains("bm-theme-dark")
-            ? "dark"
-            : "light";
-          const nextTheme = currentTheme === "dark" ? "light" : "dark";
-          applyTheme(nextTheme);
-          if (currentUser) {
-            saveThemeForUser(currentUser.uid, nextTheme);
-            try {
-              const userRef = doc(db, "users", currentUser.uid);
-              await updateDoc(userRef, { theme: nextTheme });
-            } catch (error) {
-              console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
-            }
-          }
-        });
-
-        // ปุ่ม preset ช่วงวันที่ของรายงาน
-        [
-          presetTodayBtn,
-          preset7dBtn,
-          preset14dBtn,
-          preset30dBtn,
-          preset3mBtn,
-          preset6mBtn,
-          preset1yBtn,
-        ].forEach((btn) => {
-          btn?.addEventListener("click", async (event) => {
-            const presetKey = event.currentTarget.getAttribute("data-range");
-            const { start, end } = createDateRangePreset(presetKey);
-            reportStartDateInput.value = start;
-            reportEndDateInput.value = end;
-            await loadReportsForRange(start, end);
-          });
-        });
-
-        // ปุ่มโหลดรายงานตามช่วง custom
-        loadReportBtn?.addEventListener("click", async () => {
-          const startStr = reportStartDateInput.value;
-          const endStr = reportEndDateInput.value;
-          await loadReportsForRange(startStr, endStr);
-        });
-
-        // กด Enter ใน input range เพื่อโหลดรายงาน
-        [reportStartDateInput, reportEndDateInput].forEach((input) => {
-          input?.addEventListener("keypress", (event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              const startStr = reportStartDateInput.value;
-              const endStr = reportEndDateInput.value;
-              loadReportsForRange(startStr, endStr);
-            }
-          });
-        });
-
-        // Export
-        exportReportJsonBtn?.addEventListener("click", () => {
-          handleExportReportJson();
-        });
-        exportReportCsvBtn?.addEventListener("click", () => {
-          handleExportReportCsv();
-        });
-
-        // FAB เมนูด่วน
-        fabOpenBillBtn?.addEventListener("click", () => {
-          window.location.href = "open-bill.html";
-        });
-        fabAddTxnBtn?.addEventListener("click", () => {
-          window.location.href = "finance.html";
-        });
-        fabStockInBtn?.addEventListener("click", () => {
-          window.location.href = "stock.html";
-        });
-      }
-
-      // ============================================================
-      // Auth Guard ของหน้า reports.html
-      // ============================================================
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
-
-        currentUser = user;
-
-        try {
-          const userProfile = await ensureUserProfile(user);
-          currentUserProfile = userProfile;
-
-          if (userProfile.disabled === true) {
-            await signOut(auth);
-            showToast(
-              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
-              "danger"
-            );
-            window.location.href = "index.html";
-            return;
-          }
-
-          // อัปเดต Topbar
-          if (userDisplayNameText) {
-            userDisplayNameText.textContent = userProfile.displayName || "-";
-          }
-          if (userRoleText) {
-            const roleLabel =
-              userProfile.role === "admin" ? "Admin" : "Staff";
-            userRoleText.textContent = roleLabel;
-          }
-          if (userAvatarInitial) {
-            const dn = userProfile.displayName || "U";
-            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
-          }
-
-          // เมนูตั้งค่าระบบเฉพาะ admin
-          if (settingsMenuItem) {
-            if (userProfile.role === "admin") {
-              settingsMenuItem.classList.remove("d-none");
+         jobs.forEach(j => {
+            const total = Number(j.totalAmount||0);
+            totalJobRev += total;
+            
+            // Analyze Items for Structure
+            if(j.items && Array.isArray(j.items)) {
+               j.items.forEach(item => {
+                  const lineTotal = (Number(item.price||0) * Number(item.qty||1));
+                  // Check if it's labor (assuming 'isLabor' flag or 'Labor' keyword)
+                  const isLabor = item.isLabor === true || item.name.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
+                  if(isLabor) totalLaborRev += lineTotal;
+                  else totalPartsRev += lineTotal;
+               });
             } else {
-              settingsMenuItem.classList.add("d-none");
+               // Fallback if no items: assume 30% labor
+               totalPartsRev += total * 0.7;
+               totalLaborRev += total * 0.3;
             }
-          }
 
-          // ธีม
-          const baseTheme = userProfile.theme || "light";
-          const themeToUse = readThemeForUser(user.uid, baseTheme);
-          applyTheme(themeToUse);
+            // Customer Ranking
+            const custName = j.customerName || "ลูกค้าทั่วไป";
+            if(!customerMap[custName]) customerMap[custName] = { count: 0, total: 0 };
+            customerMap[custName].count++;
+            customerMap[custName].total += total;
+         });
 
-          // ตั้งค่าช่วงเริ่มต้น เป็น 7 วันที่ผ่านมา
-          const { start, end } = createDateRangePreset("7d");
-          reportRangeStartDate = start;
-          reportRangeEndDate = end;
-          if (reportStartDateInput) reportStartDateInput.value = start;
-          if (reportEndDateInput) reportEndDateInput.value = end;
+         reportJobsCountText.textContent = formatInt(jobs.length);
+         reportJobsTotalText.textContent = formatNumber(totalJobRev);
+         reportJobsAvgText.textContent = formatNumber(jobs.length ? totalJobRev/jobs.length : 0);
 
-          // ตั้งค่า Event listeners
-          setupEventListenersForPage();
+         // Structure Chart
+         structPartsText.textContent = formatNumber(totalPartsRev) + " ฿";
+         structLaborText.textContent = formatNumber(totalLaborRev) + " ฿";
 
-          // โหลดรายงานครั้งแรก (7 วันล่าสุด)
-          await loadReportsForRange(start, end);
-        } catch (error) {
-          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/รายงาน:", error);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือรายงานได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
+         if(chartInstances.struct) chartInstances.struct.destroy();
+         chartInstances.struct = new Chart(jobStructureChartCanvas, {
+            type: 'doughnut',
+            data: {
+               labels: ['ค่าอะไหล่', 'ค่าแรง'],
+               datasets: [{ data: [totalPartsRev, totalLaborRev], backgroundColor: ['#0d6efd', '#ffc107'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, cutout: '70%' }
+         });
+
+         // Top Customers
+         const sortedCust = Object.entries(customerMap)
+            .sort(([,a], [,b]) => b.total - a.total)
+            .slice(0, 5);
+         
+         topCustomersTbody.innerHTML = "";
+         if(sortedCust.length === 0) topCustomersTbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">ไม่มีข้อมูล</td></tr>`;
+         sortedCust.forEach(([name, data], idx) => {
+            topCustomersTbody.innerHTML += `
+               <tr>
+                  <td class="ps-3"><span class="badge bg-light text-dark border rounded-circle" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;">${idx+1}</span></td>
+                  <td class="fw-medium">${name}</td>
+                  <td class="text-center text-muted">${data.count}</td>
+                  <td class="text-end pe-3 fw-bold text-success">${formatNumber(data.total)}</td>
+               </tr>`;
+         });
+
+         // Vehicles
+         let vProfit = 0;
+         currentData.vehiclesSold.forEach(v => {
+            vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0)));
+         });
+         reportVehiclesBuyCountText.textContent = formatInt(currentData.vehiclesBuy.length);
+         reportVehiclesSoldCountText.textContent = formatInt(currentData.vehiclesSold.length);
+         reportVehiclesProfitText.textContent = formatNumber(vProfit) + " ฿";
+      }
+
+      function renderInventory() {
+         const usageMap = {};
+         currentData.jobs.forEach(j => {
+            if(j.items && Array.isArray(j.items)) {
+               j.items.forEach(i => {
+                  const k = i.stockId || i.stockName;
+                  if(k && i.stockId) usageMap[i.stockId] = (usageMap[i.stockId]||0) + Number(i.qty||0);
+               });
+            }
+         });
+
+         // Forecast & Low Stock
+         const daysInRange = Math.max(1, Math.ceil(Math.abs(new Date(currentData.end)-new Date(currentData.start))/(1000*60*60*24)));
+         const forecastList = [];
+         const lowStockList = [];
+
+         allStockItems.forEach(item => {
+            const used = usageMap[item.id] || 0;
+            const currentQty = Number(item.qty || 0);
+            
+            // Forecast logic
+            if(currentQty > 0 && used > 0) {
+               const rate = used / daysInRange;
+               const daysLeft = Math.floor(currentQty / rate);
+               forecastList.push({ name: item.name, code: item.code, currentQty, rate, daysLeft });
+            }
+
+            // Low Stock logic (< 5)
+            if(currentQty <= 5 && currentQty > 0) {
+               lowStockList.push(item);
+            }
+         });
+
+         // Render Forecast
+         forecastList.sort((a,b) => a.daysLeft - b.daysLeft);
+         forecastTbody.innerHTML = "";
+         if(forecastList.length===0) forecastTbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">ข้อมูลไม่เพียงพอในการพยากรณ์</td></tr>`;
+         forecastList.slice(0, 20).forEach(i => {
+            const badge = i.daysLeft<7 ? `<span class="badge bg-danger">วิกฤต</span>` : (i.daysLeft<30 ? `<span class="badge bg-warning text-dark">เฝ้าระวัง</span>` : `<span class="badge bg-success">ปกติ</span>`);
+            forecastTbody.innerHTML += `<tr><td class="ps-3"><div class="fw-bold">${i.name}</div><div class="text-xs text-muted">${i.code||""}</div></td><td class="text-end fw-bold">${formatInt(i.currentQty)}</td><td class="text-end small">${i.rate.toFixed(2)}</td><td class="text-center fw-bold text-primary">${i.daysLeft}</td><td class="text-center pe-3">${badge}</td></tr>`;
+         });
+
+         // Render Low Stock
+         lowStockTbody.innerHTML = "";
+         if(lowStockList.length === 0) lowStockTbody.innerHTML = `<tr><td class="text-center py-3 text-success"><i class="bi bi-check-circle me-1"></i> สต๊อกเพียงพอทุกรายการ</td></tr>`;
+         lowStockList.forEach(i => {
+            lowStockTbody.innerHTML += `<tr><td class="ps-3 d-flex justify-content-between align-items-center"><span>${i.name}</span><span class="badge bg-danger rounded-pill">${i.qty}</span></td></tr>`;
+         });
+
+         // Render Dead Stock (>90 days)
+         const ninetyDaysAgo = new Date(); ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+         const deadList = allStockItems.filter(i => {
+            const lastUpd = i.updatedAt ? i.updatedAt.toDate() : (i.createdAt ? i.createdAt.toDate() : new Date());
+            return Number(i.qty) > 0 && lastUpd < ninetyDaysAgo;
+         });
+         deadStockTbody.innerHTML = "";
+         if(deadList.length===0) deadStockTbody.innerHTML = `<tr><td colspan="2" class="text-center py-3 text-success">เยี่ยม! ไม่พบสินค้าค้างนาน</td></tr>`;
+         deadList.slice(0, 10).forEach(i => {
+            deadStockTbody.innerHTML += `<tr><td class="ps-3 text-truncate" style="max-width: 150px;">${i.name}</td><td class="text-end pe-3 fw-bold text-danger">${i.qty}</td></tr>`;
+         });
+
+         // Render Top Selling
+         const topList = Object.keys(usageMap).map(id => {
+            const item = allStockItems.find(s => s.id === id);
+            return { name: item ? item.name : "สินค้าที่ถูกลบ", qty: usageMap[id] };
+         }).sort((a,b) => b.qty - a.qty).slice(0, 10);
+         
+         topSellingTbody.innerHTML = "";
+         if(topList.length===0) topSellingTbody.innerHTML = `<tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>`;
+         topList.forEach(i => {
+             topSellingTbody.innerHTML += `<tr><td class="ps-3 text-truncate" style="max-width: 150px;">${i.name}</td><td class="text-end pe-3 fw-bold text-success">${i.qty}</td></tr>`;
+         });
+      }
+
+      function renderProfit() {
+         let jobRev = 0;
+         currentData.jobs.forEach(j => jobRev += Number(j.totalAmount||0));
+         
+         let vProfit = 0;
+         currentData.vehiclesSold.forEach(v => vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0))));
+
+         let otherExp = 0;
+         currentData.transactions.forEach(t => {
+            if(t.type === 'expense') otherExp += Number(t.amount||0);
+         });
+
+         analysisJobRevenue.textContent = formatNumber(jobRev) + " ฿";
+         analysisJobCount.textContent = formatInt(currentData.jobs.length);
+         analysisVehicleProfit.textContent = formatNumber(vProfit) + " ฿";
+         analysisOtherExpense.textContent = formatNumber(otherExp) + " ฿";
+
+         if(chartInstances.profit) chartInstances.profit.destroy();
+         chartInstances.profit = new Chart(profitBreakdownChartCanvas, {
+            type: 'pie',
+            data: {
+               labels: ['รายได้งานซ่อม', 'กำไรขายรถ'],
+               datasets: [{
+                  data: [jobRev, vProfit],
+                  backgroundColor: ['#ffc107', '#0dcaf0'],
+                  hoverOffset: 10
+               }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+         });
+      }
+
+      function setLoading(isLoading) {
+         if(isLoading) {
+            loadReportSpinner.classList.remove("d-none");
+            loadReportBtn.disabled = true;
+            reportsLoadingState.textContent = "กำลังประมวลผล...";
+            reportsLoadingState.className = "badge bg-warning text-dark border";
+         } else {
+            loadReportSpinner.classList.add("d-none");
+            loadReportBtn.disabled = false;
+            reportsLoadingState.textContent = "ข้อมูลล่าสุด";
+            reportsLoadingState.className = "badge bg-success text-white border";
+         }
+      }
+
+      function setDateRange(key) {
+         let start = "", end = getTodayISO();
+         const d = new Date();
+         if(key === "today") { start = end; }
+         else if(key === "yesterday") {
+            d.setDate(d.getDate() - 1);
+            start = end = d.toISOString().split('T')[0];
+         } else if(key === "7d") {
+            d.setDate(d.getDate() - 6);
+            start = d.toISOString().split('T')[0];
+         } else if(key === "30d") {
+            d.setDate(d.getDate() - 29);
+            start = d.toISOString().split('T')[0];
+         } else if(key === "thisMonth") {
+            start = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
+         }
+         
+         reportStartDateInput.value = start;
+         reportEndDateInput.value = end;
+         loadReports(start, end);
+      }
+
+      // --- Init ---
+      onAuthStateChanged(auth, async (user) => {
+         if (!user) { window.location.href = "index.html"; return; }
+         currentUser = user;
+
+         // Theme
+         const t = localStorage.getItem("bm-theme-" + user.uid) || "light";
+         bodyEl.classList.add("bm-theme-" + t);
+
+         // Load Profile
+         const snap = await getDoc(doc(db, "users", user.uid));
+         if(snap.exists()) {
+            const d = snap.data();
+            document.getElementById("userDisplayNameText").textContent = d.displayName || "User";
+            document.getElementById("userAvatarInitial").textContent = (d.displayName||"U").charAt(0).toUpperCase();
+            document.getElementById("userRoleText").textContent = d.role === "admin" ? "Admin" : "Staff";
+         }
+
+         // Events
+         document.querySelectorAll(".bm-report-range-preset-btn").forEach(b => {
+            b.addEventListener("click", () => setDateRange(b.dataset.range));
+         });
+         
+         loadReportBtn.addEventListener("click", () => loadReports(reportStartDateInput.value, reportEndDateInput.value));
+
+         if(logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
+         if(themeToggleBtn) themeToggleBtn.addEventListener("click", () => {
+           const isDark = bodyEl.classList.contains("bm-theme-dark");
+           bodyEl.classList.replace("bm-theme-" + (isDark?"dark":"light"), "bm-theme-" + (isDark?"light":"dark"));
+           localStorage.setItem("bm-theme-" + user.uid, isDark ? "light" : "dark");
+        });
+
+         // Default Load
+         setDateRange("30d");
       });
     </script>
   </body>

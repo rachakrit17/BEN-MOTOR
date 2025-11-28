@@ -31,84 +31,33 @@
         <span class="navbar-brand mb-0 h1 fw-bold text-success">
           <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
-
         <div class="d-flex align-items-center gap-2">
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
+            class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
           >
             <i class="bi bi-moon fs-5"></i>
           </button>
-
           <div class="dropdown">
             <button
               class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
             >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
-              <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+               <li><a class="dropdown-item py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i> แดชบอร์ด</a></li>
+               <li><hr class="dropdown-divider" /></li>
+               <li><button class="dropdown-item py-2 text-danger" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
@@ -124,11 +73,11 @@
               <i class="bi bi-person-lines-fill me-2"></i>ประวัติลูกค้า &amp; รถ
             </h1>
             <p class="small text-muted mb-0">
-              ค้นหาข้อมูลลูกค้าจากชื่อ เบอร์โทร หรือทะเบียนรถ และดูประวัติการใช้บริการทั้งหมด
+              ค้นหาข้อมูล ดูประวัติซ่อม และวิเคราะห์การใช้บริการ
             </p>
           </div>
           <span class="badge text-bg-secondary shadow-sm">
-            โหมดดูข้อมูลเท่านั้น
+            โหมดดูข้อมูล
           </span>
         </div>
 
@@ -136,8 +85,7 @@
           <div class="alert alert-info small mb-0 shadow-sm border-0 d-flex align-items-center">
             <i class="bi bi-info-circle-fill me-2 fs-5"></i>
             <div>
-              พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้าในช่องด้านล่าง แล้วกด
-              <strong>ค้นหา</strong> เพื่อดูประวัติการใช้บริการทั้งหมด
+              พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้า แล้วกด <strong>ค้นหา</strong> เพื่อดูประวัติย้อนหลังทั้งหมด
             </div>
           </div>
         </section>
@@ -158,7 +106,7 @@
                       type="search"
                       class="form-control border-start-0 ps-0"
                       id="searchKeyword"
-                      placeholder="เช่น 089xxxxxxx, นพดล, 1กข1234"
+                      placeholder="เช่น 089xxxxxxx, สมชาย, 1กข1234"
                       autocomplete="off"
                     />
                   </div>
@@ -182,9 +130,11 @@
                   </button>
                 </div>
               </form>
-              <p class="small text-muted mt-2 mb-0 text-xs" id="searchHint">
-                <i class="bi bi-magic me-1"></i>ระบบจะเดาอัตโนมัติว่าค้นหาจาก <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อ</strong>
-              </p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <p class="small text-muted mb-0 text-xs" id="searchHint">
+                  <i class="bi bi-magic me-1"></i>ระบบจะค้นหาจาก <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อ</strong> อัตโนมัติ
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -192,7 +142,7 @@
         <section id="loadingState" class="mb-3 d-none">
           <div class="text-center py-4">
             <div class="spinner-border text-primary mb-2" role="status"></div>
-            <div class="small text-muted">กำลังโหลดข้อมูลลูกค้าและประวัติ...</div>
+            <div class="small text-muted">กำลังดึงข้อมูลประวัติทั้งหมด...</div>
           </div>
         </section>
 
@@ -200,7 +150,7 @@
           <div class="alert alert-warning small mb-0 shadow-sm border-0 d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
             <div>
-              ไม่พบลูกค้าตามคำค้นนี้ในระบบ กรุณาลองใช้ข้อมูลอื่นอีกครั้ง
+              ไม่พบข้อมูลลูกค้าตามคำค้นนี้ในระบบ กรุณาลองใช้ข้อมูลอื่น (เช่น ทะเบียนรถ)
             </div>
           </div>
         </section>
@@ -216,14 +166,13 @@
                     <span id="summaryAvatarInitial" class="fw-bold fs-4">C</span>
                   </div>
                   <div>
-                    <div class="small text-muted mb-0">ชื่อลูกค้า (ตามประวัติที่พบ)</div>
+                    <div class="small text-muted mb-0">ชื่อลูกค้า</div>
                     <h2 class="h5 mb-1 fw-bold text-dark" id="summaryCustomerName">-</h2>
-                    <div class="small text-muted">
-                      <i class="bi bi-telephone me-1"></i>
-                      <span id="summaryCustomerPhone">-</span>
+                    <div class="d-flex flex-wrap gap-2 align-items-center small text-muted">
+                        <span><i class="bi bi-telephone me-1"></i><span id="summaryCustomerPhone">-</span></span>
                     </div>
                     <div class="small text-muted mt-1" id="summaryOtherPhonesRow" style="display: none;">
-                      <span class="badge bg-light text-secondary border">เบอร์อื่น ๆ: <span id="summaryOtherPhones">-</span></span>
+                      <span class="badge bg-light text-secondary border">เบอร์อื่น: <span id="summaryOtherPhones">-</span></span>
                     </div>
                   </div>
                 </div>
@@ -249,21 +198,21 @@
                   <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
                     <div class="small text-muted mb-1">ยอดใช้จ่ายรวม</div>
                     <div class="h4 mb-0 fw-bold text-success" id="summaryTotalAmount">0 ฿</div>
-                    <div class="small text-muted">โดยประมาณ</div>
+                    <div class="small text-muted">บาท</div>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">ค่าเฉลี่ยต่อบิล</div>
+                    <div class="small text-muted mb-1">เฉลี่ยต่อบิล</div>
                     <div class="h4 mb-0 fw-bold text-dark" id="summaryAveragePerJob">0 ฿</div>
-                    <div class="small text-muted">บาท/บิล</div>
+                    <div class="small text-muted">บาท/ครั้ง</div>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">จำนวนทะเบียนรถ</div>
+                    <div class="small text-muted mb-1">จำนวนรถ</div>
                     <div class="h4 mb-0 fw-bold text-info" id="summaryVehiclesCount">0</div>
-                    <div class="small text-muted">คัน</div>
+                    <div class="small text-muted">คันที่เคยเข้า</div>
                   </div>
                 </div>
               </div>
@@ -295,14 +244,14 @@
         <section id="historySection" class="mb-4 d-none">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="h6 mb-0 fw-bold text-dark">
-              <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการใช้บริการทั้งหมด
+              <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการทำรายการ
             </h2>
             <span class="badge bg-light text-dark border" id="historyCountLabel">-</span>
           </div>
 
           <div id="historyEmptyBox" class="alert alert-light border small d-none text-center py-4">
             <i class="bi bi-inbox fs-4 d-block mb-2 text-muted"></i>
-            ยังไม่มีประวัติการใช้บริการสำหรับลูกค้าคนนี้ในระบบ
+            ยังไม่มีประวัติการใช้บริการสำหรับลูกค้าคนนี้
           </div>
 
           <ul class="list-group list-group-flush" id="historyTimeline">
@@ -315,15 +264,7 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
+
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow border-0" aria-labelledby="fabDropdownButton">
           <li>
             <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
@@ -332,17 +273,17 @@
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน (Manual)
+              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน
             </button>
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่เข้า
+              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่
             </button>
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddVehicleBtn">
-              <i class="bi bi-truck-front me-2 text-info"></i> เพิ่มรถรับซื้อเข้า
+              <i class="bi bi-truck-front me-2 text-info"></i> เพิ่มรถรับซื้อ
             </button>
           </li>
         </ul>
@@ -406,7 +347,7 @@
       >
         <div class="d-flex">
           <div class="toast-body fw-medium" id="mainToastBody">
-            </div>
+          </div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -417,13 +358,75 @@
       </div>
     </div>
 
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h5 class="modal-title fw-bold text-primary" id="detailModalTitle">
+              รายละเอียด
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="p-3 bg-light rounded-3 border mb-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="badge bg-white text-dark border shadow-sm" id="dmDateBadge">-</span>
+                    <span class="badge bg-warning text-dark" id="dmStatusBadge">-</span>
+                </div>
+                <div class="h5 fw-bold mb-1" id="dmCarInfo">-</div>
+                <div class="small text-muted"><i class="bi bi-person me-1"></i> <span id="dmCustomerName">-</span></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="small text-muted fw-bold">อาการที่แจ้ง / รายละเอียด</label>
+                <div class="p-2 bg-white border rounded text-secondary small" id="dmProblem">
+                    -
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="small text-muted fw-bold mb-1">รายการอะไหล่และค่าบริการ</label>
+                <div class="table-responsive rounded border">
+                    <table class="table table-sm table-striped mb-0 small" style="font-size: 0.8rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>รายการ</th>
+                                <th class="text-end" style="width: 25%;">ราคา</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dmItemsTableBody">
+                            </tbody>
+                        <tfoot class="table-group-divider">
+                            <tr>
+                                <td class="text-end fw-bold">รวมสุทธิ</td>
+                                <td class="text-end fw-bold text-success" id="dmTotalAmount">-</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+             <div class="d-flex justify-content-between text-muted text-xs border-top pt-2">
+                <div>บันทึกโดย: <span id="dmBy">-</span></div>
+                <div><span id="dmTimestamp">-</span></div>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
+            <a href="#" id="dmEditLink" class="btn btn-primary rounded-pill px-4">
+                <i class="bi bi-pencil-square me-1"></i> แก้ไขบิล
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-
-    <script type="module">
+	<script type="module">
       // ============================================================
       // Import Firebase SDK
       // ============================================================
@@ -508,6 +511,10 @@
       const historyEmptyBox = document.getElementById("historyEmptyBox");
       const historyCountLabel = document.getElementById("historyCountLabel");
 
+      // Modals
+      const detailModalEl = document.getElementById("detailModal");
+      const detailModal = new bootstrap.Modal(detailModalEl);
+      
       // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
       const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
@@ -522,6 +529,7 @@
       // State Variables
       let currentUser = null;
       let currentUserProfile = null;
+      let currentHistoryData = []; // Store fetched data for modal use
 
       // ============================================================
       // Helper Functions
@@ -593,7 +601,6 @@
         if (snap.exists()) {
           return { id: snap.id, ...snap.data() };
         }
-        // First time user logic (fallback)
         const usersCol = collection(db, "users");
         const q = query(usersCol, limit(1));
         const existingSnap = await getDocs(q);
@@ -617,21 +624,29 @@
       function detectSearchType(keyword) {
         const trimmed = (keyword || "").trim();
         if (!trimmed) return null;
+        // Clean spaces for plate detection
+        const cleanPlate = trimmed.replace(/\s+/g, '');
+        
         const onlyDigitsAndSymbol = /^[0-9+\-\s]+$/.test(trimmed);
         const hasDigit = /[0-9]/.test(trimmed);
         const hasLetter = /[A-Za-zก-ฮ]/.test(trimmed);
 
         if (onlyDigitsAndSymbol && trimmed.replace(/[^0-9]/g, "").length >= 6) return "phone";
-        if (hasDigit && hasLetter) return "plate";
+        // Simple heuristic: if it has letters and digits, likely a plate (e.g. 1กข1234)
+        if (hasDigit && hasLetter) return "plate"; 
+        // If it has letters but no digits, likely a name
         if (hasLetter && !hasDigit) return "name";
-        return null;
+        // Fallback: treat as plate if short
+        if (cleanPlate.length < 8) return "plate";
+        
+        return "name"; // Default
       }
 
       function getSearchTypeLabel(type) {
         if (type === "phone") return "เบอร์โทรศัพท์";
         if (type === "plate") return "ทะเบียนรถ";
         if (type === "name") return "ชื่อลูกค้า";
-        return "ไม่ระบุ";
+        return "ทั่วไป";
       }
 
       function setLoading(isLoading) {
@@ -654,6 +669,7 @@
         historyEmptyBox.classList.add("d-none");
         historyTimeline.innerHTML = "";
         historyCountLabel.textContent = "-";
+        currentHistoryData = [];
       }
 
       async function searchCustomerHistory(keyword) {
@@ -682,15 +698,29 @@
           const jobsConstraints = [where("isDeleted", "==", false)];
           if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
 
-          if (searchType === "phone") jobsConstraints.push(where("customerPhone", "==", trimmed));
-          else if (searchType === "plate") jobsConstraints.push(where("plate", "==", trimmed));
-          else if (searchType === "name") jobsConstraints.push(where("customerName", "==", trimmed));
+          if (searchType === "phone") {
+              jobsConstraints.push(where("customerPhone", "==", trimmed));
+          } else if (searchType === "plate") {
+              // Try basic match. If needed, we might search multiple variants in real app, but here simple match
+              jobsConstraints.push(where("plate", "==", trimmed)); 
+          } else if (searchType === "name") {
+              // Exact match for now (Firestore limits substring search). 
+              // In production, we might use a separate search index (Algolia/Typesense).
+              // Here we rely on exact name or try logical guesswork.
+              jobsConstraints.push(where("customerName", "==", trimmed));
+          }
 
-          const jobsSnap = await getDocs(query(jobsCol, ...jobsConstraints));
+          // Fetch limit to prevent overload (e.g., 200 items)
+          const jobsQuery = query(jobsCol, ...jobsConstraints, orderBy("date", "desc"), limit(200));
+          const jobsSnap = await getDocs(jobsQuery);
+          
           const jobs = [];
-          jobsSnap.forEach(doc => jobs.push({ id: doc.id, ...doc.data() }));
+          jobsSnap.forEach(doc => {
+              jobs.push({ id: doc.id, ...doc.data() });
+          });
 
           // 2. Fetch Vehicles
+          // Logic: Find vehicles that match the plates found in jobs, OR match the search keyword directly
           const vehicles = [];
           const vehiclesCol = collection(db, "vehicles");
           const plateSet = new Set();
@@ -700,6 +730,7 @@
 
           const plateList = Array.from(plateSet).filter(Boolean);
 
+          // Chunk queries if too many plates (Firestore 'in' limit is 10)
           if (plateList.length > 0) {
             const chunkSize = 10;
             for (let i = 0; i < plateList.length; i += chunkSize) {
@@ -709,12 +740,10 @@
               const snap = await getDocs(query(vehiclesCol, ...constraints));
               snap.forEach(doc => vehicles.push({ id: doc.id, ...doc.data() }));
             }
-          } else if (searchType === "plate") {
-             const constraints = [where("plate", "==", trimmed)];
-             if (branchId) constraints.push(where("branchId", "==", branchId));
-             const snap = await getDocs(query(vehiclesCol, ...constraints));
-             snap.forEach(doc => vehicles.push({ id: doc.id, ...doc.data() }));
           }
+
+          // Special case: if searched by name, vehicles might not be linked by plate yet.
+          // We can't easily search vehicles by ownerName without an index, so we rely on plates found in jobs.
 
           if (jobs.length === 0 && vehicles.length === 0) {
             setLoading(false);
@@ -730,7 +759,12 @@
         } catch (error) {
           console.error("Search error:", error);
           setLoading(false);
-          showToast("ค้นหาไม่สำเร็จ (" + (error.code || "unknown") + ")", "danger");
+          // Handle index errors or permission errors gracefully
+          if (error.message && error.message.includes("requires an index")) {
+             showToast("ระบบกำลังสร้างดัชนีค้นหา (รอ 1-2 นาที)", "warning");
+          } else {
+             showToast("ค้นหาไม่สำเร็จ (" + (error.code || "unknown") + ")", "danger");
+          }
         }
       }
 
@@ -752,10 +786,13 @@
 
         vehicles.forEach(v => { if (v.plate) allPlates.add(v.plate.trim()); });
 
-        // Select Most Frequent Name & Phone
+        // Heuristic: Most frequent name/phone is likely the main one
         let selectedName = Object.entries(nameCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
         let selectedPhone = Object.entries(phoneCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
+        
+        // Override with search term if empty
         if (jobs.length === 0 && searchType === "phone") selectedPhone = keyword;
+        if (jobs.length === 0 && searchType === "name") selectedName = keyword;
 
         summaryCustomerName.textContent = selectedName !== "-" ? selectedName : "ไม่พบชื่อ";
         summaryCustomerPhone.textContent = selectedPhone;
@@ -771,7 +808,7 @@
 
         summarySearchTypeLabel.textContent = getSearchTypeLabel(searchType);
 
-        // Stats
+        // Stats Calculation
         const jobsCount = jobs.length;
         let totalAmount = 0;
         let dates = [];
@@ -780,7 +817,7 @@
           totalAmount += Number(j.totalAmount) || 0;
           if (j.date) dates.push(j.date);
         });
-        dates.sort();
+        dates.sort(); // Sort strings YYYY-MM-DD works correctly
 
         summaryJobsCount.textContent = String(jobsCount);
         summaryTotalAmount.textContent = formatNumber(totalAmount) + " ฿";
@@ -795,54 +832,88 @@
         historyTimeline.innerHTML = "";
         historyEmptyBox.classList.add("d-none");
 
-        const entries = [];
+        currentHistoryData = []; // Clear old data cache
 
         jobs.forEach(j => {
           let dateKey = j.date;
           if (!dateKey && j.createdAt?.toDate) dateKey = j.createdAt.toDate().toISOString().slice(0, 10);
-          entries.push({
-            kind: "job", dateKey, rawDate: j.date,
+          
+          const item = {
+            id: j.id,
+            kind: "job", 
+            dateKey, 
+            rawDate: j.date,
             createdAt: j.createdAt?.toDate ? j.createdAt.toDate() : null,
-            plate: j.plate || "-", brand: j.brand || "", model: j.model || "",
-            problem: j.problem || "", status: j.status || "",
-            totalAmount: Number(j.totalAmount) || 0, createdByName: j.createdByName
-          });
+            plate: j.plate || "-", 
+            brand: j.brand || "", 
+            model: j.model || "",
+            problem: j.problem || "", 
+            status: j.status || "repairing",
+            totalAmount: Number(j.totalAmount) || 0, 
+            createdByName: j.createdByName,
+            customerName: j.customerName,
+            items: j.items || [] // Store items for modal
+          };
+          currentHistoryData.push(item);
         });
 
         vehicles.forEach(v => {
           const brandModel = [v.brand, v.model].filter(Boolean).join(" ");
+          // Buy Event
           if (v.buyDate) {
-            entries.push({
-              kind: "vehicle_buy", dateKey: v.buyDate, rawDate: v.buyDate,
+            currentHistoryData.push({
+              id: v.id + "_buy",
+              kind: "vehicle_buy", 
+              dateKey: v.buyDate, 
+              rawDate: v.buyDate,
               createdAt: v.createdAt?.toDate ? v.createdAt.toDate() : null,
-              plate: v.plate || "-", brandModel, buyPrice: Number(v.buyPrice) || 0,
+              plate: v.plate || "-", 
+              brandModel, 
+              buyPrice: Number(v.buyPrice) || 0,
               createdByName: v.createdByName
             });
           }
+          // Sell Event
           if (v.sellDate) {
-            entries.push({
-              kind: "vehicle_sell", dateKey: v.sellDate, rawDate: v.sellDate,
+            currentHistoryData.push({
+              id: v.id + "_sell",
+              kind: "vehicle_sell", 
+              dateKey: v.sellDate, 
+              rawDate: v.sellDate,
               createdAt: v.updatedAt?.toDate ? v.updatedAt.toDate() : null,
-              plate: v.plate || "-", brandModel, sellPrice: Number(v.sellPrice) || 0,
-              profit: v.profit, createdByName: v.createdByName
+              plate: v.plate || "-", 
+              brandModel, 
+              sellPrice: Number(v.sellPrice) || 0,
+              profit: v.profit, 
+              createdByName: v.createdByName
             });
           }
         });
 
-        if (entries.length === 0) {
+        if (currentHistoryData.length === 0) {
           historyEmptyBox.classList.remove("d-none");
           historyCountLabel.textContent = "0 รายการ";
           return;
         }
 
-        entries.sort((a, b) => (a.dateKey || "") < (b.dateKey || "") ? 1 : -1);
-        historyCountLabel.textContent = entries.length + " รายการ";
+        // Sort: Newest first
+        currentHistoryData.sort((a, b) => (b.dateKey || "") > (a.dateKey || "") ? 1 : -1);
+        historyCountLabel.textContent = currentHistoryData.length + " รายการ";
 
-        entries.forEach(entry => {
+        const frag = document.createDocumentFragment();
+
+        currentHistoryData.forEach((entry, index) => {
           const li = document.createElement("li");
-          li.className = "list-group-item small p-3";
-          const dateText = entry.rawDate ? formatDateThaiFromString(entry.rawDate) : "-";
+          // Add cursor pointer only for jobs to indicate clickability
+          li.className = "list-group-item small p-3 " + (entry.kind === 'job' ? 'list-group-item-action' : '');
+          if(entry.kind === 'job') li.style.cursor = "pointer";
 
+          // Bind click event for Job details
+          if (entry.kind === 'job') {
+             li.onclick = () => openJobDetail(index);
+          }
+
+          const dateText = entry.rawDate ? formatDateThaiFromString(entry.rawDate) : "-";
           let htmlContent = "";
           
           if (entry.kind === "job") {
@@ -850,9 +921,11 @@
               repairing: { text: "กำลังซ่อม", class: "bg-warning text-dark" },
               done: { text: "ซ่อมเสร็จ", class: "bg-info text-dark" },
               picked_up: { text: "รับรถแล้ว", class: "bg-success" },
+              cancel: { text: "ยกเลิก", class: "bg-danger" }
             };
             const st = statusMap[entry.status] || { text: "ไม่ระบุ", class: "bg-secondary" };
             const brandModel = [entry.brand, entry.model].filter(Boolean).join(" ");
+            const problemShort = (entry.problem || "-").length > 50 ? (entry.problem || "").substring(0, 50) + "..." : (entry.problem || "-");
 
             htmlContent = `
               <div class="d-flex align-items-start">
@@ -860,16 +933,20 @@
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
-                      <span class="fw-bold">งานซ่อม</span> - ทะเบียน ${entry.plate}
-                      ${brandModel ? `<span class="text-muted">| ${brandModel}</span>` : ""}
-                      <span class="badge ${st.class} ms-1">${st.text}</span>
+                      <span class="fw-bold text-dark">งานซ่อม</span> <i class="bi bi-dot"></i> ทะเบียน <span class="fw-semibold">${entry.plate}</span>
+                      <span class="badge ${st.class} ms-1 rounded-pill" style="font-size:0.65rem;">${st.text}</span>
                     </div>
                     <div class="text-end ms-2">
                        <span class="fw-bold text-success">${formatNumber(entry.totalAmount)} ฿</span>
-                       <div class="text-muted text-xs">${dateText}</div>
                     </div>
                   </div>
-                  <div class="text-muted mt-1">อาการ: ${entry.problem || "-"}</div>
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                     <div class="text-muted text-truncate me-2" style="max-width: 200px;">
+                        ${brandModel ? `<span class="badge bg-light text-secondary border me-1">${brandModel}</span>` : ""}
+                        <span>${problemShort}</span>
+                     </div>
+                     <div class="text-muted text-xs text-nowrap">${dateText}</div>
+                  </div>
                 </div>
               </div>
             `;
@@ -881,13 +958,15 @@
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
                       <span class="fw-bold">ซื้อรถเข้า</span> - ทะเบียน ${entry.plate}
-                      <span class="text-muted">| ${entry.brandModel || "-"}</span>
                     </div>
                     <div class="text-end ms-2">
                        <div class="fw-semibold">${dateText}</div>
                     </div>
                   </div>
-                  <div class="text-muted mt-1">ราคาซื้อ: ${formatNumber(entry.buyPrice)} ฿</div>
+                   <div class="text-muted mt-1 small">
+                    <span class="me-2">${entry.brandModel || "-"}</span> | 
+                    ราคาซื้อ: <span class="text-dark fw-medium">${formatNumber(entry.buyPrice)} ฿</span>
+                  </div>
                 </div>
               </div>
             `;
@@ -900,14 +979,15 @@
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
                       <span class="fw-bold">ขายรถออก</span> - ทะเบียน ${entry.plate}
-                      <span class="text-muted">| ${entry.brandModel || "-"}</span>
                     </div>
                     <div class="text-end ms-2">
                        <div class="fw-semibold text-success">${dateText}</div>
                     </div>
                   </div>
-                  <div class="text-muted mt-1">
-                    ราคาขาย: ${formatNumber(entry.sellPrice)} ฿ ${profitText}
+                  <div class="text-muted mt-1 small">
+                    <span class="me-2">${entry.brandModel || "-"}</span> | 
+                    ราคาขาย: <span class="text-dark fw-medium">${formatNumber(entry.sellPrice)} ฿</span>
+                    ${profitText}
                   </div>
                 </div>
               </div>
@@ -916,15 +996,71 @@
 
           const footer = `
             <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top text-muted text-xs">
-              <div>โดย: ${entry.createdByName || "-"}</div>
-              <div>${entry.createdAt ? "บันทึก: " + formatDateTimeThai(entry.createdAt) : ""}</div>
+              <div><i class="bi bi-person-circle me-1"></i>${entry.createdByName || "-"}</div>
+              <div>${entry.kind === 'job' ? '<i class="bi bi-eye me-1"></i>ดูรายละเอียด' : ''}</div>
             </div>
           `;
 
           li.innerHTML = htmlContent + footer;
-          historyTimeline.appendChild(li);
+          frag.appendChild(li);
         });
+
+        historyTimeline.appendChild(frag);
       }
+
+      // ============================================================
+      // Modal Logic
+      // ============================================================
+      window.openJobDetail = function(index) {
+          const data = currentHistoryData[index];
+          if (!data || data.kind !== 'job') return;
+
+          // Populate Header
+          document.getElementById('dmDateBadge').textContent = data.rawDate ? formatDateThaiFromString(data.rawDate) : "-";
+          
+          const statusMap = {
+              repairing: { text: "กำลังซ่อม", class: "bg-warning text-dark" },
+              done: { text: "ซ่อมเสร็จ", class: "bg-info text-dark" },
+              picked_up: { text: "รับรถแล้ว", class: "bg-success text-white" },
+              cancel: { text: "ยกเลิก", class: "bg-danger text-white" }
+          };
+          const st = statusMap[data.status] || { text: data.status, class: "bg-secondary text-white" };
+          const badge = document.getElementById('dmStatusBadge');
+          badge.textContent = st.text;
+          badge.className = "badge " + st.class;
+
+          const brandModel = [data.brand, data.model, data.plate].filter(Boolean).join(" ");
+          document.getElementById('dmCarInfo').textContent = brandModel || "ไม่ระบุข้อมูลรถ";
+          document.getElementById('dmCustomerName').textContent = data.customerName || "-";
+          document.getElementById('dmProblem').textContent = data.problem || "ไม่มีรายละเอียดอาการ";
+
+          // Populate Table
+          const tbody = document.getElementById('dmItemsTableBody');
+          tbody.innerHTML = "";
+          
+          if (data.items && data.items.length > 0) {
+              data.items.forEach(item => {
+                  const tr = document.createElement('tr');
+                  tr.innerHTML = `
+                    <td>${item.name || "รายการ"} <span class="text-muted text-xs d-block">x${item.qty || 1} ${item.unit || ""}</span></td>
+                    <td class="text-end">${formatNumber(Number(item.total) || 0)}</td>
+                  `;
+                  tbody.appendChild(tr);
+              });
+          } else {
+              tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-3">ไม่มีรายการอะไหล่</td></tr>`;
+          }
+
+          document.getElementById('dmTotalAmount').textContent = formatNumber(data.totalAmount) + " ฿";
+          document.getElementById('dmBy').textContent = data.createdByName || "-";
+          document.getElementById('dmTimestamp').textContent = data.createdAt ? formatDateTimeThai(data.createdAt) : "-";
+
+          // Setup Edit Link
+          const editBtn = document.getElementById('dmEditLink');
+          editBtn.href = `open-bill.html?jobId=${data.id}`;
+
+          detailModal.show();
+      };
 
       // ============================================================
       // Event Listeners
@@ -954,14 +1090,17 @@
           searchForm.addEventListener("submit", (e) => {
             e.preventDefault();
             searchCustomerHistory(searchKeywordInput.value);
+            // Hide keyboard on mobile
+            searchKeywordInput.blur();
           });
           resetBtn.addEventListener("click", () => {
             searchKeywordInput.value = "";
             resetView();
+            searchKeywordInput.focus();
           });
         }
 
-        // FAB
+        // FAB Navigation
         if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
         if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
         if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
@@ -982,7 +1121,6 @@
              userProfile = await ensureUserProfile(user);
           } catch(e) {
              console.log("Profile fetch/create logic fallback");
-             // Minimal fallback if ensureUserProfile fails (rare)
           }
 
           if (!userProfile) {
@@ -1014,9 +1152,17 @@
           applyTheme(readThemeForUser(user.uid, currentUserProfile.theme));
           setupEventListeners();
 
+          // Auto search if query param exists (e.g. redirected from dashboard)
+          const urlParams = new URLSearchParams(window.location.search);
+          const q = urlParams.get('q');
+          if(q) {
+              searchKeywordInput.value = q;
+              searchCustomerHistory(q);
+          }
+
         } catch (error) {
           console.error("Init Error:", error);
-          showToast("โหลดข้อมูลล้มเหลว", "danger");
+          showToast("โหลดข้อมูลล้มเหลว: " + error.message, "danger");
         }
       });
     </script>

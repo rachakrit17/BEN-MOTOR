@@ -5,34 +5,24 @@
     <title>BEN MOTOR – แดชบอร์ดภาพรวม</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    <link rel="icon" type="image/x-icon" href="img/icon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="img/icon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <link rel="manifest" href="img/site.webmanifest" />
 
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <link rel="manifest" href="img/site.webmanifest">
-    
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="bm-theme-light">
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1 fw-bold text-success">
@@ -125,270 +115,200 @@
     <main class="bm-main-content pb-5">
       <div class="container py-4">
         
-        <div class="d-flex justify-content-between align-items-end mb-4 mt-2">
-          <div>
-            <h1 class="h4 mb-1 fw-bold text-dark">แดชบอร์ดภาพรวม</h1>
-            <p class="small text-muted mb-0">
-              สรุปสถานะการเงิน งานซ่อม และสต๊อกประจำวัน
-            </p>
+        <div class="row align-items-center mb-4 mt-2 g-3">
+          <div class="col-12 col-md-6">
+            <h1 class="h4 mb-1 fw-bold text-dark">สวัสดี, <span id="welcomeUserName" class="text-primary">...</span> 👋</h1>
+            <p class="small text-muted mb-0">ข้อมูลประจำวันที่ <span id="currentDateLabel" class="fw-medium text-dark">-</span></p>
           </div>
-          <div class="text-end">
-            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-normal" id="dashboardTodayLabel">
-              <i class="bi bi-calendar-event me-1 text-primary"></i> วันนี้
-            </span>
+          <div class="col-12 col-md-6">
+            <div class="d-flex gap-2 justify-content-md-end">
+               <a href="open-bill.html" class="btn btn-primary rounded-pill px-4 shadow-sm btn-sm"><i class="bi bi-plus-lg me-1"></i> เปิดบิลใหม่</a>
+               <a href="finance.html" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm btn-sm"><i class="bi bi-cash me-1"></i> รับ/จ่ายเงิน</a>
+               <button class="btn btn-light border rounded-circle shadow-sm btn-sm" id="refreshDashboardBtn" title="รีเฟรชข้อมูล"><i class="bi bi-arrow-clockwise text-muted"></i></button>
+            </div>
           </div>
         </div>
 
         <section class="mb-4">
           <div class="row g-3">
             <div class="col-6 col-lg-3">
-              <div class="card bm-stat-card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="bm-stat-label">เงินคงเหลือ</span>
-                    <div class="bg-primary bg-opacity-10 p-2 rounded-circle">
-                       <i class="bi bi-wallet2 text-primary fs-5"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <p class="bm-stat-value mb-0 text-dark" id="statTotalBalance">-</p>
-                    <p class="bm-stat-sub text-muted mb-0 text-truncate" id="statTotalBalanceNote">
-                      กำลังโหลด...
-                    </p>
-                  </div>
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-success bg-opacity-10 border-start border-4 border-success">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between mb-2"><span class="text-success small fw-bold">รายได้วันนี้</span><i class="bi bi-graph-up-arrow text-success opacity-50"></i></div>
+                  <h4 class="fw-bold text-dark mb-0" id="statIncomeToday">-</h4>
+                  <small class="text-muted text-xs">ยอดรับจริง (เงินสด/โอน)</small>
                 </div>
               </div>
             </div>
 
             <div class="col-6 col-lg-3">
-              <div class="card bm-stat-card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="bm-stat-label">รายได้วันนี้</span>
-                    <div class="bg-success bg-opacity-10 p-2 rounded-circle">
-                      <i class="bi bi-graph-up-arrow text-success fs-5"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <p class="bm-stat-value mb-0 text-success" id="statIncomeToday">-</p>
-                    <p class="bm-stat-sub text-muted mb-0 text-truncate" id="statIncomeTodayNote">
-                      กำลังโหลด...
-                    </p>
-                  </div>
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-danger bg-opacity-10 border-start border-4 border-danger">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between mb-2"><span class="text-danger small fw-bold">รายจ่ายวันนี้</span><i class="bi bi-cart-dash text-danger opacity-50"></i></div>
+                  <h4 class="fw-bold text-dark mb-0" id="statExpenseToday">-</h4>
+                  <small class="text-muted text-xs">รวมซื้อของ/ค่าใช้จ่าย</small>
                 </div>
               </div>
             </div>
 
             <div class="col-6 col-lg-3">
-              <div class="card bm-stat-card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="bm-stat-label">รายจ่ายวันนี้</span>
-                    <div class="bg-danger bg-opacity-10 p-2 rounded-circle">
-                      <i class="bi bi-cart-dash text-danger fs-5"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <p class="bm-stat-value mb-0 text-danger" id="statExpenseToday">-</p>
-                    <p class="bm-stat-sub text-muted mb-0 text-truncate" id="statExpenseTodayNote">
-                      กำลังโหลด...
-                    </p>
-                  </div>
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-primary bg-opacity-10 border-start border-4 border-primary">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between mb-2"><span class="text-primary small fw-bold">กำไรวันนี้</span><i class="bi bi-piggy-bank text-primary opacity-50"></i></div>
+                  <h4 class="fw-bold text-dark mb-0" id="statProfitToday">-</h4>
+                  <small class="text-muted text-xs">รายรับ หัก รายจ่าย</small>
                 </div>
               </div>
             </div>
 
             <div class="col-6 col-lg-3">
-              <div class="card bm-stat-card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="bm-stat-label">กำไรวันนี้</span>
-                    <div class="bg-warning bg-opacity-10 p-2 rounded-circle">
-                       <i class="bi bi-coin text-warning fs-5"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <p class="bm-stat-value mb-0" id="statProfitToday">-</p>
-                    <p class="bm-stat-sub text-muted mb-0 text-truncate" id="statProfitTodayNote">
-                      กำลังโหลด...
-                    </p>
-                  </div>
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-white border-start border-4 border-secondary">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between mb-2"><span class="text-secondary small fw-bold">เงินคงเหลือรวม</span><i class="bi bi-safe text-secondary opacity-50"></i></div>
+                  <h4 class="fw-bold text-dark mb-0" id="statTotalBalance">-</h4>
+                  <small class="text-muted text-xs">ยอดสะสมทั้งหมด</small>
                 </div>
               </div>
             </div>
           </div>
         </section>
-
-        <section class="mb-4">
-          <div class="row g-2 g-md-3">
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="card h-100 border shadow-sm rounded-4">
-                <div class="card-body p-3 text-center">
-                  <div class="small text-muted mb-1">งานซ่อมวันนี้</div>
-                  <h3 class="fw-bold text-dark mb-0" id="statJobsToday">-</h3>
-                  <span class="badge bg-primary-subtle text-primary rounded-pill mt-1 px-2">งาน</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="card h-100 border shadow-sm rounded-4">
-                <div class="card-body p-3 text-center">
-                  <div class="small text-muted mb-1">รถค้างในอู่</div>
-                  <h3 class="fw-bold text-dark mb-0" id="statJobsInGarage">-</h3>
-                  <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill mt-1 px-2">คัน</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="card h-100 border shadow-sm rounded-4">
-                <div class="card-body p-3 text-center">
-                  <div class="small text-muted mb-1">รับซื้อรถ</div>
-                  <h3 class="fw-bold text-dark mb-0" id="statVehiclesBoughtToday">-</h3>
-                  <span class="badge bg-info-subtle text-info-emphasis rounded-pill mt-1 px-2">คัน</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="card h-100 border shadow-sm rounded-4">
-                <div class="card-body p-3 text-center">
-                  <div class="small text-muted mb-1">ขายรถออก</div>
-                  <h3 class="fw-bold text-dark mb-0" id="statVehiclesSoldToday">-</h3>
-                  <span class="badge bg-success-subtle text-success rounded-pill mt-1 px-2">คัน</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-              <div class="card h-100 border shadow-sm rounded-4">
-                <div class="card-body p-3 text-center">
-                  <div class="small text-muted mb-1">ซื้ออะไหล่เข้า</div>
-                  <h3 class="fw-bold text-dark mb-0" id="statStockInToday">-</h3>
-                  <span class="badge bg-secondary-subtle text-secondary rounded-pill mt-1 px-2">รายการ</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 d-none d-lg-block">
-               </div>
-          </div>
-        </section>
-
-        <section class="mb-5">
+		<section class="mb-4">
           <div class="row g-4">
             
-            <div class="col-12 col-lg-7">
-              <div class="card h-100 shadow-sm border-0 rounded-4">
-                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 pb-0">
-                  <h2 class="h6 mb-0 fw-bold d-flex align-items-center">
-                    <i class="bi bi-bar-chart-line me-2 text-primary"></i> กราฟรายรับ/รายจ่าย (7 วัน)
-                  </h2>
-                  <span class="badge bg-light text-secondary border fw-normal" id="chartDateRangeLabel">
-                    -
-                  </span>
+            <div class="col-12 col-lg-8">
+              
+              <div class="row g-2 mb-4">
+                <div class="col-4 col-sm-2">
+                  <div class="p-2 border rounded-3 text-center bg-white shadow-sm h-100">
+                    <div class="text-muted text-xs mb-1">เปิดบิลใหม่</div>
+                    <h5 class="fw-bold text-dark mb-0" id="statJobsToday">-</h5>
+                  </div>
                 </div>
-                <div class="card-body pt-2">
-                  <div class="position-relative w-100" style="min-height: 240px;">
-                    <canvas id="incomeExpenseChart" class="w-100" height="240"></canvas>
-                    <div id="chartEmptyState" class="text-center text-muted small position-absolute top-50 start-50 translate-middle">
-                      <i class="bi bi-inbox fs-4 d-block mb-1"></i>
-                      ไม่มีข้อมูลสำหรับแสดงกราฟ
+                <div class="col-4 col-sm-2">
+                  <div class="p-2 border rounded-3 text-center bg-white shadow-sm h-100">
+                    <div class="text-muted text-xs mb-1">รถค้างซ่อม</div>
+                    <h5 class="fw-bold text-warning mb-0" id="statJobsInGarage">-</h5>
+                  </div>
+                </div>
+                <div class="col-4 col-sm-2">
+                  <div class="p-2 border rounded-3 text-center bg-white shadow-sm h-100">
+                    <div class="text-muted text-xs mb-1">รับซื้อรถ</div>
+                    <h5 class="fw-bold text-info mb-0" id="statVehiclesBoughtToday">-</h5>
+                  </div>
+                </div>
+                <div class="col-4 col-sm-2">
+                  <div class="p-2 border rounded-3 text-center bg-white shadow-sm h-100">
+                    <div class="text-muted text-xs mb-1">ขายรถออก</div>
+                    <h5 class="fw-bold text-success mb-0" id="statVehiclesSoldToday">-</h5>
+                  </div>
+                </div>
+                <div class="col-4 col-sm-2">
+                  <div class="p-2 border rounded-3 text-center bg-white shadow-sm h-100">
+                    <div class="text-muted text-xs mb-1">ซื้ออะไหล่</div>
+                    <h5 class="fw-bold text-secondary mb-0" id="statStockInToday">-</h5>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card shadow-sm border-0 rounded-4 mb-4">
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                  <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-bar-chart-line me-2"></i>แนวโน้มการเงิน (7 วันล่าสุด)</h6>
+                </div>
+                <div class="card-body">
+                  <div class="position-relative w-100" style="min-height: 260px;">
+                    <canvas id="incomeExpenseChart"></canvas>
+                    <div id="chartEmptyState" class="text-center text-muted small position-absolute top-50 start-50 translate-middle d-none">
+                      <i class="bi bi-inbox fs-4 d-block mb-1"></i> ไม่มีข้อมูล
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-white border-0 pt-3">
+                  <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-activity me-2"></i>ความเคลื่อนไหวล่าสุด</h6>
+                </div>
+                <div class="card-body p-0">
+                  <div class="list-group list-group-flush rounded-bottom-4" id="activityLogsList">
+                    <div class="text-center py-4 small text-muted">กำลังโหลด...</div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <div class="col-12 col-lg-5">
-              <div class="d-flex flex-column gap-3 h-100">
+            <div class="col-12 col-lg-4">
+              <div class="d-flex flex-column gap-4">
                 
+                <div class="card shadow-sm border-0 rounded-4">
+                  <div class="card-header bg-white border-0 pt-3">
+                    <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-pie-chart me-2"></i>สถานะงานซ่อม</h6>
+                  </div>
+                  <div class="card-body d-flex flex-column align-items-center justify-content-center pt-0">
+                    <div style="height: 200px; width: 100%; position: relative;">
+                      <canvas id="jobStatusChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-center small text-muted">
+                      *แสดงจำนวนงานที่อยู่ในระบบ
+                    </div>
+                  </div>
+                </div>
+
                 <div class="card shadow-sm border-0 rounded-4 flex-fill">
-                  <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 pb-2">
-                    <h2 class="h6 mb-0 fw-bold text-danger">
-                      <i class="bi bi-exclamation-triangle me-2"></i> สต๊อกใกล้หมด
-                    </h2>
-                    <a href="stock.html" class="btn btn-sm btn-light rounded-pill px-3 py-0 small text-muted">
-                      ดูทั้งหมด
-                    </a>
+                  <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-danger mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>อะไหล่ใกล้หมด</h6>
+                    <a href="stock.html" class="text-decoration-none text-xs fw-bold">ดูทั้งหมด ></a>
                   </div>
                   <div class="card-body p-0">
                     <div class="table-responsive">
-                      <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light text-secondary small text-uppercase">
+                      <table class="table table-hover align-middle mb-0 small">
+                        <thead class="bg-light text-muted">
                           <tr>
-                            <th class="ps-3 fw-normal">รหัส</th>
-                            <th class="fw-normal">ชื่ออะไหล่</th>
-                            <th class="text-end fw-normal">คงเหลือ</th>
+                            <th class="ps-3 fw-normal">สินค้า</th>
+                            <th class="text-end fw-normal">เหลือ</th>
                             <th class="text-end pe-3 fw-normal">ขั้นต่ำ</th>
                           </tr>
                         </thead>
-                        <tbody id="lowStockTbody" class="border-top-0">
-                          <tr>
-                            <td colspan="4" class="text-center small text-muted py-3">
-                              กำลังโหลด...
-                            </td>
-                          </tr>
+                        <tbody id="lowStockTbody">
+                          <tr><td colspan="3" class="text-center py-3 text-muted">กำลังตรวจสอบ...</td></tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
 
-                <div class="card shadow-sm border-0 rounded-4 flex-fill">
-                  <div class="card-header bg-transparent border-0 pt-3 pb-2">
-                    <h2 class="h6 mb-0 fw-bold text-dark">
-                      <i class="bi bi-activity me-2 text-info"></i> ความเคลื่อนไหวล่าสุด
-                    </h2>
-                  </div>
-                  <div class="card-body p-0">
-                    <ul class="list-group list-group-flush rounded-bottom-4" id="activityLogsList">
-                      <li class="list-group-item small text-muted text-center py-3">
-                        กำลังโหลด...
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
               </div>
             </div>
+
           </div>
         </section>
 
-        <div style="height: 3rem;"></div>
+        <div style="height: 4rem;"></div>
       </div>
     </main>
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow-lg bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
+
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabOpenBillBtn">
-              <span class="bg-primary bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>
-              เปิดบิลซ่อมใหม่
+            <button class="dropdown-item rounded-3 py-2" id="fabOpenBillBtn">
+              <span class="bg-primary bg-opacity-10 rounded-circle p-1 me-2"><i class="bi bi-receipt-cutoff text-primary"></i></span> เปิดบิลใหม่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn">
-              <span class="bg-success bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span>
-              เพิ่มรายการเงิน
+            <button class="dropdown-item rounded-3 py-2" id="fabAddTxnBtn">
+              <span class="bg-success bg-opacity-10 rounded-circle p-1 me-2"><i class="bi bi-cash-coin text-success"></i></span> เพิ่มรายการเงิน
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn">
-              <span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span>
-              บันทึกซื้ออะไหล่
+            <button class="dropdown-item rounded-3 py-2" id="fabStockInBtn">
+              <span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2"><i class="bi bi-box-seam text-warning"></i></span> ซื้ออะไหล่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn">
-              <span class="bg-info bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span>
-              เพิ่มรถรับซื้อเข้า
+            <button class="dropdown-item rounded-3 py-2" id="fabAddVehicleBtn">
+              <span class="bg-info bg-opacity-10 rounded-circle p-1 me-2"><i class="bi bi-truck-front text-info"></i></span> รับซื้อรถ
             </button>
           </li>
         </ul>
@@ -438,10 +358,7 @@
       </div>
     </nav>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1080;"
-    >
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080">
       <div
         id="mainToast"
         class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill"
@@ -451,8 +368,7 @@
         data-bs-delay="4000"
       >
         <div class="d-flex px-2">
-          <div class="toast-body" id="mainToastBody">
-            </div>
+          <div class="toast-body" id="mainToastBody"></div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -463,45 +379,14 @@
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-
-    <script type="module">
-      // ============================================================
-      // นำเข้า Firebase SDK
-      // ============================================================
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, query, where, orderBy, limit, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-      import {
-        getFirestore,
-        collection,
-        doc,
-        addDoc,
-        setDoc,
-        getDoc,
-        getDocs,
-        updateDoc,
-        query,
-        where,
-        orderBy,
-        limit,
-        startAfter,
-        serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-      // ============================================================
-      // ตั้งค่า Firebase
-      // ============================================================
+      // --- Firebase Config ---
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -517,626 +402,293 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // ============================================================
-      // ตัวแปรอ้างอิง DOM
-      // ============================================================
-      // Topbar
+      // --- DOM Elements ---
       const bodyEl = document.body;
       const themeToggleBtn = document.getElementById("themeToggleBtn");
+      
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
-      const userAvatarCircle = document.getElementById("userAvatarCircle");
       const userAvatarInitial = document.getElementById("userAvatarInitial");
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
+      const welcomeUserName = document.getElementById("welcomeUserName");
+      const currentDateLabel = document.getElementById("currentDateLabel");
+      const refreshDashboardBtn = document.getElementById("refreshDashboardBtn");
 
-      // FAB ปุ่มด่วน
-      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
-      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
-      const fabStockInBtn = document.getElementById("fabStockInBtn");
-      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
-
-      // ตัวเลขสรุปการเงิน
+      // Stats Cards
       const statTotalBalance = document.getElementById("statTotalBalance");
-      const statTotalBalanceNote = document.getElementById("statTotalBalanceNote");
       const statIncomeToday = document.getElementById("statIncomeToday");
-      const statIncomeTodayNote = document.getElementById("statIncomeTodayNote");
       const statExpenseToday = document.getElementById("statExpenseToday");
-      const statExpenseTodayNote = document.getElementById("statExpenseTodayNote");
       const statProfitToday = document.getElementById("statProfitToday");
-      const statProfitTodayNote = document.getElementById("statProfitTodayNote");
-
-      // ตัวเลขสรุปย่อย
+      
+      // Operations Stats
       const statJobsToday = document.getElementById("statJobsToday");
       const statJobsInGarage = document.getElementById("statJobsInGarage");
       const statVehiclesBoughtToday = document.getElementById("statVehiclesBoughtToday");
       const statVehiclesSoldToday = document.getElementById("statVehiclesSoldToday");
       const statStockInToday = document.getElementById("statStockInToday");
-      const dashboardTodayLabel = document.getElementById("dashboardTodayLabel");
 
-      // ตารางสต๊อกใกล้หมด
+      // Lists & Charts
       const lowStockTbody = document.getElementById("lowStockTbody");
-
-      // ความเคลื่อนไหวล่าสุด
       const activityLogsList = document.getElementById("activityLogsList");
-
-      // กราฟ
       const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
+      const jobStatusChartCanvas = document.getElementById("jobStatusChart");
       const chartEmptyState = document.getElementById("chartEmptyState");
-      const chartDateRangeLabel = document.getElementById("chartDateRangeLabel");
+
+      // FAB
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
       // Toast
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
-      // ============================================================
-      // ฟังก์ชันช่วย
-      // ============================================================
-      function showToast(message, variant = "primary") {
-        if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
-        mainToastBody.textContent = message;
-        mainToast.show();
-      }
+      let incomeChartInstance = null;
+      let statusChartInstance = null;
 
-      function formatNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0";
-        return value.toLocaleString("th-TH", {
-          maximumFractionDigits: 2,
-        });
+      // --- Helpers ---
+      function showToast(msg, variant="primary") {
+        const toastEl = document.getElementById("mainToast");
+        const body = document.getElementById("mainToastBody");
+        toastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow-lg rounded-pill`;
+        body.innerHTML = msg;
+        bootstrap.Toast.getOrCreateInstance(toastEl).show();
       }
-
-      function formatDateThaiFromString(dateStr) {
-        if (!dateStr) return "-";
-        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
-        if (!year || !month || !day) return dateStr;
-        const d = new Date(year, month - 1, day);
-        const thaiMonths = [
-          "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-          "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
-        ];
-        const thaiYear = d.getFullYear() + 543;
-        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
-      }
-
-      function getTodayISODateString() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      function getPastISODateString(daysAgo) {
-        const now = new Date();
-        now.setDate(now.getDate() - daysAgo);
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      function getLastNDates(n) {
+      function formatNumber(v) { return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+      function formatDateThai(date) { return date.toLocaleDateString("th-TH", {day:"numeric", month:"long", year:"numeric"}); }
+      function getTodayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+      
+      function getLast7Days() {
         const dates = [];
-        for (let i = n - 1; i >= 0; i--) {
-          dates.push(getPastISODateString(i));
+        for(let i=6; i>=0; i--) {
+          const d = new Date(); d.setDate(d.getDate()-i);
+          dates.push(d.toISOString().split('T')[0]);
         }
         return dates;
       }
 
-      // ============================================================
-      // ธีม
-      // ============================================================
-      function applyTheme(theme) {
-        const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
-
-        const icon = themeToggleBtn.querySelector("i");
-        if (icon) {
-          icon.classList.toggle("bi-sun", normalized === "dark");
-          icon.classList.toggle("bi-moon", normalized === "light");
-        }
-      }
-
-      function saveThemeForUser(uid, theme) {
-        if (!uid) return;
-        try {
-          localStorage.setItem("bm-theme-" + uid, theme);
-        } catch (e) {
-          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
-        }
-      }
-
-      function readThemeForUser(uid, fallbackTheme) {
-        if (!uid) return fallbackTheme || "light";
-        try {
-          const stored = localStorage.getItem("bm-theme-" + uid);
-          return stored || fallbackTheme || "light";
-        } catch (e) {
-          return fallbackTheme || "light";
-        }
-      }
-
-      // ============================================================
-      // User Logic
-      // ============================================================
+      // --- Theme & User ---
       async function ensureUserProfile(user) {
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (snap.exists()) {
-          return { id: snap.id, ...snap.data() };
-        }
-        const usersCol = collection(db, "users");
-        const q = query(usersCol, limit(1));
-        const existingSnap = await getDocs(q);
-        const isFirstUser = existingSnap.empty;
-        const role = isFirstUser ? "admin" : "staff";
-        const defaultDisplayName =
-          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
-        const newUserData = {
-          displayName: defaultDisplayName,
-          role,
-          createdAt: serverTimestamp(),
-          branchId: null,
-          theme: "light",
-          disabled: false,
-        };
-        await setDoc(userRef, newUserData);
-        return { id: user.uid, ...newUserData };
-      }
-
-      // ============================================================
-      // กราฟ (Canvas 2D)
-      // ============================================================
-      function drawIncomeExpenseChart(canvas, dataPoints, labels) {
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        const width = canvas.width;
-        const height = canvas.height;
-        ctx.clearRect(0, 0, width, height);
-
-        const incomeValues = dataPoints.map((p) => p.income);
-        const expenseValues = dataPoints.map((p) => p.expense);
-        const allValues = incomeValues.concat(expenseValues);
-        const maxValue = Math.max(...allValues, 0);
-        const padding = 30;
-
-        if (maxValue === 0) return;
-
-        const chartHeight = height - padding * 2;
-        const chartWidth = width - padding * 2;
-        const stepX = chartWidth / Math.max(labels.length - 1, 1);
-        const valueToY = (val) => padding + chartHeight - (val / maxValue) * chartHeight;
-
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#e5e7eb"; // สีเส้นตารางจางๆ
-        ctx.fillStyle = "#6b7280";
-        ctx.font = "10px Kanit, sans-serif";
-
-        labels.forEach((dateStr, index) => {
-          const x = padding + index * stepX;
-          ctx.beginPath();
-          ctx.moveTo(x, padding);
-          ctx.lineTo(x, padding + chartHeight);
-          ctx.stroke();
-
-          const [year, month, day] = dateStr.split("-");
-          const label = `${Number(day)}/${Number(month)}`;
-          ctx.save();
-          ctx.translate(x, padding + chartHeight + 15);
-          ctx.fillText(label, -8, 0); // จัดกึ่งกลาง label
-          ctx.restore();
-        });
-
-        // Income Line
-        ctx.beginPath();
-        dataPoints.forEach((point, index) => {
-          const x = padding + index * stepX;
-          const y = valueToY(point.income);
-          if (index === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = "#22c55e"; // --bm-primary
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.fillStyle = "#ffffff";
-        dataPoints.forEach((point, index) => {
-          const x = padding + index * stepX;
-          const y = valueToY(point.income);
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = "#22c55e";
-          ctx.stroke();
-        });
-
-        // Expense Line
-        ctx.beginPath();
-        dataPoints.forEach((point, index) => {
-          const x = padding + index * stepX;
-          const y = valueToY(point.expense);
-          if (index === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        });
-        ctx.strokeStyle = "#ef4444"; // --bm-danger
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.fillStyle = "#ffffff";
-        dataPoints.forEach((point, index) => {
-          const x = padding + index * stepX;
-          const y = valueToY(point.expense);
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = "#ef4444";
-          ctx.stroke();
-        });
-
-        // Legend
-        ctx.font = "11px Kanit, sans-serif";
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if(snap.exists()) return { id: snap.id, ...snap.data() };
         
-        ctx.fillStyle = "#22c55e";
-        ctx.fillRect(padding, 10, 10, 4);
-        ctx.fillStyle = "#374151";
-        ctx.fillText("รายรับ", padding + 15, 16);
-
-        ctx.fillStyle = "#ef4444";
-        ctx.fillRect(padding + 60, 10, 10, 4);
-        ctx.fillStyle = "#374151";
-        ctx.fillText("รายจ่าย", padding + 75, 16);
+        const q = query(collection(db,"users"), limit(1));
+        const role = (await getDocs(q)).empty ? "admin" : "staff";
+        const data = { displayName: user.displayName||user.email.split("@")[0], role, createdAt: serverTimestamp(), branchId: null, theme: "light", disabled: false };
+        await setDoc(ref, data);
+        return { id: user.uid, ...data };
       }
 
-      // ============================================================
-      // โหลดข้อมูล Dashboard
-      // ============================================================
-      async function loadDashboardData(currentUser, userProfile) {
-        const branchId = userProfile.branchId || null;
-        const today = getTodayISODateString();
-        const last7Dates = getLastNDates(7);
-        const startDateFor7Days = last7Dates[0];
+      function applyTheme(theme) {
+        const t = theme==="dark"?"dark":"light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-"+t);
+        const icon = themeToggleBtn.querySelector("i");
+        icon.className = t==="dark"?"bi bi-sun fs-5":"bi bi-moon fs-5";
+      }
 
-        if (dashboardTodayLabel) {
-           // ใส่ icon ลงใน label ผ่าน innerHTML
-           const icon = `<i class="bi bi-calendar-event me-1 text-primary"></i>`;
-           dashboardTodayLabel.innerHTML = icon + " " + formatDateThaiFromString(today);
-        }
+      // --- Chart Functions (Upgrade Feature) ---
+      function renderIncomeChart(labels, incData, expData) {
+        if(incomeChartInstance) incomeChartInstance.destroy();
+        incomeChartInstance = new Chart(incomeExpenseChartCanvas, {
+          type: 'line',
+          data: {
+            labels: labels.map(d => d.slice(5)),
+            datasets: [
+              { label: 'รายรับ', data: incData, borderColor: '#198754', backgroundColor: 'rgba(25,135,84,0.1)', tension: 0.4, fill: true },
+              { label: 'รายจ่าย', data: expData, borderColor: '#dc3545', backgroundColor: 'rgba(220,53,69,0.1)', tension: 0.4, fill: true }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
 
-        // 1) ยอดเงินคงเหลือ
-        try {
-          const constraintsAll = [];
-          if (branchId) constraintsAll.push(where("branchId", "==", branchId));
-          const txnQueryAll = query(collection(db, "transactions"), ...constraintsAll);
-          const txnSnapAll = await getDocs(txnQueryAll);
+      function renderStatusChart(rep, done, pick) {
+        if(statusChartInstance) statusChartInstance.destroy();
+        if(rep+done+pick === 0) return; // Empty state handles itself
+        statusChartInstance = new Chart(jobStatusChartCanvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['กำลังซ่อม', 'ซ่อมเสร็จ', 'รับรถแล้ว'],
+            datasets: [{
+              data: [rep, done, pick],
+              backgroundColor: ['#ffc107', '#0dcaf0', '#198754'],
+              borderWidth: 0
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: {size: 11} } } }, cutout: '70%' }
+        });
+      }
 
-          let totalIncome = 0;
-          let totalExpense = 0;
-
-          txnSnapAll.forEach((docSnap) => {
-            const data = docSnap.data();
-            const amount = Number(data.amount) || 0;
-            if (data.type === "income") totalIncome += amount;
-            if (data.type === "expense") totalExpense += amount;
-          });
-
-          const balance = totalIncome - totalExpense;
-
-          if (statTotalBalance) statTotalBalance.textContent = formatNumber(balance) + " ฿";
-          if (statTotalBalanceNote) {
-            statTotalBalanceNote.textContent =
-              "รับ " + formatNumber(totalIncome) + " / จ่าย " + formatNumber(totalExpense);
-          }
-        } catch (error) {
-          console.error("Error loading balance:", error);
-          if (statTotalBalanceNote) statTotalBalanceNote.textContent = "โหลดไม่ได้";
-        }
-
-        // 2) ธุรกรรมวันนี้ & กราฟ 7 วัน
-        let incomeToday = 0;
-        let expenseToday = 0;
-        const dailySummary = {};
-        last7Dates.forEach((d) => dailySummary[d] = { income: 0, expense: 0 });
+      // --- Main Data Loading (Logic from Original) ---
+      async function loadDashboardData(profile) {
+        const branchId = profile.branchId;
+        const today = getTodayISO();
+        if(currentDateLabel) currentDateLabel.textContent = formatDateThai(new Date());
 
         try {
-          const constraints7Days = [
-            where("date", ">=", startDateFor7Days),
-            where("date", "<=", today),
-          ];
-          if (branchId) constraints7Days.push(where("branchId", "==", branchId));
+          // 1. Transactions & Balance (Logic เดิมแต่เพิ่มกราฟ)
+          const dates7 = getLast7Days();
+          const qTx = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",dates7[0]), ...(branchId?[where("branchId","==",branchId)]:[]));
+          const txSnap = await getDocs(qTx);
 
-          const txnQuery7Days = query(
-            collection(db, "transactions"),
-            ...constraints7Days,
-            orderBy("date", "asc")
-          );
+          let incToday=0, expToday=0, stockInCount=0;
+          const dailyMap = {}; dates7.forEach(d => dailyMap[d] = { inc: 0, exp: 0 });
 
-          const txnSnap7Days = await getDocs(txnQuery7Days);
-          let stockInTodayCount = 0;
-
-          txnSnap7Days.forEach((docSnap) => {
-            const data = docSnap.data();
-            const dateStr = data.date;
-            const amount = Number(data.amount) || 0;
-            const type = data.type;
-
-            if (dateStr === today) {
-              if (type === "income") incomeToday += amount;
-              if (type === "expense") expenseToday += amount;
-              if (type === "expense" && data.category === "ซื้ออะไหล่") stockInTodayCount++;
+          txSnap.forEach(doc => {
+            const d = doc.data();
+            const amt = Number(d.amount||0);
+            if(d.date === today) {
+              if(d.type==="income") incToday += amt;
+              else { expToday += amt; if(d.category==="ซื้ออะไหล่") stockInCount++; }
             }
-
-            if (dailySummary[dateStr]) {
-              if (type === "income") dailySummary[dateStr].income += amount;
-              else if (type === "expense") dailySummary[dateStr].expense += amount;
+            if(dailyMap[d.date]) {
+              if(d.type==="income") dailyMap[d.date].inc += amt;
+              else dailyMap[d.date].exp += amt;
             }
           });
 
-          const profitToday = incomeToday - expenseToday;
+          // Balance Calculation (Query All for accuracy - as per original logic)
+          let totalInc=0, totalExp=0;
+          const qAllTx = query(collection(db, "transactions"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
+          (await getDocs(qAllTx)).forEach(doc => {
+             const d = doc.data();
+             if(d.type==="income") totalInc += Number(d.amount||0);
+             else totalExp += Number(d.amount||0);
+          });
 
-          if (statIncomeToday) statIncomeToday.textContent = formatNumber(incomeToday) + " ฿";
-          if (statIncomeTodayNote) statIncomeTodayNote.textContent = incomeToday > 0 ? "ยอดรับวันนี้" : "ไม่มี";
+          statTotalBalance.textContent = formatNumber(totalInc - totalExp) + " ฿";
+          statIncomeToday.textContent = formatNumber(incToday) + " ฿";
+          statExpenseToday.textContent = formatNumber(expToday) + " ฿";
+          const profit = incToday - expToday;
+          statProfitToday.textContent = (profit>=0?"+":"") + formatNumber(profit) + " ฿";
+          statProfitToday.className = `fw-bold mb-0 ${profit>=0?'text-primary':'text-danger'}`;
+          statStockInToday.textContent = stockInCount;
 
-          if (statExpenseToday) statExpenseToday.textContent = formatNumber(expenseToday) + " ฿";
-          if (statExpenseTodayNote) statExpenseTodayNote.textContent = expenseToday > 0 ? "ยอดจ่ายวันนี้" : "ไม่มี";
+          renderIncomeChart(dates7, dates7.map(d=>dailyMap[d].inc), dates7.map(d=>dailyMap[d].exp));
 
-          if (statProfitToday) {
-            statProfitToday.textContent = formatNumber(profitToday) + " ฿";
-            statProfitToday.classList.toggle("text-success", profitToday >= 0);
-            statProfitToday.classList.toggle("text-danger", profitToday < 0);
-          }
-          if (statProfitTodayNote) statProfitTodayNote.textContent = "กำไรสุทธิวันนี้";
+          // 2. Jobs
+          const qJobs = query(collection(db,"jobs"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
+          const jobsSnap = await getDocs(qJobs);
+          let jobsToday=0, jobsGarage=0;
+          let sRep=0, sDone=0, sPick=0;
 
-          if (statStockInToday) statStockInToday.textContent = String(stockInTodayCount);
+          jobsSnap.forEach(doc => {
+             const d = doc.data();
+             if(d.date === today) jobsToday++;
+             if(d.status !== "picked_up") jobsGarage++;
+             
+             if(d.status === "repairing") sRep++;
+             else if(d.status === "done") sDone++;
+             else if(d.status === "picked_up") sPick++;
+          });
+          statJobsToday.textContent = jobsToday;
+          statJobsInGarage.textContent = jobsGarage;
+          renderStatusChart(sRep, sDone, sPick);
 
-          // Plot Graph
-          const dataPoints = last7Dates.map((d) => ({
-            date: d,
-            income: dailySummary[d].income,
-            expense: dailySummary[d].expense,
-          }));
-          const anyDataForChart = dataPoints.some((p) => p.income > 0 || p.expense > 0);
+          // 3. Vehicles
+          const qVeh = query(collection(db,"vehicles"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
+          const vehSnap = await getDocs(qVeh);
+          let vBuy=0, vSold=0;
+          vehSnap.forEach(doc => {
+             const d = doc.data();
+             if(d.buyDate === today) vBuy++;
+             if(d.sellDate === today && d.status==="sold") vSold++;
+          });
+          statVehiclesBoughtToday.textContent = vBuy;
+          statVehiclesSoldToday.textContent = vSold;
 
-          if (chartDateRangeLabel) {
-            chartDateRangeLabel.textContent =
-              formatDateThaiFromString(startDateFor7Days) + " - " + formatDateThaiFromString(today);
-          }
+          // 4. Low Stock
+          const qStock = query(collection(db,"stock"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("qty","asc"));
+          const stockSnap = await getDocs(qStock);
+          lowStockTbody.innerHTML = "";
+          let lowCount=0;
+          stockSnap.forEach(doc => {
+             const d = doc.data();
+             if(Number(d.qty) <= Number(d.minQty) && lowCount < 5) {
+                lowCount++;
+                lowStockTbody.innerHTML += `<tr><td class="ps-3"><div class="fw-bold">${d.name}</div></td><td class="text-end fw-bold text-danger">${d.qty}</td><td class="text-end pe-3 text-muted">${d.minQty}</td></tr>`;
+             }
+          });
+          if(lowCount===0) lowStockTbody.innerHTML = `<tr><td colspan="3" class="text-center py-3 text-success small">สต๊อกปกติ</td></tr>`;
 
-          if (anyDataForChart) {
-            if (chartEmptyState) chartEmptyState.classList.add("d-none");
-            if (incomeExpenseChartCanvas) {
-              const rect = incomeExpenseChartCanvas.parentNode.getBoundingClientRect();
-              incomeExpenseChartCanvas.width = rect.width;
-              incomeExpenseChartCanvas.height = 240; 
-            }
-            drawIncomeExpenseChart(incomeExpenseChartCanvas, dataPoints, last7Dates);
+          // 5. Activity Logs
+          const qLogs = query(collection(db,"activityLogs"), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("createdAt","desc"), limit(7));
+          const logsSnap = await getDocs(qLogs);
+          activityLogsList.innerHTML = "";
+          if(logsSnap.empty) {
+             activityLogsList.innerHTML = `<div class="text-center py-4 text-muted small">ไม่มีกิจกรรมล่าสุด</div>`;
           } else {
-            if (chartEmptyState) chartEmptyState.classList.remove("d-none");
-          }
-        } catch (error) {
-          console.error("Error loading 7 days:", error);
-        }
-
-        // 3) Jobs (งานซ่อม)
-        try {
-          const jobsCol = collection(db, "jobs");
-          const constraintsJobsToday = [where("isDeleted", "==", false), where("date", "==", today)];
-          const constraintsJobsInGarage = [where("isDeleted", "==", false), where("status", "!=", "picked_up")];
-
-          if (branchId) {
-            constraintsJobsToday.push(where("branchId", "==", branchId));
-            constraintsJobsInGarage.push(where("branchId", "==", branchId));
+             logsSnap.forEach(doc => {
+                const d = doc.data();
+                const time = d.createdAt?.toDate().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}) || "-";
+                activityLogsList.innerHTML += `<div class="list-group-item border-0 px-3 py-2"><div class="d-flex justify-content-between"><span class="text-dark fw-bold small text-truncate" style="max-width:70%">${d.message}</span><span class="text-muted text-xs">${time}</span></div><div class="text-xs text-muted">${d.createdByName||"System"}</div></div>`;
+             });
           }
 
-          const jobsTodayQuery = query(jobsCol, ...constraintsJobsToday);
-          const jobsTodaySnap = await getDocs(jobsTodayQuery);
-          if (statJobsToday) statJobsToday.textContent = String(jobsTodaySnap.size);
-
-          const jobsInGarageQuery = query(jobsCol, ...constraintsJobsInGarage);
-          const jobsInGarageSnap = await getDocs(jobsInGarageQuery);
-          if (statJobsInGarage) statJobsInGarage.textContent = String(jobsInGarageSnap.size);
         } catch (error) {
-          console.error("Error loading jobs:", error);
-        }
-
-        // 4) Vehicles
-        try {
-          const vehiclesCol = collection(db, "vehicles");
-          const constraintsBuyToday = [where("buyDate", "==", today)];
-          const constraintsSellToday = [where("sellDate", "==", today)];
-          if (branchId) {
-            constraintsBuyToday.push(where("branchId", "==", branchId));
-            constraintsSellToday.push(where("branchId", "==", branchId));
-          }
-
-          const [buySnap, sellSnap] = await Promise.all([
-            getDocs(query(vehiclesCol, ...constraintsBuyToday)),
-            getDocs(query(vehiclesCol, ...constraintsSellToday)),
-          ]);
-
-          if (statVehiclesBoughtToday) statVehiclesBoughtToday.textContent = String(buySnap.size);
-          if (statVehiclesSoldToday) statVehiclesSoldToday.textContent = String(sellSnap.size);
-        } catch (error) {
-          console.error("Error loading vehicles:", error);
-        }
-
-        // 5) Stock Low
-        try {
-          const stockCol = collection(db, "stock");
-          const constraintsStock = [where("isDeleted", "==", false)];
-          if (branchId) constraintsStock.push(where("branchId", "==", branchId));
-          const stockQuery = query(stockCol, ...constraintsStock, orderBy("name"), limit(20));
-          const stockSnap = await getDocs(stockQuery);
-
-          if (lowStockTbody) lowStockTbody.innerHTML = "";
-          let lowCount = 0;
-
-          stockSnap.forEach((docSnap) => {
-            const data = docSnap.data();
-            const qty = Number(data.qty) || 0;
-            const minQty = Number(data.minQty) || 0;
-
-            if (qty <= minQty) {
-              lowCount++;
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td class="ps-3 small text-muted font-monospace">${data.code || "-"}</td>
-                <td class="small fw-semibold text-dark">${data.name || "-"}</td>
-                <td class="small text-end">
-                  <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-2">
-                    ${formatNumber(qty)}
-                  </span>
-                </td>
-                <td class="small text-end pe-3 text-muted">${formatNumber(minQty)}</td>
-              `;
-              lowStockTbody.appendChild(tr);
-            }
-          });
-
-          if (lowCount === 0 && lowStockTbody) {
-            lowStockTbody.innerHTML = `
-              <tr>
-                <td colspan="4" class="text-center small text-muted py-4">
-                  <i class="bi bi-check-circle text-success fs-5 d-block mb-1"></i>
-                  สต๊อกปกติ ไม่มีรายการใกล้หมด
-                </td>
-              </tr>`;
-          }
-        } catch (error) {
-          console.error("Error loading stock:", error);
-          if(lowStockTbody) lowStockTbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger small">โหลดข้อมูลไม่ได้</td></tr>`;
-        }
-
-        // 6) Activity Logs
-        try {
-          const logsCol = collection(db, "activityLogs");
-          const constraintsLogs = [];
-          if (branchId) constraintsLogs.push(where("branchId", "==", branchId));
-          const logsQuery = query(logsCol, ...constraintsLogs, orderBy("createdAt", "desc"), limit(10));
-          const logsSnap = await getDocs(logsQuery);
-
-          if (activityLogsList) activityLogsList.innerHTML = "";
-
-          if (logsSnap.empty) {
-            if (activityLogsList) activityLogsList.innerHTML = `<li class="list-group-item text-center small text-muted py-3">ยังไม่มีความเคลื่อนไหว</li>`;
-          } else {
-            logsSnap.forEach((docSnap) => {
-              const data = docSnap.data();
-              const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : null;
-              let timePart = "-";
-              if (createdAt) {
-                timePart = `${String(createdAt.getHours()).padStart(2,"0")}:${String(createdAt.getMinutes()).padStart(2,"0")}`;
-              }
-              const msg = data.message || "-";
-              const byName = data.createdByName || "ระบบ";
-
-              const li = document.createElement("li");
-              li.className = "list-group-item small d-flex align-items-start py-3";
-              // สร้างจุด timeline
-              li.innerHTML = `
-                <div class="me-3 mt-1">
-                  <div class="rounded-circle bg-primary bg-opacity-25" style="width:8px; height:8px;"></div>
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <span class="text-dark fw-medium">${msg}</span>
-                    <span class="text-xs text-muted ms-2 bg-light border px-1 rounded">${timePart}</span>
-                  </div>
-                  <div class="text-xs text-muted">
-                    <i class="bi bi-person me-1"></i>${byName}
-                  </div>
-                </div>
-              `;
-              activityLogsList.appendChild(li);
-            });
-          }
-        } catch (error) {
-          console.error("Error loading logs:", error);
+          console.error("Load Data Error:", error);
+          showToast("โหลดข้อมูลบางส่วนไม่สำเร็จ", "danger");
         }
       }
 
-      // ============================================================
-      // Logout
-      // ============================================================
-      async function handleLogout() {
-        try {
-          await signOut(auth);
-          showToast("ออกจากระบบแล้ว", "success");
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Logout error:", error);
-        }
-      }
-
-      // ============================================================
-      // Events
-      // ============================================================
-      function setupEventListeners(currentUser, userProfile) {
-        if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
-        
-        if (themeToggleBtn) {
-          themeToggleBtn.addEventListener("click", async () => {
-            const currentTheme = bodyEl.classList.contains("bm-theme-dark") ? "dark" : "light";
-            const nextTheme = currentTheme === "dark" ? "light" : "dark";
-            applyTheme(nextTheme);
-            saveThemeForUser(currentUser.uid, nextTheme);
-            try {
-              await updateDoc(doc(db, "users", currentUser.uid), { theme: nextTheme });
-            } catch (e) { console.error(e); }
-          });
-        }
-
-        if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
-        if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
-        if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
-        if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
-      }
-
-      // ============================================================
-      // Auth Guard
-      // ============================================================
+      // --- Initialization ---
       onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
+        if (!user) return window.location.href = "index.html";
+        
         try {
-          const userProfile = await ensureUserProfile(user);
-          if (userProfile.disabled) {
-            await signOut(auth);
-            window.location.href = "index.html";
-            return;
-          }
+           const profile = await ensureUserProfile(user);
+           // Update UI
+           const name = profile.displayName || "ผู้ใช้งาน";
+           userDisplayNameText.textContent = name;
+           if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
+           if(welcomeUserName) welcomeUserName.textContent = name;
+           userAvatarInitial.textContent = name.charAt(0).toUpperCase();
+           userRoleText.textContent = profile.role==="admin"?"Admin":"Staff";
+           if(profile.role !== "admin") settingsMenuItem.classList.add("d-none");
 
-          if (userDisplayNameText) userDisplayNameText.textContent = userProfile.displayName || "-";
-          // สำหรับ Mobile
-          const mobName = document.getElementById("userDisplayNameTextMobile");
-          if (mobName) mobName.textContent = userProfile.displayName || "ผู้ใช้งาน";
+           // Theme
+           const t = localStorage.getItem("bm-theme-" + user.uid) || profile.theme || "light";
+           applyTheme(t);
 
-          if (userRoleText) {
-            userRoleText.textContent = userProfile.role === "admin" ? "Admin" : "Staff";
-          }
-          if (userAvatarInitial) {
-            const dn = userProfile.displayName || "U";
-            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
-          }
-          if (settingsMenuItem) {
-            if (userProfile.role === "admin") settingsMenuItem.classList.remove("d-none");
-            else settingsMenuItem.classList.add("d-none");
-          }
+           // Events
+           setupEventListeners(user, profile);
+           
+           // Load
+           await loadDashboardData(profile);
 
-          const themeToUse = readThemeForUser(user.uid, userProfile.theme || "light");
-          applyTheme(themeToUse);
-
-          setupEventListeners(user, userProfile);
-          await loadDashboardData(user, userProfile);
         } catch (error) {
-          console.error("Init Error:", error);
-          showToast("โหลดข้อมูลผิดพลาด", "danger");
+           console.error("Init Error", error);
+           showToast("เข้าสู่ระบบผิดพลาด", "danger");
         }
       });
+
+      function setupEventListeners(user, profile) {
+         logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
+         
+         themeToggleBtn.addEventListener("click", () => {
+            const isDark = bodyEl.classList.contains("bm-theme-dark");
+            const newTheme = isDark ? "light" : "dark";
+            applyTheme(newTheme);
+            localStorage.setItem("bm-theme-" + user.uid, newTheme);
+            updateDoc(doc(db,"users",user.uid), {theme: newTheme}).catch(()=>{});
+         });
+
+         refreshDashboardBtn?.addEventListener("click", () => {
+            loadDashboardData(profile);
+            showToast("รีเฟรชข้อมูลแล้ว", "success");
+         });
+
+         // FAB & Quick Links
+         fabOpenBillBtn?.addEventListener("click", () => window.location.href="open-bill.html");
+         fabAddTxnBtn?.addEventListener("click", () => window.location.href="finance.html");
+         fabStockInBtn?.addEventListener("click", () => window.location.href="stock.html");
+         fabAddVehicleBtn?.addEventListener("click", () => window.location.href="vehicles.html");
+      }
     </script>
   </body>
 </html>

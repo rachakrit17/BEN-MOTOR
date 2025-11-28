@@ -13,9 +13,7 @@
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-
     <link rel="manifest" href="img/site.webmanifest">
     
     <link
@@ -157,6 +155,7 @@
                     <div class="input-group input-group-sm">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
                         <input type="text" class="form-control border-start-0 ps-0" id="customerName" placeholder="ค้นหาหรือกรอกใหม่..." list="customerNameDatalist" required />
+                        <button class="btn btn-light border-start-0 border text-muted" type="button" onclick="document.getElementById('customerName').value='';"><i class="bi bi-x"></i></button>
                     </div>
                     <datalist id="customerNameDatalist"></datalist>
                     <div class="invalid-feedback">กรุณากรอกชื่อลูกค้า</div>
@@ -210,8 +209,8 @@
                   </div>
                 </div>
                 
-                <div class="d-flex align-items-center mt-3 p-2 bg-info bg-opacity-10 rounded-3">
-                    <i class="bi bi-magic text-info me-2 fs-5"></i>
+                <div class="d-flex align-items-center mt-3 p-2 bg-info bg-opacity-10 rounded-3 border border-info-subtle">
+                    <i class="bi bi-info-circle-fill text-info me-2 fs-5"></i>
                     <p class="small text-muted mb-0 lh-sm">
                         ระบบจะช่วยค้นหาข้อมูลลูกค้าและรถจากประวัติเก่าให้ทันทีเมื่อพิมพ์ชื่อหรือทะเบียน
                     </p>
@@ -219,14 +218,13 @@
               </div>
             </div>
           </section>
-
-          <section class="mb-4">
+		  <section class="mb-4">
             <div class="card border-0 shadow-sm rounded-4">
               <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
                 <h2 class="h6 fw-bold text-warning mb-0">
                     <i class="bi bi-box-seam me-2"></i> รายการอะไหล่
                 </h2>
-                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3" type="button" id="addPartRowBtn">
+                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3 shadow-sm hover-elevate" type="button" id="addPartRowBtn">
                   <i class="bi bi-plus-lg me-1"></i> เพิ่มอะไหล่
                 </button>
               </div>
@@ -236,11 +234,11 @@
                 </div>
 
                 <div class="table-responsive rounded-3 border">
-                  <table class="table table-sm align-middle mb-0 bm-bill-table">
+                  <table class="table table-sm align-middle mb-0 bm-bill-table table-hover">
                     <thead class="bg-light text-secondary">
-                      <tr class="text-muted small">
-                        <th class="ps-3 py-2 fw-normal" style="min-width: 200px;">สินค้า / อะไหล่</th>
-                        <th class="text-end py-2 fw-normal" style="width: 140px;">จำนวน</th>
+                      <tr class="text-muted small text-uppercase">
+                        <th class="ps-3 py-2 fw-normal" style="min-width: 220px;">สินค้า / อะไหล่</th>
+                        <th class="text-center py-2 fw-normal" style="width: 120px;">จำนวน</th>
                         <th class="text-end py-2 fw-normal" style="width: 120px;">ราคา/หน่วย</th>
                         <th class="text-end py-2 fw-normal" style="width: 120px;">รวม (฿)</th>
                         <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
@@ -260,15 +258,15 @@
                 <h2 class="h6 fw-bold text-info mb-0">
                     <i class="bi bi-wrench me-2"></i> รายการค่าแรง
                 </h2>
-                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3" type="button" id="addLaborRowBtn">
+                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3 shadow-sm hover-elevate" type="button" id="addLaborRowBtn">
                   <i class="bi bi-plus-lg me-1"></i> เพิ่มค่าแรง
                 </button>
               </div>
               <div class="card-body pt-0">
                 <div class="table-responsive rounded-3 border">
-                  <table class="table table-sm align-middle mb-0 bm-bill-table">
+                  <table class="table table-sm align-middle mb-0 bm-bill-table table-hover">
                     <thead class="bg-light text-secondary">
-                      <tr class="text-muted small">
+                      <tr class="text-muted small text-uppercase">
                         <th class="ps-3 py-2 fw-normal">รายละเอียดค่าแรง</th>
                         <th class="text-end py-2 fw-normal" style="width: 150px;">ราคา (฿)</th>
                         <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
@@ -285,36 +283,54 @@
           <section class="mb-5">
             <div class="card border-0 shadow rounded-4 bg-gradient" style="background-color: #f8fafc;">
               <div class="card-body p-4">
-                <div class="row align-items-center">
+                
+                <div class="row align-items-center mb-3">
                   <div class="col-12 col-md-6 mb-3 mb-md-0">
-                    <div class="d-flex gap-4">
-                        <div>
-                            <div class="small text-muted mb-1">รวมค่าอะไหล่</div>
-                            <div class="h5 mb-0 fw-semibold text-dark" id="partsTotalDisplay">0.00 ฿</div>
+                    <div class="d-flex flex-column gap-1">
+                        <div class="d-flex justify-content-between text-muted small" style="max-width: 300px;">
+                            <span>รวมค่าอะไหล่:</span>
+                            <span class="fw-semibold text-dark" id="partsTotalDisplay">0.00 ฿</span>
                         </div>
-                        <div class="border-start mx-2"></div>
-                        <div>
-                            <div class="small text-muted mb-1">รวมค่าแรง</div>
-                            <div class="h5 mb-0 fw-semibold text-dark" id="laborTotalDisplay">0.00 ฿</div>
+                        <div class="d-flex justify-content-between text-muted small" style="max-width: 300px;">
+                            <span>รวมค่าแรง:</span>
+                            <span class="fw-semibold text-dark" id="laborTotalDisplay">0.00 ฿</span>
                         </div>
                     </div>
                   </div>
                   
                   <div class="col-12 col-md-6 text-md-end">
                     <div class="small text-muted text-uppercase fw-bold ls-1 mb-1">ยอดรวมสุทธิ</div>
-                    <div class="display-6 fw-bold text-primary" id="grandTotalDisplay">0.00 ฿</div>
+                    <div class="display-5 fw-bold text-primary" id="grandTotalDisplay">0.00 ฿</div>
                   </div>
                 </div>
 
                 <hr class="my-4 text-muted opacity-25">
 
+                <div class="row g-3 justify-content-end align-items-center mb-4 bg-white p-3 rounded-3 border mx-0">
+                    <div class="col-12 col-sm-auto text-end">
+                        <label class="col-form-label col-form-label-sm fw-bold text-success">รับเงินมา:</label>
+                    </div>
+                    <div class="col-12 col-sm-3">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-success bg-opacity-10 text-success border-success fw-bold">฿</span>
+                            <input type="number" id="receivedAmountInput" class="form-control form-control-sm border-success fw-bold text-end" placeholder="0.00" min="0">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-auto text-end">
+                        <label class="col-form-label col-form-label-sm fw-bold text-danger">เงินทอน:</label>
+                    </div>
+                    <div class="col-12 col-sm-3">
+                        <input type="text" id="changeAmountDisplay" class="form-control form-control-sm bg-light text-end fw-bold text-danger" value="0.00" readonly>
+                    </div>
+                </div>
+
                 <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
                   <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2" id="resetFormBtn">
                     <i class="bi bi-arrow-counterclockwise me-2"></i> ล้างฟอร์ม
                   </button>
-                  <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm" id="saveBillBtn">
+                  <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm fw-bold" id="saveBillBtn">
                     <span class="spinner-border spinner-border-sm me-2 d-none" id="saveBillSpinner" role="status" aria-hidden="true"></span>
-                    <span id="saveBillBtnText" class="fw-bold">บันทึกบิลซ่อม</span>
+                    <span id="saveBillBtnText"><i class="bi bi-save2 me-2"></i> บันทึกบิลซ่อม</span>
                   </button>
                 </div>
               </div>
@@ -328,37 +344,29 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-        <button
-          class="btn btn-primary rounded-circle shadow-lg bm-fab-btn"
-          type="button"
-          id="fabDropdownButton"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="bi bi-plus-lg"></i>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
+
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2 active" type="button" id="fabOpenBillBtn">
-              <span class="bg-white bg-opacity-25 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>
+            <button class="dropdown-item d-flex align-items-center rounded-3 py-2 active fw-bold" type="button" id="fabOpenBillBtn">
+              <span class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff"></i></span>
               เปิดบิลซ่อมใหม่
             </button>
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn">
-              <span class="bg-success bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span>
+              <span class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin"></i></span>
               เพิ่มรายการเงิน
             </button>
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn">
-              <span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span>
+              <span class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam"></i></span>
               บันทึกซื้ออะไหล่
             </button>
           </li>
           <li>
             <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn">
-              <span class="bg-info bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span>
+              <span class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front"></i></span>
               เพิ่มรถรับซื้อเข้า
             </button>
           </li>
@@ -366,42 +374,42 @@
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
-      <div class="container-fluid px-0">
-        <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block fs-5"></i>
+    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom shadow-lg">
+      <div class="container-fluid px-0 h-100">
+        <div class="row g-0 w-100 h-100 text-center small">
+          <div class="col h-100">
+            <a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-speedometer2 d-block fs-5 mb-1"></i>
               <span>แดชบอร์ด</span>
             </a>
           </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link active">
-              <i class="bi bi-receipt-cutoff d-block fs-5"></i>
+          <div class="col h-100">
+            <a href="open-bill.html" class="bm-bottom-nav-link active h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i>
               <span>เปิดบิล</span>
             </a>
           </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block fs-5"></i>
+          <div class="col h-100">
+            <a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i>
               <span>งานซ่อม</span>
             </a>
           </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block fs-5"></i>
+          <div class="col h-100">
+            <a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-truck-front d-block fs-5 mb-1"></i>
               <span>รถรับซื้อ</span>
             </a>
           </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block fs-5"></i>
+          <div class="col h-100">
+            <a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-box-seam d-block fs-5 mb-1"></i>
               <span>สต๊อก</span>
             </a>
           </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block fs-5"></i>
+          <div class="col h-100">
+            <a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
+              <i class="bi bi-cash-coin d-block fs-5 mb-1"></i>
               <span>เงินเข้าออก</span>
             </a>
           </div>
@@ -421,8 +429,8 @@
         aria-atomic="true"
         data-bs-delay="4000"
       >
-        <div class="d-flex px-2">
-          <div class="toast-body" id="mainToastBody">
+        <div class="d-flex px-3 py-2">
+          <div class="toast-body fw-medium" id="mainToastBody">
             </div>
           <button
             type="button"
@@ -439,45 +447,13 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-
-    <script type="module">
-      // ============================================================
-      // นำเข้า Firebase SDK
-      // ============================================================
+	<script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, query, where, orderBy, limit, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        sendPasswordResetEmail
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-      import {
-        getFirestore,
-        collection,
-        doc,
-        addDoc,
-        setDoc,
-        getDoc,
-        getDocs,
-        updateDoc,
-        deleteDoc,
-        query,
-        where,
-        orderBy,
-        limit,
-        startAfter,
-        serverTimestamp,
-        onSnapshot
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-      // ============================================================
-      // ตั้งค่า Firebase
-      // ============================================================
+      // --- Firebase Config ---
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
@@ -489,24 +465,20 @@
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // ============================================================
-      // ตัวแปรอ้างอิง DOM
-      // ============================================================
+      // --- DOM Elements ---
       const bodyEl = document.body;
-
-      // Topbar
       const themeToggleBtn = document.getElementById("themeToggleBtn");
+      
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
       const userAvatarInitial = document.getElementById("userAvatarInitial");
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // ฟอร์มเปิดบิล
+      // Form
       const openBillForm = document.getElementById("openBillForm");
       const jobDateInput = document.getElementById("jobDate");
       const openBillTodayLabel = document.getElementById("openBillTodayLabel");
@@ -521,19 +493,20 @@
       const customerNameDatalist = document.getElementById("customerNameDatalist");
       const plateDatalist = document.getElementById("plateDatalist");
 
-      // รายการอะไหล่
+      // Items
       const stockLoadingState = document.getElementById("stockLoadingState");
       const partsTbody = document.getElementById("partsTbody");
       const addPartRowBtn = document.getElementById("addPartRowBtn");
-
-      // รายการค่าแรง
       const laborTbody = document.getElementById("laborTbody");
       const addLaborRowBtn = document.getElementById("addLaborRowBtn");
 
-      // สรุปยอด
+      // Summary & Actions
       const partsTotalDisplay = document.getElementById("partsTotalDisplay");
       const laborTotalDisplay = document.getElementById("laborTotalDisplay");
       const grandTotalDisplay = document.getElementById("grandTotalDisplay");
+      const receivedAmountInput = document.getElementById("receivedAmountInput");
+      const changeAmountDisplay = document.getElementById("changeAmountDisplay");
+      
       const resetFormBtn = document.getElementById("resetFormBtn");
       const saveBillBtn = document.getElementById("saveBillBtn");
       const saveBillSpinner = document.getElementById("saveBillSpinner");
@@ -550,9 +523,6 @@
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
-      // ============================================================
-      // สถานะภายในหน้า
-      // ============================================================
       let currentUser = null;
       let currentUserProfile = null;
       const stockMap = {};
@@ -560,116 +530,40 @@
       let historyRecords = [];
       let isSavingBill = false;
 
-      // ============================================================
-      // Helpers
-      // ============================================================
-      function showToast(message, variant = "primary") {
-        if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
-        mainToastBody.textContent = message;
-        mainToast.show();
+      // --- Helpers ---
+      function showToast(msg, variant="primary") {
+        if(mainToastEl && mainToastBody) {
+            mainToastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow-lg rounded-pill`;
+            mainToastBody.innerHTML = `<i class="bi bi-info-circle-fill me-2"></i>${msg}`;
+            mainToast.show();
+        } else alert(msg);
       }
+      function formatNumber(v) { return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+      function formatDateThai(date) { return date.toLocaleDateString("th-TH", {day:"numeric", month:"long", year:"numeric"}); }
+      function getTodayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
-      function formatNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0.00";
-        return value.toLocaleString("th-TH", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-      }
-
-      function formatDateThaiFromString(dateStr) {
-        if (!dateStr) return "-";
-        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
-        if (!year || !month || !day) return dateStr;
-        const d = new Date(year, month - 1, day);
-        const thaiMonths = [
-          "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-          "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
-        ];
-        const thaiYear = d.getFullYear() + 543;
-        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
-      }
-
-      function getTodayISODateString() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-      }
-
-      // ============================================================
-      // Theme
-      // ============================================================
-      function applyTheme(theme) {
-        const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
-
-        const icon = themeToggleBtn.querySelector("i");
-        if (icon) {
-          icon.classList.toggle("bi-sun", normalized === "dark");
-          icon.classList.toggle("bi-moon", normalized === "light");
-        }
-      }
-
-      function saveThemeForUser(uid, theme) {
-        if (!uid) return;
-        try {
-          localStorage.setItem("bm-theme-" + uid, theme);
-        } catch (e) {
-          console.warn("Theme save error", e);
-        }
-      }
-
-      function readThemeForUser(uid, fallbackTheme) {
-        if (!uid) return fallbackTheme || "light";
-        try {
-          const stored = localStorage.getItem("bm-theme-" + uid);
-          return stored || fallbackTheme || "light";
-        } catch (e) {
-          return fallbackTheme || "light";
-        }
-      }
-
-      // ============================================================
-      // User Profile
-      // ============================================================
+      // --- Theme & Profile ---
       async function ensureUserProfile(user) {
-        const userRef = doc(db, "users", user.uid);
-        const snap = await getDoc(userRef);
-        if (snap.exists()) {
-          return { id: snap.id, ...snap.data() };
-        }
-        const usersCol = collection(db, "users");
-        const qUsers = query(usersCol, limit(1));
-        const existingSnap = await getDocs(qUsers);
-
-        const isFirstUser = existingSnap.empty;
-        const role = isFirstUser ? "admin" : "staff";
-        const defaultDisplayName =
-          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
-
-        const newUserData = {
-          displayName: defaultDisplayName,
-          role,
-          createdAt: serverTimestamp(),
-          branchId: null,
-          theme: "light",
-          disabled: false,
-        };
-        await setDoc(userRef, newUserData);
-        return { id: user.uid, ...newUserData };
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if(snap.exists()) return { id: snap.id, ...snap.data() };
+        
+        const q = query(collection(db,"users"), limit(1));
+        const role = (await getDocs(q)).empty ? "admin" : "staff";
+        const data = { displayName: user.displayName||user.email.split("@")[0], role, createdAt: serverTimestamp(), branchId: null, theme: "light", disabled: false };
+        await setDoc(ref, data);
+        return { id: user.uid, ...data };
       }
 
-      // ============================================================
-      // Table Row Creators (Enhanced HTML)
-      // ============================================================
+      function applyTheme(theme) {
+        const t = theme==="dark"?"dark":"light";
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
+        bodyEl.classList.add("bm-theme-"+t);
+      }
+
+      // --- Table Row Creation ---
       function createPartRow() {
         const tr = document.createElement("tr");
-        // Adjusted HTML for better look
         tr.innerHTML = `
           <td>
             <select class="form-select form-select-sm part-stock-select rounded-3 border-secondary-subtle">
@@ -677,23 +571,21 @@
               ${stockOptionsHtml}
             </select>
           </td>
-          <td class="text-end">
-            <div class="input-group input-group-sm flex-nowrap justify-content-end">
-              <button class="btn btn-light border part-qty-decrease" type="button"><i class="bi bi-dash"></i></button>
-              <input type="number" class="form-control text-center part-qty-input" value="1" min="1" style="max-width: 60px;" />
-              <button class="btn btn-light border part-qty-increase" type="button"><i class="bi bi-plus"></i></button>
+          <td class="text-center">
+            <div class="input-group input-group-sm flex-nowrap justify-content-center">
+              <button class="btn btn-light border part-qty-decrease bm-qty-btn" type="button"><i class="bi bi-dash"></i></button>
+              <input type="number" class="form-control text-center part-qty-input border-secondary-subtle" value="1" min="1" style="max-width: 50px;" />
+              <button class="btn btn-light border part-qty-increase bm-qty-btn" type="button"><i class="bi bi-plus"></i></button>
             </div>
           </td>
           <td class="text-end">
-            <input type="number" class="form-control form-control-sm text-end part-unit-price-input rounded-3" placeholder="0.00" min="0" step="0.01" />
+            <input type="number" class="form-control form-control-sm text-end part-unit-price-input rounded-3 border-secondary-subtle" placeholder="0.00" min="0" step="0.01" />
           </td>
           <td class="text-end align-middle fw-semibold text-dark">
             <span class="part-line-total-text">0.00</span>
           </td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-link text-danger part-remove-row-btn p-0" type="button" aria-label="ลบ">
-              <i class="bi bi-x-circle-fill fs-6"></i>
-            </button>
+          <td class="text-center align-middle">
+            <button class="btn btn-sm btn-link text-danger part-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill"></i></button>
           </td>
         `;
         return tr;
@@ -702,595 +594,278 @@
       function createLaborRow() {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>
-            <input type="text" class="form-control form-control-sm labor-name-input rounded-3" placeholder="ระบุรายการค่าแรง..." />
-          </td>
-          <td class="text-end">
-            <input type="number" class="form-control form-control-sm text-end labor-price-input rounded-3" placeholder="0.00" min="0" step="0.01" />
-          </td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-link text-danger labor-remove-row-btn p-0" type="button" aria-label="ลบ">
-              <i class="bi bi-x-circle-fill fs-6"></i>
-            </button>
-          </td>
+          <td><input type="text" class="form-control form-control-sm labor-name-input rounded-3 border-secondary-subtle" placeholder="ระบุรายการค่าแรง..." /></td>
+          <td class="text-end"><input type="number" class="form-control form-control-sm text-end labor-price-input rounded-3 border-secondary-subtle" placeholder="0.00" min="0" step="0.01" /></td>
+          <td class="text-center align-middle"><button class="btn btn-sm btn-link text-danger labor-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill"></i></button></td>
         `;
         return tr;
       }
 
-      // ============================================================
-      // Logic: Calculations & Form Handling
-      // ============================================================
+      // --- Calculations ---
       function recalcTotals() {
-        let partsTotal = 0;
-        let laborTotal = 0;
-
-        partsTbody.querySelectorAll("tr").forEach((tr) => {
-          const select = tr.querySelector(".part-stock-select");
-          const qtyInput = tr.querySelector(".part-qty-input");
-          const priceInput = tr.querySelector(".part-unit-price-input");
-          const totalSpan = tr.querySelector(".part-line-total-text");
-
-          const stockId = select ? select.value : "";
-          let qty = qtyInput ? parseFloat(qtyInput.value) : 0;
-          let unitPrice = priceInput ? parseFloat(priceInput.value) : 0;
-
-          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) {
-            if (totalSpan) totalSpan.textContent = "0.00";
-            return;
-          }
-
-          const lineTotal = qty * unitPrice;
-          partsTotal += lineTotal;
-          if (totalSpan) totalSpan.textContent = formatNumber(lineTotal);
-        });
-
-        laborTbody.querySelectorAll("tr").forEach((tr) => {
-          const nameInput = tr.querySelector(".labor-name-input");
-          const priceInput = tr.querySelector(".labor-price-input");
-          const name = nameInput ? nameInput.value.trim() : "";
-          const price = priceInput ? parseFloat(priceInput.value) : 0;
-
-          if (!name || isNaN(price) || price <= 0) return;
-          laborTotal += price;
-        });
-
-        const grandTotal = partsTotal + laborTotal;
-
-        if (partsTotalDisplay) partsTotalDisplay.textContent = formatNumber(partsTotal) + " ฿";
-        if (laborTotalDisplay) laborTotalDisplay.textContent = formatNumber(laborTotal) + " ฿";
-        if (grandTotalDisplay) grandTotalDisplay.textContent = formatNumber(grandTotal) + " ฿";
-
-        return { partsTotal, laborTotal, grandTotal };
-      }
-
-      function collectPartItemsForSave() {
-        const items = [];
-        let partsTotal = 0;
-        partsTbody.querySelectorAll("tr").forEach((tr) => {
-          const select = tr.querySelector(".part-stock-select");
-          const qtyInput = tr.querySelector(".part-qty-input");
-          const priceInput = tr.querySelector(".part-unit-price-input");
-          if (!select || !qtyInput || !priceInput) return;
-
-          const stockId = select.value;
-          const qty = parseFloat(qtyInput.value);
-          const unitPrice = parseFloat(priceInput.value);
-
-          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) return;
-
-          const lineTotal = qty * unitPrice;
-          partsTotal += lineTotal;
-          const stockData = stockMap[stockId] || {};
-          const stockName = stockData.name || (select.options[select.selectedIndex]?.textContent || "");
-
-          items.push({ stockId, stockName, qty, unitPrice, lineTotal });
-        });
-        return { items, partsTotal };
-      }
-
-      function collectLaborItemsForSave() {
-        const laborItems = [];
-        let laborTotal = 0;
-        laborTbody.querySelectorAll("tr").forEach((tr) => {
-          const nameInput = tr.querySelector(".labor-name-input");
-          const priceInput = tr.querySelector(".labor-price-input");
-          if (!nameInput || !priceInput) return;
-
-          const name = nameInput.value.trim();
-          const price = parseFloat(priceInput.value);
-
-          if (!name || isNaN(price) || price <= 0) return;
-          laborItems.push({ name, price });
-          laborTotal += price;
-        });
-        return { laborItems, laborTotal };
-      }
-
-      function setSaveBillButtonLoading(isLoading) {
-        isSavingBill = isLoading;
-        if (!saveBillBtn || !saveBillSpinner || !saveBillBtnText) return;
-        if (isLoading) {
-          saveBillBtn.disabled = true;
-          saveBillSpinner.classList.remove("d-none");
-          saveBillBtnText.textContent = "กำลังบันทึก...";
-        } else {
-          saveBillBtn.disabled = false;
-          saveBillSpinner.classList.add("d-none");
-          saveBillBtnText.textContent = "บันทึกบิลซ่อม";
-        }
-      }
-
-      function resetOpenBillForm() {
-        if (!openBillForm) return;
-        openBillForm.reset();
-        const today = getTodayISODateString();
-        if (jobDateInput) jobDateInput.value = today;
-        if (openBillTodayLabel) {
-           openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ` + formatDateThaiFromString(today);
-        }
-
-        partsTbody.innerHTML = "";
-        laborTbody.innerHTML = "";
-        if (stockOptionsHtml) partsTbody.appendChild(createPartRow());
-        laborTbody.appendChild(createLaborRow());
-
-        customerNameInput.classList.remove("is-invalid");
-        plateInput.classList.remove("is-invalid");
-        problemInput.classList.remove("is-invalid");
-        jobDateInput.classList.remove("is-invalid");
-        recalcTotals();
-      }
-
-      async function loadStockForParts(branchId) {
-        try {
-          const stockCol = collection(db, "stock");
-          const constraints = [where("isDeleted", "==", false)];
-          if (branchId) constraints.push(where("branchId", "==", branchId));
-          const stockQueryRef = query(stockCol, ...constraints, orderBy("name"), limit(200));
-          const snap = await getDocs(stockQueryRef);
-
-          Object.keys(stockMap).forEach((k) => delete stockMap[k]);
-          let optionsHtml = "";
-          snap.forEach((docSnap) => {
-            const data = docSnap.data();
-            stockMap[docSnap.id] = data;
-            const name = data.name || "-";
-            const code = data.code || "";
-            const salePrice = Number(data.salePrice) || 0;
-            const label = code ? `${code} - ${name}` : name;
-            optionsHtml += `<option value="${docSnap.id}" data-sale-price="${salePrice}">${label}</option>`;
-          });
-          stockOptionsHtml = optionsHtml;
-
-          if (stockLoadingState) {
-            if (snap.empty) {
-              stockLoadingState.className = "alert alert-warning border small py-2 mb-2 rounded-3";
-              stockLoadingState.textContent = "ยังไม่มีข้อมูลอะไหล่ในสต๊อก";
-            } else {
-              stockLoadingState.className = "d-none";
-            }
-          }
-
-          if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
-            partsTbody.appendChild(createPartRow());
-          } else {
-            partsTbody.querySelectorAll(".part-stock-select").forEach((select) => {
-              const currentValue = select.value;
-              select.innerHTML = `<option value="">-- เลือกอะไหล่ --</option>${stockOptionsHtml}`;
-              if (currentValue && stockMap[currentValue]) select.value = currentValue;
-            });
-          }
-        } catch (error) {
-          console.error("Load Stock Error:", error);
-          if (stockLoadingState) {
-             stockLoadingState.className = "alert alert-danger border small py-2 mb-2";
-             stockLoadingState.textContent = "โหลดสต๊อกล้มเหลว";
-          }
-        }
-      }
-
-      async function loadAutocompleteHistory(branchId) {
-        const recordsMap = new Map();
-        try {
-          const jobsCol = collection(db, "jobs");
-          const jobsConstraints = [where("isDeleted", "==", false)];
-          if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
-          const jobsQueryRef = query(jobsCol, ...jobsConstraints, orderBy("createdAt", "desc"), limit(30));
-          const jobsSnap = await getDocs(jobsQueryRef);
-
-          jobsSnap.forEach((docSnap) => {
-            const data = docSnap.data();
-            const key = `${data.customerName || ""}|${data.customerPhone || ""}|${data.plate || ""}`;
-            if (!recordsMap.has(key)) {
-              recordsMap.set(key, {
-                customerName: data.customerName || "",
-                customerPhone: data.customerPhone || "",
-                plate: data.plate || "",
-                brand: data.brand || "",
-                model: data.model || "",
-              });
-            }
-          });
-
-          const vehiclesCol = collection(db, "vehicles");
-          const vehiclesConstraints = [where("isDeleted", "==", false)];
-          if (branchId) vehiclesConstraints.push(where("branchId", "==", branchId));
-          const vehiclesQueryRef = query(vehiclesCol, ...vehiclesConstraints, orderBy("createdAt", "desc"), limit(30));
-          const vehiclesSnap = await getDocs(vehiclesQueryRef);
-
-          vehiclesSnap.forEach((docSnap) => {
-            const data = docSnap.data();
-            const key = `| |${data.plate || ""}`;
-            if (!recordsMap.has(key)) {
-              recordsMap.set(key, {
-                customerName: "",
-                customerPhone: "",
-                plate: data.plate || "",
-                brand: data.brand || "",
-                model: data.model || "",
-              });
-            }
-          });
-
-          historyRecords = Array.from(recordsMap.values());
-          const nameSet = new Set();
-          const plateSet = new Set();
-          historyRecords.forEach((r) => {
-            if (r.customerName) nameSet.add(r.customerName);
-            if (r.plate) plateSet.add(r.plate);
-          });
-
-          if (customerNameDatalist) {
-            customerNameDatalist.innerHTML = "";
-            nameSet.forEach((name) => {
-              const opt = document.createElement("option");
-              opt.value = name;
-              customerNameDatalist.appendChild(opt);
-            });
-          }
-          if (plateDatalist) {
-            plateDatalist.innerHTML = "";
-            plateSet.forEach((plate) => {
-              const opt = document.createElement("option");
-              opt.value = plate;
-              plateDatalist.appendChild(opt);
-            });
-          }
-        } catch (error) {
-          console.error("Autocomplete Error:", error);
-        }
-      }
-
-      function autoFillFromHistoryByPlate(plateValue) {
-        const plate = (plateValue || "").trim();
-        if (!plate || historyRecords.length === 0) return;
-        const record = historyRecords.find((r) => r.plate === plate);
-        if (!record) return;
-        if (record.brand && brandInput) brandInput.value = record.brand;
-        if (record.model && modelInput) modelInput.value = record.model;
-        if (record.customerName && customerNameInput) customerNameInput.value = record.customerName;
-        if (record.customerPhone && customerPhoneInput) customerPhoneInput.value = record.customerPhone;
-      }
-
-      function autoFillFromHistoryByCustomerName(nameValue) {
-        const name = (nameValue || "").trim();
-        if (!name || historyRecords.length === 0) return;
-        const record = historyRecords.find((r) => r.customerName === name);
-        if (!record) return;
-        if (record.customerPhone && customerPhoneInput) customerPhoneInput.value = record.customerPhone;
-        if (record.plate && plateInput) {
-           plateInput.value = record.plate;
-           autoFillFromHistoryByPlate(record.plate);
-        }
-      }
-
-      async function saveNewJobBill() {
-        if (!currentUser || !currentUserProfile) {
-          showToast("ไม่พบข้อมูลผู้ใช้", "danger");
-          return;
-        }
-        if (isSavingBill) return;
-
-        jobDateInput.classList.remove("is-invalid");
-        customerNameInput.classList.remove("is-invalid");
-        plateInput.classList.remove("is-invalid");
-        problemInput.classList.remove("is-invalid");
-
-        const jobDate = jobDateInput.value || "";
-        const customerName = customerNameInput.value.trim();
-        const customerPhone = customerPhoneInput.value.trim();
-        const plate = plateInput.value.trim();
-        const brand = brandInput.value.trim();
-        const model = modelInput.value.trim();
-        const mileageStr = mileageInput.value.trim();
-        const problem = problemInput.value.trim();
-        const priority = prioritySelect.value || "normal";
-
-        let hasError = false;
-        if (!jobDate) { jobDateInput.classList.add("is-invalid"); hasError = true; }
-        if (!customerName) { customerNameInput.classList.add("is-invalid"); hasError = true; }
-        if (!plate) { plateInput.classList.add("is-invalid"); hasError = true; }
-        if (!problem) { problemInput.classList.add("is-invalid"); hasError = true; }
-
-        const mileage = mileageStr ? parseFloat(mileageStr) : null;
-        if (mileageStr && (isNaN(mileage) || mileage < 0)) {
-          mileageInput.classList.add("is-invalid");
-          hasError = true;
-        }
-
-        const { items, partsTotal } = collectPartItemsForSave();
-        const { laborItems, laborTotal } = collectLaborItemsForSave();
-        const totalAmount = partsTotal + laborTotal;
-
-        if (items.length === 0 && laborItems.length === 0) {
-          showToast("ต้องมีอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ", "warning");
-          hasError = true;
-        }
-
-        if (hasError) {
-          showToast("กรุณากรอกข้อมูลให้ครบถ้วน", "warning");
-          return;
-        }
-
-        setSaveBillButtonLoading(true);
-        const branchId = currentUserProfile.branchId || null;
-
-        try {
-          const jobDocRef = await addDoc(collection(db, "jobs"), {
-            createdAt: serverTimestamp(),
-            updatedAt: null,
-            date: jobDate,
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            customerName,
-            customerPhone,
-            plate,
-            brand,
-            model,
-            mileage: mileage !== null ? mileage : null,
-            problem,
-            status: "repairing",
-            priority,
-            partsTotal,
-            laborTotal,
-            totalAmount,
-            items,
-            laborItems,
-            isDeleted: false,
-            branchId,
-          });
-
-          const jobId = jobDocRef.id;
-
-          for (const item of items) {
-            const stockId = item.stockId;
-            const qtyUsed = item.qty;
-            if (!stockId || !stockMap[stockId]) continue;
-            const stockData = stockMap[stockId];
-            const currentQty = Number(stockData.qty) || 0;
-            const currentFastMoving = Number(stockData.fastMovingScore) || 0;
-            const newQty = Math.max(0, currentQty - qtyUsed);
-            const newFastMoving = currentFastMoving + qtyUsed;
-
-            const stockRef = doc(db, "stock", stockId);
-            await updateDoc(stockRef, {
-              qty: newQty,
-              fastMovingScore: newFastMoving,
-              updatedAt: serverTimestamp(),
-            });
-            stockData.qty = newQty;
-            stockData.fastMovingScore = newFastMoving;
-          }
-
-          const txnDescription = `ค่าซ่อมรถ ${plate} (${customerName})`;
-          await addDoc(collection(db, "transactions"), {
-            date: jobDate,
-            createdAt: serverTimestamp(),
-            updatedAt: null,
-            type: "income",
-            category: "ค่าซ่อม",
-            description: txnDescription,
-            amount: totalAmount,
-            method: "cash",
-            sourceType: "job",
-            sourceId: jobId,
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            isDeleted: false,
-            branchId,
-          });
-
-          const logMessage = `เปิดบิลซ่อมใหม่ ${customerName} (${plate}) ยอด ${formatNumber(totalAmount)} ฿`;
-          await addDoc(collection(db, "activityLogs"), {
-            createdAt: serverTimestamp(),
-            createdBy: currentUser.uid,
-            createdByName: currentUserProfile.displayName || "",
-            type: "job_created",
-            message: logMessage,
-            refType: "job",
-            refId: jobId,
-            branchId,
-          });
-
-          showToast("บันทึกบิลซ่อมสำเร็จ", "success");
-          resetOpenBillForm();
-          loadAutocompleteHistory(branchId);
-        } catch (error) {
-          console.error("Save Job Error:", error);
-          showToast("บันทึกไม่สำเร็จ", "danger");
-        } finally {
-          setSaveBillButtonLoading(false);
-        }
-      }
-
-      async function handleLogout() {
-        try {
-          await signOut(auth);
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Logout Error:", error);
-        }
-      }
-
-      // ============================================================
-      // Event Listeners
-      // ============================================================
-      function setupEventListenersForPage() {
-        if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+        let parts=0, labor=0;
         
-        if (themeToggleBtn) {
-          themeToggleBtn.addEventListener("click", async () => {
-            const currentTheme = bodyEl.classList.contains("bm-theme-dark") ? "dark" : "light";
-            const nextTheme = currentTheme === "dark" ? "light" : "dark";
-            applyTheme(nextTheme);
-            if (currentUser) {
-              saveThemeForUser(currentUser.uid, nextTheme);
-              try { await updateDoc(doc(db, "users", currentUser.uid), { theme: nextTheme }); } catch(e){}
-            }
-          });
-        }
-
-        if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-        if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
-        if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
-        if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
-
-        if (addPartRowBtn) {
-          addPartRowBtn.addEventListener("click", () => {
-            if (!stockOptionsHtml) {
-              showToast("ไม่มีข้อมูลสต๊อก", "warning");
-              return;
-            }
-            partsTbody.appendChild(createPartRow());
-          });
-        }
-
-        partsTbody.addEventListener("click", (event) => {
-          const target = event.target;
-          const removeBtn = target.closest(".part-remove-row-btn");
-          if (removeBtn) {
-            const tr = removeBtn.closest("tr");
-            tr.remove();
-            if (!partsTbody.querySelector("tr") && stockOptionsHtml) partsTbody.appendChild(createPartRow());
-            recalcTotals();
-            return;
-          }
-          const decBtn = target.closest(".part-qty-decrease");
-          const incBtn = target.closest(".part-qty-increase");
-          if (decBtn || incBtn) {
-            const tr = target.closest("tr");
-            const qtyInput = tr.querySelector(".part-qty-input");
-            let qty = parseFloat(qtyInput.value) || 0;
-            if (decBtn) qty = Math.max(1, qty - 1);
-            else if (incBtn) qty = qty + 1;
-            qtyInput.value = qty;
-            recalcTotals();
-          }
+        partsTbody.querySelectorAll("tr").forEach(tr => {
+           const qty = parseFloat(tr.querySelector(".part-qty-input")?.value)||0;
+           const price = parseFloat(tr.querySelector(".part-unit-price-input")?.value)||0;
+           const total = qty * price;
+           tr.querySelector(".part-line-total-text").textContent = formatNumber(total);
+           parts += total;
         });
 
-        partsTbody.addEventListener("input", (event) => {
-          const target = event.target;
-          if (target.classList.contains("part-stock-select")) {
-            const stockId = target.value;
-            const tr = target.closest("tr");
-            const priceInput = tr.querySelector(".part-unit-price-input");
-            if (stockId && stockMap[stockId] && priceInput) {
-              const salePrice = Number(stockMap[stockId].salePrice) || 0;
-              if (!priceInput.value || parseFloat(priceInput.value) <= 0) {
-                priceInput.value = salePrice > 0 ? salePrice : "";
-              }
-            }
-          }
-          recalcTotals();
+        laborTbody.querySelectorAll("tr").forEach(tr => {
+           labor += parseFloat(tr.querySelector(".labor-price-input")?.value)||0;
         });
 
-        if (addLaborRowBtn) {
-          addLaborRowBtn.addEventListener("click", () => laborTbody.appendChild(createLaborRow()));
-        }
-
-        laborTbody.addEventListener("click", (event) => {
-          const removeBtn = event.target.closest(".labor-remove-row-btn");
-          if (removeBtn) {
-            removeBtn.closest("tr").remove();
-            if (!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
-            recalcTotals();
-          }
-        });
-        laborTbody.addEventListener("input", recalcTotals);
-
-        if (resetFormBtn) {
-          resetFormBtn.addEventListener("click", () => {
-            resetOpenBillForm();
-            showToast("ล้างฟอร์มแล้ว", "info");
-          });
-        }
-
-        if (plateInput) {
-          plateInput.addEventListener("change", () => autoFillFromHistoryByPlate(plateInput.value));
-          plateInput.addEventListener("blur", () => autoFillFromHistoryByPlate(plateInput.value));
-        }
-
-        if (customerNameInput) {
-          customerNameInput.addEventListener("change", () => autoFillFromHistoryByCustomerName(customerNameInput.value));
-          customerNameInput.addEventListener("blur", () => autoFillFromHistoryByCustomerName(customerNameInput.value));
-        }
-
-        if (openBillForm) {
-          openBillForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            recalcTotals();
-            saveNewJobBill();
-          });
-        }
+        const grand = parts + labor;
+        partsTotalDisplay.textContent = formatNumber(parts)+" ฿";
+        laborTotalDisplay.textContent = formatNumber(labor)+" ฿";
+        grandTotalDisplay.textContent = formatNumber(grand)+" ฿";
+        
+        // Calculate Change
+        const received = parseFloat(receivedAmountInput.value)||0;
+        const change = received - grand;
+        changeAmountDisplay.value = formatNumber(Math.max(0, change));
       }
 
-      // ============================================================
-      // Initialization
-      // ============================================================
-      onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
-        currentUser = user;
+      // --- Data Loading ---
+      async function loadStock(branchId) {
         try {
-          const userProfile = await ensureUserProfile(user);
-          currentUserProfile = userProfile;
-          if (userProfile.disabled) {
-            await signOut(auth);
-            window.location.href = "index.html";
-            return;
-          }
+           const q = query(collection(db,"stock"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("name"));
+           const snap = await getDocs(q);
+           stockOptionsHtml="";
+           snap.forEach(d => {
+              const v = d.data();
+              stockMap[d.id] = v;
+              stockOptionsHtml += `<option value="${d.id}" data-price="${v.salePrice}">${v.code?v.code+" - ":""}${v.name}</option>`;
+           });
+           stockLoadingState.className="d-none";
+           
+           if(!partsTbody.querySelector("tr")) partsTbody.appendChild(createPartRow());
+           else { // Refresh dropdowns if already exist
+              partsTbody.querySelectorAll(".part-stock-select").forEach(sel => {
+                 const val = sel.value;
+                 sel.innerHTML = `<option value="">-- เลือกอะไหล่ --</option>${stockOptionsHtml}`;
+                 sel.value = val;
+              });
+           }
+        } catch(e){ console.error(e); stockLoadingState.textContent="โหลดสต๊อกล้มเหลว"; stockLoadingState.className="alert alert-danger small py-1"; }
+      }
 
-          if (userDisplayNameText) userDisplayNameText.textContent = userProfile.displayName || "-";
-          if (userRoleText) userRoleText.textContent = userProfile.role === "admin" ? "Admin" : "Staff";
-          if (userAvatarInitial) userAvatarInitial.textContent = (userProfile.displayName || "U").trim().charAt(0).toUpperCase();
+      async function loadHistory(branchId) {
+         try {
+            const q = query(collection(db,"jobs"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("createdAt","desc"), limit(50));
+            const snap = await getDocs(q);
+            const names=new Set(), plates=new Set();
+            historyRecords = [];
+            snap.forEach(d=>{
+               const v=d.data();
+               historyRecords.push(v);
+               if(v.customerName) names.add(v.customerName);
+               if(v.plate) plates.add(v.plate);
+            });
+            customerNameDatalist.innerHTML = Array.from(names).map(n=>`<option value="${n}">`).join("");
+            plateDatalist.innerHTML = Array.from(plates).map(p=>`<option value="${p}">`).join("");
+         } catch(e){ console.error(e); }
+      }
 
-          if (settingsMenuItem) {
-            if (userProfile.role === "admin") settingsMenuItem.classList.remove("d-none");
-            else settingsMenuItem.classList.add("d-none");
-          }
+      function autoFill(type, val) {
+         val = val.trim(); if(!val) return;
+         const rec = historyRecords.find(r => type==="plate"?r.plate===val:r.customerName===val);
+         if(rec) {
+            if(type==="plate") {
+               if(rec.customerName) customerNameInput.value=rec.customerName;
+               if(rec.customerPhone) customerPhoneInput.value=rec.customerPhone;
+               if(rec.brand) brandInput.value=rec.brand;
+               if(rec.model) modelInput.value=rec.model;
+            } else {
+               if(rec.customerPhone) customerPhoneInput.value=rec.customerPhone;
+            }
+         }
+      }
 
-          const themeToUse = readThemeForUser(user.uid, userProfile.theme || "light");
-          applyTheme(themeToUse);
+      // --- Saving ---
+      async function saveBill(e) {
+         e.preventDefault();
+         if(isSavingBill) return;
+         
+         const date = jobDateInput.value;
+         const name = customerNameInput.value.trim();
+         const plate = plateInput.value.trim();
+         const problem = problemInput.value.trim();
+         
+         if(!date || !name || !plate || !problem) { showToast("กรุณากรอกข้อมูลสำคัญ (วันที่, ชื่อ, ทะเบียน, อาการ)","warning"); return; }
 
-          const today = getTodayISODateString();
-          if (jobDateInput) jobDateInput.value = today;
-          if (openBillTodayLabel) openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ` + formatDateThaiFromString(today);
+         isSavingBill=true;
+         saveBillSpinner.classList.remove("d-none");
+         saveBillBtn.disabled=true;
 
-          setupEventListenersForPage();
-          await loadStockForParts(userProfile.branchId || null);
-          loadAutocompleteHistory(userProfile.branchId || null);
+         try {
+            const parts=[], labor=[];
+            let partsTot=0, laborTot=0;
 
-          if (!partsTbody.querySelector("tr") && stockOptionsHtml) partsTbody.appendChild(createPartRow());
-          if (!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
+            partsTbody.querySelectorAll("tr").forEach(tr=>{
+               const sId = tr.querySelector("select").value;
+               const qty = parseFloat(tr.querySelector(".part-qty-input").value)||0;
+               const pr = parseFloat(tr.querySelector(".part-unit-price-input").value)||0;
+               if(sId && qty>0) {
+                  const item = { stockId:sId, stockName:stockMap[sId]?.name||"", qty, unitPrice:pr, lineTotal:qty*pr };
+                  parts.push(item);
+                  partsTot+=item.lineTotal;
+               }
+            });
 
-          recalcTotals();
-        } catch (error) {
-          console.error("Init Error:", error);
-          showToast("โหลดข้อมูลผิดพลาด", "danger");
-        }
+            laborTbody.querySelectorAll("tr").forEach(tr=>{
+               const nm = tr.querySelector(".labor-name-input").value.trim();
+               const pr = parseFloat(tr.querySelector(".labor-price-input").value)||0;
+               if(nm && pr>0) {
+                  labor.push({ name:nm, price:pr });
+                  laborTot+=pr;
+               }
+            });
+
+            if(parts.length===0 && labor.length===0) throw new Error("ต้องมีรายการอย่างน้อย 1 รายการ");
+
+            const branchId = currentUserProfile.branchId;
+            const jobData = {
+               date, customerName:name, customerPhone:customerPhoneInput.value.trim(),
+               plate, brand:brandInput.value.trim(), model:modelInput.value.trim(), mileage:mileageInput.value,
+               problem, priority:prioritySelect.value, status:"repairing",
+               items:parts, laborItems:labor, partsTotal:partsTot, laborTotal:laborTot, totalAmount:partsTot+laborTot,
+               createdBy:currentUser.uid, createdByName:currentUserProfile.displayName, branchId, isDeleted:false,
+               createdAt: serverTimestamp()
+            };
+
+            const docRef = await addDoc(collection(db,"jobs"), jobData);
+            
+            // Cut Stock
+            for(const p of parts) {
+               const sRef = doc(db,"stock",p.stockId);
+               const curr = stockMap[p.stockId];
+               const newQty = Math.max(0, (Number(curr.qty)||0) - p.qty);
+               await updateDoc(sRef, { qty: newQty, updatedAt:serverTimestamp() });
+            }
+
+            // Transaction & Log
+            await addDoc(collection(db,"transactions"), {
+               date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
+               amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
+               createdAt:serverTimestamp(), createdBy:currentUser.uid
+            });
+            
+            await addDoc(collection(db,"activityLogs"), {
+               type:"job_created", message:`เปิดบิลซ่อม ${plate} ยอด ${formatNumber(partsTot+laborTot)}`,
+               refId:docRef.id, branchId, createdAt:serverTimestamp(), createdBy:currentUser.uid, createdByName:currentUserProfile.displayName
+            });
+
+            showToast("บันทึกบิลสำเร็จ","success");
+            openBillForm.reset();
+            jobDateInput.value = getTodayISO();
+            partsTbody.innerHTML=""; laborTbody.innerHTML="";
+            partsTbody.appendChild(createPartRow()); laborTbody.appendChild(createLaborRow());
+            recalcTotals();
+            loadHistory(branchId);
+
+         } catch(err) {
+            console.error(err);
+            showToast(err.message||"บันทึกไม่สำเร็จ","danger");
+         } finally {
+            isSavingBill=false;
+            saveBillSpinner.classList.add("d-none");
+            saveBillBtn.disabled=false;
+         }
+      }
+
+      // --- Initialization ---
+      onAuthStateChanged(auth, async (user) => {
+        if(!user) return window.location.href="index.html";
+        try {
+           const profile = await ensureUserProfile(user);
+           currentUser = user; currentUserProfile = profile;
+           
+           const name = profile.displayName||"ผู้ใช้งาน";
+           if(userDisplayNameText) userDisplayNameText.textContent = name;
+           if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
+           if(userAvatarInitial) userAvatarInitial.textContent = name.charAt(0).toUpperCase();
+           if(userRoleText) userRoleText.textContent = profile.role==="admin"?"Admin":"Staff";
+           if(profile.role!=="admin" && settingsMenuItem) settingsMenuItem.classList.add("d-none");
+
+           const t = localStorage.getItem("bm-theme-"+user.uid)||profile.theme||"light";
+           applyTheme(t);
+
+           jobDateInput.value = getTodayISO();
+           if(openBillTodayLabel) openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ${new Date().toLocaleDateString('th-TH')}`;
+
+           setupEventListeners();
+           await loadStock(profile.branchId);
+           loadHistory(profile.branchId);
+           
+           if(!partsTbody.querySelector("tr")) partsTbody.appendChild(createPartRow());
+           if(!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
+
+        } catch(e) { console.error(e); showToast("Init Failed","danger"); }
       });
+
+      function setupEventListeners() {
+         logoutBtn.addEventListener("click", ()=>signOut(auth).then(()=>window.location.href="index.html"));
+         themeToggleBtn.addEventListener("click", ()=>{
+            const isDark = bodyEl.classList.contains("bm-theme-dark");
+            const t = isDark?"light":"dark";
+            applyTheme(t); localStorage.setItem("bm-theme-"+currentUser.uid, t);
+         });
+
+         // Table Events
+         addPartRowBtn.addEventListener("click", ()=>partsTbody.appendChild(createPartRow()));
+         addLaborRowBtn.addEventListener("click", ()=>laborTbody.appendChild(createLaborRow()));
+
+         partsTbody.addEventListener("click", e=>{
+            if(e.target.closest(".part-remove-row-btn")) { e.target.closest("tr").remove(); recalcTotals(); }
+            if(e.target.closest(".part-qty-increase")) {
+               const inp = e.target.closest("tr").querySelector(".part-qty-input");
+               inp.value = Number(inp.value)+1; recalcTotals();
+            }
+            if(e.target.closest(".part-qty-decrease")) {
+               const inp = e.target.closest("tr").querySelector(".part-qty-input");
+               if(inp.value>1) inp.value = Number(inp.value)-1; recalcTotals();
+            }
+         });
+         
+         partsTbody.addEventListener("change", e=>{
+            if(e.target.classList.contains("part-stock-select")) {
+               const pr = e.target.selectedOptions[0]?.dataset.price;
+               if(pr) e.target.closest("tr").querySelector(".part-unit-price-input").value = pr;
+               recalcTotals();
+            }
+         });
+         
+         partsTbody.addEventListener("input", recalcTotals);
+         
+         laborTbody.addEventListener("click", e=>{
+            if(e.target.closest(".labor-remove-row-btn")) { e.target.closest("tr").remove(); recalcTotals(); }
+         });
+         laborTbody.addEventListener("input", recalcTotals);
+
+         // Form
+         receivedAmountInput.addEventListener("input", recalcTotals);
+         openBillForm.addEventListener("submit", saveBill);
+         resetFormBtn.addEventListener("click", ()=>{ 
+            openBillForm.reset(); 
+            partsTbody.innerHTML=""; laborTbody.innerHTML="";
+            partsTbody.appendChild(createPartRow()); laborTbody.appendChild(createLaborRow());
+            jobDateInput.value = getTodayISO();
+            recalcTotals();
+         });
+
+         // Auto-fill
+         plateInput.addEventListener("blur", ()=>autoFill("plate", plateInput.value));
+         customerNameInput.addEventListener("blur", ()=>autoFill("name", customerNameInput.value));
+
+         // FAB
+         fabOpenBillBtn?.addEventListener("click", ()=>window.scrollTo({top:0,behavior:'smooth'}));
+         fabAddTxnBtn?.addEventListener("click", ()=>window.location.href="finance.html");
+         fabStockInBtn?.addEventListener("click", ()=>window.location.href="stock.html");
+         fabAddVehicleBtn?.addEventListener("click", ()=>window.location.href="vehicles.html");
+      }
     </script>
   </body>
 </html>
