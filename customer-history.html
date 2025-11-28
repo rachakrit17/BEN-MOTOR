@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
-    <!-- เมตาพื้นฐานของหน้า ประวัติลูกค้า & รถ -->
     <meta charset="UTF-8" />
     <title>BEN MOTOR – ประวัติลูกค้า &amp; รถ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ฟอนต์ Kanit -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -20,80 +17,82 @@
       crossorigin="anonymous"
     />
 
-    <!-- Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- CSS หลักของระบบ BEN MOTOR -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
+
   <body class="bm-theme-light">
-    <!-- ===========================================================
-         แถบด้านบนของระบบ (Topbar)
-         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
-    ============================================================ -->
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
-        <!-- ชื่อระบบด้านซ้าย -->
-        <span class="navbar-brand mb-0 h1 fw-bold">
-          BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success">
+          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <!-- ปุ่มสลับธีม Light / Dark -->
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
             aria-label="สลับโหมดธีม"
+            style="width: 2.5rem; height: 2.5rem;"
           >
-            <i class="bi bi-moon"></i>
+            <i class="bi bi-moon fs-5"></i>
           </button>
 
-          <!-- Dropdown ผู้ใช้งาน -->
           <div class="dropdown">
             <button
-              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <!-- Avatar ตัวอักษรแรกของชื่อ -->
               <span
-                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
                 id="userAvatarCircle"
               >
-                <span id="userAvatarInitial">U</span>
+                <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
-              <span class="small text-start">
-                <span id="userDisplayNameText">กำลังโหลด...</span>
+              <span class="small text-start d-none d-sm-block">
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
                 <br />
-                <span class="text-muted small" id="userRoleText">-</span>
+                <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
               <li>
-                <a class="dropdown-item" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                <div class="px-3 py-2 d-sm-none">
+                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider d-sm-none"></li>
+              <li>
+                <a class="dropdown-item py-2" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="price-check.html">
-                  <i class="bi bi-tag me-2"></i> เช็คราคา
+                <a class="dropdown-item py-2" href="price-check.html">
+                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2"></i> ประวัติลูกค้า &amp; รถ
+                <a class="dropdown-item py-2" href="customer-history.html">
+                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
                 </a>
-              </li>
+              </li>              
               <li>
-                <li><a class="dropdown-item" href="activity-log.html"><i class="bi bi-clock-history me-2"></i> ประวัติการทำรายการ</a></li>
+                <a class="dropdown-item py-2" href="activity-log.html">
+                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
+                </a>
+              </li>              
+              <li>
                 <a
-                  class="dropdown-item d-none"
+                  class="dropdown-item py-2 d-none"
                   href="settings.html"
                   id="settingsMenuItem"
                 >
@@ -103,7 +102,7 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <button
-                  class="dropdown-item text-danger"
+                  class="dropdown-item py-2 text-danger"
                   type="button"
                   id="logoutBtn"
                 >
@@ -116,210 +115,204 @@
       </div>
     </nav>
 
-    <!-- ===========================================================
-         เนื้อหาหลักของหน้า ประวัติลูกค้า & รถ
-         - แถบค้นหา
-         - การ์ดสรุปโปรไฟล์ลูกค้า
-         - ไทม์ไลน์ประวัติการใช้บริการ
-    ============================================================ -->
     <main class="bm-main-content">
       <div class="container py-3">
-        <!-- หัวข้อหน้า -->
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
           <div>
-            <h1 class="h5 mb-1 fw-semibold">
-              ประวัติลูกค้า &amp; รถ
+            <h1 class="h5 mb-1 fw-bold text-primary">
+              <i class="bi bi-person-lines-fill me-2"></i>ประวัติลูกค้า &amp; รถ
             </h1>
             <p class="small text-muted mb-0">
-              ค้นหาข้อมูลลูกค้าจากชื่อ เบอร์โทร หรือทะเบียนรถ และดูประวัติการใช้บริการทั้งหมดของลูกค้าคนนั้นในร้าน
+              ค้นหาข้อมูลลูกค้าจากชื่อ เบอร์โทร หรือทะเบียนรถ และดูประวัติการใช้บริการทั้งหมด
             </p>
           </div>
-          <span class="badge text-bg-secondary">
+          <span class="badge text-bg-secondary shadow-sm">
             โหมดดูข้อมูลเท่านั้น
           </span>
         </div>
 
-        <!-- กล่องอธิบายเริ่มต้น -->
-        <section id="initialStateBox" class="mb-3">
-          <div class="alert alert-info small mb-0">
-            <i class="bi bi-info-circle me-2"></i>
-            พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้าในช่องด้านล่าง แล้วกด
-            <strong>ค้นหา</strong> เพื่อดูประวัติการใช้บริการทั้งหมดของลูกค้าคนนั้น
+        <section id="initialStateBox" class="mb-4">
+          <div class="alert alert-info small mb-0 shadow-sm border-0 d-flex align-items-center">
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <div>
+              พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้าในช่องด้านล่าง แล้วกด
+              <strong>ค้นหา</strong> เพื่อดูประวัติการใช้บริการทั้งหมด
+            </div>
           </div>
         </section>
 
-        <!-- แถบค้นหา -->
-        <section class="mb-3">
-          <!-- คอมเมนต์: แถบค้นหาลูกค้า -->
-          <div class="card">
+        <section class="mb-4">
+          <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <form id="searchForm" class="row g-2 align-items-center">
+              <form id="searchForm" class="row g-2 align-items-end">
                 <div class="col-12 col-md-6 col-lg-7">
-                  <label for="searchKeyword" class="form-label small mb-1">
+                  <label for="searchKeyword" class="form-label small mb-1 fw-bold text-muted">
                     คีย์เวิร์ดค้นหา
                   </label>
-                  <input
-                    type="search"
-                    class="form-control"
-                    id="searchKeyword"
-                    placeholder="เช่น 089xxxxxxx, นพดล, 1กข1234"
-                    autocomplete="off"
-                  />
+                  <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                      <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input
+                      type="search"
+                      class="form-control border-start-0 ps-0"
+                      id="searchKeyword"
+                      placeholder="เช่น 089xxxxxxx, นพดล, 1กข1234"
+                      autocomplete="off"
+                    />
+                  </div>
                 </div>
-                <div class="col-12 col-md-3 col-lg-2">
-                  <label class="form-label small mb-1 d-none d-md-block">&nbsp;</label>
+                <div class="col-6 col-md-3 col-lg-2">
                   <button
                     type="submit"
                     class="btn btn-primary w-100"
                     id="searchBtn"
                   >
-                    <i class="bi bi-search me-1"></i> ค้นหา
+                    ค้นหา
                   </button>
                 </div>
-                <div class="col-12 col-md-3 col-lg-3">
-                  <label class="form-label small mb-1 d-none d-md-block">&nbsp;</label>
+                <div class="col-6 col-md-3 col-lg-3">
                   <button
                     type="button"
                     class="btn btn-outline-secondary w-100"
                     id="resetBtn"
                   >
-                    <i class="bi bi-arrow-counterclockwise me-1"></i> ล้างผลการค้นหา
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> ล้างค่า
                   </button>
                 </div>
               </form>
-              <p class="small text-muted mt-2 mb-0" id="searchHint">
-                ระบบจะพยายามเดาอัตโนมัติว่าคุณกำลังค้นหาจาก
-                <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อ</strong> ของลูกค้า
+              <p class="small text-muted mt-2 mb-0 text-xs" id="searchHint">
+                <i class="bi bi-magic me-1"></i>ระบบจะเดาอัตโนมัติว่าค้นหาจาก <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อ</strong>
               </p>
             </div>
           </div>
         </section>
 
-        <!-- สถานะกำลังโหลด -->
         <section id="loadingState" class="mb-3 d-none">
-          <div class="d-flex align-items-center justify-content-center py-3">
-            <div class="spinner-border text-success me-2" role="status" aria-hidden="true"></div>
-            <div class="small text-muted">
-              กำลังโหลดข้อมูลลูกค้าและประวัติการใช้บริการ...
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary mb-2" role="status"></div>
+            <div class="small text-muted">กำลังโหลดข้อมูลลูกค้าและประวัติ...</div>
+          </div>
+        </section>
+
+        <section id="noResultBox" class="mb-3 d-none">
+          <div class="alert alert-warning small mb-0 shadow-sm border-0 d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+            <div>
+              ไม่พบลูกค้าตามคำค้นนี้ในระบบ กรุณาลองใช้ข้อมูลอื่นอีกครั้ง
             </div>
           </div>
         </section>
 
-        <!-- สถานะไม่พบข้อมูล -->
-        <section id="noResultBox" class="mb-3 d-none">
-          <div class="alert alert-warning small mb-0">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            ไม่พบลูกค้าตามคำค้นนี้ในระบบ
-            กรุณาลองใช้ชื่อ, เบอร์โทร หรือทะเบียนรถอื่นอีกครั้ง
-          </div>
-        </section>
-
-        <!-- การ์ดสรุปโปรไฟล์ลูกค้า -->
-        <section id="customerSummarySection" class="mb-3 d-none">
-          <!-- คอมเมนต์: การ์ดแสดงโปรไฟล์ลูกค้าโดยรวม -->
-          <div class="card bm-card-summary">
+        <section id="customerSummarySection" class="mb-4 d-none">
+          <div class="card bm-card-summary shadow-sm">
             <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
                 <div class="d-flex align-items-center">
                   <div
-                    class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center me-3 bm-avatar-circle-lg"
+                    class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center me-3 bm-avatar-circle-lg shadow-sm"
                   >
-                    <span id="summaryAvatarInitial" class="fw-bold fs-5">C</span>
+                    <span id="summaryAvatarInitial" class="fw-bold fs-4">C</span>
                   </div>
                   <div>
-                    <div class="small text-muted mb-1">ชื่อลูกค้า (ตามประวัติที่พบ)</div>
-                    <h2 class="h6 mb-1 fw-semibold" id="summaryCustomerName">
-                      -
-                    </h2>
+                    <div class="small text-muted mb-0">ชื่อลูกค้า (ตามประวัติที่พบ)</div>
+                    <h2 class="h5 mb-1 fw-bold text-dark" id="summaryCustomerName">-</h2>
                     <div class="small text-muted">
-                      เบอร์โทรหลัก:
+                      <i class="bi bi-telephone me-1"></i>
                       <span id="summaryCustomerPhone">-</span>
                     </div>
-                    <div class="small text-muted" id="summaryOtherPhonesRow" style="display: none;">
-                      เบอร์อื่น ๆ:
-                      <span id="summaryOtherPhones">-</span>
+                    <div class="small text-muted mt-1" id="summaryOtherPhonesRow" style="display: none;">
+                      <span class="badge bg-light text-secondary border">เบอร์อื่น ๆ: <span id="summaryOtherPhones">-</span></span>
                     </div>
                   </div>
                 </div>
-                <div class="text-end small text-muted">
-                  ผลการค้นหาจาก:
-                  <span id="summarySearchTypeLabel" class="badge text-bg-secondary ms-1">
+                <div class="text-end small">
+                  <span class="text-muted d-block mb-1">ผลการค้นหาจาก:</span>
+                  <span id="summarySearchTypeLabel" class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2 rounded-pill">
                     -
                   </span>
                 </div>
               </div>
 
-              <hr />
+              <hr class="opacity-10 my-4" />
 
               <div class="row g-3">
                 <div class="col-6 col-md-3">
-                  <div class="small text-muted mb-1">จำนวนงานซ่อมทั้งหมด</div>
-                  <div class="h5 mb-0 fw-semibold" id="summaryJobsCount">0</div>
-                  <div class="small text-muted">บิล</div>
+                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                    <div class="small text-muted mb-1">งานซ่อมทั้งหมด</div>
+                    <div class="h4 mb-0 fw-bold text-primary" id="summaryJobsCount">0</div>
+                    <div class="small text-muted">บิล</div>
+                  </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="small text-muted mb-1">ยอดใช้จ่ายรวมโดยประมาณ</div>
-                  <div class="h5 mb-0 fw-semibold" id="summaryTotalAmount">0 ฿</div>
-                  <div class="small text-muted">รวมค่าซ่อมจากบิลทั้งหมด</div>
+                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                    <div class="small text-muted mb-1">ยอดใช้จ่ายรวม</div>
+                    <div class="h4 mb-0 fw-bold text-success" id="summaryTotalAmount">0 ฿</div>
+                    <div class="small text-muted">โดยประมาณ</div>
+                  </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="small text-muted mb-1">ค่าเฉลี่ยต่อบิล</div>
-                  <div class="h5 mb-0 fw-semibold" id="summaryAveragePerJob">0 ฿</div>
-                  <div class="small text-muted">ประมาณการจากยอดซ่อม</div>
+                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                    <div class="small text-muted mb-1">ค่าเฉลี่ยต่อบิล</div>
+                    <div class="h4 mb-0 fw-bold text-dark" id="summaryAveragePerJob">0 ฿</div>
+                    <div class="small text-muted">บาท/บิล</div>
+                  </div>
                 </div>
                 <div class="col-6 col-md-3">
-                  <div class="small text-muted mb-1">จำนวนทะเบียนรถในประวัติ</div>
-                  <div class="h5 mb-0 fw-semibold" id="summaryVehiclesCount">0</div>
-                  <div class="small text-muted">ทะเบียนที่พบในงานซ่อมหรือรถซื้อ/ขาย</div>
+                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                    <div class="small text-muted mb-1">จำนวนทะเบียนรถ</div>
+                    <div class="h4 mb-0 fw-bold text-info" id="summaryVehiclesCount">0</div>
+                    <div class="small text-muted">คัน</div>
+                  </div>
                 </div>
               </div>
 
-              <hr class="mt-3 mb-3" />
-
-              <div class="row g-3">
+              <div class="row g-3 mt-2">
                 <div class="col-12 col-md-6">
-                  <div class="small text-muted mb-1">ครั้งแรกที่มาใช้บริการ</div>
-                  <div class="fw-semibold" id="summaryFirstVisit">-</div>
+                  <div class="d-flex align-items-center p-2 bg-light rounded border">
+                    <i class="bi bi-calendar-event me-2 text-muted"></i>
+                    <div class="small">
+                      <span class="text-muted">ครั้งแรก:</span>
+                      <span class="fw-semibold ms-1" id="summaryFirstVisit">-</span>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-12 col-md-6">
-                  <div class="small text-muted mb-1">ครั้งล่าสุดที่มาใช้บริการ</div>
-                  <div class="fw-semibold" id="summaryLastVisit">-</div>
+                  <div class="d-flex align-items-center p-2 bg-light rounded border">
+                    <i class="bi bi-clock-history me-2 text-muted"></i>
+                    <div class="small">
+                      <span class="text-muted">ล่าสุด:</span>
+                      <span class="fw-semibold ms-1" id="summaryLastVisit">-</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- ไทม์ไลน์ประวัติการใช้บริการ -->
         <section id="historySection" class="mb-4 d-none">
-          <!-- คอมเมนต์: ไทม์ไลน์ประวัติการใช้บริการทั้งหมดของลูกค้า -->
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h2 class="h6 mb-0 fw-semibold">ประวัติการใช้บริการทั้งหมด</h2>
-            <span class="small text-muted" id="historyCountLabel">-</span>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h6 mb-0 fw-bold text-dark">
+              <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการใช้บริการทั้งหมด
+            </h2>
+            <span class="badge bg-light text-dark border" id="historyCountLabel">-</span>
           </div>
-          <p class="small text-muted mb-2">
-            รวมรายการงานซ่อมและรถที่ซื้อ/ขายในระบบทั้งหมดที่เกี่ยวข้องกับลูกค้าคนนี้ เรียงจากรายการล่าสุดไปหาเก่าสุด
-          </p>
 
-          <div id="historyEmptyBox" class="alert alert-light border small d-none">
-            <i class="bi bi-info-circle me-2"></i>
+          <div id="historyEmptyBox" class="alert alert-light border small d-none text-center py-4">
+            <i class="bi bi-inbox fs-4 d-block mb-2 text-muted"></i>
             ยังไม่มีประวัติการใช้บริการสำหรับลูกค้าคนนี้ในระบบ
           </div>
 
           <ul class="list-group list-group-flush" id="historyTimeline">
-            <!-- รายการในไทม์ไลน์จะถูกสร้างจาก JavaScript -->
-          </ul>
+            </ul>
         </section>
 
-        <!-- ระยะห่างด้านล่างเพื่อไม่ให้เนื้อหาชนกับ Bottom Nav -->
-        <div style="height: 4.5rem;"></div>
+        <div style="height: 5rem;"></div>
       </div>
     </main>
 
-    <!-- ===========================================================
-         Floating Action Button (FAB)
-         ปุ่มลอยสำหรับเมนูด่วน เช่น เปิดบิลซ่อมใหม่, เพิ่มรายการเงิน, ซื้ออะไหล่เข้า, เพิ่มรถรับซื้อเข้า
-    ============================================================ -->
     <div class="bm-fab-container">
       <div class="dropdown dropup">
         <button
@@ -329,37 +322,33 @@
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <i class="bi bi-plus"></i>
+          <i class="bi bi-plus-lg"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow border-0" aria-labelledby="fabDropdownButton">
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-2 text-primary"></i> เปิดบิลซ่อมใหม่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน (Manual)
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่เข้า
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddVehicleBtn">
-              <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddVehicleBtn">
+              <i class="bi bi-truck-front me-2 text-info"></i> เพิ่มรถรับซื้อเข้า
             </button>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- ===========================================================
-         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
-         1) แดชบอร์ด 2) เปิดบิล 3) งานซ่อม 4) รถรับซื้อ 5) สต๊อก 6) เงินเข้าออก
-    ============================================================ -->
     <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
       <div class="container-fluid px-0">
         <div class="row g-0 w-100 text-center small">
@@ -403,23 +392,21 @@
       </div>
     </nav>
 
-    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
     <div
       class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1080;"
+      style="z-index: 1090;"
     >
       <div
         id="mainToast"
-        class="toast align-items-center text-bg-primary border-0"
+        class="toast align-items-center text-bg-primary border-0 shadow"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
         data-bs-delay="4000"
       >
         <div class="d-flex">
-          <div class="toast-body" id="mainToastBody">
-            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
-          </div>
+          <div class="toast-body fw-medium" id="mainToastBody">
+            </div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -430,27 +417,23 @@
       </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
 
-    <!-- สคริปต์หลักของหน้า customer-history.html (ใช้ ES Modules) -->
     <script type="module">
       // ============================================================
-      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // Import Firebase SDK
       // ============================================================
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
       import {
         getAuth,
         onAuthStateChanged,
         signOut,
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
       import {
         getFirestore,
         collection,
@@ -461,10 +444,11 @@
         where,
         orderBy,
         limit,
+        setDoc
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
       // ============================================================
-      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // Firebase Configuration
       // ============================================================
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
@@ -482,10 +466,11 @@
       const db = getFirestore(app);
 
       // ============================================================
-      // ตัวแปรอ้างอิง DOM ของหน้า ประวัติลูกค้า & รถ
+      // DOM Elements Reference
       // ============================================================
-      // Topbar / ผู้ใช้ / ธีม
       const bodyEl = document.body;
+      
+      // Topbar
       const themeToggleBtn = document.getElementById("themeToggleBtn");
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
@@ -493,7 +478,7 @@
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // แถบค้นหา
+      // Search Section
       const searchForm = document.getElementById("searchForm");
       const searchKeywordInput = document.getElementById("searchKeyword");
       const searchBtn = document.getElementById("searchBtn");
@@ -502,7 +487,7 @@
       const loadingState = document.getElementById("loadingState");
       const noResultBox = document.getElementById("noResultBox");
 
-      // การ์ดสรุปโปรไฟล์ลูกค้า
+      // Customer Summary Section
       const customerSummarySection = document.getElementById("customerSummarySection");
       const summaryAvatarInitial = document.getElementById("summaryAvatarInitial");
       const summaryCustomerName = document.getElementById("summaryCustomerName");
@@ -517,91 +502,63 @@
       const summaryFirstVisit = document.getElementById("summaryFirstVisit");
       const summaryLastVisit = document.getElementById("summaryLastVisit");
 
-      // ไทม์ไลน์ประวัติ
+      // History Timeline Section
       const historySection = document.getElementById("historySection");
       const historyTimeline = document.getElementById("historyTimeline");
       const historyEmptyBox = document.getElementById("historyEmptyBox");
       const historyCountLabel = document.getElementById("historyCountLabel");
 
-      // FAB ปุ่มด่วน
+      // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
       const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
       const fabStockInBtn = document.getElementById("fabStockInBtn");
       const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
-      // Toast
+      // Toasts
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
-      // ตัวแปรเก็บโปรไฟล์ผู้ใช้ปัจจุบัน
+      // State Variables
       let currentUser = null;
       let currentUserProfile = null;
 
       // ============================================================
-      // ฟังก์ชันช่วย: แสดง Toast ภาษาไทย
+      // Helper Functions
       // ============================================================
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow";
         mainToastBody.textContent = message;
         mainToast.show();
       }
 
-      // ============================================================
-      // ฟังก์ชันช่วย: รูปแบบตัวเลข และวันที่แบบไทย
-      // ============================================================
       function formatNumber(value) {
         if (typeof value !== "number" || isNaN(value)) return "0";
-        return value.toLocaleString("th-TH", {
-          maximumFractionDigits: 2,
-        });
+        return value.toLocaleString("th-TH", { maximumFractionDigits: 2 });
       }
 
-      /**
-       * แปลงสตริง "YYYY-MM-DD" เป็นวันที่แบบไทย "17 ก.พ. 2568"
-       */
       function formatDateThaiFromString(dateStr) {
         if (!dateStr) return "-";
         const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
         if (!year || !month || !day) return dateStr;
         const d = new Date(year, month - 1, day);
         const thaiMonths = [
-          "ม.ค.",
-          "ก.พ.",
-          "มี.ค.",
-          "เม.ย.",
-          "พ.ค.",
-          "มิ.ย.",
-          "ก.ค.",
-          "ส.ค.",
-          "ก.ย.",
-          "ต.ค.",
-          "พ.ย.",
-          "ธ.ค.",
+          "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+          "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
         ];
-        const thaiYear = d.getFullYear() + 543;
-        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
       }
 
-      /**
-       * แสดงวันที่และเวลาแบบไทย จากอ็อบเจ็กต์ Date
-       * เช่น 17 ก.พ. 2568 14:30 น.
-       */
       function formatDateTimeThai(dateObj) {
         if (!(dateObj instanceof Date)) return "-";
-        const dateStr = `${dateObj.getFullYear()}-${String(
-          dateObj.getMonth() + 1
-        ).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
-        const timeStr = `${String(dateObj.getHours()).padStart(2, "0")}:${String(
-          dateObj.getMinutes()
-        ).padStart(2, "0")}`;
+        const dateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
+        const timeStr = `${String(dateObj.getHours()).padStart(2, "0")}:${String(dateObj.getMinutes()).padStart(2, "0")}`;
         return `${formatDateThaiFromString(dateStr)} ${timeStr} น.`;
       }
 
       // ============================================================
-      // ธีม Light / Dark
+      // Theme Management
       // ============================================================
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
@@ -617,107 +574,66 @@
 
       function saveThemeForUser(uid, theme) {
         if (!uid) return;
-        try {
-          localStorage.setItem("bm-theme-" + uid, theme);
-        } catch (e) {
-          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
-        }
+        try { localStorage.setItem("bm-theme-" + uid, theme); }
+        catch (e) { console.warn("Theme storage error", e); }
       }
 
       function readThemeForUser(uid, fallbackTheme) {
         if (!uid) return fallbackTheme || "light";
-        try {
-          const stored = localStorage.getItem("bm-theme-" + uid);
-          return stored || fallbackTheme || "light";
-        } catch (e) {
-          return fallbackTheme || "light";
-        }
+        try { return localStorage.getItem("bm-theme-" + uid) || fallbackTheme || "light"; }
+        catch (e) { return fallbackTheme || "light"; }
       }
 
       // ============================================================
-      // ฟังก์ชัน: สร้าง/อ่านข้อมูลผู้ใช้ใน collection users
+      // User Profile Logic
       // ============================================================
-      /**
-       * ตรวจสอบและสร้างเอกสาร users/{uid} ครั้งแรก
-       * - ถ้าไม่พบเอกสาร และยังไม่มี user คนอื่น → สร้าง user นี้เป็น admin
-       * - ถ้ามี user อยู่แล้ว → สร้าง user นี้เป็น staff
-       */
       async function ensureUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
         const snap = await getDoc(userRef);
         if (snap.exists()) {
           return { id: snap.id, ...snap.data() };
         }
-
+        // First time user logic (fallback)
         const usersCol = collection(db, "users");
         const q = query(usersCol, limit(1));
         const existingSnap = await getDocs(q);
-
         const isFirstUser = existingSnap.empty;
         const role = isFirstUser ? "admin" : "staff";
-
-        const defaultDisplayName =
-          user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่");
-
         const newUserData = {
-          displayName: defaultDisplayName,
+          displayName: user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่"),
           role,
           createdAt: new Date(),
           branchId: null,
           theme: "light",
           disabled: false,
         };
-
         await setDoc(userRef, newUserData);
-
         return { id: user.uid, ...newUserData };
       }
 
-      // เนื่องจากหน้าอื่นในโปรเจกต์เป็นคนสร้าง users/doc อยู่แล้ว
-      // ฟังก์ชันด้านบนจะไม่ได้ถูกใช้บ่อย แต่เก็บไว้ให้สอดคล้องโครงสร้าง
-
       // ============================================================
-      // ฟังก์ชันช่วย: เดาประเภทการค้นหา (ชื่อ / เบอร์ / ทะเบียน)
+      // Search Logic
       // ============================================================
       function detectSearchType(keyword) {
-        const raw = keyword || "";
-        const trimmed = raw.trim();
-
+        const trimmed = (keyword || "").trim();
         if (!trimmed) return null;
-
         const onlyDigitsAndSymbol = /^[0-9+\-\s]+$/.test(trimmed);
         const hasDigit = /[0-9]/.test(trimmed);
         const hasLetter = /[A-Za-zก-ฮ]/.test(trimmed);
 
-        // ถ้ามีแต่ตัวเลข/เครื่องหมาย มองว่าเป็นเบอร์โทร
-        if (onlyDigitsAndSymbol && trimmed.replace(/[^0-9]/g, "").length >= 6) {
-          return "phone";
-        }
-
-        // ถ้ามีทั้งตัวเลขและตัวอักษร มองว่าเป็นทะเบียนรถ
-        if (hasDigit && hasLetter) {
-          return "plate";
-        }
-
-        // ถ้ามีแต่ตัวอักษร มองว่าเป็นชื่อ
-        if (hasLetter && !hasDigit) {
-          return "name";
-        }
-
-        // ถ้าไม่เข้าเคสใดเลย ให้ส่งคืน null
+        if (onlyDigitsAndSymbol && trimmed.replace(/[^0-9]/g, "").length >= 6) return "phone";
+        if (hasDigit && hasLetter) return "plate";
+        if (hasLetter && !hasDigit) return "name";
         return null;
       }
 
       function getSearchTypeLabel(type) {
-        if (type === "phone") return "ค้นหาตามเบอร์โทรลูกค้า";
-        if (type === "plate") return "ค้นหาตามทะเบียนรถ";
-        if (type === "name") return "ค้นหาตามชื่อลูกค้า";
-        return "ประเภทการค้นหาไม่ระบุ";
+        if (type === "phone") return "เบอร์โทรศัพท์";
+        if (type === "plate") return "ทะเบียนรถ";
+        if (type === "name") return "ชื่อลูกค้า";
+        return "ไม่ระบุ";
       }
 
-      // ============================================================
-      // การจัดการสถานะปุ่ม / กล่องแสดงผล
-      // ============================================================
       function setLoading(isLoading) {
         if (isLoading) {
           loadingState.classList.remove("d-none");
@@ -740,9 +656,6 @@
         historyCountLabel.textContent = "-";
       }
 
-      // ============================================================
-      // ฟังก์ชัน: โหลดประวัติลูกค้า & รถ จาก Firestore ตาม keyword
-      // ============================================================
       async function searchCustomerHistory(keyword) {
         const trimmed = (keyword || "").trim();
         if (!trimmed) {
@@ -752,7 +665,7 @@
 
         const searchType = detectSearchType(trimmed);
         if (!searchType) {
-          showToast("รูปแบบคีย์เวิร์ดไม่ชัดเจน กรุณาลองใช้ชื่อ, เบอร์โทร หรือทะเบียนรถอีกครั้ง", "warning");
+          showToast("รูปแบบคีย์เวิร์ดไม่ชัดเจน กรุณาลองใหม่", "warning");
           return;
         }
 
@@ -764,199 +677,91 @@
         const branchId = currentUserProfile?.branchId || null;
 
         try {
-          // ---------------------------
-          // 1) ดึง jobs ที่เกี่ยวข้องกับ keyword
-          // ---------------------------
+          // 1. Fetch Jobs
           const jobsCol = collection(db, "jobs");
           const jobsConstraints = [where("isDeleted", "==", false)];
+          if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
 
-          if (branchId) {
-            jobsConstraints.push(where("branchId", "==", branchId));
-          }
+          if (searchType === "phone") jobsConstraints.push(where("customerPhone", "==", trimmed));
+          else if (searchType === "plate") jobsConstraints.push(where("plate", "==", trimmed));
+          else if (searchType === "name") jobsConstraints.push(where("customerName", "==", trimmed));
 
-          if (searchType === "phone") {
-            jobsConstraints.push(where("customerPhone", "==", trimmed));
-          } else if (searchType === "plate") {
-            jobsConstraints.push(where("plate", "==", trimmed));
-          } else if (searchType === "name") {
-            jobsConstraints.push(where("customerName", "==", trimmed));
-          }
-
-          const jobsQueryRef = query(jobsCol, ...jobsConstraints);
-          const jobsSnap = await getDocs(jobsQueryRef);
-
+          const jobsSnap = await getDocs(query(jobsCol, ...jobsConstraints));
           const jobs = [];
-          jobsSnap.forEach((docSnap) => {
-            const data = docSnap.data();
-            jobs.push({
-              id: docSnap.id,
-              ...data,
-            });
-          });
+          jobsSnap.forEach(doc => jobs.push({ id: doc.id, ...doc.data() }));
 
-          // ---------------------------
-          // 2) ดึง vehicles ที่เกี่ยวข้อง (ตามทะเบียน)
-          // ---------------------------
+          // 2. Fetch Vehicles
           const vehicles = [];
           const vehiclesCol = collection(db, "vehicles");
-
-          // เตรียมชุดทะเบียนจาก jobs
           const plateSet = new Set();
-          jobs.forEach((job) => {
-            if (job.plate && typeof job.plate === "string") {
-              plateSet.add(job.plate.trim());
-            }
-          });
-
-          // ถ้าค้นด้วยทะเบียนโดยตรง ให้เพิ่มทะเบียนนั้นด้วย
-          if (searchType === "plate") {
-            plateSet.add(trimmed);
-          }
+          
+          jobs.forEach(j => { if (j.plate) plateSet.add(j.plate.trim()); });
+          if (searchType === "plate") plateSet.add(trimmed);
 
           const plateList = Array.from(plateSet).filter(Boolean);
 
           if (plateList.length > 0) {
-            // Firestore จำกัด in ได้สูงสุด 10 ค่าในครั้งเดียว
             const chunkSize = 10;
             for (let i = 0; i < plateList.length; i += chunkSize) {
               const chunk = plateList.slice(i, i + chunkSize);
-              const constraintsVehicles = [where("plate", "in", chunk)];
-              if (branchId) {
-                constraintsVehicles.push(where("branchId", "==", branchId));
-              }
-              const vehiclesQueryRef = query(vehiclesCol, ...constraintsVehicles);
-              const vehiclesSnap = await getDocs(vehiclesQueryRef);
-
-              vehiclesSnap.forEach((docSnap) => {
-                const data = docSnap.data();
-                vehicles.push({
-                  id: docSnap.id,
-                  ...data,
-                });
-              });
+              const constraints = [where("plate", "in", chunk)];
+              if (branchId) constraints.push(where("branchId", "==", branchId));
+              const snap = await getDocs(query(vehiclesCol, ...constraints));
+              snap.forEach(doc => vehicles.push({ id: doc.id, ...doc.data() }));
             }
           } else if (searchType === "plate") {
-            // ในกรณีที่ jobs ไม่พบ แต่ใช้ทะเบียนค้นหา → ลองค้นแค่จาก vehicles
-            const constraintsVehicles = [where("plate", "==", trimmed)];
-            if (branchId) {
-              constraintsVehicles.push(where("branchId", "==", branchId));
-            }
-            const vehiclesQueryRef = query(vehiclesCol, ...constraintsVehicles);
-            const vehiclesSnap = await getDocs(vehiclesQueryRef);
-
-            vehiclesSnap.forEach((docSnap) => {
-              const data = docSnap.data();
-              vehicles.push({
-                id: docSnap.id,
-                ...data,
-              });
-            });
+             const constraints = [where("plate", "==", trimmed)];
+             if (branchId) constraints.push(where("branchId", "==", branchId));
+             const snap = await getDocs(query(vehiclesCol, ...constraints));
+             snap.forEach(doc => vehicles.push({ id: doc.id, ...doc.data() }));
           }
 
-          // ถ้าทั้ง jobs และ vehicles ว่างเปล่า → ไม่พบข้อมูล
           if (jobs.length === 0 && vehicles.length === 0) {
             setLoading(false);
             noResultBox.classList.remove("d-none");
             return;
           }
 
-          // ---------------------------
-          // 3) สร้างสรุปโปรไฟล์ลูกค้า
-          // ---------------------------
+          // 3. Build UI
           buildCustomerSummary(jobs, vehicles, trimmed, searchType);
-
-          // ---------------------------
-          // 4) สร้างไทม์ไลน์ประวัติ
-          // ---------------------------
           buildHistoryTimeline(jobs, vehicles);
 
           setLoading(false);
         } catch (error) {
-          console.error("เกิดข้อผิดพลาดในการค้นหาประวัติลูกค้า:", error);
+          console.error("Search error:", error);
           setLoading(false);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลประวัติลูกค้าได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
+          showToast("ค้นหาไม่สำเร็จ (" + (error.code || "unknown") + ")", "danger");
         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: สร้างข้อมูลสรุปโปรไฟล์ลูกค้า
-      // ============================================================
       function buildCustomerSummary(jobs, vehicles, keyword, searchType) {
         customerSummarySection.classList.remove("d-none");
 
-        // สรุปชื่อและเบอร์โทรจาก jobs
         const nameCount = {};
         const phoneCount = {};
         const allPhones = new Set();
         const allPlates = new Set();
 
-        jobs.forEach((job) => {
-          const name = (job.customerName || "").trim();
-          const phone = (job.customerPhone || "").trim();
-          const plate = (job.plate || "").trim();
-
-          if (name) {
-            nameCount[name] = (nameCount[name] || 0) + 1;
-          }
-          if (phone) {
-            phoneCount[phone] = (phoneCount[phone] || 0) + 1;
-            allPhones.add(phone);
-          }
-          if (plate) {
-            allPlates.add(plate);
-          }
+        jobs.forEach(j => {
+          const name = (j.customerName || "").trim();
+          const phone = (j.customerPhone || "").trim();
+          if (name) nameCount[name] = (nameCount[name] || 0) + 1;
+          if (phone) { phoneCount[phone] = (phoneCount[phone] || 0) + 1; allPhones.add(phone); }
+          if (j.plate) allPlates.add(j.plate.trim());
         });
 
-        vehicles.forEach((v) => {
-          const plate = (v.plate || "").trim();
-          if (plate) {
-            allPlates.add(plate);
-          }
-        });
+        vehicles.forEach(v => { if (v.plate) allPlates.add(v.plate.trim()); });
 
-        // เลือกชื่อที่พบบ่อยที่สุด
-        let selectedName = "-";
-        let maxNameCount = 0;
-        Object.entries(nameCount).forEach(([name, count]) => {
-          if (count > maxNameCount) {
-            maxNameCount = count;
-            selectedName = name;
-          }
-        });
+        // Select Most Frequent Name & Phone
+        let selectedName = Object.entries(nameCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
+        let selectedPhone = Object.entries(phoneCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
+        if (jobs.length === 0 && searchType === "phone") selectedPhone = keyword;
 
-        // เลือกเบอร์โทรหลัก
-        let selectedPhone = "-";
-        let maxPhoneCount = 0;
-        Object.entries(phoneCount).forEach(([phone, count]) => {
-          if (count > maxPhoneCount) {
-            maxPhoneCount = count;
-            selectedPhone = phone;
-          }
-        });
-
-        // กรณีค้นด้วยเบอร์โทร แต่ jobs ว่าง ให้ถือว่า keyword คือเบอร์
-        if (jobs.length === 0 && searchType === "phone") {
-          selectedPhone = keyword;
-        }
-
-        summaryCustomerName.textContent = selectedName !== "-" ? selectedName : "ไม่พบชื่อลูกค้าในประวัติ";
+        summaryCustomerName.textContent = selectedName !== "-" ? selectedName : "ไม่พบชื่อ";
         summaryCustomerPhone.textContent = selectedPhone;
+        summaryAvatarInitial.textContent = selectedName !== "-" ? selectedName.trim().charAt(0).toUpperCase() : "C";
 
-        // Avatar ใช้อักษรตัวแรกของชื่อ หรือคำว่า C
-        const avatarInitial =
-          selectedName && selectedName !== "-"
-            ? selectedName.trim().charAt(0).toUpperCase()
-            : "C";
-        summaryAvatarInitial.textContent = avatarInitial;
-
-        // แสดงเบอร์อื่น ๆ
-        const phoneList = Array.from(allPhones);
-        const otherPhones = phoneList.filter((p) => p !== selectedPhone);
+        const otherPhones = Array.from(allPhones).filter(p => p !== selectedPhone);
         if (otherPhones.length > 0) {
           summaryOtherPhonesRow.style.display = "";
           summaryOtherPhones.textContent = otherPhones.join(", ");
@@ -964,50 +769,27 @@
           summaryOtherPhonesRow.style.display = "none";
         }
 
-        // แสดงประเภทการค้นหา
         summarySearchTypeLabel.textContent = getSearchTypeLabel(searchType);
 
-        // สรุปจำนวนงาน และยอดใช้จ่ายจาก jobs
+        // Stats
         const jobsCount = jobs.length;
         let totalAmount = 0;
-        let firstDateStr = null;
-        let lastDateStr = null;
+        let dates = [];
 
-        jobs.forEach((job) => {
-          const amount = Number(job.totalAmount) || 0;
-          totalAmount += amount;
-
-          const dateStr = job.date || null;
-          if (dateStr) {
-            if (!firstDateStr || dateStr < firstDateStr) {
-              firstDateStr = dateStr;
-            }
-            if (!lastDateStr || dateStr > lastDateStr) {
-              lastDateStr = dateStr;
-            }
-          }
+        jobs.forEach(j => {
+          totalAmount += Number(j.totalAmount) || 0;
+          if (j.date) dates.push(j.date);
         });
-
-        const avgPerJob = jobsCount > 0 ? totalAmount / jobsCount : 0;
+        dates.sort();
 
         summaryJobsCount.textContent = String(jobsCount);
         summaryTotalAmount.textContent = formatNumber(totalAmount) + " ฿";
-        summaryAveragePerJob.textContent = formatNumber(avgPerJob) + " ฿";
-
-        // จำนวนทะเบียนทั้งหมดที่พบ
+        summaryAveragePerJob.textContent = formatNumber(jobsCount > 0 ? totalAmount / jobsCount : 0) + " ฿";
         summaryVehiclesCount.textContent = String(allPlates.size);
-
-        summaryFirstVisit.textContent = firstDateStr
-          ? formatDateThaiFromString(firstDateStr)
-          : "-";
-        summaryLastVisit.textContent = lastDateStr
-          ? formatDateThaiFromString(lastDateStr)
-          : "-";
+        summaryFirstVisit.textContent = dates.length > 0 ? formatDateThaiFromString(dates[0]) : "-";
+        summaryLastVisit.textContent = dates.length > 0 ? formatDateThaiFromString(dates[dates.length - 1]) : "-";
       }
 
-      // ============================================================
-      // ฟังก์ชัน: สร้างไทม์ไลน์ประวัติจาก jobs + vehicles
-      // ============================================================
       function buildHistoryTimeline(jobs, vehicles) {
         historySection.classList.remove("d-none");
         historyTimeline.innerHTML = "";
@@ -1015,377 +797,228 @@
 
         const entries = [];
 
-        // เพิ่มจาก jobs (งานซ่อม)
-        jobs.forEach((job) => {
-          const dateStr = job.date || null;
-          let dateKey = dateStr;
-          if (!dateKey && job.createdAt?.toDate) {
-            const d = job.createdAt.toDate();
-            dateKey = d.toISOString().slice(0, 10);
-          }
-
+        jobs.forEach(j => {
+          let dateKey = j.date;
+          if (!dateKey && j.createdAt?.toDate) dateKey = j.createdAt.toDate().toISOString().slice(0, 10);
           entries.push({
-            kind: "job",
-            dateKey,
-            rawDate: dateStr,
-            createdAt: job.createdAt?.toDate ? job.createdAt.toDate() : null,
-            plate: job.plate || "-",
-            brand: job.brand || "",
-            model: job.model || "",
-            problem: job.problem || "",
-            status: job.status || "",
-            totalAmount: Number(job.totalAmount) || 0,
-            createdByName: job.createdByName || "ไม่ทราบผู้บันทึก",
+            kind: "job", dateKey, rawDate: j.date,
+            createdAt: j.createdAt?.toDate ? j.createdAt.toDate() : null,
+            plate: j.plate || "-", brand: j.brand || "", model: j.model || "",
+            problem: j.problem || "", status: j.status || "",
+            totalAmount: Number(j.totalAmount) || 0, createdByName: j.createdByName
           });
         });
 
-        // เพิ่มจาก vehicles (รถซื้อ/ขาย)
-        vehicles.forEach((v) => {
+        vehicles.forEach(v => {
           const brandModel = [v.brand, v.model].filter(Boolean).join(" ");
-
           if (v.buyDate) {
             entries.push({
-              kind: "vehicle_buy",
-              dateKey: v.buyDate,
-              rawDate: v.buyDate,
+              kind: "vehicle_buy", dateKey: v.buyDate, rawDate: v.buyDate,
               createdAt: v.createdAt?.toDate ? v.createdAt.toDate() : null,
-              plate: v.plate || "-",
-              brandModel,
-              buyPrice: Number(v.buyPrice) || 0,
-              sellPrice: null,
-              profit: null,
-              createdByName: v.createdByName || "ไม่ทราบผู้บันทึก",
+              plate: v.plate || "-", brandModel, buyPrice: Number(v.buyPrice) || 0,
+              createdByName: v.createdByName
             });
           }
-
           if (v.sellDate) {
             entries.push({
-              kind: "vehicle_sell",
-              dateKey: v.sellDate,
-              rawDate: v.sellDate,
+              kind: "vehicle_sell", dateKey: v.sellDate, rawDate: v.sellDate,
               createdAt: v.updatedAt?.toDate ? v.updatedAt.toDate() : null,
-              plate: v.plate || "-",
-              brandModel,
-              buyPrice: Number(v.buyPrice) || 0,
-              sellPrice: Number(v.sellPrice) || 0,
-              profit: typeof v.profit === "number" ? v.profit : null,
-              createdByName: v.createdByName || "ไม่ทราบผู้บันทึก",
+              plate: v.plate || "-", brandModel, sellPrice: Number(v.sellPrice) || 0,
+              profit: v.profit, createdByName: v.createdByName
             });
           }
         });
 
         if (entries.length === 0) {
           historyEmptyBox.classList.remove("d-none");
-          historyCountLabel.textContent = "พบ 0 รายการ";
+          historyCountLabel.textContent = "0 รายการ";
           return;
         }
 
-        // เรียงจากใหม่ไปเก่า
-        entries.sort((a, b) => {
-          const aKey = a.dateKey || "";
-          const bKey = b.dateKey || "";
-          if (aKey === bKey) {
-            return 0;
-          }
-          // เรียงจากใหม่ → เก่า
-          return aKey < bKey ? 1 : -1;
-        });
+        entries.sort((a, b) => (a.dateKey || "") < (b.dateKey || "") ? 1 : -1);
+        historyCountLabel.textContent = entries.length + " รายการ";
 
-        historyCountLabel.textContent = "พบ " + entries.length + " รายการ";
-
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const li = document.createElement("li");
-          li.className = "list-group-item small";
+          li.className = "list-group-item small p-3";
+          const dateText = entry.rawDate ? formatDateThaiFromString(entry.rawDate) : "-";
 
-          let iconHtml = "";
-          let titleHtml = "";
-          let badgeHtml = "";
-
-          const dateText = entry.rawDate
-            ? formatDateThaiFromString(entry.rawDate)
-            : "-";
-
+          let htmlContent = "";
+          
           if (entry.kind === "job") {
-            iconHtml = `<span class="me-2 text-primary"><i class="bi bi-wrench-adjustable-circle"></i></span>`;
-            const brandModel = [entry.brand, entry.model].filter(Boolean).join(" ");
             const statusMap = {
               repairing: { text: "กำลังซ่อม", class: "bg-warning text-dark" },
               done: { text: "ซ่อมเสร็จ", class: "bg-info text-dark" },
               picked_up: { text: "รับรถแล้ว", class: "bg-success" },
             };
-            const st = statusMap[entry.status] || {
-              text: "ไม่ระบุสถานะ",
-              class: "bg-secondary",
-            };
-            badgeHtml = `<span class="badge ${st.class} ms-1">${st.text}</span>`;
+            const st = statusMap[entry.status] || { text: "ไม่ระบุ", class: "bg-secondary" };
+            const brandModel = [entry.brand, entry.model].filter(Boolean).join(" ");
 
-            titleHtml = `
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="fw-semibold">
-                    งานซ่อม – ทะเบียน ${entry.plate || "-"}
-                    ${brandModel ? " | " + brandModel : ""}
-                    ${badgeHtml}
+            htmlContent = `
+              <div class="d-flex align-items-start">
+                <div class="me-3 mt-1 text-primary"><i class="bi bi-wrench-adjustable-circle fs-5"></i></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <span class="fw-bold">งานซ่อม</span> - ทะเบียน ${entry.plate}
+                      ${brandModel ? `<span class="text-muted">| ${brandModel}</span>` : ""}
+                      <span class="badge ${st.class} ms-1">${st.text}</span>
+                    </div>
+                    <div class="text-end ms-2">
+                       <span class="fw-bold text-success">${formatNumber(entry.totalAmount)} ฿</span>
+                       <div class="text-muted text-xs">${dateText}</div>
+                    </div>
                   </div>
-                  <div class="text-muted mt-1">
-                    อาการ: ${entry.problem ? entry.problem : "ไม่ระบุอาการ"}
-                  </div>
-                </div>
-                <div class="text-end ms-2">
-                  <div class="fw-semibold text-success">${formatNumber(entry.totalAmount)} ฿</div>
-                  <div class="text-muted">${dateText}</div>
+                  <div class="text-muted mt-1">อาการ: ${entry.problem || "-"}</div>
                 </div>
               </div>
             `;
           } else if (entry.kind === "vehicle_buy") {
-            iconHtml = `<span class="me-2 text-info"><i class="bi bi-truck-front"></i></span>`;
-            titleHtml = `
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="fw-semibold">
-                    ซื้อรถเข้า – ทะเบียน ${entry.plate || "-"}
-                    ${entry.brandModel ? " | " + entry.brandModel : ""}
+             htmlContent = `
+              <div class="d-flex align-items-start">
+                <div class="me-3 mt-1 text-info"><i class="bi bi-truck-front fs-5"></i></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <span class="fw-bold">ซื้อรถเข้า</span> - ทะเบียน ${entry.plate}
+                      <span class="text-muted">| ${entry.brandModel || "-"}</span>
+                    </div>
+                    <div class="text-end ms-2">
+                       <div class="fw-semibold">${dateText}</div>
+                    </div>
                   </div>
-                  <div class="text-muted mt-1">
-                    ราคาซื้อเข้า: ${formatNumber(entry.buyPrice || 0)} ฿
-                  </div>
-                </div>
-                <div class="text-end ms-2">
-                  <div class="fw-semibold">${dateText}</div>
+                  <div class="text-muted mt-1">ราคาซื้อ: ${formatNumber(entry.buyPrice)} ฿</div>
                 </div>
               </div>
             `;
           } else if (entry.kind === "vehicle_sell") {
-            iconHtml = `<span class="me-2 text-success"><i class="bi bi-truck-front-fill"></i></span>`;
-            const profitText =
-              typeof entry.profit === "number"
-                ? `กำไรโดยประมาณ: ${formatNumber(entry.profit)} ฿`
-                : "";
-            titleHtml = `
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <div class="fw-semibold">
-                    ขายรถออก – ทะเบียน ${entry.plate || "-"}
-                    ${entry.brandModel ? " | " + entry.brandModel : ""}
+             const profitText = typeof entry.profit === "number" ? `<span class="text-success ms-2">(กำไร ${formatNumber(entry.profit)})</span>` : "";
+             htmlContent = `
+              <div class="d-flex align-items-start">
+                <div class="me-3 mt-1 text-success"><i class="bi bi-truck-front-fill fs-5"></i></div>
+                <div class="flex-grow-1">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <span class="fw-bold">ขายรถออก</span> - ทะเบียน ${entry.plate}
+                      <span class="text-muted">| ${entry.brandModel || "-"}</span>
+                    </div>
+                    <div class="text-end ms-2">
+                       <div class="fw-semibold text-success">${dateText}</div>
+                    </div>
                   </div>
                   <div class="text-muted mt-1">
-                    ราคาขาย: ${formatNumber(entry.sellPrice || 0)} ฿
-                    <br />
-                    ${profitText}
+                    ราคาขาย: ${formatNumber(entry.sellPrice)} ฿ ${profitText}
                   </div>
-                </div>
-                <div class="text-end ms-2">
-                  <div class="fw-semibold text-success">${dateText}</div>
                 </div>
               </div>
             `;
           }
 
-          const createdByText = entry.createdAt
-            ? formatDateTimeThai(entry.createdAt)
-            : null;
-
-          const footerHtml = `
-            <div class="d-flex justify-content-between align-items-center mt-2 text-muted">
-              <div>
-                โดย: ${entry.createdByName || "ไม่ทราบผู้บันทึก"}
-              </div>
-              <div class="small">
-                ${createdByText ? "บันทึกเมื่อ: " + createdByText : ""}
-              </div>
+          const footer = `
+            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top text-muted text-xs">
+              <div>โดย: ${entry.createdByName || "-"}</div>
+              <div>${entry.createdAt ? "บันทึก: " + formatDateTimeThai(entry.createdAt) : ""}</div>
             </div>
           `;
 
-          li.innerHTML = `
-            <div class="d-flex align-items-start">
-              ${iconHtml}
-              <div class="flex-grow-1">
-                ${titleHtml}
-                ${footerHtml}
-              </div>
-            </div>
-          `;
-
+          li.innerHTML = htmlContent + footer;
           historyTimeline.appendChild(li);
         });
       }
 
       // ============================================================
-      // การจัดการ Logout
-      // ============================================================
-      async function handleLogout() {
-        try {
-          await signOut(auth);
-          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Logout error:", error);
-          showToast(
-            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
-        }
-      }
-
-      // ============================================================
-      // ตั้งค่า Event Listeners ต่าง ๆ
+      // Event Listeners
       // ============================================================
       function setupEventListeners() {
-        // ปุ่ม Logout
         if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            handleLogout();
+          logoutBtn.addEventListener("click", async () => {
+            try { await signOut(auth); window.location.href = "index.html"; }
+            catch (error) { console.error(error); showToast("ออกจากระบบไม่สำเร็จ", "danger"); }
           });
         }
 
-        // ปุ่มสลับธีม
         if (themeToggleBtn) {
           themeToggleBtn.addEventListener("click", async () => {
-            const currentTheme = bodyEl.classList.contains("bm-theme-dark")
-              ? "dark"
-              : "light";
-            const nextTheme = currentTheme === "dark" ? "light" : "dark";
-            applyTheme(nextTheme);
+            const current = bodyEl.classList.contains("bm-theme-dark") ? "dark" : "light";
+            const next = current === "dark" ? "light" : "dark";
+            applyTheme(next);
             if (currentUser?.uid) {
-              saveThemeForUser(currentUser.uid, nextTheme);
-              try {
-                const userRef = doc(db, "users", currentUser.uid);
-                await updateDoc(userRef, { theme: nextTheme });
-              } catch (error) {
-                console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
-              }
+              saveThemeForUser(currentUser.uid, next);
+              try { await setDoc(doc(db, "users", currentUser.uid), { theme: next }, { merge: true }); }
+              catch (e) {}
             }
           });
         }
 
-        // แบบฟอร์มค้นหา
-        if (searchForm && searchKeywordInput && searchBtn && resetBtn) {
-          searchForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const keyword = searchKeywordInput.value;
-            searchCustomerHistory(keyword);
+        if (searchForm) {
+          searchForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            searchCustomerHistory(searchKeywordInput.value);
           });
-
           resetBtn.addEventListener("click", () => {
             searchKeywordInput.value = "";
             resetView();
           });
-
-          // กด Enter ที่ช่องค้นหาให้เท่ากับกดค้นหา
-          searchKeywordInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              searchForm.dispatchEvent(new Event("submit"));
-            }
-          });
         }
 
-        // FAB เมนูด่วน
-        if (fabOpenBillBtn) {
-          fabOpenBillBtn.addEventListener("click", () => {
-            window.location.href = "open-bill.html";
-          });
-        }
-        if (fabAddTxnBtn) {
-          fabAddTxnBtn.addEventListener("click", () => {
-            window.location.href = "finance.html";
-          });
-        }
-        if (fabStockInBtn) {
-          fabStockInBtn.addEventListener("click", () => {
-            window.location.href = "stock.html";
-          });
-        }
-        if (fabAddVehicleBtn) {
-          fabAddVehicleBtn.addEventListener("click", () => {
-            window.location.href = "vehicles.html";
-          });
-        }
+        // FAB
+        if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
+        if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
+        if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
+        if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
       }
 
       // ============================================================
-      // Auth Guard ของหน้า ประวัติลูกค้า & รถ
+      // Auth & Init
       // ============================================================
       onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
-
+        if (!user) { window.location.href = "index.html"; return; }
         currentUser = user;
 
         try {
-          // โหลดโปรไฟล์ผู้ใช้จาก collection users
-          const userRef = doc(db, "users", user.uid);
-          const snap = await getDoc(userRef);
+          // Check/Create User Profile
+          let userProfile = null;
+          try {
+             userProfile = await ensureUserProfile(user);
+          } catch(e) {
+             console.log("Profile fetch/create logic fallback");
+             // Minimal fallback if ensureUserProfile fails (rare)
+          }
 
-          if (!snap.exists()) {
-            showToast("ไม่พบโปรไฟล์ผู้ใช้ในระบบ กรุณาติดต่อผู้ดูแล", "danger");
+          if (!userProfile) {
+             const snap = await getDoc(doc(db, "users", user.uid));
+             if (snap.exists()) userProfile = { id: snap.id, ...snap.data() };
+          }
+
+          if (!userProfile) {
+            showToast("ไม่พบข้อมูลผู้ใช้", "danger");
+            await signOut(auth); return;
+          }
+
+          currentUserProfile = userProfile;
+
+          if (currentUserProfile.disabled) {
             await signOut(auth);
+            showToast("บัญชีถูกระงับ", "danger");
             window.location.href = "index.html";
             return;
           }
 
-          currentUserProfile = { id: snap.id, ...snap.data() };
+          // Update UI
+          if (userDisplayNameText) userDisplayNameText.textContent = currentUserProfile.displayName || "-";
+          if (userRoleText) userRoleText.textContent = currentUserProfile.role === "admin" ? "Admin" : "Staff";
+          if (userAvatarInitial) userAvatarInitial.textContent = (currentUserProfile.displayName || "U").trim().charAt(0).toUpperCase();
+          
+          if (settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== "admin");
 
-          // เช็ค disabled
-          if (currentUserProfile.disabled === true) {
-            await signOut(auth);
-            showToast(
-              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
-              "danger"
-            );
-            window.location.href = "index.html";
-            return;
-          }
-
-          // อัปเดตข้อมูลผู้ใช้ใน Topbar
-          if (userDisplayNameText) {
-            userDisplayNameText.textContent =
-              currentUserProfile.displayName || "-";
-          }
-          if (userRoleText) {
-            const roleLabel =
-              currentUserProfile.role === "admin"
-                ? "ผู้ดูแลระบบ (Admin)"
-                : "พนักงาน (Staff)";
-            userRoleText.textContent = roleLabel;
-          }
-          if (userAvatarInitial) {
-            const dn = currentUserProfile.displayName || "U";
-            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
-          }
-
-          // แสดงเมนูตั้งค่าระบบเฉพาะ admin
-          if (settingsMenuItem) {
-            if (currentUserProfile.role === "admin") {
-              settingsMenuItem.classList.remove("d-none");
-            } else {
-              settingsMenuItem.classList.add("d-none");
-            }
-          }
-
-          // ธีม
-          const baseTheme = currentUserProfile.theme || "light";
-          const themeToUse = readThemeForUser(user.uid, baseTheme);
-          applyTheme(themeToUse);
-
-          // ตั้งค่า event listeners
+          applyTheme(readThemeForUser(user.uid, currentUserProfile.theme));
           setupEventListeners();
+
         } catch (error) {
-          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้:", error);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
+          console.error("Init Error:", error);
+          showToast("โหลดข้อมูลล้มเหลว", "danger");
         }
       });
     </script>
   </body>
-
 </html>
-

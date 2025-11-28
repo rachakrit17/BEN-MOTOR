@@ -23,33 +23,87 @@
     
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold">BEN MOTOR</span>
+        <span class="navbar-brand mb-0 h1 fw-bold text-success">
+          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        </span>
 
         <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center" id="themeToggleBtn" type="button" aria-label="สลับโหมดธีม">
-            <i class="bi bi-moon"></i>
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
+            id="themeToggleBtn"
+            type="button"
+            aria-label="สลับโหมดธีม"
+            style="width: 2.5rem; height: 2.5rem;"
+          >
+            <i class="bi bi-moon fs-5"></i>
           </button>
 
           <div class="dropdown">
-            <button class="btn btn-sm btn-outline-primary d-flex align-items-center" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle" id="userAvatarCircle">
-                <span id="userAvatarInitial">U</span>
+            <button
+              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span
+                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
+                id="userAvatarCircle"
+              >
+                <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
-              <span class="small text-start">
-                <span id="userDisplayNameText">กำลังโหลด...</span><br />
-                <span class="text-muted small" id="userRoleText">-</span>
+              <span class="small text-start d-none d-sm-block">
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
+                <br />
+                <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="reports.html"><i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด</a></li>
-              <li><a class="dropdown-item" href="price-check.html"><i class="bi bi-tags me-2"></i> เช็คราคา</a></li>
-              <li><a class="dropdown-item" href="customer-history.html"><i class="bi bi-person-lines-fill me-2"></i> ประวัติลูกค้า &amp; รถ</a></li>
-              <li><a class="dropdown-item" href="activity-log.html"><i class="bi bi-clock-history me-2"></i> ประวัติการทำรายการ</a></li>
-              
-              <li><a class="dropdown-item d-none" href="settings.html" id="settingsMenuItem"><i class="bi bi-gear me-2"></i> ตั้งค่าระบบ</a></li>
-              
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
+              <li>
+                <div class="px-3 py-2 d-sm-none">
+                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider d-sm-none"></li>
+              <li>
+                <a class="dropdown-item py-2" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2" href="price-check.html">
+                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2" href="customer-history.html">
+                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
+                </a>
+              </li>              
+              <li>
+                <a class="dropdown-item py-2" href="activity-log.html">
+                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
+                </a>
+              </li>              
+              <li>
+                <a
+                  class="dropdown-item py-2 d-none"
+                  href="settings.html"
+                  id="settingsMenuItem"
+                >
+                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
+                </a>
+              </li>
               <li><hr class="dropdown-divider" /></li>
-              <li><button class="dropdown-item text-danger" type="button" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
+              <li>
+                <button
+                  class="dropdown-item py-2 text-danger"
+                  type="button"
+                  id="logoutBtn"
+                >
+                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -58,72 +112,78 @@
 
     <main class="bm-main-content">
       <div class="container py-3">
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
-          <div>
-            <h1 class="h5 mb-1 fw-semibold">ประวัติการทำรายการในระบบ</h1>
-            <p class="small text-muted mb-0">ตรวจสอบกิจกรรมที่เกิดขึ้นในระบบ ย้อนหลังได้ทั้งหมด</p>
+        
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-3">
+          <div class="mb-3 mb-md-0">
+            <h1 class="h5 mb-1 fw-bold text-dark">
+                <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการทำรายการในระบบ
+            </h1>
+            <p class="small text-muted mb-0 ms-1">ตรวจสอบกิจกรรม (Audit Log) ย้อนหลังเพื่อความโปร่งใส</p>
           </div>
           <div>
-            <button class="btn btn-outline-secondary btn-sm" type="button" id="refreshLogBtn">
-              <i class="bi bi-arrow-clockwise me-1"></i> รีโหลด
+            <button class="btn btn-outline-secondary btn-sm bg-white" type="button" id="refreshLogBtn">
+              <i class="bi bi-arrow-clockwise me-1"></i> รีโหลดข้อมูล
             </button>
           </div>
         </div>
 
-        <div class="card mb-3">
-          <div class="card-body py-2">
-            <div class="row g-2 align-items-end">
+        <div class="bm-filter-bar mb-3">
+            <div class="row g-2 align-items-center">
               <div class="col-12 col-md-3">
-                <label class="form-label small mb-1">กลุ่มข้อมูล</label>
-                <select class="form-select form-select-sm" id="refTypeFilter">
-                  <option value="">ทั้งหมด</option>
-                  <option value="job">งานซ่อม (Job)</option>
-                  <option value="stock">สต๊อก (Stock)</option>
-                  <option value="vehicle">ซื้อ–ขายรถ (Vehicle)</option>
-                  <option value="transaction">การเงิน (Finance)</option>
-                  <option value="settings">ตั้งค่า (Settings)</option>
-                </select>
+                <div class="input-group input-group-sm">
+                    <label class="input-group-text bg-transparent border-end-0 text-muted" for="refTypeFilter"><i class="bi bi-filter"></i></label>
+                    <select class="form-select border-start-0 ps-0" id="refTypeFilter">
+                        <option value="">ทุกประเภทรายการ</option>
+                        <option value="job">งานซ่อม (Job)</option>
+                        <option value="stock">สต๊อก (Stock)</option>
+                        <option value="vehicle">ซื้อ–ขายรถ (Vehicle)</option>
+                        <option value="transaction">การเงิน (Finance)</option>
+                        <option value="settings">ตั้งค่า (Settings)</option>
+                    </select>
+                </div>
               </div>
               <div class="col-12 col-md-5">
-                <label class="form-label small mb-1">ค้นหา (ข้อความ/ชื่อผู้ใช้)</label>
                 <div class="input-group input-group-sm">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control" id="searchTextInput" placeholder="เช่น ทะเบียนรถ, ชื่อลูกค้า" />
+                    <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control border-start-0 ps-1" id="searchTextInput" placeholder="ค้นหา: ทะเบียนรถ, ชื่อลูกค้า, หรือเลขบิล..." />
                 </div>
               </div>
               <div class="col-12 col-md-4 text-md-end">
-                <span class="small text-muted" id="logSummaryText">พร้อมใช้งาน</span>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary fw-normal px-3 py-2 rounded-pill" id="logSummaryText">
+                    <i class="bi bi-check-circle me-1"></i> ระบบพร้อมใช้งาน
+                </span>
               </div>
             </div>
-          </div>
         </div>
 
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0 overflow-hidden mb-4">
           <div class="card-body p-0">
             <div class="table-responsive">
-              <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light small text-muted text-uppercase">
+              <table class="table table-hover mb-0 align-middle text-nowrap">
+                <thead class="table-light text-muted small text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.5px;">
                   <tr>
-                    <th style="width: 150px;">วัน-เวลา</th>
-                    <th style="width: 140px;">ผู้ทำรายการ</th>
-                    <th style="width: 130px;">กิจกรรม</th>
-                    <th>รายละเอียด</th>
-                    <th style="width: 100px;" class="text-end">Ref ID</th>
+                    <th class="ps-3 py-3" style="width: 160px;">วัน-เวลา</th>
+                    <th class="py-3" style="width: 160px;">ผู้ทำรายการ</th>
+                    <th class="py-3" style="width: 140px;">กิจกรรม</th>
+                    <th class="py-3">รายละเอียด</th>
+                    <th class="pe-3 py-3 text-end" style="width: 120px;">Ref ID</th>
                   </tr>
                 </thead>
-                <tbody id="activityTableBody" class="small">
+                <tbody id="activityTableBody" class="small text-secondary">
                   <tr>
-                    <td colspan="5" class="text-center text-muted py-4">
-                      <span class="spinner-border spinner-border-sm me-2"></span> กำลังโหลดข้อมูล...
+                    <td colspan="5" class="text-center text-muted py-5">
+                      <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                      <div class="small">กำลังโหลดข้อมูล...</div>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div class="card-footer text-center py-2 bg-white border-top-0">
-             <button id="loadMoreBtn" class="btn btn-sm btn-link text-decoration-none text-muted w-100 d-none">
-                โหลดรายการเพิ่มเติม...
+          
+          <div class="card-footer text-center py-3 bg-white border-top-0">
+             <button id="loadMoreBtn" class="btn btn-sm btn-light text-muted rounded-pill px-4 d-none">
+                <i class="bi bi-chevron-down me-1"></i> โหลดรายการเพิ่มเติม
              </button>
           </div>
         </div>
@@ -146,7 +206,7 @@
     </nav>
 
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080">
-      <div id="mainToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
         <div class="d-flex">
           <div class="toast-body" id="mainToastBody"></div>
           <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -203,7 +263,7 @@
       const pageSize = 20;
 
       // ==========================================
-      // Badge Configuration (แปลไทย + ใส่สี)
+      // Badge Configuration
       // ==========================================
       const LOG_TYPES = {
         'job_created':       { text: 'เปิดบิลซ่อม', color: 'bg-primary' },
@@ -221,7 +281,7 @@
       // Helper: Toast
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0";
+        mainToastEl.className = "toast align-items-center shadow text-bg-" + variant + " border-0";
         mainToastBody.textContent = message;
         mainToast.show();
       }
@@ -233,31 +293,38 @@
         const m = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."][date.getMonth()];
         const y = date.getFullYear() + 543;
         const time = `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
-        return `<span class="fw-semibold">${d} ${m} ${y}</span><br/><span class="text-muted small">${time} น.</span>`;
+        return `<div class="d-flex flex-column lh-sm"><span class="fw-semibold text-dark">${d} ${m} ${y}</span><span class="text-muted small" style="font-size: 0.75rem;">${time} น.</span></div>`;
       }
 
       // Helper: Create Table Row
       function createRow(data) {
         const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : null;
         const typeInfo = LOG_TYPES[data.type] || { text: data.type || 'ทั่วไป', color: 'bg-light text-dark border' };
-        const refIdShort = (data.refId || '').length > 6 ? '...' + (data.refId || '').slice(-6) : (data.refId || '-');
+        const refIdShort = (data.refId || '').length > 8 ? (data.refId || '').slice(0, 8) + '..' : (data.refId || '-');
         
         return `
           <tr class="align-middle">
-            <td>${formatDateTimeThai(createdAt)}</td>
+            <td class="ps-3">${formatDateTimeThai(createdAt)}</td>
             <td>
-                <div class="fw-medium text-dark">${data.createdByName || 'ไม่ระบุ'}</div>
+                <div class="d-flex align-items-center">
+                    <div class="bm-avatar-circle bg-light text-secondary me-2 d-flex align-items-center justify-content-center small fw-bold" style="width: 24px; height: 24px; font-size: 0.7rem;">
+                        ${(data.createdByName || 'U').charAt(0).toUpperCase()}
+                    </div>
+                    <span class="fw-medium text-dark">${data.createdByName || 'ไม่ระบุ'}</span>
+                </div>
             </td>
             <td>
-                <span class="badge ${typeInfo.color} fw-normal px-2 py-1">
+                <span class="badge ${typeInfo.color} fw-normal px-2 py-1 rounded-pill bg-opacity-75">
                     ${typeInfo.text}
                 </span>
             </td>
-            <td class="text-wrap" style="max-width: 400px; line-height: 1.4;">
-                ${data.message || '-'}
+            <td class="text-wrap" style="min-width: 200px; max-width: 350px;">
+                <span class="d-block lh-sm text-dark">${data.message || '-'}</span>
             </td>
-            <td class="text-end text-muted font-monospace small">
-                ${refIdShort}
+            <td class="text-end pe-3">
+                <span class="badge bg-light text-secondary border font-monospace fw-normal">
+                   ${refIdShort}
+                </span>
             </td>
           </tr>
         `;
@@ -274,10 +341,10 @@
             lastVisible = null;
             activityTableBody.innerHTML = '';
             loadMoreBtn.classList.add('d-none');
-            // แสดง Loading ชั่วคราว
-            activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm"></span> กำลังโหลด...</td></tr>`;
+            // แสดง Loading
+            activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-primary mb-2"></div><div class="small">กำลังโหลดข้อมูล...</div></td></tr>`;
         } else {
-            loadMoreBtn.textContent = "กำลังโหลด...";
+            loadMoreBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> กำลังโหลด...`;
             loadMoreBtn.disabled = true;
         }
 
@@ -298,21 +365,21 @@
             const q = query(collection(db, "activityLogs"), ...constraints);
             const snapshot = await getDocs(q);
 
-            // ถ้าเป็นการรีเซ็ต ให้ล้าง Loading ออกก่อน
+            // Clear loading if reset
             if (reset) {
                 activityTableBody.innerHTML = '';
             }
 
             if (snapshot.empty) {
                 if (reset) {
-                    activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-inbox fs-4 d-block mb-2"></i>ไม่พบประวัติการทำรายการ</td></tr>`;
+                    activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-25"></i><span class="small">ไม่พบประวัติการทำรายการ</span></td></tr>`;
                 }
                 loadMoreBtn.classList.add('d-none');
             } else {
                 lastVisible = snapshot.docs[snapshot.docs.length - 1];
                 let rowsHtml = '';
                 
-                // Client-side Search Logic (Simple text match)
+                // Client-side Search Logic
                 const searchText = searchTextInput.value.toLowerCase().trim();
 
                 snapshot.forEach(doc => {
@@ -327,7 +394,7 @@
                 if (rowsHtml) {
                     activityTableBody.insertAdjacentHTML('beforeend', rowsHtml);
                 } else if (reset) {
-                     activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">ไม่พบข้อมูลที่ค้นหาในหน้านี้</td></tr>`;
+                     activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-5"><i class="bi bi-search fs-4 d-block mb-2"></i>ไม่พบข้อมูลที่ค้นหา</td></tr>`;
                 }
                 
                 // Show/Hide Load More
@@ -335,16 +402,19 @@
                     loadMoreBtn.classList.add('d-none');
                 } else {
                     loadMoreBtn.classList.remove('d-none');
-                    loadMoreBtn.textContent = 'โหลดรายการเพิ่มเติม...';
+                    loadMoreBtn.innerHTML = `<i class="bi bi-chevron-down me-1"></i> โหลดรายการเพิ่มเติม`;
                     loadMoreBtn.disabled = false;
                 }
             }
             
-            logSummaryText.textContent = `แสดงผลล่าสุด`;
+            if(reset) {
+                logSummaryText.innerHTML = `<i class="bi bi-check-circle me-1"></i> แสดงผลล่าสุด`;
+                logSummaryText.className = "badge bg-success bg-opacity-10 text-success fw-normal px-3 py-2 rounded-pill";
+            }
 
         } catch (error) {
             console.error(error);
-            if (reset) activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-3">เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>`;
+            if (reset) activityTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4"><i class="bi bi-exclamation-circle me-1"></i> เกิดข้อผิดพลาดในการโหลดข้อมูล</td></tr>`;
             showToast("โหลดข้อมูลไม่สำเร็จ: " + error.message, "danger");
         } finally {
             isLogsLoading = false;
@@ -369,12 +439,11 @@
         if (snap.exists()) {
             profile = snap.data();
         } else {
-            // Fallback display
             profile = { displayName: user.displayName || user.email, role: 'staff', theme: 'light' };
         }
 
         userDisplayNameText.textContent = profile.displayName || user.email;
-        userRoleText.textContent = profile.role === 'admin' ? 'ผู้ดูแลระบบ (Admin)' : 'พนักงาน (Staff)';
+        userRoleText.textContent = profile.role === 'admin' ? 'Admin' : 'Staff';
         userAvatarInitial.textContent = (profile.displayName || 'U').charAt(0).toUpperCase();
 
         if (settingsMenuItem && profile.role === 'admin') {
@@ -437,4 +506,3 @@
     </script>
   </body>
 </html>
-

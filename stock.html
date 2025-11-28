@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
-    <!-- เมตาพื้นฐานของหน้า "สต๊อกอะไหล่" -->
     <meta charset="UTF-8" />
     <title>BEN MOTOR – สต๊อกอะไหล่</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ฟอนต์ Kanit -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-<!-- Favicon ปกติบนเบราว์เซอร์ -->
-<link rel="icon" type="image/x-icon" href="img/icon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="img/icon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
-<!-- Icon เวลาเซฟลงหน้าจอมือถือ (iOS) -->
-<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 
-<!-- PWA manifest -->
-<link rel="manifest" href="img/site.webmanifest">
+    <link rel="manifest" href="img/site.webmanifest">
     
-    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -31,82 +25,81 @@
       crossorigin="anonymous"
     />
 
-    <!-- Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- CSS หลักของระบบ BEN MOTOR -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="bm-theme-light">
-    <!-- ===========================================================
-         แถบด้านบนของระบบ (Topbar)
-         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
-    ============================================================ -->
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
-        <!-- ชื่อระบบด้านซ้าย -->
-        <span class="navbar-brand mb-0 h1 fw-bold">
-          BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success">
+          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <!-- ปุ่มสลับธีม Light / Dark -->
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
             aria-label="สลับโหมดธีม"
+            style="width: 2.5rem; height: 2.5rem;"
           >
-            <i class="bi bi-moon"></i>
+            <i class="bi bi-moon fs-5"></i>
           </button>
 
-          <!-- Dropdown ผู้ใช้งาน -->
           <div class="dropdown">
             <button
-              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <!-- Avatar ตัวอักษรแรกของชื่อ -->
               <span
-                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
                 id="userAvatarCircle"
               >
-                <span id="userAvatarInitial">U</span>
+                <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
-              <span class="small text-start">
-                <span id="userDisplayNameText">กำลังโหลด...</span>
+              <span class="small text-start d-none d-sm-block">
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
                 <br />
-                <span class="text-muted small" id="userRoleText">-</span>
+                <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
               <li>
-                <a class="dropdown-item" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                <div class="px-3 py-2 d-sm-none">
+                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider d-sm-none"></li>
+              <li>
+                <a class="dropdown-item py-2" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
                 </a>
               </li>
               <li>
-              
+                <a class="dropdown-item py-2" href="price-check.html">
+                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
+                </a>
+              </li>
               <li>
-    <a class="dropdown-item" href="price-check.html">
-      <i class="bi bi-tags me-2"></i> เช็คราคา
-    </a>
-  </li>
-       
-<li>
-  <a class="dropdown-item" href="customer-history.html">
-    <i class="bi bi-person-lines-fill me-2"></i> ประวัติลูกค้า &amp; รถ
-  </a>
-</li>
- <li><a class="dropdown-item" href="activity-log.html"><i class="bi bi-clock-history me-2"></i> ประวัติการทำรายการ</a></li>      
+                <a class="dropdown-item py-2" href="customer-history.html">
+                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
+                </a>
+              </li>              
+              <li>
+                <a class="dropdown-item py-2" href="activity-log.html">
+                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
+                </a>
+              </li>              
+              <li>
                 <a
-                  class="dropdown-item d-none"
+                  class="dropdown-item py-2 d-none"
                   href="settings.html"
                   id="settingsMenuItem"
                 >
@@ -116,7 +109,7 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <button
-                  class="dropdown-item text-danger"
+                  class="dropdown-item py-2 text-danger"
                   type="button"
                   id="logoutBtn"
                 >
@@ -129,150 +122,145 @@
       </div>
     </nav>
 
-    <!-- ===========================================================
-         เนื้อหาหลักของหน้า "สต๊อกอะไหล่"
-         ฟอร์มเพิ่ม/แก้ไขสินค้า + ตารางดูข้อมูล + ซื้ออะไหล่เข้า
-    ============================================================ -->
     <main class="bm-main-content">
-      <div class="container py-3">
-        <!-- ส่วนหัวของหน้า -->
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
-          <div>
-            <h1 class="h5 mb-1 fw-semibold">สต๊อกอะไหล่</h1>
+      <div class="container py-4">
+        
+        <div class="row align-items-center mb-4 mt-2">
+          <div class="col-12 col-md-8">
+            <h1 class="h5 mb-1 fw-bold text-dark">
+              <i class="bi bi-box-seam-fill text-primary me-2"></i>สต๊อกอะไหล่
+            </h1>
             <p class="small text-muted mb-0">
-              จัดการรายการอะไหล่ในสต๊อก ดูของใกล้หมด บันทึกซื้อเข้า และดูสินค้าขายดี/ขายช้า
+              บริหารจัดการอะไหล่ในคลัง ตรวจสอบสินค้าคงเหลือ และบันทึกการซื้อเข้า
             </p>
           </div>
         </div>
 
-        <!-- ================= ฟอร์มเพิ่ม / แก้ไขสินค้าในสต๊อก ================= -->
-        <!-- คอมเมนต์: ฟอร์มส่วนบนสำหรับสร้าง/แก้ไขข้อมูลอะไหล่ -->
-        <section class="mb-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h2 class="h6 fw-semibold mb-0">
-                  <i class="bi bi-box-seam me-2"></i>
+        <section class="mb-4">
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
+                <h2 class="h6 fw-semibold text-primary mb-0">
+                  <i class="bi bi-plus-circle me-2"></i>
                   <span id="stockFormTitleText">เพิ่มสินค้าอะไหล่ใหม่</span>
                 </h2>
                 <button
                   type="button"
-                  class="btn btn-outline-secondary btn-sm d-none"
+                  class="btn btn-outline-secondary btn-sm d-none rounded-pill px-3"
                   id="cancelEditStockBtn"
                 >
-                  ยกเลิกการแก้ไข
+                  <i class="bi bi-x-circle me-1"></i>ยกเลิกการแก้ไข
                 </button>
-              </div>
-              <form id="stockItemForm" class="row g-2 small">
-                <!-- hidden id สำหรับโหมดแก้ไข -->
+            </div>
+            <div class="card-body">
+              <form id="stockItemForm" class="row g-3">
                 <input type="hidden" id="stockItemIdInput" />
 
                 <div class="col-6 col-md-3">
-                  <label for="stockCodeInput" class="form-label small mb-1">
-                    รหัสสินค้า
+                  <label for="stockCodeInput" class="form-label small mb-1 text-muted">
+                    <i class="bi bi-upc-scan me-1"></i>รหัสสินค้า
                   </label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockCodeInput"
                     placeholder="เช่น OIL-10W40"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockNameInput" class="form-label small mb-1">
-                    ชื่อสินค้า
+                  <label for="stockNameInput" class="form-label small mb-1 text-muted">
+                    <i class="bi bi-tag me-1"></i>ชื่อสินค้า
                   </label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockNameInput"
-                    placeholder="เช่น น้ำมันเครื่อง 10W40"
+                    placeholder="เช่น น้ำมันเครื่อง"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockCategoryInput" class="form-label small mb-1">
-                    หมวดหมู่
+                  <label for="stockCategoryInput" class="form-label small mb-1 text-muted">
+                    <i class="bi bi-bookmarks me-1"></i>หมวดหมู่
                   </label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockCategoryInput"
-                    placeholder="เช่น น้ำมันเครื่อง, ยาง, ผ้าเบรก"
+                    placeholder="ระบุหมวดหมู่"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockUnitInput" class="form-label small mb-1">
-                    หน่วยนับ
+                  <label for="stockUnitInput" class="form-label small mb-1 text-muted">
+                    <i class="bi bi-box me-1"></i>หน่วยนับ
                   </label>
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockUnitInput"
-                    placeholder="เช่น ขวด, เส้น, ชิ้น"
+                    placeholder="เช่น ชิ้น, ขวด"
                     required
                   />
                 </div>
 
                 <div class="col-6 col-md-3">
-                  <label for="stockQtyInput" class="form-label small mb-1">
-                    จำนวนคงเหลือ
+                  <label for="stockQtyInput" class="form-label small mb-1 text-primary fw-semibold">
+                    <i class="bi bi-layers me-1"></i>จำนวนคงเหลือ
                   </label>
                   <input
                     type="number"
                     min="0"
-                    class="form-control form-control-sm"
+                    class="form-control border-primary"
                     id="stockQtyInput"
                     placeholder="0"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockMinQtyInput" class="form-label small mb-1">
-                    จำนวนขั้นต่ำ (เตือนใกล้หมด)
+                  <label for="stockMinQtyInput" class="form-label small mb-1 text-warning fw-semibold">
+                    <i class="bi bi-exclamation-triangle me-1"></i>แจ้งเตือนเมื่อต่ำกว่า
                   </label>
                   <input
                     type="number"
                     min="0"
-                    class="form-control form-control-sm"
+                    class="form-control border-warning"
                     id="stockMinQtyInput"
                     placeholder="0"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockCostPriceInput" class="form-label small mb-1">
-                    ราคาต้นทุน (ต่อหน่วย)
+                  <label for="stockCostPriceInput" class="form-label small mb-1 text-muted">
+                    <i class="bi bi-coin me-1"></i>ราคาต้นทุน (บาท)
                   </label>
                   <input
                     type="number"
                     min="0"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockCostPriceInput"
                     placeholder="0.00"
                     required
                   />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="stockSalePriceInput" class="form-label small mb-1">
-                    ราคาขาย (ต่อหน่วย)
+                  <label for="stockSalePriceInput" class="form-label small mb-1 text-success fw-semibold">
+                    <i class="bi bi-cash-coin me-1"></i>ราคาขาย (บาท)
                   </label>
                   <input
                     type="number"
                     min="0"
-                    class="form-control form-control-sm"
+                    class="form-control border-success"
                     id="stockSalePriceInput"
                     placeholder="0.00"
                     required
                   />
                 </div>
 
-                <div class="col-12 mt-1 d-flex justify-content-end">
+                <div class="col-12 mt-2 d-flex justify-content-end">
                   <button
                     type="submit"
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary px-4 shadow-sm"
                     id="saveStockItemBtn"
                   >
                     <span
@@ -281,207 +269,165 @@
                       role="status"
                       aria-hidden="true"
                     ></span>
-                    <span id="saveStockItemBtnText">บันทึกสินค้า</span>
+                    <i class="bi bi-save2 me-2"></i><span id="saveStockItemBtnText">บันทึกสินค้า</span>
                   </button>
                 </div>
               </form>
-              <p class="small text-muted mt-2 mb-0">
-                เมื่อบันทึกสำเร็จ ข้อมูลจะถูกเก็บใน Firestore (collection
-                <code>stock</code>) พร้อมระบุสาขาจาก <code>branchId</code> ของผู้ใช้
-              </p>
+              <div class="d-flex align-items-center mt-3 text-muted" style="font-size: 0.75rem;">
+                <i class="bi bi-info-circle me-2"></i>
+                <span>ข้อมูลจะถูกบันทึกลงในฐานข้อมูล Firestore (Stock) โดยอัตโนมัติ</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <!-- ================= แถบกรองและสรุปสต๊อก ================= -->
-        <!-- คอมเมนต์: ส่วนนี้ใช้ค้นหา/กรอง และแสดงตัวเลขสรุป -->
-        <section class="mb-3">
-          <div class="card">
+        <section class="mb-4">
+          <div class="card shadow-sm border-0">
             <div class="card-body">
-              <div
-                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-2"
-              >
-                <div class="d-flex flex-column flex-md-row gap-2 align-items-start align-items-md-center">
-                  <div class="input-group input-group-sm" style="min-width: 220px;">
-                    <span class="input-group-text">
-                      <i class="bi bi-search"></i>
-                    </span>
-                    <input
-                      type="text"
-                      id="searchStockInput"
-                      class="form-control"
-                      placeholder="ค้นหาด้วยรหัส / ชื่อสินค้า"
-                    />
-                  </div>
-                  <div class="d-flex align-items-center gap-2">
-                    <label for="stockCategoryFilter" class="form-label small mb-0">
-                      หมวดหมู่:
-                    </label>
-                    <select
-                      id="stockCategoryFilter"
-                      class="form-select form-select-sm"
-                      style="min-width: 150px;"
-                    >
-                      <option value="all" selected>ทุกหมวดหมู่</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="small text-muted" id="stockLoadingState">
-                  กำลังโหลดข้อมูลสต๊อกจากฐานข้อมูล...
-                </div>
-              </div>
-
-              <div class="row g-2 align-items-center mb-2 small">
+              
+              <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6">
-                  <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผล">
-                    <input
-                      type="radio"
-                      class="btn-check"
-                      name="stockFilterMode"
-                      id="stockFilterModeAll"
-                      autocomplete="off"
-                      value="all"
-                      checked
-                    />
-                    <label class="btn btn-outline-secondary" for="stockFilterModeAll">
-                      ทั้งหมด
-                    </label>
-
-                    <input
-                      type="radio"
-                      class="btn-check"
-                      name="stockFilterMode"
-                      id="stockFilterModeLow"
-                      autocomplete="off"
-                      value="low"
-                    />
-                    <label class="btn btn-outline-warning" for="stockFilterModeLow">
-                      ใกล้หมด
-                    </label>
-
-                    <input
-                      type="radio"
-                      class="btn-check"
-                      name="stockFilterMode"
-                      id="stockFilterModeFast"
-                      autocomplete="off"
-                      value="fast"
-                    />
-                    <label class="btn btn-outline-success" for="stockFilterModeFast">
-                      ขายดี
-                    </label>
-
-                    <input
-                      type="radio"
-                      class="btn-check"
-                      name="stockFilterMode"
-                      id="stockFilterModeSlow"
-                      autocomplete="off"
-                      value="slow"
-                    />
-                    <label class="btn btn-outline-info" for="stockFilterModeSlow">
-                      ขายช้า
-                    </label>
-                  </div>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                          <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input
+                          type="text"
+                          id="searchStockInput"
+                          class="form-control border-start-0 ps-0"
+                          placeholder="ค้นหาด้วยรหัส หรือ ชื่อสินค้า..."
+                        />
+                    </div>
                 </div>
-                <div class="col-12 col-md-6 text-md-end">
-                  <span class="small text-muted d-none" id="stockCountInfo">
-                    พบสินค้า
-                    <span id="stockCountNumber">0</span> รายการ (จากข้อมูลที่โหลด)
-                  </span>
+                <div class="col-12 col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">หมวดหมู่</span>
+                        <select
+                          id="stockCategoryFilter"
+                          class="form-select"
+                        >
+                          <option value="all" selected>ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 d-flex align-items-center justify-content-md-end">
+                    <div class="small" id="stockLoadingState">
+                        <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status" aria-hidden="true"></span>
+                        โหลดข้อมูล...
+                    </div>
                 </div>
               </div>
 
-              <!-- การ์ดสรุปสต๊อก -->
-              <div class="row g-2 small">
-                <div class="col-12 col-md-3">
-                  <div class="card bm-stat-card h-100">
-                    <div class="card-body py-2">
-                      <div class="text-muted small">จำนวนสินค้าในสต๊อก</div>
-                      <div class="h5 mb-0 fw-bold" id="stockTotalItemsText">
-                        0 รายการ
-                      </div>
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeAll" value="all" checked autocomplete="off">
+                <label class="btn btn-outline-secondary btn-sm rounded-pill px-3" for="stockFilterModeAll">
+                    ทั้งหมด
+                </label>
+
+                <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeLow" value="low" autocomplete="off">
+                <label class="btn btn-outline-warning btn-sm rounded-pill px-3" for="stockFilterModeLow">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>ใกล้หมด
+                </label>
+
+                <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeFast" value="fast" autocomplete="off">
+                <label class="btn btn-outline-success btn-sm rounded-pill px-3" for="stockFilterModeFast">
+                    <i class="bi bi-graph-up-arrow me-1"></i>ขายดี
+                </label>
+
+                <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeSlow" value="slow" autocomplete="off">
+                <label class="btn btn-outline-info btn-sm rounded-pill px-3" for="stockFilterModeSlow">
+                    <i class="bi bi-hourglass-bottom me-1"></i>ขายช้า
+                </label>
+                
+                <span class="ms-auto small text-muted d-none align-self-center" id="stockCountInfo">
+                    พบ <span id="stockCountNumber" class="fw-bold text-dark">0</span> รายการ
+                </span>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-6 col-md-3">
+                  <div class="card bm-stat-card h-100 shadow-sm border">
+                    <div class="d-flex justify-content-between align-items-center h-100">
+                        <div>
+                            <div class="text-muted small mb-1">สินค้าในสต๊อก</div>
+                            <div class="h5 mb-0 fw-bold" id="stockTotalItemsText">0 รายการ</div>
+                        </div>
+                        <div class="text-primary opacity-25"><i class="bi bi-box-seam fs-1"></i></div>
                     </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-3">
-                  <div class="card bm-stat-card h-100">
-                    <div class="card-body py-2">
-                      <div class="text-muted small">สินค้าที่ใกล้หมด</div>
-                      <div class="h5 mb-0 fw-bold text-warning" id="stockLowItemsText">
-                        0 รายการ
-                      </div>
-                    </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bm-stat-card h-100 shadow-sm border">
+                     <div class="d-flex justify-content-between align-items-center h-100">
+                        <div>
+                            <div class="text-muted small mb-1">สินค้าใกล้หมด</div>
+                            <div class="h5 mb-0 fw-bold text-warning" id="stockLowItemsText">0 รายการ</div>
+                        </div>
+                        <div class="text-warning opacity-25"><i class="bi bi-exclamation-circle fs-1"></i></div>
+                     </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-3">
-                  <div class="card bm-stat-card h-100">
-                    <div class="card-body py-2">
-                      <div class="text-muted small">มูลค่าต้นทุนรวมโดยประมาณ</div>
-                      <div class="h5 mb-0 fw-bold" id="stockTotalCostValueText">
-                        0.00 ฿
-                      </div>
-                    </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bm-stat-card h-100 shadow-sm border">
+                     <div class="d-flex justify-content-between align-items-center h-100">
+                        <div>
+                            <div class="text-muted small mb-1">มูลค่าต้นทุนรวม</div>
+                            <div class="h5 mb-0 fw-bold text-dark" id="stockTotalCostValueText">0.00 ฿</div>
+                        </div>
+                        <div class="text-secondary opacity-25"><i class="bi bi-wallet2 fs-1"></i></div>
+                     </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-3">
-                  <div class="card bm-stat-card h-100">
-                    <div class="card-body py-2">
-                      <div class="text-muted small">มูลค่าขายรวมโดยประมาณ</div>
-                      <div class="h5 mb-0 fw-bold text-success" id="stockTotalSaleValueText">
-                        0.00 ฿
-                      </div>
-                    </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bm-stat-card h-100 shadow-sm border">
+                     <div class="d-flex justify-content-between align-items-center h-100">
+                        <div>
+                             <div class="text-muted small mb-1">มูลค่าขายรวม</div>
+                             <div class="h5 mb-0 fw-bold text-success" id="stockTotalSaleValueText">0.00 ฿</div>
+                        </div>
+                        <div class="text-success opacity-25"><i class="bi bi-currency-dollar fs-1"></i></div>
+                     </div>
                   </div>
                 </div>
               </div>
-
-              <p class="small text-muted mt-2 mb-0">
-                ตัวเลขสรุปอิงจากข้อมูลใน Firestore ตามสาขาที่ผู้ใช้สังกัด (branchId)
-                และไม่นับสินค้าที่ถูกซ่อน (isDeleted = true)
-              </p>
             </div>
           </div>
         </section>
 
-        <!-- ================= ตารางข้อมูลสินค้าในสต๊อก ================= -->
-        <!-- คอมเมนต์: แสดงรายการอะไหล่ในรูปแบบตาราง พร้อมปุ่มซื้อเข้า/แก้ไข/ลบ -->
         <section class="mb-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <div class="small text-muted">
-                  รายการสินค้าในสต๊อกตามตัวกรองที่เลือก
-                </div>
-              </div>
+          <div class="card shadow-sm border-0 overflow-hidden">
+            <div class="card-header bg-white border-bottom py-3">
+                <h3 class="h6 fw-bold mb-0 text-secondary">
+                    <i class="bi bi-list-ul me-2"></i>รายการสินค้า
+                </h3>
+            </div>
+            <div class="card-body p-0">
               <div class="table-responsive">
-                <table class="table table-sm align-middle mb-0">
-                  <thead class="small text-muted">
+                <table class="table table-hover table-sm align-middle mb-0">
+                  <thead class="bg-light text-muted small text-uppercase">
                     <tr>
-                      <th style="min-width: 110px;">รหัส</th>
-                      <th style="min-width: 180px;">ชื่อสินค้า</th>
-                      <th style="min-width: 120px;">หมวดหมู่</th>
-                      <th style="min-width: 80px;">หน่วย</th>
-                      <th class="text-end" style="min-width: 120px;">จำนวน / ขั้นต่ำ</th>
-                      <th class="text-end" style="min-width: 110px;">ราคาขาย/หน่วย</th>
-                      <th class="text-center" style="min-width: 110px;">คะแนนขายดี</th>
-                      <th class="text-center" style="min-width: 200px;">การทำงาน</th>
+                      <th class="ps-3 py-2 text-nowrap" style="min-width: 110px;">รหัส</th>
+                      <th class="py-2" style="min-width: 180px;">ชื่อสินค้า</th>
+                      <th class="py-2 text-nowrap" style="min-width: 120px;">หมวดหมู่</th>
+                      <th class="py-2 text-nowrap" style="min-width: 80px;">หน่วย</th>
+                      <th class="py-2 text-end text-nowrap" style="min-width: 120px;">คงเหลือ / ขั้นต่ำ</th>
+                      <th class="py-2 text-end text-nowrap" style="min-width: 110px;">ราคาขาย</th>
+                      <th class="py-2 text-center text-nowrap" style="min-width: 110px;">Score</th>
+                      <th class="py-2 text-center" style="min-width: 180px;">จัดการ</th>
                     </tr>
                   </thead>
-                  <tbody id="stockTableBody">
-                    <!-- รายการแถวสต๊อกจะแทรกผ่าน JS -->
-                  </tbody>
+                  <tbody id="stockTableBody" class="border-top-0">
+                    </tbody>
                 </table>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- ปุ่มโหลดเพิ่ม (Pagination) -->
         <section class="mb-5 text-center">
           <button
             type="button"
-            class="btn btn-outline-secondary btn-sm d-none"
+            class="btn btn-outline-secondary btn-sm rounded-pill px-4 d-none"
             id="loadMoreStockBtn"
           >
             <span
@@ -490,19 +436,14 @@
               role="status"
               aria-hidden="true"
             ></span>
-            <span id="loadMoreStockBtnText">โหลดรายการสต๊อกเพิ่ม</span>
+            <span id="loadMoreStockBtnText">โหลดรายการเพิ่ม</span> <i class="bi bi-chevron-down ms-1"></i>
           </button>
         </section>
 
-        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
         <div style="height: 4.5rem;"></div>
       </div>
     </main>
 
-    <!-- ===========================================================
-         Floating Action Button (FAB)
-         ปุ่มลอยเมนูด่วน
-    ============================================================ -->
     <div class="bm-fab-container">
       <div class="dropdown dropup">
         <button
@@ -512,32 +453,28 @@
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <i class="bi bi-plus"></i>
+          <i class="bi bi-plus-lg"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0" aria-labelledby="fabDropdownButton">
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
+              <i class="bi bi-receipt-cutoff me-3 text-primary"></i> เปิดบิลซ่อมใหม่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
+              <i class="bi bi-cash-coin me-3 text-success"></i> เพิ่มรายการเงิน
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            <button class="dropdown-item d-flex align-items-center py-2 fw-semibold" type="button" id="fabStockInBtn">
+              <i class="bi bi-box-seam me-3 text-warning"></i> บันทึกซื้ออะไหล่เข้า
             </button>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- ===========================================================
-         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
-         หน้าปัจจุบัน: สต๊อก
-    ============================================================ -->
     <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
       <div class="container-fluid px-0">
         <div class="row g-0 w-100 text-center small">
@@ -581,10 +518,6 @@
       </div>
     </nav>
 
-    <!-- ===========================================================
-         Modal ซื้ออะไหล่เข้า (Stock In)
-         ใช้บันทึกจำนวนที่ซื้อเข้า + ต้นทุนต่อหน่วย
-    ============================================================ -->
     <div
       class="modal fade"
       id="stockInModal"
@@ -592,11 +525,11 @@
       aria-labelledby="stockInModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-md modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-6" id="stockInModalLabel">
-              บันทึกซื้ออะไหล่เข้า
+      <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content shadow border-0">
+          <div class="modal-header border-bottom-0 pb-0">
+            <h1 class="modal-title fs-5 fw-bold" id="stockInModalLabel">
+              <i class="bi bi-box-arrow-in-down me-2 text-primary"></i>บันทึกซื้ออะไหล่เข้า
             </h1>
             <button
               type="button"
@@ -605,106 +538,94 @@
               aria-label="ปิด"
             ></button>
           </div>
-          <div class="modal-body">
-            <!-- สถานะโหลดข้อมูล -->
+          <div class="modal-body pt-3">
             <div
               id="stockInLoadingState"
-              class="alert alert-light border small py-2 mb-3 d-none"
+              class="alert alert-light border small py-2 mb-3 d-none text-center"
             >
-              กำลังโหลดข้อมูลสินค้า...
+              <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลดข้อมูลสินค้า...
             </div>
 
-            <!-- ข้อมูลสินค้าแบบสรุป -->
-            <section class="mb-3 small">
-              <h2 class="h6 fw-semibold mb-2">ข้อมูลสินค้า</h2>
-              <div>
-                <div>
-                  <span class="fw-semibold">รหัสสินค้า:</span>
-                  <span id="stockInItemCodeText">-</span>
+            <div class="bg-body-tertiary p-3 rounded-3 mb-3 border">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="h6 fw-semibold text-secondary mb-0">ข้อมูลสินค้า</h2>
+                    <span class="badge bg-secondary" id="stockInItemCodeText">-</span>
                 </div>
-                <div>
-                  <span class="fw-semibold">ชื่อสินค้า:</span>
-                  <span id="stockInItemNameText">-</span>
+                <div class="small">
+                    <div class="fw-bold fs-6 mb-1" id="stockInItemNameText">-</div>
+                    <div class="d-flex gap-3 text-muted">
+                        <span><i class="bi bi-bookmarks me-1"></i><span id="stockInItemCategoryText">-</span></span>
+                        <span><i class="bi bi-layers me-1"></i>คงเหลือ: <span id="stockInItemQtyText" class="fw-medium text-dark">-</span></span>
+                    </div>
                 </div>
-                <div>
-                  <span class="fw-semibold">หมวดหมู่:</span>
-                  <span id="stockInItemCategoryText">-</span>
-                </div>
-                <div>
-                  <span class="fw-semibold">จำนวนคงเหลือปัจจุบัน:</span>
-                  <span id="stockInItemQtyText">-</span>
-                </div>
-              </div>
-            </section>
+            </div>
 
-            <!-- ฟอร์มบันทึกซื้อเข้า -->
             <section class="mb-0">
-              <h2 class="h6 fw-semibold mb-2">บันทึกการซื้อเข้า</h2>
-              <form id="stockInForm" class="row g-2 small">
+              <h2 class="h6 fw-semibold mb-3 text-primary"><i class="bi bi-cart-plus me-2"></i>รายละเอียดการซื้อ</h2>
+              <form id="stockInForm" class="row g-3">
                 <div class="col-6">
                   <label for="stockInDateInput" class="form-label small mb-1">
                     วันที่ซื้อเข้า
                   </label>
                   <input
                     type="date"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockInDateInput"
                   />
                 </div>
                 <div class="col-6">
-                  <label for="stockInQtyInput" class="form-label small mb-1">
-                    จำนวนที่ซื้อเข้า
+                  <label for="stockInQtyInput" class="form-label small mb-1 fw-bold text-success">
+                    + จำนวนที่เพิ่ม
                   </label>
                   <input
                     type="number"
                     min="1"
-                    class="form-control form-control-sm"
+                    class="form-control border-success"
                     id="stockInQtyInput"
-                    placeholder="เช่น 10"
+                    placeholder="ระบุจำนวน"
                   />
                 </div>
-                <div class="col-6">
+                <div class="col-12 col-md-6">
                   <label for="stockInCostPerUnitInput" class="form-label small mb-1">
-                    ราคาต้นทุนต่อหน่วย (บาท)
+                    ต้นทุนต่อหน่วย (บาท)
                   </label>
                   <input
                     type="number"
                     min="0"
-                    class="form-control form-control-sm"
+                    class="form-control"
                     id="stockInCostPerUnitInput"
                     placeholder="0.00"
                   />
                 </div>
-                <div class="col-6">
-                  <label class="form-label small mb-1">
+                <div class="col-12 col-md-6">
+                  <label class="form-label small mb-1 text-muted">
                     มูลค่ารวมโดยประมาณ
                   </label>
                   <div
-                    class="alert alert-secondary py-2 mb-0"
+                    class="alert alert-secondary py-2 mb-0 fw-bold text-end"
                     id="stockInTotalCostPreview"
                   >
                     0.00 ฿
                   </div>
                 </div>
               </form>
-              <p class="small text-muted mt-2 mb-0">
-                ระบบจะเพิ่มจำนวนในสต๊อก อัปเดตราคาต้นทุนล่าสุด
-                บันทึกค่าใช้จ่ายใน <code>transactions</code>
-                และบันทึกเหตุการณ์ใน <code>activityLogs</code> ให้โดยอัตโนมัติ
-              </p>
+              <div class="d-flex align-items-center mt-3 text-muted" style="font-size: 0.7rem;">
+                <i class="bi bi-info-circle me-2"></i>
+                <span>ระบบจะอัปเดตสต๊อกและต้นทุนล่าสุด พร้อมบันทึกรายจ่ายให้อัตโนมัติ</span>
+              </div>
             </section>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer border-top-0 pt-0">
             <button
               type="button"
-              class="btn btn-secondary btn-sm"
+              class="btn btn-secondary btn-sm px-4"
               data-bs-dismiss="modal"
             >
-              ปิด
+              ยกเลิก
             </button>
             <button
               type="button"
-              class="btn btn-primary btn-sm"
+              class="btn btn-primary btn-sm px-4 shadow-sm"
               id="stockInSaveBtn"
             >
               <span
@@ -713,30 +634,28 @@
                 role="status"
                 aria-hidden="true"
               ></span>
-              <span id="stockInSaveBtnText">บันทึกซื้อเข้า</span>
+              <span id="stockInSaveBtnText">ยืนยันการรับเข้า</span>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
     <div
       class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1080;"
+      style="z-index: 1090;"
     >
       <div
         id="mainToast"
-        class="toast align-items-center text-bg-primary border-0"
+        class="toast align-items-center text-bg-primary border-0 shadow-lg"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
         data-bs-delay="4000"
       >
         <div class="d-flex">
-          <div class="toast-body" id="mainToastBody">
-            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
-          </div>
+          <div class="toast-body d-flex align-items-center" id="mainToastBody">
+            </div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -747,14 +666,12 @@
       </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
 
-    <!-- สคริปต์หลักของหน้า stock.html (ใช้ ES Modules) -->
     <script type="module">
       // ============================================================
       // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
@@ -927,8 +844,15 @@
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0";
-        mainToastBody.textContent = message;
+          "toast align-items-center text-bg-" + variant + " border-0 shadow-lg";
+        // ใส่ icon ตาม variant
+        let iconHtml = "";
+        if (variant === "success") iconHtml = '<i class="bi bi-check-circle-fill me-2"></i>';
+        else if (variant === "danger") iconHtml = '<i class="bi bi-exclamation-circle-fill me-2"></i>';
+        else if (variant === "warning") iconHtml = '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
+        else iconHtml = '<i class="bi bi-info-circle-fill me-2"></i>';
+        
+        mainToastBody.innerHTML = iconHtml + message;
         mainToast.show();
       }
 
@@ -1064,17 +988,17 @@
 
         if (stockLoadingState) {
           if (isLoading && isFirstPage) {
-            stockLoadingState.textContent =
-              "กำลังโหลดข้อมูลสต๊อกจากฐานข้อมูล...";
+            stockLoadingState.innerHTML =
+              '<span class="spinner-grow spinner-grow-sm text-primary me-1" role="status" aria-hidden="true"></span> กำลังโหลด...';
             stockLoadingState.classList.remove("text-danger");
             stockLoadingState.classList.remove("text-success");
           } else if (!isLoading && stockItemsRaw.length === 0) {
             stockLoadingState.textContent =
-              "ไม่พบรายการสต๊อกในระบบตามตัวกรองปัจจุบัน";
+              "ไม่พบรายการ";
             stockLoadingState.classList.remove("text-success");
             stockLoadingState.classList.add("text-danger");
           } else if (!isLoading) {
-            stockLoadingState.textContent = "โหลดข้อมูลล่าสุดแล้ว";
+            stockLoadingState.innerHTML = '<i class="bi bi-check2-all me-1"></i>อัปเดตแล้ว';
             stockLoadingState.classList.add("text-success");
           }
         }
@@ -1082,11 +1006,11 @@
         if (loadMoreStockBtn && loadMoreStockSpinner && loadMoreStockBtnText) {
           if (isLoading && !isFirstPage) {
             loadMoreStockSpinner.classList.remove("d-none");
-            loadMoreStockBtnText.textContent = "กำลังโหลดรายการสต๊อกเพิ่ม...";
+            loadMoreStockBtnText.textContent = "กำลังโหลด...";
             loadMoreStockBtn.disabled = true;
           } else {
             loadMoreStockSpinner.classList.add("d-none");
-            loadMoreStockBtnText.textContent = "โหลดรายการสต๊อกเพิ่ม";
+            loadMoreStockBtnText.textContent = "โหลดรายการเพิ่ม";
             loadMoreStockBtn.disabled = false;
           }
         }
@@ -1152,7 +1076,7 @@
           }
         });
 
-        const options = ['<option value="all">ทุกหมวดหมู่</option>'];
+        const options = ['<option value="all">ทั้งหมด</option>'];
         Array.from(categoriesSet)
           .sort((a, b) => a.localeCompare(b, "th"))
           .forEach((cat) => {
@@ -1222,7 +1146,8 @@
         if (filteredItems.length === 0) {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td colspan="8" class="text-center small text-muted">
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary opacity-50"></i>
               ไม่พบรายการสต๊อกตามตัวกรองที่เลือก
             </td>
           `;
@@ -1242,26 +1167,26 @@
             }
 
             tr.innerHTML = `
-              <td class="small">
-                ${item.code || "-"}
+              <td class="small ps-3 text-nowrap">
+                <span class="badge bg-light text-dark border">${item.code || "-"}</span>
               </td>
-              <td class="small">
+              <td class="small fw-medium text-dark">
                 ${item.name || "-"}
               </td>
-              <td class="small">
+              <td class="small text-nowrap">
                 ${item.category || "-"}
               </td>
-              <td class="small">
+              <td class="small text-nowrap">
                 ${item.unit || "-"}
               </td>
-              <td class="small text-end">
-                ${formatIntegerNumber(qty)} / ${formatIntegerNumber(minQty)}
+              <td class="small text-end fw-medium text-nowrap ${isLow ? 'text-danger fw-bold' : ''}">
+                ${formatIntegerNumber(qty)} <span class="text-muted fw-normal" style="font-size:0.75em">/ ${formatIntegerNumber(minQty)}</span>
               </td>
-              <td class="small text-end">
-                ${formatNumber(salePrice)} ฿
+              <td class="small text-end text-nowrap">
+                ${formatNumber(salePrice)}
               </td>
-              <td class="small text-center">
-                <span class="badge bg-${
+              <td class="small text-center text-nowrap">
+                <span class="badge rounded-pill bg-${
                   fastMovingScore >= 10
                     ? "success"
                     : fastMovingScore > 0
@@ -1272,27 +1197,32 @@
                 </span>
               </td>
               <td class="small text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-success btn-sm me-1 stock-in-btn"
-                  data-stock-id="${item.id}"
-                >
-                  ซื้อเข้า
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-primary btn-sm me-1 edit-stock-btn"
-                  data-stock-id="${item.id}"
-                >
-                  แก้ไข
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm delete-stock-btn"
-                  data-stock-id="${item.id}"
-                >
-                  ลบ
-                </button>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-success stock-in-btn"
+                      data-stock-id="${item.id}"
+                      title="ซื้อเข้า"
+                    >
+                      <i class="bi bi-box-arrow-in-down"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary edit-stock-btn"
+                      data-stock-id="${item.id}"
+                      title="แก้ไข"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger delete-stock-btn"
+                      data-stock-id="${item.id}"
+                      title="ลบ"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                </div>
               </td>
             `;
 
@@ -1401,13 +1331,11 @@
           console.error("โหลดรายการสต๊อกไม่สำเร็จ:", error);
           if (stockLoadingState) {
             stockLoadingState.textContent =
-              "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")";
+              "ผิดพลาด: " + (error.code || "unknown");
             stockLoadingState.classList.add("text-danger");
           }
           showToast(
-            "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
+            "ไม่สามารถโหลดข้อมูลสต๊อกได้ (" +
               (error.code || "error") +
               ")",
             "danger"
@@ -1471,8 +1399,8 @@
 
         saveStockItemSpinner.classList.remove("d-none");
         saveStockItemBtnText.textContent = isEditingStockItem
-          ? "กำลังอัปเดตสินค้า..."
-          : "กำลังบันทึกสินค้า...";
+          ? "กำลังอัปเดต..."
+          : "กำลังบันทึก...";
         saveStockItemBtn.disabled = true;
 
         const branchId = currentUserProfile.branchId || null;
@@ -1615,9 +1543,12 @@
         const rect = stockItemForm?.getBoundingClientRect();
         if (rect) {
           window.scrollTo({
-            top: window.scrollY + rect.top - 80,
+            top: window.scrollY + rect.top - 120, // offset for fixed topbar
             behavior: "smooth",
           });
+          // highlight form slightly
+          stockItemForm.closest('.card').classList.add('border-primary');
+          setTimeout(() => stockItemForm.closest('.card').classList.remove('border-primary'), 2000);
         }
       }
 
@@ -1702,7 +1633,8 @@
           stockInLoadingState.classList.add("d-none");
         }
 
-        stockInModalLabel.textContent = "บันทึกซื้ออะไหล่เข้า";
+        // stockInModalLabel is static html now, let's keep it clean
+        // stockInModalLabel.textContent = "บันทึกซื้ออะไหล่เข้า";
 
         stockInItemCodeText.textContent = item.code || "-";
         stockInItemNameText.textContent = item.name || "-";
@@ -1716,7 +1648,7 @@
 
         stockInSaveBtn.disabled = false;
         stockInSaveSpinner.classList.add("d-none");
-        stockInSaveBtnText.textContent = "บันทึกซื้อเข้า";
+        stockInSaveBtnText.textContent = "ยืนยันการรับเข้า";
 
         stockInModal.show();
       }
@@ -1752,7 +1684,7 @@
 
         isSavingStockIn = true;
         stockInSaveSpinner.classList.remove("d-none");
-        stockInSaveBtnText.textContent = "กำลังบันทึกซื้อเข้า...";
+        stockInSaveBtnText.textContent = "กำลังบันทึก...";
         stockInSaveBtn.disabled = true;
 
         const branchId = currentUserProfile.branchId || null;
@@ -1830,7 +1762,7 @@
         } finally {
           isSavingStockIn = false;
           stockInSaveSpinner.classList.add("d-none");
-          stockInSaveBtnText.textContent = "บันทึกซื้อเข้า";
+          stockInSaveBtnText.textContent = "ยืนยันการรับเข้า";
           stockInSaveBtn.disabled = false;
         }
       }
@@ -1986,7 +1918,7 @@
           const rect = stockTableBody?.getBoundingClientRect();
           if (rect) {
             window.scrollTo({
-              top: window.scrollY + rect.top - 80,
+              top: window.scrollY + rect.top - 120,
               behavior: "smooth",
             });
           }
@@ -2024,7 +1956,7 @@
           }
           if (userRoleText) {
             const roleLabel =
-              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
+              userProfile.role === "admin" ? "Admin" : "Staff";
             userRoleText.textContent = roleLabel;
           }
           if (userAvatarInitial) {
@@ -2069,6 +2001,3 @@
     </script>
   </body>
 </html>
-
-
-

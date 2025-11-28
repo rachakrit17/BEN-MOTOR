@@ -1,30 +1,23 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
-    <!-- เมตาพื้นฐานของหน้าเปิดบิลซ่อม -->
     <meta charset="UTF-8" />
     <title>BEN MOTOR – เปิดบิลซ่อมใหม่</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ฟอนต์ Kanit -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-<!-- Favicon ปกติบนเบราว์เซอร์ -->
-<link rel="icon" type="image/x-icon" href="img/icon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="img/icon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
-<!-- Icon เวลาเซฟลงหน้าจอมือถือ (iOS) -->
-<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 
-<!-- PWA manifest -->
-<link rel="manifest" href="img/site.webmanifest">
-
+    <link rel="manifest" href="img/site.webmanifest">
     
-    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -32,82 +25,75 @@
       crossorigin="anonymous"
     />
 
-    <!-- Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
-    <!-- CSS หลักของระบบ BEN MOTOR -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="bm-theme-light">
-    <!-- ===========================================================
-         แถบด้านบนของระบบ (Topbar)
-         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
-    ============================================================ -->
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
-        <!-- ชื่อระบบด้านซ้าย -->
-        <span class="navbar-brand mb-0 h1 fw-bold">
-          BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success">
+          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <!-- ปุ่มสลับธีม Light / Dark -->
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
             id="themeToggleBtn"
             type="button"
             aria-label="สลับโหมดธีม"
+            style="width: 2.5rem; height: 2.5rem;"
           >
-            <i class="bi bi-moon"></i>
+            <i class="bi bi-moon fs-5"></i>
           </button>
 
-          <!-- Dropdown ผู้ใช้งาน -->
           <div class="dropdown">
             <button
-              class="btn btn-sm btn-outline-primary d-flex align-items-center"
+              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <!-- Avatar ตัวอักษรแรกของชื่อ -->
               <span
-                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
+                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
                 id="userAvatarCircle"
               >
-                <span id="userAvatarInitial">U</span>
+                <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
-              <span class="small text-start">
-                <span id="userDisplayNameText">กำลังโหลด...</span>
+              <span class="small text-start d-none d-sm-block">
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
                 <br />
-                <span class="text-muted small" id="userRoleText">-</span>
+                <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
               <li>
-                <a class="dropdown-item" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
+                <a class="dropdown-item py-2" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
                 </a>
               </li>
               <li>
-              
+                <a class="dropdown-item py-2" href="price-check.html">
+                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
+                </a>
+              </li>
               <li>
-    <a class="dropdown-item" href="price-check.html">
-      <i class="bi bi-tags me-2"></i> เช็คราคา
-    </a>
-  </li>
-        
-<li>
-  <a class="dropdown-item" href="customer-history.html">
-    <i class="bi bi-person-lines-fill me-2"></i> ประวัติลูกค้า &amp; รถ
-  </a>
-</li>
-<li><a class="dropdown-item" href="activity-log.html"><i class="bi bi-clock-history me-2"></i> ประวัติการทำรายการ</a></li>      
+                <a class="dropdown-item py-2" href="customer-history.html">
+                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
+                </a>
+              </li>              
+              <li>
+                <a class="dropdown-item py-2" href="activity-log.html">
+                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
+                </a>
+              </li>              
+              <li>
                 <a
-                  class="dropdown-item d-none"
+                  class="dropdown-item py-2 d-none"
                   href="settings.html"
                   id="settingsMenuItem"
                 >
@@ -117,7 +103,7 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <button
-                  class="dropdown-item text-danger"
+                  class="dropdown-item py-2 text-danger"
                   type="button"
                   id="logoutBtn"
                 >
@@ -130,314 +116,205 @@
       </div>
     </nav>
 
-    <!-- ===========================================================
-         เนื้อหาหลักของหน้าเปิดบิลซ่อม
-         มีฟอร์มข้อมูลหลัก, รายการอะไหล่, รายการค่าแรง, และสรุปยอด
-    ============================================================ -->
-    <main class="bm-main-content">
-      <div class="container py-3">
-        <!-- ส่วนหัวของหน้า -->
-        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+    <main class="bm-main-content pb-5">
+      <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 mt-2">
           <div>
-            <h1 class="h5 mb-1 fw-semibold">เปิดบิลซ่อมใหม่</h1>
+            <h1 class="h4 mb-1 fw-bold text-dark">เปิดบิลซ่อมใหม่</h1>
             <p class="small text-muted mb-0">
-              บันทึกข้อมูลลูกค้า รถ รายการอะไหล่ ค่าแรง และสรุปยอดบิลซ่อม
+              บันทึกข้อมูลลูกค้า อาการรถ และรายการซ่อม
             </p>
           </div>
-          <span class="badge text-bg-secondary" id="openBillTodayLabel">
-            วันนี้
-          </span>
+          <div class="text-end">
+            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-normal" id="openBillTodayLabel">
+              <i class="bi bi-calendar-event me-1 text-primary"></i> วันนี้
+            </span>
+          </div>
         </div>
 
-        <!-- ฟอร์มหลักสำหรับเปิดบิลซ่อม -->
-        <!-- ใช้ novalidate และจัดการ validate ด้วย JS -->
         <form id="openBillForm" novalidate>
-          <!-- ================= ข้อมูลหลักของบิลซ่อม ================= -->
-          <section class="mb-3">
-            <div class="card">
-              <div class="card-body">
-                <h2 class="h6 fw-semibold mb-3">ข้อมูลหลักของบิลซ่อม</h2>
-                <div class="row g-2">
+          
+          <section class="mb-4">
+            <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                <h2 class="h6 fw-bold text-primary mb-0">
+                  <i class="bi bi-person-vcard me-2"></i> ข้อมูลลูกค้าและรถ
+                </h2>
+              </div>
+              <div class="card-body pt-2 pb-4">
+                <div class="row g-3">
                   <div class="col-12 col-md-4">
-                    <label for="jobDate" class="form-label small mb-1">วันที่</label>
-                    <input
-                      type="date"
-                      class="form-control form-control-sm"
-                      id="jobDate"
-                      required
-                    />
-                    <div class="invalid-feedback">
-                      กรุณาเลือกวันที่เปิดบิล
+                    <label for="jobDate" class="form-label small text-muted mb-1">วันที่รับงาน</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar3"></i></span>
+                        <input type="date" class="form-control border-start-0 ps-0" id="jobDate" required />
                     </div>
+                    <div class="invalid-feedback">กรุณาเลือกวันที่</div>
                   </div>
 
                   <div class="col-12 col-md-4">
-                    <label for="customerName" class="form-label small mb-1">
-                      ชื่อลูกค้า
-                    </label>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm"
-                      id="customerName"
-                      placeholder="กรอกชื่อหรือลูกค้าใหม่"
-                      list="customerNameDatalist"
-                      required
-                    />
+                    <label for="customerName" class="form-label small text-muted mb-1">ชื่อลูกค้า</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control border-start-0 ps-0" id="customerName" placeholder="ค้นหาหรือกรอกใหม่..." list="customerNameDatalist" required />
+                    </div>
                     <datalist id="customerNameDatalist"></datalist>
-                    <div class="invalid-feedback">
-                      กรุณากรอกชื่อลูกค้า
-                    </div>
+                    <div class="invalid-feedback">กรุณากรอกชื่อลูกค้า</div>
                   </div>
 
                   <div class="col-12 col-md-4">
-                    <label for="customerPhone" class="form-label small mb-1">
-                      เบอร์โทรลูกค้า
-                    </label>
-                    <input
-                      type="tel"
-                      class="form-control form-control-sm"
-                      id="customerPhone"
-                      placeholder="เช่น 0812345678"
-                    />
-                  </div>
-
-                  <div class="col-12 col-md-3">
-                    <label for="plate" class="form-label small mb-1">
-                      ทะเบียนรถ
-                    </label>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm"
-                      id="plate"
-                      placeholder="ทะเบียนรถ"
-                      list="plateDatalist"
-                      required
-                    />
-                    <datalist id="plateDatalist"></datalist>
-                    <div class="invalid-feedback">
-                      กรุณากรอกทะเบียนรถ
+                    <label for="customerPhone" class="form-label small text-muted mb-1">เบอร์โทรศัพท์</label>
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" class="form-control border-start-0 ps-0" id="customerPhone" placeholder="เช่น 081xxxxxxx" />
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-3">
-                    <label for="brand" class="form-label small mb-1">
-                      ยี่ห้อ
-                    </label>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm"
-                      id="brand"
-                      placeholder="เช่น Honda, Yamaha"
-                    />
+                  <div class="col-12"><hr class="my-1 border-light"></div>
+
+                  <div class="col-6 col-md-3">
+                    <label for="plate" class="form-label small text-muted mb-1">ทะเบียนรถ <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm bg-light fw-semibold text-primary" id="plate" placeholder="ระบุทะเบียน" list="plateDatalist" required />
+                    <datalist id="plateDatalist"></datalist>
+                    <div class="invalid-feedback">กรุณากรอกทะเบียนรถ</div>
                   </div>
 
-                  <div class="col-12 col-md-3">
-                    <label for="model" class="form-label small mb-1">
-                      รุ่น
-                    </label>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm"
-                      id="model"
-                      placeholder="เช่น Click, Wave"
-                    />
+                  <div class="col-6 col-md-3">
+                    <label for="brand" class="form-label small text-muted mb-1">ยี่ห้อ</label>
+                    <input type="text" class="form-control form-control-sm" id="brand" placeholder="Honda, Yamaha..." />
                   </div>
 
-                  <div class="col-12 col-md-3">
-                    <label for="mileage" class="form-label small mb-1">
-                      เลขไมล์ (กม.)</label
-                    >
-                    <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
-                      id="mileage"
-                      placeholder="กรอกเลขไมล์โดยประมาณ"
-                    />
+                  <div class="col-6 col-md-3">
+                    <label for="model" class="form-label small text-muted mb-1">รุ่น</label>
+                    <input type="text" class="form-control form-control-sm" id="model" placeholder="Wave, PCX..." />
+                  </div>
+
+                  <div class="col-6 col-md-3">
+                    <label for="mileage" class="form-label small text-muted mb-1">เลขไมล์ (กม.)</label>
+                    <input type="number" min="0" class="form-control form-control-sm" id="mileage" placeholder="0" />
                   </div>
 
                   <div class="col-12 col-md-8">
-                    <label for="problem" class="form-label small mb-1">
-                      อาการ/ปัญหาที่ลูกค้าแจ้ง
-                    </label>
-                    <textarea
-                      id="problem"
-                      class="form-control form-control-sm"
-                      rows="2"
-                      placeholder="อธิบายอาการที่ลูกค้าแจ้งหรือสิ่งที่ตรวจพบคร่าว ๆ"
-                      required
-                    ></textarea>
-                    <div class="invalid-feedback">
-                      กรุณากรอกอาการหรือปัญหาของรถ
-                    </div>
+                    <label for="problem" class="form-label small text-muted mb-1">อาการ/ปัญหาที่แจ้ง</label>
+                    <textarea id="problem" class="form-control form-control-sm" rows="2" placeholder="เช่น สตาร์ทไม่ติด, เปลี่ยนยาง..." required></textarea>
+                    <div class="invalid-feedback">กรุณากรอกอาการ</div>
                   </div>
 
                   <div class="col-12 col-md-4">
-                    <label for="priority" class="form-label small mb-1">
-                      ระดับความด่วน
-                    </label>
-                    <select
-                      id="priority"
-                      class="form-select form-select-sm"
-                      required
-                    >
-                      <option value="normal" selected>ปกติ</option>
-                      <option value="high">ด่วนมาก</option>
-                      <option value="low">ไม่ด่วน</option>
+                    <label for="priority" class="form-label small text-muted mb-1">ความเร่งด่วน</label>
+                    <select id="priority" class="form-select form-select-sm">
+                      <option value="normal" selected>🟢 ปกติ</option>
+                      <option value="high">🔴 ด่วนมาก</option>
+                      <option value="low">⚪ ไม่ด่วน</option>
                     </select>
                   </div>
                 </div>
-
-                <p class="small text-muted mt-3 mb-0">
-                  ระบบจะพยายามดึงข้อมูลลูกค้าและรถจากประวัติงานซ่อมหรือรถที่เคยซื้อขาย
-                  เพื่อช่วยเติมข้อมูลให้อัตโนมัติเมื่อพิมพ์ชื่อหรือทะเบียน
-                </p>
+                
+                <div class="d-flex align-items-center mt-3 p-2 bg-info bg-opacity-10 rounded-3">
+                    <i class="bi bi-magic text-info me-2 fs-5"></i>
+                    <p class="small text-muted mb-0 lh-sm">
+                        ระบบจะช่วยค้นหาข้อมูลลูกค้าและรถจากประวัติเก่าให้ทันทีเมื่อพิมพ์ชื่อหรือทะเบียน
+                    </p>
+                </div>
               </div>
             </div>
           </section>
 
-          <!-- ================= รายการอะไหล่ที่ใช้ในงานซ่อม ================= -->
-          <section class="mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h2 class="h6 fw-semibold mb-0">รายการอะไหล่ที่ใช้</h2>
-                  <button
-                    class="btn btn-sm btn-outline-primary"
-                    type="button"
-                    id="addPartRowBtn"
-                  >
-                    <i class="bi bi-plus-lg me-1"></i> เพิ่มรายการอะไหล่
-                  </button>
-                </div>
-                <p class="small text-muted mb-2">
-                  เลือกอะไหล่จากสต๊อก ปรับจำนวน และราคาต่อหน่วย
-                  ระบบจะหักสต๊อกและคำนวณยอดให้อัตโนมัติเมื่อบันทึกบิล
-                </p>
-
-                <!-- สถานะโหลดข้อมูลสต๊อก -->
-                <div
-                  id="stockLoadingState"
-                  class="alert alert-light border small py-2 mb-2"
-                >
-                  กำลังโหลดข้อมูลสต๊อกอะไหล่...
+          <section class="mb-4">
+            <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
+                <h2 class="h6 fw-bold text-warning mb-0">
+                    <i class="bi bi-box-seam me-2"></i> รายการอะไหล่
+                </h2>
+                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3" type="button" id="addPartRowBtn">
+                  <i class="bi bi-plus-lg me-1"></i> เพิ่มอะไหล่
+                </button>
+              </div>
+              <div class="card-body pt-0">
+                <div id="stockLoadingState" class="alert alert-light border small py-2 mb-2 rounded-3 text-center text-muted">
+                  <div class="spinner-border spinner-border-sm me-2" role="status"></div> กำลังโหลดสต๊อก...
                 </div>
 
-                <!-- ตารางรายการอะไหล่ -->
-                <div class="table-responsive">
-                  <table class="table table-sm align-middle mb-0">
-                    <thead class="small text-muted">
-                      <tr>
-                        <th style="min-width: 160px;">ชื่ออะไหล่จากสต๊อก</th>
-                        <th class="text-end" style="width: 130px;">จำนวน</th>
-                        <th class="text-end" style="width: 130px;">ราคาต่อหน่วย (฿)</th>
-                        <th class="text-end" style="width: 130px;">รวม (฿)</th>
-                        <th class="text-center" style="width: 40px;">ลบ</th>
+                <div class="table-responsive rounded-3 border">
+                  <table class="table table-sm align-middle mb-0 bm-bill-table">
+                    <thead class="bg-light text-secondary">
+                      <tr class="text-muted small">
+                        <th class="ps-3 py-2 fw-normal" style="min-width: 200px;">สินค้า / อะไหล่</th>
+                        <th class="text-end py-2 fw-normal" style="width: 140px;">จำนวน</th>
+                        <th class="text-end py-2 fw-normal" style="width: 120px;">ราคา/หน่วย</th>
+                        <th class="text-end py-2 fw-normal" style="width: 120px;">รวม (฿)</th>
+                        <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
                       </tr>
                     </thead>
-                    <tbody id="partsTbody">
-                      <!-- แถวรายการอะไหล่จะถูกสร้างด้วย JS -->
-                    </tbody>
+                    <tbody id="partsTbody" class="bg-white">
+                      </tbody>
                   </table>
                 </div>
-                <p class="small text-muted mt-2 mb-0">
-                  ถ้าไม่ใช้อะไหล่ในงานนี้ สามารถข้ามส่วนนี้ได้ แต่ควรระบุค่าแรงในส่วนถัดไป
-                </p>
               </div>
             </div>
           </section>
 
-          <!-- ================= รายการค่าแรง ================= -->
-          <section class="mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h2 class="h6 fw-semibold mb-0">รายการค่าแรง</h2>
-                  <button
-                    class="btn btn-sm btn-outline-primary"
-                    type="button"
-                    id="addLaborRowBtn"
-                  >
-                    <i class="bi bi-plus-lg me-1"></i> เพิ่มรายการค่าแรง
-                  </button>
-                </div>
-                <p class="small text-muted mb-2">
-                  ระบุค่าแรงเช่น ค่าถอดประกอบ, ค่าล้าง, ค่าตั้งศูนย์ ฯลฯ
-                  เพื่อให้เห็นโครงสร้างรายได้ชัดเจน
-                </p>
-
-                <div class="table-responsive">
-                  <table class="table table-sm align-middle mb-0">
-                    <thead class="small text-muted">
-                      <tr>
-                        <th>รายการค่าแรง</th>
-                        <th class="text-end" style="width: 150px;">ราคา (฿)</th>
-                        <th class="text-center" style="width: 40px;">ลบ</th>
+          <section class="mb-4">
+            <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
+                <h2 class="h6 fw-bold text-info mb-0">
+                    <i class="bi bi-wrench me-2"></i> รายการค่าแรง
+                </h2>
+                <button class="btn btn-sm btn-light border text-primary fw-medium rounded-pill px-3" type="button" id="addLaborRowBtn">
+                  <i class="bi bi-plus-lg me-1"></i> เพิ่มค่าแรง
+                </button>
+              </div>
+              <div class="card-body pt-0">
+                <div class="table-responsive rounded-3 border">
+                  <table class="table table-sm align-middle mb-0 bm-bill-table">
+                    <thead class="bg-light text-secondary">
+                      <tr class="text-muted small">
+                        <th class="ps-3 py-2 fw-normal">รายละเอียดค่าแรง</th>
+                        <th class="text-end py-2 fw-normal" style="width: 150px;">ราคา (฿)</th>
+                        <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
                       </tr>
                     </thead>
-                    <tbody id="laborTbody">
-                      <!-- แถวรายการค่าแรงจะถูกสร้างด้วย JS -->
-                    </tbody>
+                    <tbody id="laborTbody" class="bg-white">
+                      </tbody>
                   </table>
                 </div>
-                <p class="small text-muted mt-2 mb-0">
-                  ถ้าไม่มีค่าแรง สามารถปล่อยว่างได้ โดยระบบจะคิดเฉพาะค่าอะไหล่
-                </p>
               </div>
             </div>
           </section>
 
-          <!-- ================= สรุปยอดและปุ่มบันทึก ================= -->
           <section class="mb-5">
-            <div class="card">
-              <div class="card-body">
-                <h2 class="h6 fw-semibold mb-3">สรุปยอดบิลซ่อม</h2>
-                <div class="row g-2 align-items-center mb-2">
-                  <div class="col-6 col-md-4">
-                    <div class="small text-muted">รวมค่าอะไหล่</div>
-                    <div class="h6 mb-0 fw-semibold" id="partsTotalDisplay">
-                      0.00 ฿
+            <div class="card border-0 shadow rounded-4 bg-gradient" style="background-color: #f8fafc;">
+              <div class="card-body p-4">
+                <div class="row align-items-center">
+                  <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    <div class="d-flex gap-4">
+                        <div>
+                            <div class="small text-muted mb-1">รวมค่าอะไหล่</div>
+                            <div class="h5 mb-0 fw-semibold text-dark" id="partsTotalDisplay">0.00 ฿</div>
+                        </div>
+                        <div class="border-start mx-2"></div>
+                        <div>
+                            <div class="small text-muted mb-1">รวมค่าแรง</div>
+                            <div class="h5 mb-0 fw-semibold text-dark" id="laborTotalDisplay">0.00 ฿</div>
+                        </div>
                     </div>
                   </div>
-                  <div class="col-6 col-md-4">
-                    <div class="small text-muted">รวมค่าแรง</div>
-                    <div class="h6 mb-0 fw-semibold" id="laborTotalDisplay">
-                      0.00 ฿
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <div class="small text-muted">ยอดรวมทั้งหมด</div>
-                    <div class="h4 mb-0 fw-bold text-primary" id="grandTotalDisplay">
-                      0.00 ฿
-                    </div>
+                  
+                  <div class="col-12 col-md-6 text-md-end">
+                    <div class="small text-muted text-uppercase fw-bold ls-1 mb-1">ยอดรวมสุทธิ</div>
+                    <div class="display-6 fw-bold text-primary" id="grandTotalDisplay">0.00 ฿</div>
                   </div>
                 </div>
-                <p class="small text-muted mb-3">
-                  ระบบจะบันทึกบิลซ่อมในฐานข้อมูลงานซ่อม (jobs) ปรับลดสต๊อกอะไหล่
-                  สร้างธุรกรรมรายรับ (transactions) และบันทึกเหตุการณ์ (activityLogs)
-                  ให้อัตโนมัติเมื่อกดบันทึก
-                </p>
 
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch gap-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary flex-fill"
-                    id="resetFormBtn"
-                  >
-                    <i class="bi bi-arrow-counterclockwise me-1"></i> ล้างฟอร์ม
+                <hr class="my-4 text-muted opacity-25">
+
+                <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
+                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2" id="resetFormBtn">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i> ล้างฟอร์ม
                   </button>
-                  <button
-                    type="submit"
-                    class="btn btn-primary flex-fill"
-                    id="saveBillBtn"
-                  >
-                    <span
-                      class="spinner-border spinner-border-sm me-2 d-none"
-                      id="saveBillSpinner"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <span id="saveBillBtnText">บันทึกบิลซ่อม</span>
+                  <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm" id="saveBillBtn">
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="saveBillSpinner" role="status" aria-hidden="true"></span>
+                    <span id="saveBillBtnText" class="fw-bold">บันทึกบิลซ่อม</span>
                   </button>
                 </div>
               </div>
@@ -445,91 +322,86 @@
           </section>
         </form>
 
-        <!-- ระยะห่างด้านล่างไม่ให้เนื้อหาชนกับ Bottom Nav -->
-        <div style="height: 4.5rem;"></div>
+        <div style="height: 3rem;"></div>
       </div>
     </main>
 
-    <!-- ===========================================================
-         Floating Action Button (FAB)
-         ปุ่มลอยสำหรับเมนูด่วน
-    ============================================================ -->
     <div class="bm-fab-container">
       <div class="dropdown dropup">
         <button
-          class="btn btn-primary rounded-circle shadow bm-fab-btn"
+          class="btn btn-primary rounded-circle shadow-lg bm-fab-btn"
           type="button"
           id="fabDropdownButton"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <i class="bi bi-plus"></i>
+          <i class="bi bi-plus-lg"></i>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end mb-2" aria-labelledby="fabDropdownButton">
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
+            <button class="dropdown-item d-flex align-items-center rounded-3 py-2 active" type="button" id="fabOpenBillBtn">
+              <span class="bg-white bg-opacity-25 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>
+              เปิดบิลซ่อมใหม่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
+            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn">
+              <span class="bg-success bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span>
+              เพิ่มรายการเงิน
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
+            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn">
+              <span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span>
+              บันทึกซื้ออะไหล่
             </button>
           </li>
           <li>
-            <button class="dropdown-item d-flex align-items-center" type="button" id="fabAddVehicleBtn">
-              <i class="bi bi-truck-front me-2"></i> เพิ่มรถรับซื้อเข้า
+            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn">
+              <span class="bg-info bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span>
+              เพิ่มรถรับซื้อเข้า
             </button>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- ===========================================================
-         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่ม
-         หน้าปัจจุบัน: เปิดบิล
-    ============================================================ -->
     <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
       <div class="container-fluid px-0">
         <div class="row g-0 w-100 text-center small">
           <div class="col">
             <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block"></i>
+              <i class="bi bi-speedometer2 d-block fs-5"></i>
               <span>แดชบอร์ด</span>
             </a>
           </div>
           <div class="col">
             <a href="open-bill.html" class="bm-bottom-nav-link active">
-              <i class="bi bi-receipt-cutoff d-block"></i>
+              <i class="bi bi-receipt-cutoff d-block fs-5"></i>
               <span>เปิดบิล</span>
             </a>
           </div>
           <div class="col">
             <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block"></i>
+              <i class="bi bi-wrench-adjustable-circle d-block fs-5"></i>
               <span>งานซ่อม</span>
             </a>
           </div>
           <div class="col">
             <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block"></i>
+              <i class="bi bi-truck-front d-block fs-5"></i>
               <span>รถรับซื้อ</span>
             </a>
           </div>
           <div class="col">
             <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block"></i>
+              <i class="bi bi-box-seam d-block fs-5"></i>
               <span>สต๊อก</span>
             </a>
           </div>
           <div class="col">
             <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block"></i>
+              <i class="bi bi-cash-coin d-block fs-5"></i>
               <span>เงินเข้าออก</span>
             </a>
           </div>
@@ -537,23 +409,21 @@
       </div>
     </nav>
 
-    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
     <div
       class="position-fixed top-0 start-50 translate-middle-x p-3"
       style="z-index: 1080;"
     >
       <div
         id="mainToast"
-        class="toast align-items-center text-bg-primary border-0"
+        class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
         data-bs-delay="4000"
       >
-        <div class="d-flex">
+        <div class="d-flex px-2">
           <div class="toast-body" id="mainToastBody">
-            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
-          </div>
+            </div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -564,17 +434,15 @@
       </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
 
-    <!-- สคริปต์หลักของหน้า open-bill.html (ใช้ ES Modules) -->
     <script type="module">
       // ============================================================
-      // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
+      // นำเข้า Firebase SDK
       // ============================================================
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
@@ -608,7 +476,7 @@
       } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
       // ============================================================
-      // ตั้งค่า Firebase ใช้เหมือนกันทุกหน้า
+      // ตั้งค่า Firebase
       // ============================================================
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
@@ -687,31 +555,22 @@
       // ============================================================
       let currentUser = null;
       let currentUserProfile = null;
-
-      // แผนที่สต๊อกจาก Firestore: stockId -> ข้อมูลสต๊อก
       const stockMap = {};
-      let stockOptionsHtml = ""; // ใช้สำหรับเติมใน select ของอะไหล่
-
-      // ประวัติสำหรับ auto-complete
+      let stockOptionsHtml = "";
       let historyRecords = [];
-
-      // ป้องกันกดบันทึกหลายครั้ง
       let isSavingBill = false;
 
       // ============================================================
-      // ฟังก์ชันช่วย: Toast ภาษาไทย
+      // Helpers
       // ============================================================
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className =
-          "toast align-items-center text-bg-" + variant + " border-0";
+          "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
         mainToastBody.textContent = message;
         mainToast.show();
       }
 
-      // ============================================================
-      // ฟังก์ชันช่วย: รูปแบบตัวเลขและวันที่ไทย
-      // ============================================================
       function formatNumber(value) {
         if (typeof value !== "number" || isNaN(value)) return "0.00";
         return value.toLocaleString("th-TH", {
@@ -726,18 +585,8 @@
         if (!year || !month || !day) return dateStr;
         const d = new Date(year, month - 1, day);
         const thaiMonths = [
-          "ม.ค.",
-          "ก.พ.",
-          "มี.ค.",
-          "เม.ย.",
-          "พ.ค.",
-          "มิ.ย.",
-          "ก.ค.",
-          "ส.ค.",
-          "ก.ย.",
-          "ต.ค.",
-          "พ.ย.",
-          "ธ.ค.",
+          "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+          "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
         ];
         const thaiYear = d.getFullYear() + 543;
         return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
@@ -752,7 +601,7 @@
       }
 
       // ============================================================
-      // ธีม Light / Dark
+      // Theme
       // ============================================================
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
@@ -771,7 +620,7 @@
         try {
           localStorage.setItem("bm-theme-" + uid, theme);
         } catch (e) {
-          console.warn("ไม่สามารถบันทึกธีมใน localStorage ได้", e);
+          console.warn("Theme save error", e);
         }
       }
 
@@ -786,7 +635,7 @@
       }
 
       // ============================================================
-      // ฟังก์ชัน: ตรวจสอบ/สร้างเอกสารผู้ใช้ใน collection users
+      // User Profile
       // ============================================================
       async function ensureUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
@@ -794,8 +643,6 @@
         if (snap.exists()) {
           return { id: snap.id, ...snap.data() };
         }
-
-        // ยังไม่มีเอกสารของ user นี้ → เช็คว่ามี user คนอื่นแล้วหรือยัง
         const usersCol = collection(db, "users");
         const qUsers = query(usersCol, limit(1));
         const existingSnap = await getDocs(qUsers);
@@ -813,101 +660,57 @@
           theme: "light",
           disabled: false,
         };
-
         await setDoc(userRef, newUserData);
         return { id: user.uid, ...newUserData };
       }
 
       // ============================================================
-      // ฟังก์ชันช่วย: สร้างแถวรายการอะไหล่ในตาราง
+      // Table Row Creators (Enhanced HTML)
       // ============================================================
       function createPartRow() {
         const tr = document.createElement("tr");
-
+        // Adjusted HTML for better look
         tr.innerHTML = `
           <td>
-            <select class="form-select form-select-sm part-stock-select">
-              <option value="">เลือกอะไหล่จากสต๊อก</option>
+            <select class="form-select form-select-sm part-stock-select rounded-3 border-secondary-subtle">
+              <option value="">-- เลือกอะไหล่ --</option>
               ${stockOptionsHtml}
             </select>
           </td>
           <td class="text-end">
-            <div class="input-group input-group-sm justify-content-end">
-              <button
-                class="btn btn-outline-secondary btn-sm part-qty-decrease"
-                type="button"
-              >
-                <i class="bi bi-dash"></i>
-              </button>
-              <input
-                type="number"
-                class="form-control form-control-sm text-end part-qty-input"
-                value="1"
-                min="1"
-              />
-              <button
-                class="btn btn-outline-secondary btn-sm part-qty-increase"
-                type="button"
-              >
-                <i class="bi bi-plus"></i>
-              </button>
+            <div class="input-group input-group-sm flex-nowrap justify-content-end">
+              <button class="btn btn-light border part-qty-decrease" type="button"><i class="bi bi-dash"></i></button>
+              <input type="number" class="form-control text-center part-qty-input" value="1" min="1" style="max-width: 60px;" />
+              <button class="btn btn-light border part-qty-increase" type="button"><i class="bi bi-plus"></i></button>
             </div>
           </td>
           <td class="text-end">
-            <input
-              type="number"
-              class="form-control form-control-sm text-end part-unit-price-input"
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-            />
+            <input type="number" class="form-control form-control-sm text-end part-unit-price-input rounded-3" placeholder="0.00" min="0" step="0.01" />
           </td>
-          <td class="text-end">
-            <span class="part-line-total-text">0.00</span> ฿
+          <td class="text-end align-middle fw-semibold text-dark">
+            <span class="part-line-total-text">0.00</span>
           </td>
           <td class="text-center">
-            <button
-              class="btn btn-outline-danger btn-sm part-remove-row-btn"
-              type="button"
-              aria-label="ลบรายการอะไหล่นี้"
-            >
-              <i class="bi bi-x-lg"></i>
+            <button class="btn btn-sm btn-link text-danger part-remove-row-btn p-0" type="button" aria-label="ลบ">
+              <i class="bi bi-x-circle-fill fs-6"></i>
             </button>
           </td>
         `;
-
         return tr;
       }
 
-      // ============================================================
-      // ฟังก์ชันช่วย: สร้างแถวรายการค่าแรง
-      // ============================================================
       function createLaborRow() {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
-            <input
-              type="text"
-              class="form-control form-control-sm labor-name-input"
-              placeholder="เช่น ค่าตั้งโซ่, ค่าล้างรถ"
-            />
+            <input type="text" class="form-control form-control-sm labor-name-input rounded-3" placeholder="ระบุรายการค่าแรง..." />
           </td>
           <td class="text-end">
-            <input
-              type="number"
-              class="form-control form-control-sm text-end labor-price-input"
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-            />
+            <input type="number" class="form-control form-control-sm text-end labor-price-input rounded-3" placeholder="0.00" min="0" step="0.01" />
           </td>
           <td class="text-center">
-            <button
-              class="btn btn-outline-danger btn-sm labor-remove-row-btn"
-              type="button"
-              aria-label="ลบรายการค่าแรงนี้"
-            >
-              <i class="bi bi-x-lg"></i>
+            <button class="btn btn-sm btn-link text-danger labor-remove-row-btn p-0" type="button" aria-label="ลบ">
+              <i class="bi bi-x-circle-fill fs-6"></i>
             </button>
           </td>
         `;
@@ -915,13 +718,12 @@
       }
 
       // ============================================================
-      // ฟังก์ชัน: คำนวณยอดรวมจากตารางอะไหล่และค่าแรง
+      // Logic: Calculations & Form Handling
       // ============================================================
       function recalcTotals() {
         let partsTotal = 0;
         let laborTotal = 0;
 
-        // รวมค่าอะไหล่จากทุกแถวที่เลือกสต๊อกและมีจำนวน/ราคา
         partsTbody.querySelectorAll("tr").forEach((tr) => {
           const select = tr.querySelector(".part-stock-select");
           const qtyInput = tr.querySelector(".part-qty-input");
@@ -933,101 +735,62 @@
           let unitPrice = priceInput ? parseFloat(priceInput.value) : 0;
 
           if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) {
-            if (totalSpan) {
-              totalSpan.textContent = "0.00";
-            }
+            if (totalSpan) totalSpan.textContent = "0.00";
             return;
           }
 
           const lineTotal = qty * unitPrice;
           partsTotal += lineTotal;
-
-          if (totalSpan) {
-            totalSpan.textContent = formatNumber(lineTotal);
-          }
+          if (totalSpan) totalSpan.textContent = formatNumber(lineTotal);
         });
 
-        // รวมค่าแรงจากทุกแถวที่ใส่ชื่อและราคา
         laborTbody.querySelectorAll("tr").forEach((tr) => {
           const nameInput = tr.querySelector(".labor-name-input");
           const priceInput = tr.querySelector(".labor-price-input");
-
           const name = nameInput ? nameInput.value.trim() : "";
           const price = priceInput ? parseFloat(priceInput.value) : 0;
 
-          if (!name || isNaN(price) || price <= 0) {
-            return;
-          }
-
+          if (!name || isNaN(price) || price <= 0) return;
           laborTotal += price;
         });
 
         const grandTotal = partsTotal + laborTotal;
 
-        if (partsTotalDisplay) {
-          partsTotalDisplay.textContent = formatNumber(partsTotal) + " ฿";
-        }
-        if (laborTotalDisplay) {
-          laborTotalDisplay.textContent = formatNumber(laborTotal) + " ฿";
-        }
-        if (grandTotalDisplay) {
-          grandTotalDisplay.textContent = formatNumber(grandTotal) + " ฿";
-        }
+        if (partsTotalDisplay) partsTotalDisplay.textContent = formatNumber(partsTotal) + " ฿";
+        if (laborTotalDisplay) laborTotalDisplay.textContent = formatNumber(laborTotal) + " ฿";
+        if (grandTotalDisplay) grandTotalDisplay.textContent = formatNumber(grandTotal) + " ฿";
 
         return { partsTotal, laborTotal, grandTotal };
       }
 
-      // ============================================================
-      // ฟังก์ชัน: อ่านรายการอะไหล่จาก DOM เพื่อเตรียมบันทึกลง Firestore
-      // ============================================================
       function collectPartItemsForSave() {
         const items = [];
         let partsTotal = 0;
-
         partsTbody.querySelectorAll("tr").forEach((tr) => {
           const select = tr.querySelector(".part-stock-select");
           const qtyInput = tr.querySelector(".part-qty-input");
           const priceInput = tr.querySelector(".part-unit-price-input");
-
           if (!select || !qtyInput || !priceInput) return;
 
           const stockId = select.value;
           const qty = parseFloat(qtyInput.value);
           const unitPrice = parseFloat(priceInput.value);
 
-          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) {
-            return; // ข้ามแถวที่ข้อมูลไม่ครบ
-          }
+          if (!stockId || isNaN(qty) || qty <= 0 || isNaN(unitPrice) || unitPrice < 0) return;
 
           const lineTotal = qty * unitPrice;
           partsTotal += lineTotal;
-
           const stockData = stockMap[stockId] || {};
-          const stockName =
-            stockData.name ||
-            (select.options[select.selectedIndex]
-              ? select.options[select.selectedIndex].textContent
-              : "");
+          const stockName = stockData.name || (select.options[select.selectedIndex]?.textContent || "");
 
-          items.push({
-            stockId,
-            stockName,
-            qty,
-            unitPrice,
-            lineTotal,
-          });
+          items.push({ stockId, stockName, qty, unitPrice, lineTotal });
         });
-
         return { items, partsTotal };
       }
 
-      // ============================================================
-      // ฟังก์ชัน: อ่านรายการค่าแรงจาก DOM เพื่อเตรียมบันทึกลง Firestore
-      // ============================================================
       function collectLaborItemsForSave() {
         const laborItems = [];
         let laborTotal = 0;
-
         laborTbody.querySelectorAll("tr").forEach((tr) => {
           const nameInput = tr.querySelector(".labor-name-input");
           const priceInput = tr.querySelector(".labor-price-input");
@@ -1036,31 +799,20 @@
           const name = nameInput.value.trim();
           const price = parseFloat(priceInput.value);
 
-          if (!name || isNaN(price) || price <= 0) {
-            return; // ข้ามแถวที่ข้อมูลไม่ครบ
-          }
-
-          laborItems.push({
-            name,
-            price,
-          });
+          if (!name || isNaN(price) || price <= 0) return;
+          laborItems.push({ name, price });
           laborTotal += price;
         });
-
         return { laborItems, laborTotal };
       }
 
-      // ============================================================
-      // จัดการปุ่ม Loading สำหรับบันทึกบิล
-      // ============================================================
       function setSaveBillButtonLoading(isLoading) {
         isSavingBill = isLoading;
         if (!saveBillBtn || !saveBillSpinner || !saveBillBtnText) return;
-
         if (isLoading) {
           saveBillBtn.disabled = true;
           saveBillSpinner.classList.remove("d-none");
-          saveBillBtnText.textContent = "กำลังบันทึกบิลซ่อม...";
+          saveBillBtnText.textContent = "กำลังบันทึก...";
         } else {
           saveBillBtn.disabled = false;
           saveBillSpinner.classList.add("d-none");
@@ -1068,152 +820,87 @@
         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: ล้างค่าฟอร์มเปิดบิลซ่อมกลับค่าเริ่มต้น
-      // ============================================================
       function resetOpenBillForm() {
         if (!openBillForm) return;
-
         openBillForm.reset();
-
         const today = getTodayISODateString();
-        if (jobDateInput) {
-          jobDateInput.value = today;
-        }
+        if (jobDateInput) jobDateInput.value = today;
         if (openBillTodayLabel) {
-          openBillTodayLabel.textContent = formatDateThaiFromString(today);
+           openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ` + formatDateThaiFromString(today);
         }
 
         partsTbody.innerHTML = "";
         laborTbody.innerHTML = "";
-
-        // เพิ่มแถวเริ่มต้นอย่างน้อย 1 แถว
-        if (stockOptionsHtml) {
-          partsTbody.appendChild(createPartRow());
-        }
+        if (stockOptionsHtml) partsTbody.appendChild(createPartRow());
         laborTbody.appendChild(createLaborRow());
 
-        // เคลียร์ invalid state
         customerNameInput.classList.remove("is-invalid");
         plateInput.classList.remove("is-invalid");
         problemInput.classList.remove("is-invalid");
         jobDateInput.classList.remove("is-invalid");
-
         recalcTotals();
       }
 
-      // ============================================================
-      // ฟังก์ชัน: โหลดข้อมูลสต๊อกจาก Firestore เพื่อใช้ใน select อะไหล่
-      // ============================================================
       async function loadStockForParts(branchId) {
         try {
           const stockCol = collection(db, "stock");
           const constraints = [where("isDeleted", "==", false)];
-          if (branchId) {
-            constraints.push(where("branchId", "==", branchId));
-          }
-
-          // หมายเหตุ: อาจต้องสร้าง index ตามที่ Firestore แจ้งถ้าใช้ where + orderBy
-          const stockQueryRef = query(
-            stockCol,
-            ...constraints,
-            orderBy("name"),
-            limit(200)
-          );
-
+          if (branchId) constraints.push(where("branchId", "==", branchId));
+          const stockQueryRef = query(stockCol, ...constraints, orderBy("name"), limit(200));
           const snap = await getDocs(stockQueryRef);
 
-          // เคลียร์ข้อมูลเดิม
           Object.keys(stockMap).forEach((k) => delete stockMap[k]);
-
           let optionsHtml = "";
           snap.forEach((docSnap) => {
             const data = docSnap.data();
             stockMap[docSnap.id] = data;
-
             const name = data.name || "-";
             const code = data.code || "";
             const salePrice = Number(data.salePrice) || 0;
             const label = code ? `${code} - ${name}` : name;
-
             optionsHtml += `<option value="${docSnap.id}" data-sale-price="${salePrice}">${label}</option>`;
           });
-
           stockOptionsHtml = optionsHtml;
 
           if (stockLoadingState) {
             if (snap.empty) {
-              stockLoadingState.className =
-                "alert alert-warning border small py-2 mb-2";
-              stockLoadingState.textContent =
-                "ยังไม่มีข้อมูลอะไหล่ในสต๊อก กรุณาเพิ่มอะไหล่ที่หน้า 'สต๊อก' ก่อน";
+              stockLoadingState.className = "alert alert-warning border small py-2 mb-2 rounded-3";
+              stockLoadingState.textContent = "ยังไม่มีข้อมูลอะไหล่ในสต๊อก";
             } else {
-              stockLoadingState.className =
-                "alert alert-light border small py-2 mb-2 d-none";
+              stockLoadingState.className = "d-none";
             }
           }
 
-          // หลังโหลดสต๊อกเสร็จ ถ้ายังไม่มีแถวอะไหล่ ให้สร้างแถวเริ่มต้น
-          if (!partsTbody.querySelector("tr")) {
-            if (stockOptionsHtml) {
-              partsTbody.appendChild(createPartRow());
-            }
+          if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
+            partsTbody.appendChild(createPartRow());
           } else {
-            // อัปเดต options ของ select ในทุกแถวให้เป็นข้อมูลล่าสุด
             partsTbody.querySelectorAll(".part-stock-select").forEach((select) => {
               const currentValue = select.value;
-              select.innerHTML =
-                `<option value="">เลือกอะไหล่จากสต๊อก</option>${stockOptionsHtml}`;
-              if (currentValue && stockMap[currentValue]) {
-                select.value = currentValue;
-              }
+              select.innerHTML = `<option value="">-- เลือกอะไหล่ --</option>${stockOptionsHtml}`;
+              if (currentValue && stockMap[currentValue]) select.value = currentValue;
             });
           }
         } catch (error) {
-          console.error("โหลดข้อมูลสต๊อกไม่สำเร็จ:", error);
+          console.error("Load Stock Error:", error);
           if (stockLoadingState) {
-            stockLoadingState.className =
-              "alert alert-danger border small py-2 mb-2";
-            stockLoadingState.textContent =
-              "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง";
+             stockLoadingState.className = "alert alert-danger border small py-2 mb-2";
+             stockLoadingState.textContent = "โหลดสต๊อกล้มเหลว";
           }
-          showToast(
-            "ไม่สามารถโหลดข้อมูลสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: โหลดประวัติลูกค้า/รถเพื่อใช้ auto-complete
-      // ============================================================
       async function loadAutocompleteHistory(branchId) {
         const recordsMap = new Map();
-
         try {
-          // ดึงข้อมูลจาก jobs
           const jobsCol = collection(db, "jobs");
           const jobsConstraints = [where("isDeleted", "==", false)];
-          if (branchId) {
-            jobsConstraints.push(where("branchId", "==", branchId));
-          }
-
-          // หมายเหตุ: ถ้า Firestore แจ้งต้องสร้าง index ให้สร้างตามลิงก์
-          const jobsQueryRef = query(
-            jobsCol,
-            ...jobsConstraints,
-            orderBy("createdAt", "desc"),
-            limit(30)
-          );
+          if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
+          const jobsQueryRef = query(jobsCol, ...jobsConstraints, orderBy("createdAt", "desc"), limit(30));
           const jobsSnap = await getDocs(jobsQueryRef);
 
           jobsSnap.forEach((docSnap) => {
             const data = docSnap.data();
-            const key = `${data.customerName || ""}|${data.customerPhone || ""}|${
-              data.plate || ""
-            }`;
+            const key = `${data.customerName || ""}|${data.customerPhone || ""}|${data.plate || ""}`;
             if (!recordsMap.has(key)) {
               recordsMap.set(key, {
                 customerName: data.customerName || "",
@@ -1225,24 +912,15 @@
             }
           });
 
-          // ดึงข้อมูลจาก vehicles
           const vehiclesCol = collection(db, "vehicles");
           const vehiclesConstraints = [where("isDeleted", "==", false)];
-          if (branchId) {
-            vehiclesConstraints.push(where("branchId", "==", branchId));
-          }
-
-          const vehiclesQueryRef = query(
-            vehiclesCol,
-            ...vehiclesConstraints,
-            orderBy("createdAt", "desc"),
-            limit(30)
-          );
+          if (branchId) vehiclesConstraints.push(where("branchId", "==", branchId));
+          const vehiclesQueryRef = query(vehiclesCol, ...vehiclesConstraints, orderBy("createdAt", "desc"), limit(30));
           const vehiclesSnap = await getDocs(vehiclesQueryRef);
 
           vehiclesSnap.forEach((docSnap) => {
             const data = docSnap.data();
-            const key = `| |${data.plate || ""}`; // เน้นทะเบียนจาก vehicles
+            const key = `| |${data.plate || ""}`;
             if (!recordsMap.has(key)) {
               recordsMap.set(key, {
                 customerName: "",
@@ -1255,11 +933,8 @@
           });
 
           historyRecords = Array.from(recordsMap.values());
-
-          // เติม datalist สำหรับชื่อลูกค้าและทะเบียน
           const nameSet = new Set();
           const plateSet = new Set();
-
           historyRecords.forEach((r) => {
             if (r.customerName) nameSet.add(r.customerName);
             if (r.plate) plateSet.add(r.plate);
@@ -1273,7 +948,6 @@
               customerNameDatalist.appendChild(opt);
             });
           }
-
           if (plateDatalist) {
             plateDatalist.innerHTML = "";
             plateSet.forEach((plate) => {
@@ -1283,66 +957,40 @@
             });
           }
         } catch (error) {
-          console.error("โหลดข้อมูล auto-complete ไม่สำเร็จ:", error);
-          // ไม่จำเป็นต้องขึ้น error ใหญ่ แค่ไม่ได้ auto-fill
+          console.error("Autocomplete Error:", error);
         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: auto-fill จากประวัติโดยใช้ทะเบียน
-      // ============================================================
       function autoFillFromHistoryByPlate(plateValue) {
         const plate = (plateValue || "").trim();
         if (!plate || historyRecords.length === 0) return;
-
         const record = historyRecords.find((r) => r.plate === plate);
         if (!record) return;
-
-        if (record.brand && brandInput) {
-          brandInput.value = record.brand;
-        }
-        if (record.model && modelInput) {
-          modelInput.value = record.model;
-        }
-        if (record.customerName && customerNameInput) {
-          customerNameInput.value = record.customerName;
-        }
-        if (record.customerPhone && customerPhoneInput) {
-          customerPhoneInput.value = record.customerPhone;
-        }
+        if (record.brand && brandInput) brandInput.value = record.brand;
+        if (record.model && modelInput) modelInput.value = record.model;
+        if (record.customerName && customerNameInput) customerNameInput.value = record.customerName;
+        if (record.customerPhone && customerPhoneInput) customerPhoneInput.value = record.customerPhone;
       }
 
-      // ============================================================
-      // ฟังก์ชัน: auto-fill จากประวัติโดยใช้ชื่อลูกค้า
-      // ============================================================
       function autoFillFromHistoryByCustomerName(nameValue) {
         const name = (nameValue || "").trim();
         if (!name || historyRecords.length === 0) return;
-
         const record = historyRecords.find((r) => r.customerName === name);
         if (!record) return;
-
-        if (record.customerPhone && customerPhoneInput) {
-          customerPhoneInput.value = record.customerPhone;
-        }
+        if (record.customerPhone && customerPhoneInput) customerPhoneInput.value = record.customerPhone;
         if (record.plate && plateInput) {
-          plateInput.value = record.plate;
-          autoFillFromHistoryByPlate(record.plate);
+           plateInput.value = record.plate;
+           autoFillFromHistoryByPlate(record.plate);
         }
       }
 
-      // ============================================================
-      // ฟังก์ชัน: บันทึกบิลซ่อมใหม่ลง Firestore
-      // ============================================================
       async function saveNewJobBill() {
         if (!currentUser || !currentUserProfile) {
-          showToast("ไม่พบข้อมูลผู้ใช้ กรุณาเข้าสู่ระบบใหม่อีกครั้ง", "danger");
+          showToast("ไม่พบข้อมูลผู้ใช้", "danger");
           return;
         }
-
         if (isSavingBill) return;
 
-        // ล้าง invalid state ก่อน validate ใหม่
         jobDateInput.classList.remove("is-invalid");
         customerNameInput.classList.remove("is-invalid");
         plateInput.classList.remove("is-invalid");
@@ -1359,57 +1007,35 @@
         const priority = prioritySelect.value || "normal";
 
         let hasError = false;
-
-        if (!jobDate) {
-          jobDateInput.classList.add("is-invalid");
-          hasError = true;
-        }
-        if (!customerName) {
-          customerNameInput.classList.add("is-invalid");
-          hasError = true;
-        }
-        if (!plate) {
-          plateInput.classList.add("is-invalid");
-          hasError = true;
-        }
-        if (!problem) {
-          problemInput.classList.add("is-invalid");
-          hasError = true;
-        }
+        if (!jobDate) { jobDateInput.classList.add("is-invalid"); hasError = true; }
+        if (!customerName) { customerNameInput.classList.add("is-invalid"); hasError = true; }
+        if (!plate) { plateInput.classList.add("is-invalid"); hasError = true; }
+        if (!problem) { problemInput.classList.add("is-invalid"); hasError = true; }
 
         const mileage = mileageStr ? parseFloat(mileageStr) : null;
         if (mileageStr && (isNaN(mileage) || mileage < 0)) {
           mileageInput.classList.add("is-invalid");
           hasError = true;
-        } else {
-          mileageInput.classList.remove("is-invalid");
         }
 
-        // อ่านรายการอะไหล่และค่าแรง
         const { items, partsTotal } = collectPartItemsForSave();
         const { laborItems, laborTotal } = collectLaborItemsForSave();
         const totalAmount = partsTotal + laborTotal;
 
         if (items.length === 0 && laborItems.length === 0) {
-          showToast(
-            "กรุณาเพิ่มรายการอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ",
-            "warning"
-          );
+          showToast("ต้องมีอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ", "warning");
           hasError = true;
         }
 
         if (hasError) {
-          showToast("กรุณากรอกข้อมูลให้ครบถ้วนก่อนบันทึกบิล", "warning");
+          showToast("กรุณากรอกข้อมูลให้ครบถ้วน", "warning");
           return;
         }
 
-        // staff/admin สามารถสร้างบิลซ่อมได้ทั้งคู่ตามสเปก
         setSaveBillButtonLoading(true);
-
         const branchId = currentUserProfile.branchId || null;
 
         try {
-          // 1) บันทึกเอกสารงานซ่อมใน jobs
           const jobDocRef = await addDoc(collection(db, "jobs"), {
             createdAt: serverTimestamp(),
             updatedAt: null,
@@ -1436,13 +1062,10 @@
 
           const jobId = jobDocRef.id;
 
-          // 2) อัปเดตสต๊อกอะไหล่สำหรับแต่ละรายการ
           for (const item of items) {
             const stockId = item.stockId;
             const qtyUsed = item.qty;
-
             if (!stockId || !stockMap[stockId]) continue;
-
             const stockData = stockMap[stockId];
             const currentQty = Number(stockData.qty) || 0;
             const currentFastMoving = Number(stockData.fastMovingScore) || 0;
@@ -1455,14 +1078,11 @@
               fastMovingScore: newFastMoving,
               updatedAt: serverTimestamp(),
             });
-
-            // อัปเดตค่าในแผนที่ภายในด้วย
             stockData.qty = newQty;
             stockData.fastMovingScore = newFastMoving;
           }
 
-          // 3) เพิ่มเอกสารธุรกรรมรายรับ (transactions)
-          const txnDescription = `ค่าซ่อมรถ ทะเบียน ${plate} (${customerName})`;
+          const txnDescription = `ค่าซ่อมรถ ${plate} (${customerName})`;
           await addDoc(collection(db, "transactions"), {
             date: jobDate,
             createdAt: serverTimestamp(),
@@ -1480,11 +1100,7 @@
             branchId,
           });
 
-          // 4) บันทึก activityLogs สำหรับ job_created
-          const logMessage = `เปิดบิลซ่อมใหม่ให้ลูกค้า ${customerName} ทะเบียน ${plate} รวม ${formatNumber(
-            totalAmount
-          )} ฿`;
-
+          const logMessage = `เปิดบิลซ่อมใหม่ ${customerName} (${plate}) ยอด ${formatNumber(totalAmount)} ฿`;
           await addDoc(collection(db, "activityLogs"), {
             createdAt: serverTimestamp(),
             createdBy: currentUser.uid,
@@ -1496,161 +1112,87 @@
             branchId,
           });
 
-          showToast("บันทึกบิลซ่อมเรียบร้อยแล้ว", "success");
-
-          // ล้างฟอร์มกลับค่าเริ่มต้น
+          showToast("บันทึกบิลซ่อมสำเร็จ", "success");
           resetOpenBillForm();
-
-          // รีโหลด auto-complete เพื่อให้ดึงประวัติล่าสุด
           loadAutocompleteHistory(branchId);
         } catch (error) {
-          console.error("บันทึกบิลซ่อมไม่สำเร็จ:", error);
-          showToast(
-            "ไม่สามารถบันทึกบิลซ่อมได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
+          console.error("Save Job Error:", error);
+          showToast("บันทึกไม่สำเร็จ", "danger");
         } finally {
           setSaveBillButtonLoading(false);
         }
       }
 
-      // ============================================================
-      // Logout
-      // ============================================================
       async function handleLogout() {
         try {
           await signOut(auth);
-          showToast("ออกจากระบบเรียบร้อยแล้ว", "success");
           window.location.href = "index.html";
         } catch (error) {
-          console.error("Logout error:", error);
-          showToast(
-            "ไม่สามารถออกจากระบบได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
+          console.error("Logout Error:", error);
         }
       }
 
       // ============================================================
-      // ตั้งค่า Event Listeners สำหรับหน้าเปิดบิลซ่อม
+      // Event Listeners
       // ============================================================
       function setupEventListenersForPage() {
-        // ปุ่ม Logout
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            handleLogout();
-          });
-        }
-
-        // ปุ่มสลับธีม
+        if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+        
         if (themeToggleBtn) {
           themeToggleBtn.addEventListener("click", async () => {
-            const currentTheme = bodyEl.classList.contains("bm-theme-dark")
-              ? "dark"
-              : "light";
+            const currentTheme = bodyEl.classList.contains("bm-theme-dark") ? "dark" : "light";
             const nextTheme = currentTheme === "dark" ? "light" : "dark";
             applyTheme(nextTheme);
             if (currentUser) {
               saveThemeForUser(currentUser.uid, nextTheme);
-              try {
-                const userRef = doc(db, "users", currentUser.uid);
-                await updateDoc(userRef, { theme: nextTheme });
-              } catch (error) {
-                console.error("อัปเดตธีมใน Firestore ไม่สำเร็จ:", error);
-              }
+              try { await updateDoc(doc(db, "users", currentUser.uid), { theme: nextTheme }); } catch(e){}
             }
           });
         }
 
-        // FAB เมนูด่วน
-        if (fabOpenBillBtn) {
-          fabOpenBillBtn.addEventListener("click", () => {
-            // อยู่หน้าเปิดบิลแล้ว
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-        }
-        if (fabAddTxnBtn) {
-          fabAddTxnBtn.addEventListener("click", () => {
-            window.location.href = "finance.html";
-          });
-        }
-        if (fabStockInBtn) {
-          fabStockInBtn.addEventListener("click", () => {
-            window.location.href = "stock.html";
-          });
-        }
-        if (fabAddVehicleBtn) {
-          fabAddVehicleBtn.addEventListener("click", () => {
-            window.location.href = "vehicles.html";
-          });
-        }
+        if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
+        if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
+        if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
 
-        // ปุ่มเพิ่มแถวอะไหล่
         if (addPartRowBtn) {
           addPartRowBtn.addEventListener("click", () => {
             if (!stockOptionsHtml) {
-              showToast(
-                "ยังไม่มีข้อมูลอะไหล่ในสต๊อก กรุณาเพิ่มอะไหล่ที่หน้า 'สต๊อก' ก่อน",
-                "warning"
-              );
+              showToast("ไม่มีข้อมูลสต๊อก", "warning");
               return;
             }
-            const tr = createPartRow();
-            partsTbody.appendChild(tr);
+            partsTbody.appendChild(createPartRow());
           });
         }
 
-        // Event delegation สำหรับตารางอะไหล่
         partsTbody.addEventListener("click", (event) => {
           const target = event.target;
-
-          // ปุ่มลบแถว
           const removeBtn = target.closest(".part-remove-row-btn");
           if (removeBtn) {
             const tr = removeBtn.closest("tr");
-            if (tr) {
-              tr.remove();
-              if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
-                partsTbody.appendChild(createPartRow());
-              }
-              recalcTotals();
-            }
+            tr.remove();
+            if (!partsTbody.querySelector("tr") && stockOptionsHtml) partsTbody.appendChild(createPartRow());
+            recalcTotals();
             return;
           }
-
-          // ปุ่มเพิ่ม/ลดจำนวน
           const decBtn = target.closest(".part-qty-decrease");
           const incBtn = target.closest(".part-qty-increase");
           if (decBtn || incBtn) {
             const tr = target.closest("tr");
-            if (!tr) return;
             const qtyInput = tr.querySelector(".part-qty-input");
-            if (!qtyInput) return;
-
             let qty = parseFloat(qtyInput.value) || 0;
-            if (decBtn) {
-              qty = Math.max(1, qty - 1);
-            } else if (incBtn) {
-              qty = qty + 1;
-            }
+            if (decBtn) qty = Math.max(1, qty - 1);
+            else if (incBtn) qty = qty + 1;
             qtyInput.value = qty;
             recalcTotals();
           }
         });
 
-        // เปลี่ยนค่า select หรือราคา/จำนวน → recalcuate
         partsTbody.addEventListener("input", (event) => {
           const target = event.target;
-
-          // เมื่อเลือกอะไหล่จาก select ให้เติมราคาขายเริ่มต้น
           if (target.classList.contains("part-stock-select")) {
-            const select = target;
-            const stockId = select.value;
-            const tr = select.closest("tr");
+            const stockId = target.value;
+            const tr = target.closest("tr");
             const priceInput = tr.querySelector(".part-unit-price-input");
             if (stockId && stockMap[stockId] && priceInput) {
               const salePrice = Number(stockMap[stockId].salePrice) || 0;
@@ -1659,64 +1201,40 @@
               }
             }
           }
-
           recalcTotals();
         });
 
-        // ปุ่มเพิ่ม/ลบ/แก้ไขค่าแรง
         if (addLaborRowBtn) {
-          addLaborRowBtn.addEventListener("click", () => {
-            laborTbody.appendChild(createLaborRow());
-          });
+          addLaborRowBtn.addEventListener("click", () => laborTbody.appendChild(createLaborRow()));
         }
 
         laborTbody.addEventListener("click", (event) => {
-          const target = event.target;
-          const removeBtn = target.closest(".labor-remove-row-btn");
+          const removeBtn = event.target.closest(".labor-remove-row-btn");
           if (removeBtn) {
-            const tr = removeBtn.closest("tr");
-            if (tr) {
-              tr.remove();
-              if (!laborTbody.querySelector("tr")) {
-                laborTbody.appendChild(createLaborRow());
-              }
-              recalcTotals();
-            }
+            removeBtn.closest("tr").remove();
+            if (!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
+            recalcTotals();
           }
         });
+        laborTbody.addEventListener("input", recalcTotals);
 
-        laborTbody.addEventListener("input", () => {
-          recalcTotals();
-        });
-
-        // ปุ่มล้างฟอร์ม
         if (resetFormBtn) {
           resetFormBtn.addEventListener("click", () => {
             resetOpenBillForm();
-            showToast("ล้างข้อมูลฟอร์มเรียบร้อยแล้ว", "info");
+            showToast("ล้างฟอร์มแล้ว", "info");
           });
         }
 
-        // เมื่อเปลี่ยนทะเบียนหรือชื่อลูกค้า → auto-fill จากประวัติ
         if (plateInput) {
-          plateInput.addEventListener("change", () => {
-            autoFillFromHistoryByPlate(plateInput.value);
-          });
-          plateInput.addEventListener("blur", () => {
-            autoFillFromHistoryByPlate(plateInput.value);
-          });
+          plateInput.addEventListener("change", () => autoFillFromHistoryByPlate(plateInput.value));
+          plateInput.addEventListener("blur", () => autoFillFromHistoryByPlate(plateInput.value));
         }
 
         if (customerNameInput) {
-          customerNameInput.addEventListener("change", () => {
-            autoFillFromHistoryByCustomerName(customerNameInput.value);
-          });
-          customerNameInput.addEventListener("blur", () => {
-            autoFillFromHistoryByCustomerName(customerNameInput.value);
-          });
+          customerNameInput.addEventListener("change", () => autoFillFromHistoryByCustomerName(customerNameInput.value));
+          customerNameInput.addEventListener("blur", () => autoFillFromHistoryByCustomerName(customerNameInput.value));
         }
 
-        // Submit ฟอร์มเปิดบิลซ่อม
         if (openBillForm) {
           openBillForm.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -1727,100 +1245,52 @@
       }
 
       // ============================================================
-      // Auth Guard ของหน้าเปิดบิลซ่อม
+      // Initialization
       // ============================================================
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          // ยังไม่ล็อกอิน → กลับไปหน้า index
           window.location.href = "index.html";
           return;
         }
-
         currentUser = user;
-
         try {
           const userProfile = await ensureUserProfile(user);
           currentUserProfile = userProfile;
-
-          if (userProfile.disabled === true) {
+          if (userProfile.disabled) {
             await signOut(auth);
-            showToast(
-              "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
-              "danger"
-            );
             window.location.href = "index.html";
             return;
           }
 
-          // อัปเดตข้อมูลผู้ใช้บน Topbar
-          if (userDisplayNameText) {
-            userDisplayNameText.textContent = userProfile.displayName || "-";
-          }
-          if (userRoleText) {
-            const roleLabel =
-              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
-            userRoleText.textContent = roleLabel;
-          }
-          if (userAvatarInitial) {
-            const dn = userProfile.displayName || "U";
-            userAvatarInitial.textContent = dn.trim().charAt(0).toUpperCase();
-          }
+          if (userDisplayNameText) userDisplayNameText.textContent = userProfile.displayName || "-";
+          if (userRoleText) userRoleText.textContent = userProfile.role === "admin" ? "Admin" : "Staff";
+          if (userAvatarInitial) userAvatarInitial.textContent = (userProfile.displayName || "U").trim().charAt(0).toUpperCase();
 
-          // แสดงเมนูตั้งค่าเฉพาะ admin
           if (settingsMenuItem) {
-            if (userProfile.role === "admin") {
-              settingsMenuItem.classList.remove("d-none");
-            } else {
-              settingsMenuItem.classList.add("d-none");
-            }
+            if (userProfile.role === "admin") settingsMenuItem.classList.remove("d-none");
+            else settingsMenuItem.classList.add("d-none");
           }
 
-          // ธีม
-          const baseTheme = userProfile.theme || "light";
-          const themeToUse = readThemeForUser(user.uid, baseTheme);
+          const themeToUse = readThemeForUser(user.uid, userProfile.theme || "light");
           applyTheme(themeToUse);
 
-          // ตั้งวันที่เริ่มต้นของฟอร์มเป็นวันนี้
           const today = getTodayISODateString();
-          if (jobDateInput) {
-            jobDateInput.value = today;
-          }
-          if (openBillTodayLabel) {
-            openBillTodayLabel.textContent = formatDateThaiFromString(today);
-          }
+          if (jobDateInput) jobDateInput.value = today;
+          if (openBillTodayLabel) openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ` + formatDateThaiFromString(today);
 
-          // ตั้งค่า event listeners
           setupEventListenersForPage();
-
-          // โหลดข้อมูลสต๊อกสำหรับใช้ในฟอร์มอะไหล่
           await loadStockForParts(userProfile.branchId || null);
-
-          // โหลดประวัติลูกค้า/รถสำหรับ auto-complete
           loadAutocompleteHistory(userProfile.branchId || null);
 
-          // ถ้ายังไม่มีแถวอะไหล่/ค่าแรง ให้สร้างแถวเริ่มต้น
-          if (!partsTbody.querySelector("tr") && stockOptionsHtml) {
-            partsTbody.appendChild(createPartRow());
-          }
-          if (!laborTbody.querySelector("tr")) {
-            laborTbody.appendChild(createLaborRow());
-          }
+          if (!partsTbody.querySelector("tr") && stockOptionsHtml) partsTbody.appendChild(createPartRow());
+          if (!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
 
-          // คำนวณยอดเริ่มต้น
           recalcTotals();
         } catch (error) {
-          console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้/สต๊อก:", error);
-          showToast(
-            "ไม่สามารถโหลดข้อมูลผู้ใช้หรือสต๊อกได้ กรุณาลองใหม่อีกครั้ง (" +
-              (error.code || "error") +
-              ")",
-            "danger"
-          );
+          console.error("Init Error:", error);
+          showToast("โหลดข้อมูลผิดพลาด", "danger");
         }
       });
     </script>
   </body>
 </html>
-
-
-
