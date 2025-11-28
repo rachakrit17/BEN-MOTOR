@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="th">
   <head>
+    <!-- เมตาพื้นฐานของหน้า "ตั้งค่าระบบ" -->
     <meta charset="UTF-8" />
     <title>BEN MOTOR – ตั้งค่าระบบ & ผู้ใช้ & สำรองข้อมูล</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- ฟอนต์ Kanit -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <link rel="icon" type="image/x-icon" href="img/icon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<!-- Favicon ปกติบนเบราว์เซอร์ -->
+<link rel="icon" type="image/x-icon" href="img/icon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<!-- Icon เวลาเซฟลงหน้าจอมือถือ (iOS) -->
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 
-    <link rel="manifest" href="img/site.webmanifest">
+<!-- PWA manifest -->
+<link rel="manifest" href="img/site.webmanifest">
     
+    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -25,81 +31,82 @@
       crossorigin="anonymous"
     />
 
+    <!-- Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 
+    <!-- CSS หลักของระบบ BEN MOTOR -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="bm-theme-light">
+    <!-- ===========================================================
+         แถบด้านบนของระบบ (Topbar)
+         แสดงชื่อระบบ + ปุ่มเปลี่ยนธีม + เมนูผู้ใช้
+    ============================================================ -->
     <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <!-- ชื่อระบบด้านซ้าย -->
+        <span class="navbar-brand mb-0 h1 fw-bold">
+          BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
+          <!-- ปุ่มสลับธีม Light / Dark -->
           <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
+            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
             id="themeToggleBtn"
             type="button"
             aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
           >
-            <i class="bi bi-moon fs-5"></i>
+            <i class="bi bi-moon"></i>
           </button>
 
+          <!-- Dropdown ผู้ใช้งาน -->
           <div class="dropdown">
             <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
+              class="btn btn-sm btn-outline-primary d-flex align-items-center"
               type="button"
               id="userMenuButton"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
+              <!-- Avatar ตัวอักษรแรกของชื่อ -->
               <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
+                class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle"
                 id="userAvatarCircle"
               >
-                <span id="userAvatarInitial" class="fw-bold">U</span>
+                <span id="userAvatarInitial">U</span>
               </span>
-              <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
+              <span class="small text-start">
+                <span id="userDisplayNameText">กำลังโหลด...</span>
                 <br />
-                <span class="text-muted text-xs" id="userRoleText">-</span>
+                <span class="text-muted small" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
+            <ul class="dropdown-menu dropdown-menu-end">
               <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
-              <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
+                <a class="dropdown-item" href="reports.html">
+                  <i class="bi bi-graph-up-arrow me-2"></i> รายงานทั้งหมด
                 </a>
               </li>
               <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
+              
               <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
+    <a class="dropdown-item" href="price-check.html">
+      <i class="bi bi-tags me-2"></i> เช็คราคา
+    </a>
+  </li>
+
+<li>
+  <a class="dropdown-item" href="customer-history.html">
+    <i class="bi bi-person-lines-fill me-2"></i> ประวัติลูกค้า &amp; รถ
+  </a>
+</li>
+<li><a class="dropdown-item" href="activity-log.html"><i class="bi bi-clock-history me-2"></i> ประวัติการทำรายการ</a></li>              
                 <a
-                  class="dropdown-item py-2 d-none"
+                  class="dropdown-item active"
                   href="settings.html"
                   id="settingsMenuItem"
                 >
@@ -109,7 +116,7 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <button
-                  class="dropdown-item py-2 text-danger"
+                  class="dropdown-item text-danger"
                   type="button"
                   id="logoutBtn"
                 >
@@ -122,83 +129,95 @@
       </div>
     </nav>
 
+    <!-- ===========================================================
+         เนื้อหาหลักของหน้า "ตั้งค่าระบบ"
+         - โปรไฟล์ของฉัน
+         - ผู้ใช้ในระบบ (เฉพาะ admin)
+         - สำรองข้อมูล (Export jobs / transactions)
+    ============================================================ -->
     <main class="bm-main-content">
       <div class="container py-3">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-3">
-          <div class="mb-3 mb-md-0">
-            <h1 class="h5 mb-1 fw-bold text-dark">
-               <i class="bi bi-sliders me-2 text-primary"></i>ตั้งค่าระบบ & ข้อมูลผู้ใช้
-            </h1>
-            <p class="small text-muted mb-0 ms-1">
-              จัดการโปรไฟล์ของคุณ ปรับธีม เปลี่ยนสิทธิ์ผู้ใช้ และสำรองข้อมูล
+        <!-- ส่วนหัวของหน้า -->
+        <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-semibold">ตั้งค่าระบบ & ข้อมูลผู้ใช้</h1>
+            <p class="small text-muted mb-0">
+              จัดการโปรไฟล์ของคุณ ปรับธีม เปลี่ยนสิทธิ์ผู้ใช้ และสำรองข้อมูลงานซ่อม/รายการเงิน
             </p>
           </div>
-          <div>
+          <div class="text-end">
             <span
-              class="badge rounded-pill bg-white text-secondary border shadow-sm px-3 py-2 fw-normal"
+              class="badge rounded-pill text-bg-secondary small"
               id="settingsRoleBadge"
             >
-              <span class="spinner-border spinner-border-sm" style="width: 0.7rem; height: 0.7rem;"></span> Loading...
+              -
             </span>
           </div>
         </div>
 
-        <div class="card border-0 bg-transparent mb-3">
-            <ul
-            class="nav nav-pills small gap-2"
-            id="settingsTabs"
-            role="tablist"
+        <!-- ================= แถบเมนูแท็บ Settings ================= -->
+        <!-- คอมเมนต์: ใช้ Nav พื้นฐานของ Bootstrap แยก 3 Tabs ตามสเปก -->
+        <ul
+          class="nav nav-pills mb-3 small"
+          id="settingsTabs"
+          role="tablist"
+        >
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="profile-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#profileTabPane"
+              type="button"
+              role="tab"
+              aria-controls="profileTabPane"
+              aria-selected="true"
             >
-            <li class="nav-item" role="presentation">
-                <button
-                class="nav-link active shadow-sm"
-                id="profile-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#profileTabPane"
-                type="button"
-                role="tab"
-                aria-controls="profileTabPane"
-                aria-selected="true"
-                >
-                <i class="bi bi-person-circle me-1"></i> โปรไฟล์ของฉัน
-                </button>
-            </li>
-            <li class="nav-item" role="presentation" id="usersTabNavItem">
-                <button
-                class="nav-link shadow-sm"
-                id="users-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#usersTabPane"
-                type="button"
-                role="tab"
-                aria-controls="usersTabPane"
-                aria-selected="false"
-                >
-                <i class="bi bi-people-fill me-1"></i> ผู้ใช้ในระบบ
-                <span
-                    class="badge bg-danger ms-1 rounded-pill"
-                    id="usersCountBadge"
-                >0</span>
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button
-                class="nav-link shadow-sm"
-                id="backup-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#backupTabPane"
-                type="button"
-                role="tab"
-                aria-controls="backupTabPane"
-                aria-selected="false"
-                >
-                <i class="bi bi-cloud-arrow-down me-1"></i> สำรองข้อมูล
-                </button>
-            </li>
-            </ul>
-        </div>
+              <i class="bi bi-person-circle me-1"></i> โปรไฟล์ของฉัน
+            </button>
+          </li>
+          <li class="nav-item" role="presentation" id="usersTabNavItem">
+            <button
+              class="nav-link"
+              id="users-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#usersTabPane"
+              type="button"
+              role="tab"
+              aria-controls="usersTabPane"
+              aria-selected="false"
+            >
+              <i class="bi bi-people-fill me-1"></i> ผู้ใช้ในระบบ
+              <span
+                class="badge bg-secondary ms-1"
+                id="usersCountBadge"
+              >0</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="backup-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#backupTabPane"
+              type="button"
+              role="tab"
+              aria-controls="backupTabPane"
+              aria-selected="false"
+            >
+              <i class="bi bi-cloud-arrow-down me-1"></i> สำรองข้อมูล
+            </button>
+          </li>
+        </ul>
 
+        <!-- ================= เนื้อหาแต่ละ Tab ================= -->
         <div class="tab-content" id="settingsTabContent">
+          <!-- -------------------------------------------------------
+               Tab 1: โปรไฟล์ของฉัน
+               - แสดง Email (อ่านอย่างเดียว)
+               - เปลี่ยน Display Name
+               - เลือก Theme light/dark
+          -------------------------------------------------------- -->
           <div
             class="tab-pane fade show active"
             id="profileTabPane"
@@ -206,59 +225,50 @@
             aria-labelledby="profile-tab"
             tabindex="0"
           >
-            <div class="card shadow-sm border-0">
-              <div class="card-body p-4">
-                <h2 class="h6 fw-bold mb-4 text-primary">
-                  <i class="bi bi-person-vcard me-2"></i>ข้อมูลส่วนตัวและการแสดงผล
+            <div class="card">
+              <div class="card-body small">
+                <h2 class="h6 fw-semibold mb-3">
+                  <i class="bi bi-person-check me-2"></i> โปรไฟล์ของฉัน
                 </h2>
 
-                <div class="row g-4">
-                  <div class="col-12 col-md-6 border-end-md">
-                    <h6 class="small fw-bold text-muted text-uppercase mb-3">บัญชีผู้ใช้</h6>
-                    
-                    <div class="mb-3">
-                      <label class="form-label small text-muted">อีเมล (Login Email)</label>
-                      <div class="input-group input-group-sm">
-                          <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                          <input
-                            type="email"
-                            class="form-control border-start-0 bg-white"
-                            id="profileEmailInput"
-                            readonly
-                          />
-                      </div>
-                      <div class="form-text text-xs text-muted mt-1">
-                        <i class="bi bi-info-circle"></i> อีเมลใช้สำหรับเข้าสู่ระบบเท่านั้น ไม่สามารถเปลี่ยนได้
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <div class="mb-2">
+                      <label class="form-label small">อีเมล (ใช้เข้าสู่ระบบ)</label>
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        id="profileEmailInput"
+                        readonly
+                      />
+                      <div class="form-text small">
+                        อีเมลใช้สำหรับเข้าสู่ระบบและรับลิงก์รีเซ็ตรหัสผ่าน
                       </div>
                     </div>
-
-                    <div class="mb-3">
-                      <label class="form-label small">ชื่อที่ใช้แสดง (Display Name)</label>
+                    <div class="mb-2">
+                      <label class="form-label small">ชื่อที่ใช้แสดงในระบบ</label>
                       <input
                         type="text"
                         class="form-control form-control-sm"
                         id="profileDisplayNameInput"
-                        placeholder="เช่น ช่างเบน, เจ้าของอู่"
+                        placeholder="เช่น ช่างเบน, เจ้าของอู่ ฯลฯ"
                       />
                     </div>
-
                     <div class="mb-2">
-                      <label class="form-label small">สาขาที่สังกัด (Branch ID)</label>
+                      <label class="form-label small">สาขาที่สังกัด (ถ้ามี)</label>
                       <input
                         type="text"
                         class="form-control form-control-sm"
                         id="profileBranchIdInput"
-                        placeholder="Main, Branch01 (เว้นว่างได้)"
+                        placeholder="เช่น main, branch01 หรือปล่อยว่างหากมีสาขาเดียว"
                       />
                     </div>
                   </div>
-
-                  <div class="col-12 col-md-6 ps-md-4">
-                     <h6 class="small fw-bold text-muted text-uppercase mb-3">รูปลักษณ์ (Appearance)</h6>
-                    <div class="mb-3">
-                      <label class="form-label small mb-2">ธีมของระบบ</label>
-                      <div class="d-flex flex-column gap-2">
-                        <div class="form-check p-3 border rounded-3 bg-light">
+                  <div class="col-12 col-md-6">
+                    <div class="mb-2">
+                      <label class="form-label small">ธีมการแสดงผล</label>
+                      <div class="d-flex flex-wrap gap-2">
+                        <div class="form-check">
                           <input
                             class="form-check-input"
                             type="radio"
@@ -267,13 +277,13 @@
                             value="light"
                           />
                           <label
-                            class="form-check-label small fw-medium w-100 stretched-link"
+                            class="form-check-label small"
                             for="themeLightRadio"
                           >
-                            <i class="bi bi-sun me-2 text-warning"></i>โหมดสว่าง (Light Mode)
+                            โหมดสว่าง (Light)
                           </label>
                         </div>
-                        <div class="form-check p-3 border rounded-3 bg-dark text-white">
+                        <div class="form-check">
                           <input
                             class="form-check-input"
                             type="radio"
@@ -282,27 +292,31 @@
                             value="dark"
                           />
                           <label
-                            class="form-check-label small fw-medium w-100 stretched-link"
+                            class="form-check-label small"
                             for="themeDarkRadio"
                           >
-                            <i class="bi bi-moon-stars me-2"></i>โหมดมืด (Dark Mode)
+                            โหมดมืด (Dark)
                           </label>
                         </div>
                       </div>
+                      <div class="form-text small">
+                        การเลือกธีมจะมีผลทั้งในอุปกรณ์นี้ และบันทึกไว้ในบัญชีของคุณ
+                      </div>
+                    </div>
+                    <div class="alert alert-info small mb-2" id="profileInfoAlert">
+                      คุณสามารถใช้หน้านี้เพื่อปรับชื่อที่ใช้แสดงและธีมได้ทุกเวลา
                     </div>
                   </div>
                 </div>
 
-                <hr class="my-4 text-muted opacity-25">
-
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="mt-3 d-flex justify-content-between align-items-center">
                   <small class="text-muted" id="profileSaveStatusText">
-                    <i class="bi bi-check2-circle"></i> ข้อมูลเป็นปัจจุบัน
+                    ยังไม่มีการเปลี่ยนแปลง
                   </small>
                   <div>
                     <button
                       type="button"
-                      class="btn btn-primary btn-sm px-4"
+                      class="btn btn-primary btn-sm"
                       id="profileSaveBtn"
                     >
                       <span
@@ -311,7 +325,7 @@
                         role="status"
                         aria-hidden="true"
                       ></span>
-                      <span id="profileSaveBtnText"><i class="bi bi-save me-1"></i> บันทึกการเปลี่ยนแปลง</span>
+                      <span id="profileSaveBtnText">บันทึกการเปลี่ยนแปลง</span>
                     </button>
                   </div>
                 </div>
@@ -319,6 +333,12 @@
             </div>
           </div>
 
+          <!-- -------------------------------------------------------
+               Tab 2: ผู้ใช้ในระบบ (เฉพาะ admin)
+               - ตารางผู้ใช้ทั้งหมด
+               - เปลี่ยน role, disabled, branchId, displayName
+               - ฟอร์มสร้างผู้ใช้ใหม่ (email + password + displayName + role + branchId)
+          -------------------------------------------------------- -->
           <div
             class="tab-pane fade"
             id="usersTabPane"
@@ -326,132 +346,153 @@
             aria-labelledby="users-tab"
             tabindex="0"
           >
-            <div class="card shadow-sm border-0">
-              <div class="card-body p-0">
-                <div class="p-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center bg-light rounded-top">
-                    <div>
-                        <h2 class="h6 fw-bold mb-0 text-dark">
-                            <i class="bi bi-people-fill me-2"></i>จัดการผู้ใช้ (User Management)
-                        </h2>
-                    </div>
-                    <span
-                        class="badge bg-warning text-dark small d-none mt-2 mt-md-0"
-                        id="usersAdminOnlyBadge"
-                    >
-                        <i class="bi bi-shield-lock me-1"></i> Admin Area
-                    </span>
+            <div class="card">
+              <div class="card-body small">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-2 gap-2">
+                  <h2 class="h6 fw-semibold mb-0">
+                    <i class="bi bi-people-fill me-2"></i> ผู้ใช้ในระบบ
+                  </h2>
+                  <span
+                    class="badge rounded-pill text-bg-warning small d-none"
+                    id="usersAdminOnlyBadge"
+                  >
+                    เฉพาะผู้ดูแลระบบ (Admin) เท่านั้นที่สามารถจัดการผู้ใช้
+                  </span>
                 </div>
 
                 <div
-                  class="alert alert-warning small m-3 d-none"
+                  class="alert alert-warning small d-none"
                   id="usersNotAdminAlert"
                 >
-                  <i class="bi bi-exclamation-triangle me-2"></i>
                   ขณะนี้คุณยังไม่ได้เป็นผู้ดูแลระบบ (Admin)
                   คุณสามารถดูข้อมูลผู้ใช้คนอื่นได้แต่ไม่สามารถแก้ไขได้
                 </div>
 
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light small text-muted text-uppercase">
+                <!-- ตารางผู้ใช้ทั้งหมด -->
+                <div class="table-responsive mb-3">
+                  <table class="table table-sm align-middle mb-0">
+                    <thead class="small text-muted">
                       <tr>
-                        <th class="ps-3 py-3">อีเมล</th>
-                        <th class="py-3">ชื่อแสดง</th>
-                        <th class="py-3">Role</th>
-                        <th class="py-3">สาขา</th>
-                        <th class="py-3">สถานะ</th>
-                        <th class="text-end pe-3 py-3">จัดการ</th>
+                        <th>อีเมล</th>
+                        <th>ชื่อแสดง</th>
+                        <th>Role</th>
+                        <th>สาขา</th>
+                        <th>สถานะ</th>
+                        <th class="text-end">จัดการ</th>
                       </tr>
                     </thead>
-                    <tbody id="usersTableTbody" class="small">
+                    <tbody id="usersTableTbody">
                       <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
-                          <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลดข้อมูลผู้ใช้...
+                        <td colspan="6" class="text-center small text-muted">
+                          กำลังโหลดข้อมูลผู้ใช้...
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
-                <div class="p-4 bg-light bg-opacity-50">
-                  <div class="card border-0 shadow-sm">
-                      <div class="card-body">
-                        <h3 class="h6 fw-bold mb-3 text-success">
-                            <i class="bi bi-person-plus-fill me-2"></i>สร้างผู้ใช้ใหม่ (Create New User)
-                        </h3>
-                        <div class="row g-2">
-                            <div class="col-12 col-md-3">
-                            <label class="form-label small text-muted mb-1" for="newUserEmailInput">อีเมล</label>
-                            <input
-                                type="email"
-                                class="form-control form-control-sm"
-                                id="newUserEmailInput"
-                                placeholder="user@benmotor.com"
-                            />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label small text-muted mb-1" for="newUserPasswordInput">รหัสผ่าน</label>
-                            <input
-                                type="password"
-                                class="form-control form-control-sm"
-                                id="newUserPasswordInput"
-                                placeholder="ขั้นต่ำ 6 ตัวอักษร"
-                            />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label small text-muted mb-1" for="newUserDisplayNameInput">ชื่อที่ใช้แสดง</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                id="newUserDisplayNameInput"
-                                placeholder="เช่น ช่าง A"
-                            />
-                            </div>
-                            <div class="col-6 col-md-1">
-                            <label class="form-label small text-muted mb-1" for="newUserRoleSelect">สิทธิ์</label>
-                            <select
-                                class="form-select form-select-sm"
-                                id="newUserRoleSelect"
-                            >
-                                <option value="staff">Staff</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                            </div>
-                            <div class="col-6 col-md-2">
-                            <label class="form-label small text-muted mb-1" for="newUserBranchIdInput">สาขา</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                id="newUserBranchIdInput"
-                                placeholder="Optional"
-                            />
-                            </div>
-                        </div>
-                        <div class="mt-3 d-flex justify-content-between align-items-center">
-                            <small class="text-muted" id="newUserCreateStatusText">
-                            <i class="bi bi-info-circle me-1"></i>ระบบจะสร้าง User ใน Firebase Auth และ Collection Users
-                            </small>
-                            <button
-                            type="button"
-                            class="btn btn-success btn-sm px-3"
-                            id="newUserCreateBtn"
-                            >
-                            <span
-                                class="spinner-border spinner-border-sm me-2 d-none"
-                                id="newUserCreateSpinner"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                            <span id="newUserCreateBtnText"><i class="bi bi-plus-lg me-1"></i> สร้างผู้ใช้ใหม่</span>
-                            </button>
-                        </div>
-                      </div>
+                <!-- ฟอร์มสร้างผู้ใช้ใหม่ -->
+                <div class="border-top pt-3 mt-3">
+                  <h3 class="h6 fw-semibold mb-2">
+                    <i class="bi bi-person-plus me-2"></i> สร้างผู้ใช้ใหม่
+                  </h3>
+                  <p class="small text-muted mb-2">
+                    ระบบจะสร้างบัญชีผู้ใช้ใหม่ใน Firebase Auth และสร้างเอกสาร
+                    <code>/users</code> ให้อัตโนมัติ โดยไม่กระทบการล็อกอินของคุณ
+                  </p>
+                  <div class="row g-2">
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserEmailInput"
+                        >อีเมล</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        id="newUserEmailInput"
+                        placeholder="example@domain.com"
+                      />
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserPasswordInput"
+                        >รหัสผ่านเริ่มต้น</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        id="newUserPasswordInput"
+                        placeholder="อย่างน้อย 6 ตัวอักษร"
+                      />
+                    </div>
+                    <div class="col-12 col-md-3">
+                      <label class="form-label small" for="newUserDisplayNameInput"
+                        >ชื่อที่ใช้แสดง</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="newUserDisplayNameInput"
+                        placeholder="เช่น ช่าง A"
+                      />
+                    </div>
+                    <div class="col-6 col-md-1">
+                      <label class="form-label small" for="newUserRoleSelect"
+                        >Role</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        id="newUserRoleSelect"
+                      >
+                        <option value="staff">staff</option>
+                        <option value="admin">admin</option>
+                      </select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                      <label class="form-label small" for="newUserBranchIdInput"
+                        >สาขา</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="newUserBranchIdInput"
+                        placeholder="เว้นว่างได้"
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-2 d-flex justify-content-between align-items-center">
+                    <small class="text-muted" id="newUserCreateStatusText">
+                      ระบุข้อมูลให้ครบแล้วกดปุ่ม "สร้างผู้ใช้ใหม่"
+                    </small>
+                    <button
+                      type="button"
+                      class="btn btn-success btn-sm"
+                      id="newUserCreateBtn"
+                    >
+                      <span
+                        class="spinner-border spinner-border-sm me-2 d-none"
+                        id="newUserCreateSpinner"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span id="newUserCreateBtnText">สร้างผู้ใช้ใหม่</span>
+                    </button>
+                  </div>
+
+                  <div class="alert alert-info small mt-2 mb-0">
+                    <strong>หมายเหตุ:</strong>
+                    เมื่อสร้างผู้ใช้ใหม่แล้ว
+                    แนะนำให้เปลี่ยนรหัสผ่านทันทีหลังจากเข้าสู่ระบบครั้งแรกด้วยตนเอง
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
+          <!-- -------------------------------------------------------
+               Tab 3: สำรองข้อมูล
+               - เลือกช่วงวันที่
+               - Export jobs ช่วงนี้ (JSON / CSV)
+               - Export transactions ช่วงนี้ (JSON / CSV)
+          -------------------------------------------------------- -->
           <div
             class="tab-pane fade"
             id="backupTabPane"
@@ -459,132 +500,134 @@
             aria-labelledby="backup-tab"
             tabindex="0"
           >
-            <div class="card shadow-sm border-0">
-              <div class="card-body p-4">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 me-3">
-                        <i class="bi bi-database-down fs-4"></i>
-                    </div>
-                    <div>
-                        <h2 class="h6 fw-bold mb-1">สำรองข้อมูล (Data Export)</h2>
-                        <p class="text-muted small mb-0">เลือกช่วงวันที่เพื่อดึงข้อมูลออกมาเป็นไฟล์ JSON หรือ CSV</p>
-                    </div>
+            <div class="card">
+              <div class="card-body small">
+                <h2 class="h6 fw-semibold mb-3">
+                  <i class="bi bi-cloud-arrow-down me-2"></i> สำรองข้อมูล
+                </h2>
+
+                <!-- ฟอร์มเลือกช่วงวันที่ -->
+                <div class="row g-2 align-items-end mb-3">
+                  <div class="col-6 col-md-3">
+                    <label
+                      for="backupStartDateInput"
+                      class="form-label small mb-1"
+                    >
+                      วันที่เริ่มต้น
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="backupStartDateInput"
+                    />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <label for="backupEndDateInput" class="form-label small mb-1">
+                      วันที่สิ้นสุด
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="backupEndDateInput"
+                    />
+                  </div>
+                  <div class="col-12 col-md-6 text-md-end">
+                    <span class="small text-muted" id="backupRangeStatusText">
+                      เลือกช่วงวันที่ที่ต้องการสำรองข้อมูล
+                    </span>
+                  </div>
                 </div>
 
-                <div class="bm-filter-bar mb-4">
-                    <div class="row g-2 align-items-center">
-                        <div class="col-12 col-md-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white border-end-0 text-muted">เริ่ม</span>
-                                <input
-                                type="date"
-                                class="form-control border-start-0"
-                                id="backupStartDateInput"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white border-end-0 text-muted">ถึง</span>
-                                <input
-                                type="date"
-                                class="form-control border-start-0"
-                                id="backupEndDateInput"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4 text-md-end">
-                            <span class="small fw-medium text-primary" id="backupRangeStatusText">
-                            <i class="bi bi-calendar-check me-1"></i> กรุณาเลือกช่วงวันที่
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row g-3 mb-4">
+                <!-- ปุ่ม Export แต่ละประเภท -->
+                <div class="row g-2 mb-3">
                   <div class="col-12 col-lg-6">
-                    <div class="card h-100 border bg-light bg-opacity-25">
-                      <div class="card-body">
-                        <h3 class="h6 fw-bold mb-2 text-dark">
-                          <i class="bi bi-wrench-adjustable-circle me-2 text-primary"></i>Export Jobs (ใบงานซ่อม)
-                        </h3>
-                        <p class="small text-muted mb-3">
-                          ข้อมูลใบงานซ่อมทั้งหมด สถานะ ราคา และรายละเอียดรถ
-                        </p>
-                        <div class="d-flex gap-2">
-                          <button
-                            type="button"
-                            class="btn btn-outline-secondary btn-sm flex-fill bg-white"
-                            id="backupJobsJsonBtn"
-                          >
-                            <i class="bi bi-filetype-json me-1 text-warning"></i> JSON
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-outline-secondary btn-sm flex-fill bg-white"
-                            id="backupJobsCsvBtn"
-                          >
-                            <i class="bi bi-filetype-csv me-1 text-success"></i> CSV (Excel)
-                          </button>
-                        </div>
+                    <div class="border rounded p-2 h-100">
+                      <h3 class="h6 fw-semibold mb-2">
+                        <i class="bi bi-receipt-cutoff me-2"></i> Export Jobs (ใบงานซ่อม)
+                      </h3>
+                      <p class="small text-muted mb-2">
+                        ดึงข้อมูลจาก collection <code>jobs</code>
+                        เฉพาะรายการที่ยังไม่ถูกซ่อน (<code>isDeleted = false</code>)
+                        และอยู่ในช่วงวันที่ที่เลือก
+                      </p>
+                      <div class="d-flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupJobsJsonBtn"
+                        >
+                          <i class="bi bi-filetype-json me-1"></i> Export Jobs JSON
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupJobsCsvBtn"
+                        >
+                          <i class="bi bi-filetype-csv me-1"></i> Export Jobs CSV
+                        </button>
                       </div>
                     </div>
                   </div>
                   <div class="col-12 col-lg-6">
-                    <div class="card h-100 border bg-light bg-opacity-25">
-                      <div class="card-body">
-                        <h3 class="h6 fw-bold mb-2 text-dark">
-                          <i class="bi bi-cash-stack me-2 text-success"></i>Export Transactions (การเงิน)
-                        </h3>
-                        <p class="small text-muted mb-3">
-                          ข้อมูลรายรับ-รายจ่าย ทั้งจากงานซ่อมและการบันทึกเอง
-                        </p>
-                        <div class="d-flex gap-2">
-                          <button
-                            type="button"
-                            class="btn btn-outline-secondary btn-sm flex-fill bg-white"
-                            id="backupTxJsonBtn"
-                          >
-                            <i class="bi bi-filetype-json me-1 text-warning"></i> JSON
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-outline-secondary btn-sm flex-fill bg-white"
-                            id="backupTxCsvBtn"
-                          >
-                            <i class="bi bi-filetype-csv me-1 text-success"></i> CSV (Excel)
-                          </button>
-                        </div>
+                    <div class="border rounded p-2 h-100">
+                      <h3 class="h6 fw-semibold mb-2">
+                        <i class="bi bi-cash-coin me-2"></i> Export Transactions (เงินเข้าออก)
+                      </h3>
+                      <p class="small text-muted mb-2">
+                        ดึงข้อมูลจาก collection <code>transactions</code>
+                        เฉพาะรายการที่ยังไม่ถูกซ่อน (<code>isDeleted = false</code>)
+                        และอยู่ในช่วงวันที่ที่เลือก
+                      </p>
+                      <div class="d-flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupTxJsonBtn"
+                        >
+                          <i class="bi bi-filetype-json me-1"></i> Export Txn JSON
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-secondary btn-sm"
+                          id="backupTxCsvBtn"
+                        >
+                          <i class="bi bi-filetype-csv me-1"></i> Export Txn CSV
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
 
+                <!-- Textarea แสดง JSON ที่ Export ล่าสุดให้ copy ได้ง่าย -->
                 <div class="mb-2">
-                  <label for="backupResultTextarea" class="form-label small fw-bold text-muted">
-                    <i class="bi bi-code-square me-1"></i>Log Preview (JSON Result)
+                  <label for="backupResultTextarea" class="form-label small">
+                    พื้นที่แสดงผล JSON ล่าสุดที่ Export (คัดลอกไปเก็บเองได้)
                   </label>
                   <textarea
-                    class="form-control form-control-sm font-monospace bg-light text-secondary"
+                    class="form-control form-control-sm"
                     id="backupResultTextarea"
-                    rows="6"
-                    readonly
-                    style="font-size: 0.75rem;"
-                    placeholder="พื้นที่แสดงตัวอย่างข้อมูลเมื่อกด Export แบบ JSON..."
+                    rows="8"
+                    placeholder="เมื่อ Export แบบ JSON ระบบจะแสดงข้อมูลล่าสุดที่นี่ให้คุณตรวจสอบ/คัดลอก"
                   ></textarea>
                 </div>
-                <div class="alert alert-info py-2 px-3 small border-0 bg-info bg-opacity-10 text-info mb-0">
-                  <i class="bi bi-shield-check me-2"></i>แนะนำให้เก็บไฟล์ Backup ไว้ในที่ปลอดภัย (เช่น Google Drive) อย่างสม่ำเสมอ
-                </div>
+                <p class="small text-muted mb-0">
+                  หากต้องการกู้คืนข้อมูลในอนาคต แนะนำให้เก็บไฟล์ JSON/CSV
+                  ไว้ในที่ปลอดภัย (เช่น Google Drive, External HDD)
+                </p>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- ระยะห่างด้านล่างสำหรับ Bottom Nav -->
         <div style="height: 4.5rem;"></div>
       </div>
     </main>
 
+    <!-- ===========================================================
+         Floating Action Button (FAB)
+         ปุ่มลอยเมนูด่วน
+    ============================================================ -->
     <div class="bm-fab-container">
       <div class="dropdown dropup">
         <button
@@ -597,40 +640,43 @@
           <i class="bi bi-plus"></i>
         </button>
         <ul
-          class="dropdown-menu dropdown-menu-end mb-2 shadow border-0"
+          class="dropdown-menu dropdown-menu-end mb-2"
           aria-labelledby="fabDropdownButton"
         >
           <li>
             <button
-              class="dropdown-item d-flex align-items-center py-2"
+              class="dropdown-item d-flex align-items-center"
               type="button"
               id="fabOpenBillBtn"
             >
-              <i class="bi bi-receipt-cutoff me-2 text-primary"></i> เปิดบิลซ่อมใหม่
+              <i class="bi bi-receipt-cutoff me-2"></i> เปิดบิลซ่อมใหม่
             </button>
           </li>
           <li>
             <button
-              class="dropdown-item d-flex align-items-center py-2"
+              class="dropdown-item d-flex align-items-center"
               type="button"
               id="fabAddTxnBtn"
             >
-              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน (Manual)
+              <i class="bi bi-cash-coin me-2"></i> เพิ่มรายการเงิน (Manual)
             </button>
           </li>
           <li>
             <button
-              class="dropdown-item d-flex align-items-center py-2"
+              class="dropdown-item d-flex align-items-center"
               type="button"
               id="fabStockInBtn"
             >
-              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่เข้า
+              <i class="bi bi-box-seam me-2"></i> บันทึกซื้ออะไหล่เข้า
             </button>
           </li>
         </ul>
       </div>
     </div>
 
+    <!-- ===========================================================
+         เมนูด้านล่าง (Bottom Navigation) 6 ปุ่มหลัก
+    ============================================================ -->
     <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
       <div class="container-fluid px-0">
         <div class="row g-0 w-100 text-center small">
@@ -674,13 +720,14 @@
       </div>
     </nav>
 
+    <!-- Toast สำหรับแสดงข้อความแจ้งเตือนภาษาไทย -->
     <div
       class="position-fixed top-0 start-50 translate-middle-x p-3"
       style="z-index: 1080;"
     >
       <div
         id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow"
+        class="toast align-items-center text-bg-primary border-0"
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
@@ -688,7 +735,8 @@
       >
         <div class="d-flex">
           <div class="toast-body" id="mainToastBody">
-            </div>
+            <!-- ข้อความแจ้งเตือนจะถูกเติมจาก JS -->
+          </div>
           <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -699,14 +747,17 @@
       </div>
     </div>
 
+    <!-- ลิงก์ซ่อนสำหรับดาวน์โหลดไฟล์ Export -->
     <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
 
+    <!-- Bootstrap 5 JS Bundle -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
 
+    <!-- สคริปต์หลักของหน้า settings.html (ใช้ ES Modules) -->
     <script type="module">
       // ============================================================
       // นำเข้า Firebase SDK แบบ ES Module ใช้เหมือนกันทุกหน้า
@@ -865,7 +916,7 @@
       function showToast(message, variant = "primary") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className =
-          "toast align-items-center shadow text-bg-" + variant + " border-0";
+          "toast align-items-center text-bg-" + variant + " border-0";
         mainToastBody.textContent = message;
         mainToast.show();
       }
@@ -1028,8 +1079,7 @@
         applyTheme(theme);
 
         if (profileSaveStatusText) {
-            profileSaveStatusText.innerHTML = '<i class="bi bi-check2-circle"></i> ข้อมูลเป็นปัจจุบัน';
-            profileSaveStatusText.className = "text-success small";
+          profileSaveStatusText.textContent = "ยังไม่มีการเปลี่ยนแปลง";
         }
       }
 
@@ -1081,8 +1131,7 @@
           applyTheme(newTheme);
 
           if (profileSaveStatusText) {
-            profileSaveStatusText.innerHTML = '<i class="bi bi-check-circle-fill"></i> บันทึกเรียบร้อยแล้ว';
-            profileSaveStatusText.className = "text-success small fw-bold";
+            profileSaveStatusText.textContent = "บันทึกการเปลี่ยนแปลงล่าสุดแล้ว";
           }
 
           showToast("บันทึกโปรไฟล์เรียบร้อยแล้ว", "success");
@@ -1097,12 +1146,11 @@
           if (profileSaveStatusText) {
             profileSaveStatusText.textContent =
               "บันทึกไม่สำเร็จ: " + (error.code || "error");
-            profileSaveStatusText.className = "text-danger small";
           }
         } finally {
           isSavingProfile = false;
           profileSaveSpinner.classList.add("d-none");
-          profileSaveBtnText.innerHTML = '<i class="bi bi-save me-1"></i> บันทึกการเปลี่ยนแปลง';
+          profileSaveBtnText.textContent = "บันทึกการเปลี่ยนแปลง";
           profileSaveBtn.disabled = false;
         }
       }
@@ -1117,8 +1165,8 @@
         if (usersTableTbody) {
           usersTableTbody.innerHTML = `
             <tr>
-              <td colspan="6" class="text-center small text-muted py-5">
-                <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลดข้อมูลผู้ใช้...
+              <td colspan="6" class="text-center small text-muted">
+                กำลังโหลดข้อมูลผู้ใช้...
               </td>
             </tr>
           `;
@@ -1162,8 +1210,8 @@
           if (usersTableTbody) {
             usersTableTbody.innerHTML = `
               <tr>
-                <td colspan="6" class="text-center small text-danger py-4">
-                  <i class="bi bi-exclamation-circle me-1"></i> ไม่สามารถโหลดรายชื่อผู้ใช้ได้ (${error.code || "error"})
+                <td colspan="6" class="text-center small text-danger">
+                  ไม่สามารถโหลดรายชื่อผู้ใช้ได้ (${error.code || "error"})
                 </td>
               </tr>
             `;
@@ -1184,8 +1232,7 @@
         if (!allUsers || allUsers.length === 0) {
           usersTableTbody.innerHTML = `
             <tr>
-              <td colspan="6" class="text-center small text-muted py-5">
-                <i class="bi bi-people text-secondary opacity-25 fs-1 d-block mb-2"></i>
+              <td colspan="6" class="text-center small text-muted">
                 ยังไม่มีข้อมูลผู้ใช้ในระบบ
               </td>
             </tr>
@@ -1198,44 +1245,44 @@
 
           const isCurrent = currentUser && currentUser.uid === u.id;
 
-          const emailText = u.email || '<span class="text-muted fst-italic">(ไม่ระบุ)</span>';
+          const emailText = u.email || "(ไม่ระบุใน users)";
           const disabledBadge = u.disabled
-            ? '<span class="badge rounded-pill text-bg-danger bg-opacity-75"><i class="bi bi-slash-circle me-1"></i>ถูกระงับ</span>'
-            : '<span class="badge rounded-pill text-bg-success bg-opacity-75"><i class="bi bi-check-circle me-1"></i>ปกติ</span>';
+            ? '<span class="badge rounded-pill text-bg-danger">ถูกระงับ</span>'
+            : '<span class="badge rounded-pill text-bg-success">ใช้งานได้</span>';
 
           tr.innerHTML = `
-            <td class="small ps-3 fw-medium text-dark">${emailText}</td>
+            <td class="small">${emailText}</td>
             <td class="small">
               <input
                 type="text"
-                class="form-control form-control-sm users-displayname-input border-0 bg-light"
+                class="form-control form-control-sm users-displayname-input"
                 data-uid="${u.id}"
                 value="${u.displayName || ""}"
               />
             </td>
             <td class="small">
               <select
-                class="form-select form-select-sm users-role-select border-0 bg-light"
+                class="form-select form-select-sm users-role-select"
                 data-uid="${u.id}"
               >
                 <option value="staff" ${
                   u.role === "staff" ? "selected" : ""
-                }>Staff</option>
+                }>staff</option>
                 <option value="admin" ${
                   u.role === "admin" ? "selected" : ""
-                }>Admin</option>
+                }>admin</option>
               </select>
             </td>
             <td class="small">
               <input
                 type="text"
-                class="form-control form-control-sm users-branch-input border-0 bg-light"
+                class="form-control form-control-sm users-branch-input"
                 data-uid="${u.id}"
                 value="${u.branchId || ""}"
               />
             </td>
             <td class="small">
-              <div class="form-check form-switch d-flex align-items-center gap-2">
+              <div class="form-check form-switch">
                 <input
                   class="form-check-input users-disabled-switch"
                   type="checkbox"
@@ -1248,20 +1295,20 @@
                 </label>
               </div>
             </td>
-            <td class="small text-end pe-3">
+            <td class="small text-end">
               <button
                 type="button"
-                class="btn btn-outline-primary btn-sm users-save-btn rounded-pill px-3"
+                class="btn btn-outline-primary btn-sm users-save-btn"
                 data-uid="${u.id}"
               >
-                <i class="bi bi-save"></i>
+                <i class="bi bi-save me-1"></i> บันทึก
               </button>
             </td>
           `;
 
           // ถ้าเป็น user ปัจจุบัน ให้ใส่พื้นหลังเบา ๆ
           if (isCurrent) {
-            tr.classList.add("table-primary", "table-opacity-10");
+            tr.classList.add("table-info");
           }
 
           usersTableTbody.appendChild(tr);
@@ -1325,7 +1372,7 @@
         saveBtn.disabled = true;
         const originalHtml = saveBtn.innerHTML;
         saveBtn.innerHTML =
-          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+          '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> กำลังบันทึก...';
 
         try {
           const userRef = doc(db, "users", uid);
@@ -1391,7 +1438,6 @@
         newUserCreateBtnText.textContent = "กำลังสร้าง...";
         newUserCreateBtn.disabled = true;
         newUserCreateStatusText.textContent = "กำลังสร้างผู้ใช้ใหม่...";
-        newUserCreateStatusText.className = "text-primary small";
 
         try {
           // ใช้ Secondary App เพื่อสร้างผู้ใช้ใหม่โดยไม่กระทบ session ปัจจุบัน
@@ -1431,8 +1477,8 @@
           newUserBranchIdInput.value = "";
           newUserRoleSelect.value = "staff";
 
-          newUserCreateStatusText.innerHTML = '<i class="bi bi-check-circle me-1"></i> สร้างผู้ใช้ใหม่สำเร็จแล้ว';
-          newUserCreateStatusText.className = "text-success small";
+          newUserCreateStatusText.textContent =
+            "สร้างผู้ใช้ใหม่สำเร็จแล้ว (ระบบเพิ่มใน Firebase Auth และ collection users แล้ว)";
           showToast("สร้างผู้ใช้ใหม่สำเร็จแล้ว", "success");
 
           // โหลด users ใหม่
@@ -1447,11 +1493,10 @@
           );
           newUserCreateStatusText.textContent =
             "ไม่สามารถสร้างผู้ใช้ใหม่ได้: " + (error.code || "error");
-          newUserCreateStatusText.className = "text-danger small";
         } finally {
           isCreatingNewUser = false;
           newUserCreateSpinner.classList.add("d-none");
-          newUserCreateBtnText.innerHTML = '<i class="bi bi-plus-lg me-1"></i> สร้างผู้ใช้ใหม่';
+          newUserCreateBtnText.textContent = "สร้างผู้ใช้ใหม่";
           newUserCreateBtn.disabled = false;
         }
       }
@@ -1466,7 +1511,7 @@
         if (!startStr || !endStr) {
           backupRangeStatusText.textContent =
             "กรุณาเลือกวันที่เริ่มต้นและสิ้นสุดให้ครบก่อน Export";
-          backupRangeStatusText.classList.remove("text-success", "text-danger", "text-primary");
+          backupRangeStatusText.classList.remove("text-success", "text-danger");
           backupRangeStatusText.classList.add("text-warning");
           return null;
         }
@@ -1474,17 +1519,17 @@
         if (startStr > endStr) {
           backupRangeStatusText.textContent =
             "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด";
-          backupRangeStatusText.classList.remove("text-success", "text-primary");
+          backupRangeStatusText.classList.remove("text-success");
           backupRangeStatusText.classList.add("text-danger");
           return null;
         }
 
-        backupRangeStatusText.innerHTML =
-          '<i class="bi bi-check-circle-fill me-1"></i> ช่วงวันที่: ' +
+        backupRangeStatusText.textContent =
+          "ช่วงวันที่ที่เลือก: " +
           formatDateThaiFromString(startStr) +
           " - " +
           formatDateThaiFromString(endStr);
-        backupRangeStatusText.classList.remove("text-danger", "text-warning", "text-primary");
+        backupRangeStatusText.classList.remove("text-danger", "text-warning");
         backupRangeStatusText.classList.add("text-success");
 
         return { startStr, endStr };
@@ -1921,9 +1966,8 @@
         [themeLightRadio, themeDarkRadio].forEach((radio) => {
           radio?.addEventListener("change", () => {
             if (profileSaveStatusText) {
-              profileSaveStatusText.innerHTML =
-                '<i class="bi bi-info-circle"></i> มีการเปลี่ยนแปลงธีมแล้ว แต่ยังไม่ได้บันทึก';
-              profileSaveStatusText.className = "text-warning small";
+              profileSaveStatusText.textContent =
+                "มีการเปลี่ยนแปลงธีมแล้ว แต่ยังไม่ได้บันทึก";
             }
           });
         });
@@ -2017,12 +2061,13 @@
 
           if (userRoleText) {
             const roleLabel =
-              userProfile.role === "admin" ? "Admin" : "Staff";
+              userProfile.role === "admin" ? "ผู้ดูแลระบบ (Admin)" : "พนักงาน (Staff)";
             userRoleText.textContent = roleLabel;
           }
 
           if (settingsRoleBadge) {
-            settingsRoleBadge.innerHTML = `<i class="bi bi-shield-lock-fill me-1 ${userProfile.role === 'admin' ? 'text-danger' : 'text-primary'}"></i>Role: ${userProfile.role || "staff"}`;
+            settingsRoleBadge.textContent =
+              "Role: " + (userProfile.role || "staff");
           }
 
           // เมนูตั้งค่าระบบ: ตามสเปกให้แสดงเฉพาะ admin
@@ -2076,3 +2121,6 @@
     </script>
   </body>
 </html>
+
+
+
