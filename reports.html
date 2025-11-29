@@ -794,7 +794,8 @@ function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
                j.items.forEach(item => {
                   const lineTotal = (Number(item.price||0) * Number(item.qty||1));
                   // Check if it's labor (assuming 'isLabor' flag or 'Labor' keyword)
-                  const isLabor = item.isLabor === true || item.name.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
+				  const itemName = item.name || "";
+                  const isLabor = item.isLabor === true || itemName.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
                   if(isLabor) totalLaborRev += lineTotal;
                   else totalPartsRev += lineTotal;
                });
