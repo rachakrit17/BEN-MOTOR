@@ -789,18 +789,33 @@ function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
             const total = Number(j.totalAmount||0);
             totalJobRev += total;
             
-            // Analyze Items for Structure
-            if(j.items && Array.isArray(j.items)) {
+// Analyze Items for Structure
+            let calculatedFromItems = false; // ตัวแปรเช็คว่าดึงจากรายการสินค้าได้จริงไหม
+
+            if(j.items && Array.isArray(j.items) && j.items.length > 0) {
+               let tempParts = 0;
+               let tempLabor = 0;
+
                j.items.forEach(item => {
                   const lineTotal = (Number(item.price||0) * Number(item.qty||1));
-                  // Check if it's labor (assuming 'isLabor' flag or 'Labor' keyword)
-				  const itemName = item.name || "";
+                  
+                  const itemName = item.name || "";
                   const isLabor = item.isLabor === true || itemName.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
-                  if(isLabor) totalLaborRev += lineTotal;
-                  else totalPartsRev += lineTotal;
+                  
+                  if(isLabor) tempLabor += lineTotal;
+                  else tempParts += lineTotal;
                });
-            } else {
-               // Fallback if no items: assume 30% labor
+
+               // ถ้าคำนวณไส้ในออกมาแล้วมีค่ามากกว่า 0 ให้นับว่าใช้ได้
+               if(tempParts + tempLabor > 0) {
+                   totalPartsRev += tempParts;
+                   totalLaborRev += tempLabor;
+                   calculatedFromItems = true;
+               }
+            } 
+            
+            // ถ้าดึงจากรายการไม่ได้ (หรือเป็น 0) ให้ใช้สูตรสำรอง (อะไหล่ 70% : ค่าแรง 30%) จากยอดรวมแทน
+            if(!calculatedFromItems) {
                totalPartsRev += total * 0.7;
                totalLaborRev += total * 0.3;
             }
