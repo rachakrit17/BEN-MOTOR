@@ -23,21 +23,22 @@
       .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
       .bg-soft-success { background-color: rgba(25, 135, 84, 0.05); }
       
-      /* สไตล์สำหรับการพิมพ์ (Print) แก้ไขใหม่ให้เต็มแผ่นพอดี */
+      /* สไตล์สำหรับการพิมพ์ (Print) ดึงขึ้นบนสุด ล้างค่ากึ่งกลางของ Bootstrap */
       @media print {
-        /* 1. ซ่อนทุกอย่างบนหน้าเว็บหลักแบบถอนรากถอนโคน เพื่อไม่ให้กินพื้นที่ */
-        .bm-topbar, .bm-main-content, .bm-fab-container, .bm-bottom-nav, #mainToast {
+        /* 1. ซ่อนทุกอย่างบนหน้าเว็บหลักแบบถอนรากถอนโคน */
+        nav, main, .bm-fab-container, .bm-bottom-nav, #mainToast, .modal-backdrop {
           display: none !important;
         }
 
-        /* 2. เคลียร์สีพื้นหลังและระยะห่างของบอดี้ */
-        body { 
+        /* 2. รีเซ็ต Body */
+        body, html { 
           margin: 0 !important; 
           padding: 0 !important; 
-          background-color: #fff !important; 
+          background: #fff !important; 
+          height: auto !important; 
         }
 
-        /* 3. ดึงเฉพาะกล่องใบเสร็จ (Modal) มาแสดงเต็มขอบหน้ากระดาษ */
+        /* 3. จัดการ Modal ตัวปัญหา ล้างค่า Flexbox และ Transform ที่ทำให้มันตกไปข้างล่าง */
         .modal {
           position: absolute !important;
           left: 0 !important; 
@@ -45,13 +46,15 @@
           margin: 0 !important; 
           padding: 0 !important;
           width: 100% !important;
+          display: block !important; /* ยกเลิก Flexbox จัดกึ่งกลาง */
           overflow: visible !important;
-          background: transparent !important;
         }
         
         .modal-dialog { 
           margin: 0 !important; 
           max-width: 100% !important; 
+          transform: translate(0, 0) !important; /* ล้างค่าเลื่อนแกน Y ของ Bootstrap */
+          display: block !important; /* ล้างค่ากึ่งกลางจาก modal-dialog-centered */
         }
         
         .modal-content { 
@@ -59,14 +62,15 @@
           box-shadow: none !important; 
         }
         
-        /* 4. ซ่อนแถบหัว (ปุ่มกากบาท) และแถบท้าย (ปุ่มปริ้น) ตอนออกมาเป็นกระดาษ */
+        /* 4. ซ่อนปุ่มต่างๆ ในหน้า Popup ตอนพิมพ์ */
         .modal-header, .modal-footer { display: none !important; }
 
-        /* 5. จัดสไตล์ตารางและตัวอักษรให้สีดำคมชัด (เครื่องปริ้นจะได้ไม่ออกสีเทาจาง) */
+        /* 5. จัดสไตล์ตารางให้คมชัดเวลาปริ้น */
+        #printArea { padding: 0 !important; }
         #printArea, #printArea * { color: #000 !important; }
         .table-print { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         .table-print th, .table-print td { border: 1px solid #000 !important; padding: 8px; font-size: 14px; }
-        .table-print th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
+        .table-print th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       }
     </style>
   </head>
