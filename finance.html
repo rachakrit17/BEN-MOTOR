@@ -5,179 +5,125 @@
     <title>BEN MOTOR – ระบบการเงิน</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="manifest" href="img/site.webmanifest">
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
-  <body class="bm-theme-light">
     
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* อัปเกรด UI พรีเมียม */
+      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+      .card-premium:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
+      .bm-stat-card { transition: all 0.3s ease; border-radius: 1rem; border: none; }
+      .bm-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
+      .table-hover tbody tr:hover { background-color: rgba(25, 135, 84, 0.03); }
+      .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+    </style>
+  </head>
+  <body class="bm-theme-light bg-light">
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
+          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
-            id="themeToggleBtn"
-            type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
-          >
+          <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent" id="themeToggleBtn" type="button" aria-label="สลับโหมดธีม" style="width: 2.5rem; height: 2.5rem;">
             <i class="bi bi-moon fs-5"></i>
           </button>
 
           <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
-              type="button"
-              id="userMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4">
+              <li><div class="px-3 py-2 d-sm-none"><strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong></div></li>
               <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
+              <li><a class="dropdown-item py-2" href="reports.html"><i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด</a></li>
+              <li><a class="dropdown-item py-2" href="price-check.html"><i class="bi bi-tags me-2 text-warning"></i> เช็คราคา</a></li>
+              <li><a class="dropdown-item py-2" href="customer-history.html"><i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า & รถ</a></li>              
+              <li><a class="dropdown-item py-2" href="activity-log.html"><i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ</a></li>              
+              <li><a class="dropdown-item py-2 d-none" href="settings.html" id="settingsMenuItem"><i class="bi bi-gear me-2"></i> ตั้งค่าระบบ</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+              <li><button class="dropdown-item py-2 text-danger fw-medium" type="button" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <main class="bm-main-content">
+    <main class="bm-main-content pb-5 mt-5 pt-3">
       <div class="container py-4">
         
-        <div class="d-flex justify-content-between align-items-end mb-4 mt-2">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 mt-2 gap-3">
           <div>
-            <h1 class="h5 mb-1 fw-bold text-dark">
-              <i class="bi bi-wallet2 text-success me-2"></i>เงินเข้าออก
+            <h1 class="h3 mb-1 fw-bold text-dark d-flex align-items-center">
+              <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle me-3 d-flex"><i class="bi bi-wallet2"></i></span> เงินเข้าออก (Finance)
             </h1>
-            <p class="small text-muted mb-0">
-              บริหารจัดการกระแสเงินสด วิเคราะห์รายรับรายจ่าย และกราฟแสดงผล
+            <p class="small text-muted mb-0 ms-1 mt-2">
+              <i class="bi bi-info-circle me-1"></i> บริหารจัดการกระแสเงินสด วิเคราะห์รายรับรายจ่าย และกราฟแสดงผล
             </p>
           </div>
           <div>
-              <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="refreshBtn">
-                  <i class="bi bi-arrow-clockwise me-1"></i> รีโหลด
+              <button class="btn btn-white border shadow-sm rounded-pill px-4 fw-medium hover-elevate" id="refreshBtn">
+                  <i class="bi bi-arrow-clockwise me-2 text-primary"></i> รีโหลดข้อมูล
               </button>
           </div>
         </div>
 
         <section class="mb-4">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body">
-              <div class="row g-3 align-items-center mb-3">
+          <div class="card card-premium shadow-sm border-0 rounded-4">
+            <div class="card-body p-4">
+              <div class="row g-3 align-items-center mb-4">
                 <div class="col-12 col-md-8">
                   <div class="d-flex align-items-center flex-wrap gap-2">
-                    <span class="text-muted small fw-semibold me-2"><i class="bi bi-calendar3 me-1"></i>เลือกช่วงเวลา:</span>
-                    <div class="btn-group btn-group-sm" role="group">
-                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn rounded-pill-start" data-range="today" id="rangePresetTodayBtn">วันนี้</button>
-                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn" data-range="7d" id="rangePreset7dBtn">7 วัน</button>
-                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn" data-range="month" id="rangePresetMonthBtn">เดือนนี้</button>
-                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn rounded-pill-end" data-range="year" id="rangePresetYearBtn">ปีนี้</button>
+                    <span class="text-dark small fw-bold me-2"><i class="bi bi-calendar3 me-1 text-primary"></i> เลือกช่วงเวลา:</span>
+                    <div class="btn-group btn-group-sm shadow-sm" role="group">
+                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn fw-medium px-3" data-range="today" id="rangePresetTodayBtn">วันนี้</button>
+                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn fw-medium px-3" data-range="7d" id="rangePreset7dBtn">7 วัน</button>
+                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn fw-medium px-3" data-range="month" id="rangePresetMonthBtn">เดือนนี้</button>
+                      <button type="button" class="btn btn-outline-secondary bm-range-preset-btn fw-medium px-3" data-range="year" id="rangePresetYearBtn">ปีนี้</button>
                     </div>
                   </div>
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                  <div class="small" id="transactionsLoadingState">
+                  <div class="small fw-bold" id="transactionsLoadingState">
                     <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status"></span>
                     กำลังโหลด...
                   </div>
                 </div>
               </div>
 
-              <div class="row g-2 align-items-end p-3 bg-light rounded-3 border">
-                <div class="col-6 col-md-3">
-                  <label for="dateRangeStartInput" class="form-label small mb-1 text-muted">เริ่มต้น</label>
-                  <input type="date" class="form-control form-control-sm" id="dateRangeStartInput" />
+              <div class="row g-3 align-items-end p-3 bg-light rounded-4 border border-secondary-subtle">
+                <div class="col-6 col-md-4">
+                  <label for="dateRangeStartInput" class="form-label small mb-1 fw-medium text-dark">เริ่มต้นตั้งแต่วันที่</label>
+                  <input type="date" class="form-control" id="dateRangeStartInput" />
                 </div>
-                <div class="col-6 col-md-3">
-                  <label for="dateRangeEndInput" class="form-label small mb-1 text-muted">สิ้นสุด</label>
-                  <input type="date" class="form-control form-control-sm" id="dateRangeEndInput" />
+                <div class="col-6 col-md-4">
+                  <label for="dateRangeEndInput" class="form-label small mb-1 fw-medium text-dark">ถึงวันที่</label>
+                  <input type="date" class="form-control" id="dateRangeEndInput" />
                 </div>
-                <div class="col-12 col-md-6">
-                  <button type="button" class="btn btn-primary btn-sm w-100 w-md-auto px-4 shadow-sm rounded-pill" id="applyDateRangeBtn">
+                <div class="col-12 col-md-4">
+                  <button type="button" class="btn btn-success w-100 px-4 shadow-sm rounded-pill fw-bold hover-elevate" id="applyDateRangeBtn">
                     <span class="spinner-border spinner-border-sm me-2 d-none" id="applyDateRangeSpinner"></span>
-                    <i class="bi bi-search me-2"></i><span id="applyDateRangeBtnText">ดูรายงาน</span>
+                    <i class="bi bi-search me-2"></i><span id="applyDateRangeBtnText">ดูรายงานช่วงนี้</span>
                   </button>
                 </div>
               </div>
@@ -188,46 +134,46 @@
         <section class="mb-4">
           <div class="row g-3">
             <div class="col-6 col-md-3">
-              <div class="card bm-stat-card h-100 shadow-sm border-0">
-                <div class="card-body py-3">
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-success bg-opacity-10 border-start border-4 border-success p-2">
+                <div class="card-body p-3">
                   <div class="d-flex justify-content-between align-items-center mb-2">
-                      <div class="text-muted small">รายรับ</div>
-                      <div class="text-success opacity-50"><i class="bi bi-arrow-down-circle-fill fs-5"></i></div>
+                      <div class="text-success small fw-bold">รายรับรวม</div>
+                      <div class="text-success opacity-50"><i class="bi bi-arrow-down-left-circle-fill fs-4"></i></div>
                   </div>
-                  <div class="h5 mb-0 fw-bold text-success" id="summaryIncomeText">0.00 ฿</div>
+                  <div class="h4 mb-0 fw-bold text-success text-truncate" id="summaryIncomeText">0.00 ฿</div>
                 </div>
               </div>
             </div>
             <div class="col-6 col-md-3">
-              <div class="card bm-stat-card h-100 shadow-sm border-0">
-                <div class="card-body py-3">
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-danger bg-opacity-10 border-start border-4 border-danger p-2">
+                <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="text-muted small">รายจ่าย</div>
-                        <div class="text-danger opacity-50"><i class="bi bi-arrow-up-circle-fill fs-5"></i></div>
+                        <div class="text-danger small fw-bold">รายจ่ายรวม</div>
+                        <div class="text-danger opacity-50"><i class="bi bi-arrow-up-right-circle-fill fs-4"></i></div>
                     </div>
-                  <div class="h5 mb-0 fw-bold text-danger" id="summaryExpenseText">0.00 ฿</div>
+                  <div class="h4 mb-0 fw-bold text-danger text-truncate" id="summaryExpenseText">0.00 ฿</div>
                 </div>
               </div>
             </div>
             <div class="col-6 col-md-3">
-              <div class="card bm-stat-card h-100 shadow-sm border-0">
-                <div class="card-body py-3">
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-info bg-opacity-10 border-start border-4 border-info p-2">
+                <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="text-muted small">กำไรสุทธิ (ช่วงที่เลือก)</div>
-                        <div class="text-primary opacity-50"><i class="bi bi-graph-up-arrow fs-5"></i></div>
+                        <div class="text-info-emphasis small fw-bold">กำไรสุทธิ (ช่วงที่เลือก)</div>
+                        <div class="text-info opacity-50"><i class="bi bi-graph-up-arrow fs-4"></i></div>
                     </div>
-                  <div class="h5 mb-0 fw-bold" id="summaryNetText">0.00 ฿</div>
+                  <div class="h4 mb-0 fw-bold text-truncate" id="summaryNetText">0.00 ฿</div>
                 </div>
               </div>
             </div>
             <div class="col-6 col-md-3">
-              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-primary-subtle border-primary">
-                <div class="card-body py-3">
+              <div class="card bm-stat-card h-100 shadow-sm border-0 bg-primary bg-opacity-10 border-start border-4 border-primary p-2">
+                <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="text-muted small">คงเหลือทั้งหมด (Real-time)</div>
-                        <div class="text-dark opacity-50"><i class="bi bi-wallet2 fs-5"></i></div>
+                        <div class="text-primary small fw-bold">คงเหลือทั้งหมด (Real-time)</div>
+                        <div class="text-primary opacity-50"><i class="bi bi-safe-fill fs-4"></i></div>
                     </div>
-                  <div class="h5 mb-0 fw-bold text-primary" id="summaryBalanceText">0.00 ฿</div>
+                  <div class="h4 mb-0 fw-bold text-primary text-truncate" id="summaryBalanceText">0.00 ฿</div>
                 </div>
               </div>
             </div>
@@ -235,23 +181,27 @@
         </section>
 
         <section class="mb-4">
-            <div class="row g-3">
+            <div class="row g-4">
                 <div class="col-12 col-lg-8">
-                   <div class="card shadow-sm border-0 rounded-4 h-100">
-                      <div class="card-body">
-                         <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-bar-chart-line me-2"></i>แนวโน้มการเงิน</h6>
-                         <div class="bm-chart-container" style="height: 250px;">
+                   <div class="card card-premium shadow-sm border-0 rounded-4 h-100">
+                      <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                          <h6 class="fw-bold text-dark mb-0"><i class="bi bi-bar-chart-line-fill text-success me-2"></i>แนวโน้มการเงิน</h6>
+                      </div>
+                      <div class="card-body p-4">
+                         <div class="bm-chart-container" style="height: 280px; position: relative;">
                             <canvas id="financeChart"></canvas>
                          </div>
                       </div>
                    </div>
                 </div>
                 <div class="col-12 col-lg-4">
-                   <div class="card shadow-sm border-0 rounded-4 h-100">
-                       <div class="card-body">
-                           <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-pie-chart me-2"></i>ค่าใช้จ่ายสูงสุด (Top 5)</h6>
-                           <ul class="list-group list-group-flush small" id="topExpenseList">
-                               <li class="list-group-item text-center text-muted py-4">ไม่มีข้อมูลรายจ่าย</li>
+                   <div class="card card-premium shadow-sm border-0 rounded-4 h-100">
+                       <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4">
+                           <h6 class="fw-bold text-danger mb-0"><i class="bi bi-pie-chart-fill text-danger me-2"></i>ค่าใช้จ่ายสูงสุด (Top 5)</h6>
+                       </div>
+                       <div class="card-body p-0 custom-scrollbar" style="max-height: 320px; overflow-y: auto;">
+                           <ul class="list-group list-group-flush small rounded-bottom-4" id="topExpenseList">
+                               <li class="list-group-item text-center text-muted py-5 border-0"><div class="spinner-border spinner-border-sm"></div> กำลังโหลด...</li>
                            </ul>
                        </div>
                    </div>
@@ -260,30 +210,30 @@
         </section>
 
         <section class="mb-4">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0">
-                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center fw-semibold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseManualForm" aria-expanded="true">
-                  <i class="bi bi-pencil-square me-2"></i> เพิ่มรายการเงิน (Manual)
+          <div class="card card-premium shadow-sm border-0 rounded-4 border border-primary-subtle">
+            <div class="card-header bg-primary bg-opacity-10 border-bottom-0 pt-3 pb-2 px-4">
+                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center fw-bold text-primary fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#collapseManualForm" aria-expanded="true">
+                  <i class="bi bi-pencil-square me-2 fs-5"></i> เพิ่มรายการเงินด้วยตัวเอง (Manual Entry)
                   <i class="bi bi-chevron-down ms-2 small"></i>
                 </button>
             </div>
             <div class="collapse show" id="collapseManualForm">
-              <div class="card-body">
-                <form id="manualTxnForm" class="row g-3">
+              <div class="card-body px-4 pb-4 pt-3">
+                <form id="manualTxnForm" class="row g-3 bg-white p-3 rounded-4 border shadow-sm">
                   <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1 text-muted">วันที่</label>
-                    <input type="date" class="form-control" id="manualDateInput" required />
+                    <label class="form-label small mb-1 fw-bold text-dark">วันที่ทำรายการ</label>
+                    <input type="date" class="form-control fw-medium" id="manualDateInput" required />
                   </div>
                   <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1 text-muted">ประเภท</label>
-                    <select class="form-select" id="manualTypeSelect" required>
+                    <label class="form-label small mb-1 fw-bold text-dark">ประเภทรายการ</label>
+                    <select class="form-select fw-medium text-dark border-secondary" id="manualTypeSelect" required>
                       <option value="income" selected>รายรับ (+)</option>
                       <option value="expense">รายจ่าย (-)</option>
                     </select>
                   </div>
                   <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1 text-muted">หมวดหมู่</label>
-                    <select class="form-select" id="manualCategorySelect" required>
+                    <label class="form-label small mb-1 fw-bold text-dark">หมวดหมู่</label>
+                    <select class="form-select fw-medium" id="manualCategorySelect" required>
                       <option value="ค่าซ่อม">ค่าซ่อม</option>
                       <option value="ขายรถ">ขายรถ</option>
                       <option value="ซื้ออะไหล่">ซื้ออะไหล่</option>
@@ -297,35 +247,35 @@
                     </select>
                   </div>
                   <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1 text-muted">วิธีชำระ</label>
-                    <select class="form-select" id="manualMethodSelect" required>
-                      <option value="cash" selected>เงินสด</option>
-                      <option value="transfer">โอน</option>
-                      <option value="credit">เครดิต</option>
+                    <label class="form-label small mb-1 fw-bold text-dark">วิธีชำระเงิน</label>
+                    <select class="form-select fw-medium" id="manualMethodSelect" required>
+                      <option value="cash" selected>💵 เงินสด</option>
+                      <option value="transfer">📱 โอนเงินผ่านธนาคาร</option>
+                      <option value="credit">💳 บัตรเครดิต</option>
                     </select>
                   </div>
                   
-                  <div class="col-12 col-md-6">
-                    <label class="form-label small mb-1 text-muted">รายละเอียดเพิ่มเติม</label>
-                    <input type="text" class="form-control" id="manualDescriptionInput" placeholder="เช่น จ่ายค่าเช่าอู่, รับเงินมัดจำ" required />
+                  <div class="col-12 col-md-5">
+                    <label class="form-label small mb-1 fw-bold text-dark">รายละเอียดเพิ่มเติม</label>
+                    <input type="text" class="form-control" id="manualDescriptionInput" placeholder="เช่น จ่ายค่าเช่าอู่เดือนนี้, รับเงินมัดจำค่าทำสี" required />
                   </div>
                   <div class="col-12 col-md-4">
-                    <label class="form-label small mb-1 fw-bold text-dark">จำนวนเงิน (บาท)</label>
-                    <div class="input-group">
-                      <input type="number" min="0" step="0.01" class="form-control border-primary" id="manualAmountInput" placeholder="0.00" required />
-                      <span class="input-group-text bg-white border-primary text-primary">฿</span>
+                    <label class="form-label small mb-1 fw-bold text-primary">จำนวนเงิน (บาท) <span class="text-danger">*</span></label>
+                    <div class="input-group shadow-sm">
+                      <input type="number" min="0" step="0.01" class="form-control border-primary fw-bold text-dark" id="manualAmountInput" placeholder="0.00" required />
+                      <span class="input-group-text bg-primary-subtle border-primary text-primary fw-bold">฿</span>
                     </div>
-                    <div class="d-flex gap-1 mt-1">
-                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill" data-amount="100">+100</button>
-                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill" data-amount="500">+500</button>
-                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill" data-amount="1000">+1k</button>
+                    <div class="d-flex gap-2 mt-2">
+                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill py-1 text-xs fw-medium rounded-pill" data-amount="100">+100</button>
+                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill py-1 text-xs fw-medium rounded-pill" data-amount="500">+500</button>
+                      <button type="button" class="btn btn-outline-secondary bm-quick-amount-btn flex-fill py-1 text-xs fw-medium rounded-pill" data-amount="1000">+1,000</button>
                     </div>
                   </div>
                   
-                  <div class="col-12 col-md-2 d-flex align-items-start pt-md-4 mt-1">
-                    <button type="submit" class="btn btn-success w-100 shadow-sm" id="manualTxnSaveBtn">
+                  <div class="col-12 col-md-3 d-flex align-items-start pt-md-4 mt-1">
+                    <button type="submit" class="btn btn-primary w-100 shadow-sm fw-bold rounded-pill hover-elevate py-2" id="manualTxnSaveBtn">
                       <span class="spinner-border spinner-border-sm me-2 d-none" id="manualTxnSaveSpinner"></span>
-                      <i class="bi bi-save2 me-2"></i>บันทึก
+                      <i class="bi bi-save2 me-2"></i>บันทึกรายการ
                     </button>
                   </div>
                 </form>
@@ -335,17 +285,17 @@
         </section>
 
         <section class="mb-3">
-          <div class="card shadow-sm border-0 overflow-hidden rounded-4">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                <h3 class="h6 fw-bold mb-0 text-secondary">
-                    <i class="bi bi-list-ul me-2"></i>รายการเคลื่อนไหว
+          <div class="card card-premium shadow-sm border-0 overflow-hidden rounded-4">
+            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center px-4">
+                <h3 class="h6 fw-bold mb-0 text-dark">
+                    <i class="bi bi-list-columns-reverse me-2 text-primary"></i>รายการเคลื่อนไหว (Statement)
                 </h3>
                 <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-outline-success btn-sm rounded-pill" id="exportJsonBtn">
-                    <i class="bi bi-filetype-json me-1"></i> JSON
-                  </button>
-                  <button type="button" class="btn btn-outline-success btn-sm rounded-pill" id="exportCsvBtn">
+                  <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-medium hover-elevate" id="exportCsvBtn">
                     <i class="bi bi-filetype-csv me-1"></i> CSV
+                  </button>
+                  <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-medium hover-elevate" id="exportJsonBtn">
+                    <i class="bi bi-filetype-json me-1"></i> JSON
                   </button>
                 </div>
             </div>
@@ -355,27 +305,27 @@
                 <table class="table table-hover align-middle mb-0">
                   <thead class="bg-light text-muted small text-uppercase">
                     <tr>
-                      <th class="ps-3 py-3" style="min-width: 100px;">วันที่</th>
-                      <th class="py-3" style="min-width: 90px;">ประเภท</th>
-                      <th class="py-3" style="min-width: 120px;">หมวดหมู่</th>
-                      <th class="py-3" style="min-width: 200px;">รายละเอียด</th>
-                      <th class="py-3 text-end" style="min-width: 120px;">จำนวนเงิน</th>
-                      <th class="py-3 text-center" style="min-width: 80px;">วิธี</th>
-                      <th class="py-3 text-muted text-center" style="min-width: 80px;">จัดการ</th>
+                      <th class="ps-4 py-3 fw-semibold" style="min-width: 100px;">วันที่</th>
+                      <th class="py-3 fw-semibold text-center" style="min-width: 90px;">ประเภท</th>
+                      <th class="py-3 fw-semibold" style="min-width: 120px;">หมวดหมู่</th>
+                      <th class="py-3 fw-semibold" style="min-width: 250px;">รายละเอียด</th>
+                      <th class="py-3 fw-semibold text-end pe-4" style="min-width: 130px;">จำนวนเงิน</th>
+                      <th class="py-3 fw-semibold text-center" style="min-width: 80px;">วิธีชำระ</th>
+                      <th class="py-3 fw-semibold text-center" style="min-width: 90px;">จัดการ</th>
                     </tr>
                   </thead>
-                  <tbody id="transactionsTableBody" class="border-top-0">
+                  <tbody id="transactionsTableBody" class="border-top-0 bg-white">
                     </tbody>
                 </table>
               </div>
             </div>
-            <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center py-3">
-                <div class="small text-muted d-none" id="transactionsCountInfo">
-                  รวม <span id="transactionsCountNumber" class="fw-bold">0</span> รายการ
+            <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center py-3 px-4">
+                <div class="small text-muted d-none bg-white px-3 py-1 rounded-pill border shadow-sm" id="transactionsCountInfo">
+                  พบข้อมูล <span id="transactionsCountNumber" class="fw-bold text-dark">0</span> รายการ
                 </div>
-                <button type="button" class="btn btn-outline-secondary btn-sm d-none ms-auto rounded-pill px-3" id="loadMoreTransactionsBtn">
+                <button type="button" class="btn btn-white border shadow-sm btn-sm d-none ms-auto rounded-pill px-4 fw-medium hover-elevate" id="loadMoreTransactionsBtn">
                   <span class="spinner-border spinner-border-sm me-2 d-none" id="loadMoreTransactionsSpinner"></span>
-                  <span id="loadMoreTransactionsBtnText">โหลดเพิ่ม</span> <i class="bi bi-chevron-down ms-1"></i>
+                  <span id="loadMoreTransactionsBtnText">โหลดเพิ่มเติม</span> <i class="bi bi-chevron-down ms-1"></i>
                 </button>
             </div>
           </div>
@@ -387,95 +337,52 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-3 text-primary"></i> เปิดบิลซ่อมใหม่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2 fw-semibold" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-3 text-success"></i> เพิ่มรายการเงิน
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-3 text-warning"></i> บันทึกซื้ออะไหล่
-            </button>
-          </li>
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0 rounded-4 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabOpenBillBtn"><i class="bi bi-receipt-cutoff me-3 text-primary"></i> เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-bold rounded-3 active" type="button" id="fabAddTxnBtn"><i class="bi bi-cash-coin me-3 text-success"></i> เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabStockInBtn"><i class="bi bi-box-seam me-3 text-warning"></i> บันทึกซื้ออะไหล่</button></li>
         </ul>
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
       <div class="container-fluid px-0">
-        <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link">
-              <i class="bi bi-receipt-cutoff d-block"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link active">
-              <i class="bi bi-cash-coin d-block"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+        <div class="row g-0 w-100 text-center small fw-medium">
+          <div class="col"><a href="dashboard.html" class="bm-bottom-nav-link"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col"><a href="open-bill.html" class="bm-bottom-nav-link"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col"><a href="jobs.html" class="bm-bottom-nav-link"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col"><a href="vehicles.html" class="bm-bottom-nav-link"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col"><a href="stock.html" class="bm-bottom-nav-link"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col"><a href="finance.html" class="bm-bottom-nav-link active text-success"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
     <div class="modal fade" id="editTxnModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow border-0 rounded-4">
-          <div class="modal-header border-bottom-0">
-             <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2 text-warning"></i>แก้ไขรายการ</h5>
+        <div class="modal-content shadow-lg border-0 rounded-4">
+          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+             <h5 class="modal-title fw-bold text-dark"><i class="bi bi-pencil-square me-2 text-warning"></i>แก้ไขรายการบัญชี</h5>
              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-             <form id="editTxnForm">
+          <div class="modal-body p-4 pt-3">
+             <form id="editTxnForm" class="bg-light p-3 rounded-4 border">
                 <input type="hidden" id="editTxnId">
-                <div class="mb-2">
-                   <label class="form-label small text-muted">วันที่</label>
-                   <input type="date" class="form-control" id="editTxnDate" required>
+                <div class="mb-3">
+                   <label class="form-label small text-dark fw-bold">วันที่ทำรายการ</label>
+                   <input type="date" class="form-control fw-medium" id="editTxnDate" required>
                 </div>
-                <div class="row g-2 mb-2">
+                <div class="row g-3 mb-3">
                     <div class="col-6">
-                        <label class="form-label small text-muted">ประเภท</label>
-                        <select class="form-select" id="editTxnType">
-                            <option value="income">รายรับ</option>
-                            <option value="expense">รายจ่าย</option>
+                        <label class="form-label small text-dark fw-bold">ประเภท</label>
+                        <select class="form-select fw-medium" id="editTxnType">
+                            <option value="income">รายรับ (+)</option>
+                            <option value="expense">รายจ่าย (-)</option>
                         </select>
                     </div>
                     <div class="col-6">
-                        <label class="form-label small text-muted">หมวดหมู่</label>
-                        <select class="form-select" id="editTxnCategory">
+                        <label class="form-label small text-dark fw-bold">หมวดหมู่</label>
+                        <select class="form-select fw-medium" id="editTxnCategory">
                              <option value="ค่าซ่อม">ค่าซ่อม</option>
                              <option value="ขายรถ">ขายรถ</option>
                              <option value="ซื้ออะไหล่">ซื้ออะไหล่</option>
@@ -489,21 +396,21 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-2">
-                    <label class="form-label small text-muted">รายละเอียด</label>
+                <div class="mb-3">
+                    <label class="form-label small text-dark fw-bold">รายละเอียด</label>
                     <input type="text" class="form-control" id="editTxnDesc" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label small text-muted">จำนวนเงิน</label>
-                    <input type="number" step="0.01" class="form-control" id="editTxnAmount" required>
+                <div class="mb-2">
+                    <label class="form-label small text-primary fw-bold">จำนวนเงิน (บาท)</label>
+                    <input type="number" step="0.01" class="form-control border-primary fw-bold text-dark" id="editTxnAmount" required>
                 </div>
              </form>
           </div>
-          <div class="modal-footer border-top-0 pt-0">
-             <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
-             <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" id="saveEditTxnBtn">
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+             <button type="button" class="btn btn-light border fw-medium rounded-pill px-4 hover-elevate" data-bs-dismiss="modal">ยกเลิก</button>
+             <button type="button" class="btn btn-primary fw-bold rounded-pill px-4 shadow-sm hover-elevate" id="saveEditTxnBtn">
                 <span class="spinner-border spinner-border-sm me-2 d-none" id="saveEditTxnSpinner"></span>
-                บันทึกการแก้ไข
+                <i class="bi bi-save2 me-1"></i> บันทึกการแก้ไข
              </button>
           </div>
         </div>
@@ -511,20 +418,16 @@
     </div>
 
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
-      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-        <div class="d-flex px-2">
-          <div class="toast-body d-flex align-items-center" id="mainToastBody"></div>
+      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex px-3 py-2">
+          <div class="toast-body d-flex align-items-center fw-medium fs-6" id="mainToastBody"></div>
           <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
     <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -585,7 +488,8 @@
       const manualQuickButtons = document.querySelectorAll(".bm-quick-amount-btn");
 
       // Edit Modal
-      const editTxnModal = new bootstrap.Modal(document.getElementById("editTxnModal"));
+      const editTxnModalEl = document.getElementById("editTxnModal");
+      const editTxnModal = bootstrap.Modal.getOrCreateInstance(editTxnModalEl);
       const editTxnId = document.getElementById("editTxnId");
       const editTxnDate = document.getElementById("editTxnDate");
       const editTxnType = document.getElementById("editTxnType");
@@ -624,9 +528,9 @@
       let isSavingManualTxn = false;
 
       // --- Helpers ---
-      function showToast(message, variant = "primary") {
+      function showToast(message, variant = "success") {
          mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
-         mainToastBody.innerHTML = message;
+         mainToastBody.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-triangle'}-fill me-2 fs-5"></i> ${message}`;
          mainToast.show();
       }
       function formatNumber(val) {
@@ -642,14 +546,16 @@
         return `${d} ${months[m-1]} ${y+543}`;
       }
       function applyTheme(theme) {
-         bodyEl.className = theme === "dark" ? "bm-theme-dark" : "bm-theme-light";
-         themeToggleBtn.querySelector("i").className = theme === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
-         if(financeChartInstance) updateChartTheme(theme);
+         bodyEl.className = theme === "dark" ? "bm-theme-dark bg-dark" : "bm-theme-light bg-light";
+         if(themeToggleBtn) {
+            themeToggleBtn.querySelector("i").className = theme === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
+         }
       }
 
       // --- Chart Logic ---
+      Chart.defaults.font.family = "'Kanit', sans-serif";
+      
       function renderChart(data) {
-         // Group data by date
          const dates = {};
          data.forEach(txn => {
             if(!dates[txn.date]) dates[txn.date] = { income: 0, expense: 0 };
@@ -657,9 +563,11 @@
             else dates[txn.date].expense += Number(txn.amount);
          });
 
-         // Sort dates
          const sortedKeys = Object.keys(dates).sort();
-         const labels = sortedKeys.map(d => formatDateThai(d));
+         const labels = sortedKeys.map(d => {
+             const parts = d.split('-');
+             return `${parts[2]}/${parts[1]}`; // แปลงเป็น วัน/เดือน สั้นๆ
+         });
          const incomeData = sortedKeys.map(k => dates[k].income);
          const expenseData = sortedKeys.map(k => dates[k].expense);
 
@@ -676,18 +584,22 @@
                   {
                      label: 'รายรับ',
                      data: incomeData,
-                     backgroundColor: 'rgba(34, 197, 94, 0.7)',
-                     borderColor: '#16a34a',
-                     borderWidth: 1,
-                     borderRadius: 4
+                     backgroundColor: 'rgba(25, 135, 84, 0.8)',
+                     borderColor: '#198754',
+                     borderWidth: 0,
+                     borderRadius: 6,
+                     barThickness: 'flex',
+                     maxBarThickness: 30
                   },
                   {
                      label: 'รายจ่าย',
                      data: expenseData,
-                     backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                     borderColor: '#dc2626',
-                     borderWidth: 1,
-                     borderRadius: 4
+                     backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                     borderColor: '#dc3545',
+                     borderWidth: 0,
+                     borderRadius: 6,
+                     barThickness: 'flex',
+                     maxBarThickness: 30
                   }
                ]
             },
@@ -695,19 +607,15 @@
                responsive: true,
                maintainAspectRatio: false,
                plugins: {
-                  legend: { position: 'top' },
-                  tooltip: { mode: 'index', intersect: false }
+                  legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 10, font: { weight: 'bold' } } },
+                  tooltip: { mode: 'index', intersect: false, backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, titleFont: { size: 14 }, bodyFont: { size: 14, weight: 'bold' } }
                },
                scales: {
-                  y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-                  x: { grid: { display: false } }
+                  y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(0,0,0,0.05)' }, border: { display: false } },
+                  x: { grid: { display: false }, border: { display: false } }
                }
             }
          });
-      }
-
-      function updateChartTheme(theme) {
-         // Placeholder for advanced chart theme switching if needed
       }
 
       function renderTopExpenses() {
@@ -721,20 +629,20 @@
           topExpenseList.innerHTML = "";
           
           if(sortedCats.length === 0) {
-              topExpenseList.innerHTML = `<li class="list-group-item text-center text-muted py-4">ไม่มีข้อมูลรายจ่าย</li>`;
+              topExpenseList.innerHTML = `<li class="list-group-item text-center text-muted py-5 border-0"><i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i>ไม่มีข้อมูลรายจ่าย</li>`;
           } else {
               const maxVal = sortedCats[0][1];
               sortedCats.forEach(([cat, val]) => {
                   const pct = (val / maxVal) * 100;
                   topExpenseList.innerHTML += `
-                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                     <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 border-light">
                         <div class="w-100">
-                           <div class="d-flex justify-content-between mb-1">
-                              <span class="fw-medium text-dark">${cat}</span>
-                              <span class="text-danger fw-bold">${formatNumber(val)}</span>
+                           <div class="d-flex justify-content-between mb-2">
+                              <span class="fw-bold text-dark"><i class="bi bi-tag me-2 text-secondary"></i>${cat}</span>
+                              <span class="text-danger fw-bold fs-6">${formatNumber(val)} ฿</span>
                            </div>
-                           <div class="progress" style="height: 6px;">
-                              <div class="progress-bar bg-danger" role="progressbar" style="width: ${pct}%" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"></div>
+                           <div class="progress bg-danger-subtle" style="height: 8px; border-radius: 10px;">
+                              <div class="progress-bar bg-danger rounded-pill" role="progressbar" style="width: ${pct}%" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"></div>
                            </div>
                         </div>
                      </li>
@@ -747,7 +655,7 @@
       function renderTable() {
          transactionsTableBody.innerHTML = "";
          if(transactionsInRange.length === 0) {
-            transactionsTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted">ไม่พบรายการในช่วงนี้</td></tr>`;
+            transactionsTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted fw-medium"><i class="bi bi-search fs-3 d-block mb-2 opacity-50"></i>ไม่พบรายการในช่วงที่เลือก</td></tr>`;
             return;
          }
 
@@ -759,16 +667,24 @@
             const isInc = txn.type === 'income';
             const tr = document.createElement("tr");
             tr.innerHTML = `
-               <td class="ps-3 text-muted small text-nowrap">${formatDateThai(txn.date)}</td>
-               <td class="small"><span class="badge ${isInc ? 'bg-success-subtle text-success border-success-subtle' : 'bg-danger-subtle text-danger border-danger-subtle'} border">${isInc ? 'รายรับ' : 'รายจ่าย'}</span></td>
-               <td class="small"><span class="badge bg-light text-dark border fw-normal">${txn.category}</span></td>
-               <td class="small text-dark text-truncate" style="max-width: 200px;">${txn.description}</td>
-               <td class="text-end fw-bold ${isInc ? 'text-success' : 'text-danger'}">${isInc ? '+' : '-'}${formatNumber(txn.amount)}</td>
-               <td class="text-center small text-muted">${txn.method === 'transfer' ? 'โอน' : 'สด'}</td>
+               <td class="ps-4 text-muted small fw-medium text-nowrap">${formatDateThai(txn.date)}</td>
                <td class="text-center">
-                   <div class="btn-group btn-group-sm">
-                      <button class="btn btn-light border text-warning edit-txn-btn" data-id="${txn.id}"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-light border text-danger delete-txn-btn" data-id="${txn.id}"><i class="bi bi-trash"></i></button>
+                  <span class="badge ${isInc ? 'bg-success text-white' : 'bg-danger text-white'} rounded-pill px-3 shadow-sm">
+                     <i class="bi ${isInc ? 'bi-arrow-down-left' : 'bi-arrow-up-right'} me-1"></i>${isInc ? 'รายรับ' : 'รายจ่าย'}
+                  </span>
+               </td>
+               <td><span class="badge bg-light text-dark border border-secondary-subtle fw-bold shadow-sm">${txn.category}</span></td>
+               <td class="text-dark fw-medium text-truncate" style="max-width: 250px;">${txn.description}</td>
+               <td class="text-end fw-bold fs-6 pe-4 ${isInc ? 'text-success' : 'text-danger'}">${isInc ? '+' : '-'}${formatNumber(txn.amount)}</td>
+               <td class="text-center small fw-medium text-muted">${txn.method === 'transfer' ? '<i class="bi bi-phone"></i> โอน' : '<i class="bi bi-cash"></i> สด'}</td>
+               <td class="text-center">
+                   <div class="dropdown">
+                     <button class="btn btn-sm btn-light border rounded-circle shadow-sm hover-elevate" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical text-muted"></i></button>
+                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2">
+                        <li><button class="dropdown-item py-2 fw-medium rounded-3 edit-txn-btn" data-id="${txn.id}"><i class="bi bi-pencil me-2 text-warning"></i>แก้ไขรายการ</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3 delete-txn-btn" data-id="${txn.id}"><i class="bi bi-trash-fill me-2"></i>ลบรายการ</button></li>
+                     </ul>
                    </div>
                </td>
             `;
@@ -780,7 +696,7 @@
          summaryExpenseText.textContent = formatNumber(expense) + " ฿";
          const net = income - expense;
          summaryNetText.textContent = (net >= 0 ? "+" : "") + formatNumber(net) + " ฿";
-         summaryNetText.className = "h5 mb-0 fw-bold " + (net >= 0 ? "text-success" : "text-danger");
+         summaryNetText.className = "h4 mb-0 fw-bold text-truncate " + (net >= 0 ? "text-info-emphasis" : "text-danger");
          
          // Update Counts
          if(transactionsCountInfo) {
@@ -813,7 +729,6 @@
          if(isLoadingTransactions) return;
          if(!currentUserProfile) return;
 
-         // Default Range Today
          if(!txnRangeStartDate) {
              txnRangeStartDate = getTodayISO();
              txnRangeEndDate = getTodayISO();
@@ -828,7 +743,7 @@
 
          isLoadingTransactions = true;
          transactionsLoadingState.classList.remove("text-danger", "text-success");
-         transactionsLoadingState.innerHTML = `<span class="spinner-border spinner-border-sm text-primary"></span> กำลังโหลด...`;
+         transactionsLoadingState.innerHTML = `<span class="spinner-grow spinner-grow-sm text-primary me-2" role="status"></span>กำลังโหลด...`;
          if(loadMoreTransactionsBtn) loadMoreTransactionsBtn.classList.add("d-none");
          applyDateRangeBtn.disabled = true;
 
@@ -852,16 +767,16 @@
 
              if(snap.size === TXN_PAGE_SIZE) loadMoreTransactionsBtn.classList.remove("d-none");
              
-             transactionsLoadingState.innerHTML = `<i class="bi bi-check2-all"></i> เรียบร้อย`;
+             transactionsLoadingState.innerHTML = `<i class="bi bi-check2-all me-1"></i> โหลดเรียบร้อย`;
              transactionsLoadingState.classList.add("text-success");
              
              renderTable();
-             loadBalance(); // Refresh balance too
+             loadBalance(); 
 
          } catch(e) {
              console.error(e);
-             showToast("โหลดข้อมูลล้มเหลว", "danger");
-             transactionsLoadingState.textContent = "ผิดพลาด";
+             showToast("โหลดข้อมูลล้มเหลว โปรดลองอีกครั้ง", "danger");
+             transactionsLoadingState.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-1"></i> ผิดพลาด`;
              transactionsLoadingState.classList.add("text-danger");
          } finally {
              isLoadingTransactions = false;
@@ -876,7 +791,7 @@
           const date = manualDateInput.value;
           const desc = manualDescriptionInput.value.trim();
           
-          if(!amount || !date || !desc) { showToast("กรุณากรอกข้อมูลให้ครบ", "warning"); return; }
+          if(!amount || !date || !desc) { showToast("กรุณากรอกข้อมูลให้ครบถ้วน", "warning"); return; }
           
           manualTxnSaveBtn.disabled = true;
           manualTxnSaveSpinner.classList.remove("d-none");
@@ -892,19 +807,18 @@
               
               const ref = await addDoc(collection(db, "transactions"), data);
               
-              // Activity Log
-await addDoc(collection(db, "activityLogs"), {
-    type: "transaction_manual", message: `เพิ่มรายการ ${desc} (${amount})`,
-    refId: ref.id, refType: "transaction", branchId: currentUserProfile.branchId,
-    createdAt: serverTimestamp(), 
-    createdBy: currentUser.uid,
-    createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่มบรรทัดนี้
-});
+              await addDoc(collection(db, "activityLogs"), {
+                 type: "transaction_manual", message: `เพิ่มรายการมือ: ${desc} (${formatNumber(amount)} ฿)`,
+                 refId: ref.id, refType: "transaction", branchId: currentUserProfile.branchId,
+                 createdAt: serverTimestamp(), 
+                 createdBy: currentUser.uid,
+                 createdByName: currentUserProfile.displayName || currentUser.email
+              });
 
-              showToast("บันทึกสำเร็จ", "success");
+              showToast("บันทึกรายการสำเร็จ", "success");
               e.target.reset();
               manualDateInput.value = getTodayISO();
-              loadTransactions(true); // reload list
+              loadTransactions(true); 
 
           } catch(err) {
               console.error(err);
@@ -916,14 +830,23 @@ await addDoc(collection(db, "activityLogs"), {
       }
 
       async function handleDelete(id) {
-          if(!confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) return;
+          if(!confirm("⚠️ ต้องการลบรายการบัญชีนี้ใช่หรือไม่? (ลบแล้วยอดรวมจะเปลี่ยนทันที)")) return;
           try {
               await updateDoc(doc(db, "transactions", id), { isDeleted: true });
               transactionsInRange = transactionsInRange.filter(t => t.id !== id);
               renderTable();
               loadBalance();
-              showToast("ลบรายการแล้ว", "success");
-          } catch(e) { showToast("ลบไม่สำเร็จ", "danger"); }
+              
+              await addDoc(collection(db, "activityLogs"), {
+                 type: "transaction_deleted", message: `ลบรายการบัญชี ID: ${id.substring(0,6)}`,
+                 refId: id, refType: "transaction", branchId: currentUserProfile.branchId,
+                 createdAt: serverTimestamp(), 
+                 createdBy: currentUser.uid,
+                 createdByName: currentUserProfile.displayName || currentUser.email
+              });
+
+              showToast("ลบรายการออกจากระบบแล้ว", "success");
+          } catch(e) { showToast("ลบรายการไม่สำเร็จ", "danger"); }
       }
 
       function openEditModal(id) {
@@ -954,13 +877,20 @@ await addDoc(collection(db, "activityLogs"), {
           try {
               await updateDoc(doc(db, "transactions", id), updates);
               
-              // Update local state
               const idx = transactionsInRange.findIndex(t => t.id === id);
               if(idx !== -1) transactionsInRange[idx] = { ...transactionsInRange[idx], ...updates };
               
+              await addDoc(collection(db, "activityLogs"), {
+                 type: "transaction_updated", message: `แก้ไขรายการบัญชี: ${updates.description}`,
+                 refId: id, refType: "transaction", branchId: currentUserProfile.branchId,
+                 createdAt: serverTimestamp(), 
+                 createdBy: currentUser.uid,
+                 createdByName: currentUserProfile.displayName || currentUser.email
+              });
+
               renderTable();
               loadBalance();
-              showToast("แก้ไขเรียบร้อย", "success");
+              showToast("บันทึกแก้ไขรายการเรียบร้อย", "success");
               editTxnModal.hide();
           } catch(e) {
               console.error(e);
@@ -970,16 +900,29 @@ await addDoc(collection(db, "activityLogs"), {
           }
       }
 
+      // --- Export Functions ---
       function exportToCSV() {
-          if(!transactionsInRange.length) return;
-          let csv = "\uFEFFวันที่,ประเภท,หมวดหมู่,รายละเอียด,จำนวน,วิธี\n";
+          if(!transactionsInRange.length) { showToast("ไม่มีข้อมูลให้ส่งออก", "warning"); return; }
+          let csv = "\uFEFFวันที่,ประเภท,หมวดหมู่,รายละเอียด,จำนวน,วิธีชำระ\n";
           transactionsInRange.forEach(t => {
-              csv += `${t.date},${t.type},${t.category},"${t.description}",${t.amount},${t.method}\n`;
+              const typeStr = t.type === 'income' ? 'รายรับ' : 'รายจ่าย';
+              const methodStr = t.method === 'transfer' ? 'โอน' : 'เงินสด';
+              csv += `${t.date},${typeStr},${t.category},"${t.description}",${t.amount},${methodStr}\n`;
           });
           const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
-          link.download = `finance_${txnRangeStartDate}.csv`;
+          link.download = `finance_report_${txnRangeStartDate}_to_${txnRangeEndDate}.csv`;
+          link.click();
+      }
+
+      function exportToJSON() {
+          if(!transactionsInRange.length) { showToast("ไม่มีข้อมูลให้ส่งออก", "warning"); return; }
+          const dataStr = JSON.stringify(transactionsInRange, null, 2);
+          const blob = new Blob([dataStr], {type: "application/json"});
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `finance_data_${txnRangeStartDate}.json`;
           link.click();
       }
 
@@ -990,6 +933,15 @@ await addDoc(collection(db, "activityLogs"), {
           // Date Presets
           document.querySelectorAll(".bm-range-preset-btn").forEach(btn => {
               btn.onclick = (e) => {
+                  // รีเซ็ตปุ่มอื่น
+                  document.querySelectorAll(".bm-range-preset-btn").forEach(b => {
+                      b.classList.remove("active", "btn-success", "text-white");
+                      b.classList.add("btn-outline-secondary");
+                  });
+                  // ทำสีให้ปุ่มที่ถูกกด
+                  e.target.classList.remove("btn-outline-secondary");
+                  e.target.classList.add("active", "btn-success", "text-white");
+
                   const range = e.target.dataset.range;
                   const today = new Date();
                   let start = getTodayISO();
@@ -1012,7 +964,19 @@ await addDoc(collection(db, "activityLogs"), {
               };
           });
 
+          // เลือกปุ่ม 'เดือนนี้' ไว้เป็นค่าเริ่มต้น
+          const monthBtn = document.getElementById("rangePresetMonthBtn");
+          if(monthBtn) {
+             monthBtn.classList.remove("btn-outline-secondary");
+             monthBtn.classList.add("active", "btn-success", "text-white");
+          }
+
           applyDateRangeBtn.onclick = () => {
+              // เอาสีปุ่ม preset ออกเพราะตั้งค่าเอง
+              document.querySelectorAll(".bm-range-preset-btn").forEach(b => {
+                  b.classList.remove("active", "btn-success", "text-white");
+                  b.classList.add("btn-outline-secondary");
+              });
               txnRangeStartDate = dateRangeStartInput.value;
               txnRangeEndDate = dateRangeEndInput.value;
               loadTransactions(true);
@@ -1041,13 +1005,25 @@ await addDoc(collection(db, "activityLogs"), {
           
           saveEditTxnBtn.onclick = saveEditTxn;
           exportCsvBtn.onclick = exportToCSV;
+          exportJsonBtn.onclick = exportToJSON;
 
           // FAB
           fabOpenBillBtn.onclick = () => window.location.href="open-bill.html";
           fabAddTxnBtn.onclick = () => {
-              document.getElementById("manualTxnForm").scrollIntoView({behavior:"smooth"});
+              const collapse = new bootstrap.Collapse(document.getElementById("collapseManualForm"), { toggle: false });
+              collapse.show();
+              document.getElementById("manualTxnForm").scrollIntoView({behavior:"smooth", block:"center"});
+              setTimeout(()=> document.getElementById("manualAmountInput").focus(), 400);
           };
           fabStockInBtn.onclick = () => window.location.href="stock.html";
+          
+          if(themeToggleBtn) {
+              themeToggleBtn.onclick = () => {
+                  const t = bodyEl.classList.contains("bm-theme-dark") ? "light" : "dark";
+                  applyTheme(t);
+                  localStorage.setItem("bm-theme-" + currentUser.uid, t);
+              };
+          }
       }
 
       // --- Main ---
@@ -1062,14 +1038,25 @@ await addDoc(collection(db, "activityLogs"), {
 
           if(currentUserProfile.disabled) { signOut(auth); return; }
 
-          userDisplayNameText.textContent = currentUserProfile.displayName || user.email;
-          userRoleText.textContent = currentUserProfile.role === 'admin' ? "Admin" : "Staff";
-          userAvatarInitial.textContent = (currentUserProfile.displayName||"U")[0].toUpperCase();
-          if(settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== 'admin');
+          const name = currentUserProfile.displayName || "ผู้ใช้งาน";
+          if(document.getElementById("userDisplayNameText")) document.getElementById("userDisplayNameText").textContent = name;
+          if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
+          if(document.getElementById("userRoleText")) document.getElementById("userRoleText").textContent = currentUserProfile.role === 'admin' ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
+          if(document.getElementById("userAvatarInitial")) document.getElementById("userAvatarInitial").textContent = name[0].toUpperCase();
           
           applyTheme(localStorage.getItem("bm-theme-"+user.uid)||"light");
           
+          manualDateInput.value = getTodayISO();
+          
           setupEvents();
+          
+          // Set initial range to current month
+          const today = new Date();
+          txnRangeStartDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split("T")[0];
+          txnRangeEndDate = getTodayISO();
+          dateRangeStartInput.value = txnRangeStartDate;
+          dateRangeEndInput.value = txnRangeEndDate;
+
           loadTransactions(true);
       });
     </script>
