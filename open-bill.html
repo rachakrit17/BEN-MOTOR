@@ -5,126 +5,73 @@
     <title>BEN MOTOR – เปิดบิลซ่อมใหม่</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="manifest" href="img/site.webmanifest">
     
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+      /* เพิ่ม Custom Style เล็กน้อยให้ UI ดูพรีเมียมขึ้น */
+      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+      .card-premium:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important; }
+      .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
+      .bg-soft-success { background-color: rgba(25, 135, 84, 0.05); }
+    </style>
   </head>
-  <body class="bm-theme-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+  <body class="bm-theme-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
+          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
+          <span class="badge bg-light text-secondary border ms-3 fw-normal small d-none d-md-inline-block" style="font-size: 0.75rem;">
+            <i class="bi bi-clock me-1"></i> เปิดทุกวัน 08:30-23:00
+          </span>
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
-            id="themeToggleBtn"
-            type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
-          >
+          <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent" id="themeToggleBtn" type="button" aria-label="สลับโหมดธีม" style="width: 2.5rem; height: 2.5rem;">
             <i class="bi bi-moon fs-5"></i>
           </button>
 
           <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
-              type="button"
-              id="userMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4">
+              <li><a class="dropdown-item py-2" href="reports.html"><i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด</a></li>
+              <li><a class="dropdown-item py-2" href="price-check.html"><i class="bi bi-tags me-2 text-warning"></i> เช็คราคา</a></li>
+              <li><a class="dropdown-item py-2" href="customer-history.html"><i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า & รถ</a></li>              
+              <li><a class="dropdown-item py-2" href="activity-log.html"><i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ</a></li>              
+              <li><a class="dropdown-item py-2 d-none" href="settings.html" id="settingsMenuItem"><i class="bi bi-gear me-2"></i> ตั้งค่าระบบ</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+              <li><button class="dropdown-item py-2 text-danger fw-medium" type="button" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <main class="bm-main-content pb-5">
+    <main class="bm-main-content pb-5 mt-5 pt-3">
       <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-end mb-4 mt-2">
-          <div>
-            <h1 class="h4 mb-1 fw-bold text-dark">เปิดบิลซ่อมใหม่</h1>
-            <p class="small text-muted mb-0">
-              บันทึกข้อมูลลูกค้า อาการรถ และรายการซ่อม
-            </p>
+        <div class="row mb-4 align-items-end">
+          <div class="col">
+            <h1 class="h3 mb-1 fw-bold text-dark">เปิดบิลซ่อมใหม่</h1>
+            <p class="small text-muted mb-0"><i class="bi bi-pencil-square me-1"></i> บันทึกข้อมูลลูกค้า อาการรถ และรายการอะไหล่แบบละเอียด</p>
           </div>
-          <div class="text-end">
-            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-normal" id="openBillTodayLabel">
+          <div class="col-auto text-end">
+            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-medium fs-6" id="openBillTodayLabel">
               <i class="bi bi-calendar-event me-1 text-success"></i> วันนี้
             </span>
           </div>
@@ -132,116 +79,108 @@
 
         <form id="openBillForm" novalidate>
           
+          <!-- Section 1: ข้อมูลลูกค้าและรถ -->
           <section class="mb-4">
-            <div class="card border-0 shadow-sm rounded-4">
-              <div class="card-header bg-transparent border-0 pt-3 pb-0">
-                <h2 class="h6 fw-bold text-success mb-0">
-                  <i class="bi bi-person-vcard me-2"></i> ข้อมูลลูกค้าและรถ
+            <div class="card card-premium shadow-sm rounded-4 border-0">
+              <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4">
+                <h2 class="h6 fw-bold text-success mb-0 d-flex align-items-center">
+                  <span class="bg-soft-success p-2 rounded-circle me-2 d-flex"><i class="bi bi-person-vcard"></i></span>
+                  ข้อมูลลูกค้าและรถ
                 </h2>
               </div>
-              <div class="card-body pt-2 pb-4">
+              <div class="card-body px-4 pb-4">
                 <div class="row g-3">
                   <div class="col-12 col-md-4">
-                    <label for="jobDate" class="form-label small text-muted mb-1">วันที่รับงาน</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar3"></i></span>
-                        <input type="date" class="form-control border-start-0 ps-0" id="jobDate" required />
+                    <label for="jobDate" class="form-label small text-muted mb-1 fw-medium">วันที่รับงาน</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar3 text-muted"></i></span>
+                        <input type="date" class="form-control border-start-0 ps-0 fw-medium" id="jobDate" required />
                     </div>
-                    <div class="invalid-feedback">กรุณาเลือกวันที่</div>
                   </div>
-
                   <div class="col-12 col-md-4">
-                    <label for="customerName" class="form-label small text-muted mb-1">ชื่อลูกค้า</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                    <label for="customerName" class="form-label small text-muted mb-1 fw-medium">ชื่อลูกค้า</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
                         <input type="text" class="form-control border-start-0 ps-0" id="customerName" placeholder="ค้นหาหรือกรอกใหม่..." list="customerNameDatalist" required />
                         <button class="btn btn-light border-start-0 border text-muted" type="button" onclick="document.getElementById('customerName').value='';"><i class="bi bi-x"></i></button>
                     </div>
                     <datalist id="customerNameDatalist"></datalist>
-                    <div class="invalid-feedback">กรุณากรอกชื่อลูกค้า</div>
                   </div>
-
                   <div class="col-12 col-md-4">
-                    <label for="customerPhone" class="form-label small text-muted mb-1">เบอร์โทรศัพท์</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone"></i></span>
-                        <input type="tel" class="form-control border-start-0 ps-0" id="customerPhone" placeholder="เช่น 081xxxxxxx" />
+                    <label for="customerPhone" class="form-label small text-muted mb-1 fw-medium">เบอร์โทรศัพท์</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone text-muted"></i></span>
+                        <input type="tel" class="form-control border-start-0 ps-0" id="customerPhone" placeholder="081-xxx-xxxx" />
                     </div>
                   </div>
 
-                  <div class="col-12"><hr class="my-1 border-light"></div>
+                  <div class="col-12"><hr class="my-2 border-light"></div>
 
                   <div class="col-6 col-md-3">
-                    <label for="plate" class="form-label small text-muted mb-1">ทะเบียนรถ <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control form-control-sm bg-light fw-semibold text-primary" id="plate" placeholder="ระบุทะเบียน" list="plateDatalist" required />
+                    <label for="plate" class="form-label small text-muted mb-1 fw-medium">ทะเบียนรถ <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control bg-light fw-bold text-primary" id="plate" placeholder="ระบุทะเบียน" list="plateDatalist" required />
                     <datalist id="plateDatalist"></datalist>
-                    <div class="invalid-feedback">กรุณากรอกทะเบียนรถ</div>
                   </div>
-
                   <div class="col-6 col-md-3">
-                    <label for="brand" class="form-label small text-muted mb-1">ยี่ห้อ</label>
-                    <input type="text" class="form-control form-control-sm" id="brand" placeholder="Honda, Yamaha..." />
+                    <label for="brand" class="form-label small text-muted mb-1 fw-medium">ยี่ห้อ (Brand)</label>
+                    <input type="text" class="form-control" id="brand" placeholder="Honda, Yamaha, Kawasaki..." />
                   </div>
-
                   <div class="col-6 col-md-3">
-                    <label for="model" class="form-label small text-muted mb-1">รุ่น</label>
-                    <input type="text" class="form-control form-control-sm" id="model" placeholder="Wave, PCX..." />
+                    <label for="model" class="form-label small text-muted mb-1 fw-medium">รุ่น (Model)</label>
+                    <input type="text" class="form-control" id="model" placeholder="Wave, MSX, Kaze..." />
                   </div>
-
                   <div class="col-6 col-md-3">
-                    <label for="mileage" class="form-label small text-muted mb-1">เลขไมล์ (กม.)</label>
-                    <input type="number" min="0" class="form-control form-control-sm" id="mileage" placeholder="0" />
+                    <label for="mileage" class="form-label small text-muted mb-1 fw-medium">เลขไมล์ (กม.)</label>
+                    <input type="number" min="0" class="form-control" id="mileage" placeholder="0" />
                   </div>
 
-                  <div class="col-12 col-md-8">
-                    <label for="problem" class="form-label small text-muted mb-1">อาการ/ปัญหาที่แจ้ง</label>
-                    <textarea id="problem" class="form-control form-control-sm" rows="2" placeholder="เช่น สตาร์ทไม่ติด, เปลี่ยนยาง..." required></textarea>
-                    <div class="invalid-feedback">กรุณากรอกอาการ</div>
+                  <div class="col-12 col-md-6">
+                    <label for="problem" class="form-label small text-muted mb-1 fw-medium">อาการ/ปัญหาที่แจ้ง <span class="text-danger">*</span></label>
+                    <textarea id="problem" class="form-control" rows="2" placeholder="ระบุอาการให้ชัดเจน เช่น สตาร์ทไม่ติด, เปลี่ยนสเตอร์, จูนคาร์บู..." required></textarea>
                   </div>
-
-                  <div class="col-12 col-md-4">
-                    <label for="priority" class="form-label small text-muted mb-1">ความเร่งด่วน</label>
-                    <select id="priority" class="form-select form-select-sm">
-                      <option value="normal" selected>🟢 ปกติ</option>
-                      <option value="high">🔴 ด่วนมาก</option>
-                      <option value="low">⚪ ไม่ด่วน</option>
+                  <div class="col-12 col-md-3">
+                    <label for="estimatedTime" class="form-label small text-muted mb-1 fw-medium">คาดว่าจะเสร็จ</label>
+                    <input type="text" class="form-control" id="estimatedTime" placeholder="เช่น วันนี้ 17:00, พรุ่งนี้บ่าย" />
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <label for="priority" class="form-label small text-muted mb-1 fw-medium">ความเร่งด่วน</label>
+                    <select id="priority" class="form-select fw-medium">
+                      <option value="normal" selected>🟢 ปกติ (รอคิว)</option>
+                      <option value="high">🔴 ด่วนมาก (ทำทันที)</option>
+                      <option value="low">⚪ ไม่ด่วน (ทิ้งรถไว้)</option>
                     </select>
                   </div>
-                </div>
-                
-                <div class="d-flex align-items-center mt-3 p-2 bg-info bg-opacity-10 rounded-3 border border-info-subtle">
-                    <i class="bi bi-info-circle-fill text-info me-2 fs-5"></i>
-                    <p class="small text-muted mb-0 lh-sm">
-                        ระบบจะช่วยค้นหาข้อมูลลูกค้าและรถจากประวัติเก่าให้ทันทีเมื่อพิมพ์ชื่อหรือทะเบียน
-                    </p>
                 </div>
               </div>
             </div>
           </section>
+
+          <!-- Section 2: รายการอะไหล่ -->
 		  <section class="mb-4">
-            <div class="card border-0 shadow-sm rounded-4">
-              <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
-                <h2 class="h6 fw-bold text-warning mb-0">
-                    <i class="bi bi-box-seam me-2"></i> รายการอะไหล่
+            <div class="card card-premium shadow-sm rounded-4 border-0">
+              <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                <h2 class="h6 fw-bold text-warning mb-0 d-flex align-items-center">
+                    <span class="bg-warning bg-opacity-10 text-warning p-2 rounded-circle me-2 d-flex"><i class="bi bi-box-seam"></i></span>
+                    รายการอะไหล่ (Parts)
                 </h2>
-                <button class="btn btn-sm btn-light border text-success fw-medium rounded-pill px-3 shadow-sm hover-elevate" type="button" id="addPartRowBtn">
+                <button class="btn btn-sm btn-outline-warning fw-medium rounded-pill px-3 shadow-sm" type="button" id="addPartRowBtn">
                   <i class="bi bi-plus-lg me-1"></i> เพิ่มอะไหล่
                 </button>
               </div>
-              <div class="card-body pt-0">
-                <div id="stockLoadingState" class="alert alert-light border small py-2 mb-2 rounded-3 text-center text-muted">
-                  <div class="spinner-border spinner-border-sm me-2" role="status"></div> กำลังโหลดสต๊อก...
+              <div class="card-body px-4 pt-0">
+                <div id="stockLoadingState" class="alert alert-light border small py-2 mb-3 rounded-3 text-center text-muted">
+                  <div class="spinner-border spinner-border-sm me-2 text-warning" role="status"></div> กำลังโหลดสต๊อก...
                 </div>
 
                 <div class="table-responsive rounded-3 border">
-                  <table class="table table-sm align-middle mb-0 bm-bill-table table-hover">
-                    <thead class="bg-light text-secondary">
-                      <tr class="text-muted small text-uppercase">
-                        <th class="ps-3 py-2 fw-normal" style="min-width: 220px;">สินค้า / อะไหล่</th>
-                        <th class="text-center py-2 fw-normal" style="width: 120px;">จำนวน</th>
-                        <th class="text-end py-2 fw-normal" style="width: 120px;">ราคา/หน่วย</th>
-                        <th class="text-end py-2 fw-normal" style="width: 120px;">รวม (฿)</th>
-                        <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
+                  <table class="table align-middle mb-0 bm-bill-table table-hover">
+                    <thead class="bg-light text-secondary border-bottom">
+                      <tr class="small text-uppercase">
+                        <th class="ps-3 py-3 fw-semibold" style="min-width: 250px;">สินค้า / อะไหล่</th>
+                        <th class="text-center py-3 fw-semibold" style="width: 140px;">จำนวน</th>
+                        <th class="text-end py-3 fw-semibold" style="width: 140px;">ราคา/หน่วย</th>
+                        <th class="text-end py-3 fw-semibold" style="width: 140px;">รวม (฿)</th>
+                        <th class="text-center py-3 fw-semibold" style="width: 60px;"><i class="bi bi-trash"></i></th>
                       </tr>
                     </thead>
                     <tbody id="partsTbody" class="bg-white">
@@ -252,24 +191,26 @@
             </div>
           </section>
 
+          <!-- Section 3: รายการค่าแรง -->
           <section class="mb-4">
-            <div class="card border-0 shadow-sm rounded-4">
-              <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3">
-                <h2 class="h6 fw-bold text-info mb-0">
-                    <i class="bi bi-wrench me-2"></i> รายการค่าแรง
+            <div class="card card-premium shadow-sm rounded-4 border-0">
+              <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                <h2 class="h6 fw-bold text-info mb-0 d-flex align-items-center">
+                    <span class="bg-info bg-opacity-10 text-info p-2 rounded-circle me-2 d-flex"><i class="bi bi-wrench"></i></span>
+                    รายการค่าแรง (Labor)
                 </h2>
-                <button class="btn btn-sm btn-light border text-success fw-medium rounded-pill px-3 shadow-sm hover-elevate" type="button" id="addLaborRowBtn">
+                <button class="btn btn-sm btn-outline-info fw-medium rounded-pill px-3 shadow-sm" type="button" id="addLaborRowBtn">
                   <i class="bi bi-plus-lg me-1"></i> เพิ่มค่าแรง
                 </button>
               </div>
-              <div class="card-body pt-0">
+              <div class="card-body px-4 pt-0">
                 <div class="table-responsive rounded-3 border">
-                  <table class="table table-sm align-middle mb-0 bm-bill-table table-hover">
-                    <thead class="bg-light text-secondary">
-                      <tr class="text-muted small text-uppercase">
-                        <th class="ps-3 py-2 fw-normal">รายละเอียดค่าแรง</th>
-                        <th class="text-end py-2 fw-normal" style="width: 150px;">ราคา (฿)</th>
-                        <th class="text-center py-2 fw-normal" style="width: 50px;"><i class="bi bi-trash"></i></th>
+                  <table class="table align-middle mb-0 bm-bill-table table-hover">
+                    <thead class="bg-light text-secondary border-bottom">
+                      <tr class="small text-uppercase">
+                        <th class="ps-3 py-3 fw-semibold">รายละเอียดงานซ่อม / ค่าแรง</th>
+                        <th class="text-end py-3 fw-semibold" style="width: 180px;">ราคา (฿)</th>
+                        <th class="text-center py-3 fw-semibold" style="width: 60px;"><i class="bi bi-trash"></i></th>
                       </tr>
                     </thead>
                     <tbody id="laborTbody" class="bg-white">
@@ -280,176 +221,125 @@
             </div>
           </section>
 
+          <!-- Section 4: สรุปยอดและบันทึก -->
           <section class="mb-5">
-            <div class="card border-0 shadow rounded-4 bg-gradient" style="background-color: #f8fafc;">
-              <div class="card-body p-4">
-                
-                <div class="row align-items-center mb-3">
-                  <div class="col-12 col-md-6 mb-3 mb-md-0">
-                    <div class="d-flex flex-column gap-1">
-                        <div class="d-flex justify-content-between text-muted small" style="max-width: 300px;">
-                            <span>รวมค่าอะไหล่:</span>
-                            <span class="fw-semibold text-dark" id="partsTotalDisplay">0.00 ฿</span>
-                        </div>
-                        <div class="d-flex justify-content-between text-muted small" style="max-width: 300px;">
-                            <span>รวมค่าแรง:</span>
-                            <span class="fw-semibold text-dark" id="laborTotalDisplay">0.00 ฿</span>
-                        </div>
-                    </div>
+            <div class="card shadow-lg rounded-4 border-0 bg-white overflow-hidden">
+              <div class="row g-0">
+                <!-- ฝั่งซ้าย: ข้อมูลเพิ่มเติม -->
+                <div class="col-12 col-lg-5 p-4 bg-light border-end">
+                  <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-square me-2"></i>รายละเอียดเพิ่มเติม</h6>
+                  
+                  <div class="mb-3">
+                    <label class="form-label small text-muted mb-1 fw-medium">ช่องทางการชำระเงิน</label>
+                    <select id="paymentMethod" class="form-select">
+                      <option value="cash" selected>💵 เงินสด</option>
+                      <option value="transfer">📱 โอนเงินผ่านธนาคาร</option>
+                    </select>
                   </div>
                   
-                  <div class="col-12 col-md-6 text-md-end">
-                    <div class="small text-muted text-uppercase fw-bold ls-1 mb-1">ยอดรวมสุทธิ</div>
-                    <div class="display-5 fw-bold text-success" id="grandTotalDisplay">0.00 ฿</div>
+                  <div class="mb-3">
+                    <label class="form-label small text-muted mb-1 fw-medium">ช่างผู้รับผิดชอบ</label>
+                    <input type="text" id="mechanicName" class="form-control" placeholder="ชื่อช่าง..." />
+                  </div>
+
+                  <div class="mb-0">
+                    <label class="form-label small text-muted mb-1 fw-medium">หมายเหตุ / คำแนะนำให้ลูกค้า</label>
+                    <textarea id="jobNotes" class="form-control" rows="2" placeholder="เช่น แนะนำให้ตรวจเช็คระยะรอบหน้า..."></textarea>
                   </div>
                 </div>
 
-                <hr class="my-4 text-muted opacity-25">
+                <!-- ฝั่งขวา: สรุปยอดเงิน -->
+                <div class="col-12 col-lg-7 p-4">
+                  <div class="row mb-3">
+                    <div class="col-6 text-muted">รวมค่าอะไหล่:</div>
+                    <div class="col-6 text-end fw-semibold text-dark fs-5" id="partsTotalDisplay">0.00 ฿</div>
+                  </div>
+                  <div class="row mb-3 pb-3 border-bottom border-2 border-light">
+                    <div class="col-6 text-muted">รวมค่าแรง:</div>
+                    <div class="col-6 text-end fw-semibold text-dark fs-5" id="laborTotalDisplay">0.00 ฿</div>
+                  </div>
+                  
+                  <div class="row mb-4 align-items-center">
+                    <div class="col-5">
+                      <div class="small text-muted text-uppercase fw-bold ls-1 mb-1">ยอดรวมสุทธิ</div>
+                    </div>
+                    <div class="col-7 text-end">
+                      <div class="display-5 fw-bold text-success" id="grandTotalDisplay">0.00 ฿</div>
+                    </div>
+                  </div>
 
-                <div class="row g-3 justify-content-end align-items-center mb-4 bg-white p-3 rounded-3 border mx-0">
-                    <div class="col-12 col-sm-auto text-end">
-                        <label class="col-form-label col-form-label-sm fw-bold text-success">รับเงินมา:</label>
+                  <div class="row g-2 justify-content-end align-items-center mb-4 bg-soft-success p-3 rounded-3 mx-0">
+                    <div class="col-6 col-sm-3 text-end">
+                        <label class="col-form-label fw-bold text-success">รับเงินมา:</label>
                     </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-success bg-opacity-10 text-success border-success fw-bold">฿</span>
-                            <input type="number" id="receivedAmountInput" class="form-control form-control-sm border-success fw-bold text-end" placeholder="0.00" min="0">
-                        </div>
+                    <div class="col-6 col-sm-3">
+                        <input type="number" id="receivedAmountInput" class="form-control border-success fw-bold text-end" placeholder="0.00" min="0">
                     </div>
-                    <div class="col-12 col-sm-auto text-end">
-                        <label class="col-form-label col-form-label-sm fw-bold text-danger">เงินทอน:</label>
+                    <div class="col-6 col-sm-3 text-end mt-2 mt-sm-0">
+                        <label class="col-form-label fw-bold text-danger">เงินทอน:</label>
                     </div>
-                    <div class="col-12 col-sm-3">
-                        <input type="text" id="changeAmountDisplay" class="form-control form-control-sm bg-light text-end fw-bold text-danger" value="0.00" readonly>
+                    <div class="col-6 col-sm-3 mt-2 mt-sm-0">
+                        <input type="text" id="changeAmountDisplay" class="form-control bg-white text-end fw-bold text-danger border-danger" value="0.00" readonly>
                     </div>
-                </div>
+                  </div>
 
-                <div class="d-flex flex-column flex-md-row justify-content-end gap-3">
-                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2" id="resetFormBtn">
-                    <i class="bi bi-arrow-counterclockwise me-2"></i> ล้างฟอร์ม
-                  </button>
-                  <button type="submit" class="btn btn-success rounded-pill px-5 py-2 shadow-sm fw-bold" id="saveBillBtn">
-                    <span class="spinner-border spinner-border-sm me-2 d-none" id="saveBillSpinner" role="status" aria-hidden="true"></span>
-                    <span id="saveBillBtnText"><i class="bi bi-save2 me-2"></i> บันทึกบิลซ่อม</span>
-                  </button>
+                  <div class="d-flex flex-column flex-md-row justify-content-end gap-3 mt-4">
+                    <button type="button" class="btn btn-light border rounded-pill px-4 py-3 fw-medium hover-elevate" id="resetFormBtn">
+                      <i class="bi bi-arrow-counterclockwise me-2"></i> ล้างข้อมูล
+                    </button>
+                    <button type="submit" class="btn btn-success rounded-pill px-5 py-3 shadow fw-bold fs-5 hover-elevate" id="saveBillBtn">
+                      <span class="spinner-border spinner-border-sm me-2 d-none" id="saveBillSpinner" role="status" aria-hidden="true"></span>
+                      <span id="saveBillBtnText"><i class="bi bi-printer me-2"></i> บันทึกบิลซ่อม</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
         </form>
 
-        <div style="height: 3rem;"></div>
+        <div style="height: 5rem;"></div>
       </div>
     </main>
 
+    <!-- FAB Button & Bottom Nav คงไว้ตามเดิม -->
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2 active fw-bold" type="button" id="fabOpenBillBtn">
-              <span class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff"></i></span>
-              เปิดบิลซ่อมใหม่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn">
-              <span class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin"></i></span>
-              เพิ่มรายการเงิน
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn">
-              <span class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam"></i></span>
-              บันทึกซื้ออะไหล่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn">
-              <span class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front"></i></span>
-              เพิ่มรถรับซื้อเข้า
-            </button>
-          </li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2 active fw-bold" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff"></i></span>เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin"></i></span>เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam"></i></span>บันทึกซื้ออะไหล่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn"><span class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front"></i></span>เพิ่มรถรับซื้อเข้า</button></li>
         </ul>
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom shadow-lg">
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
       <div class="container-fluid px-0 h-100">
-        <div class="row g-0 w-100 h-100 text-center small">
-          <div class="col h-100">
-            <a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-speedometer2 d-block fs-5 mb-1"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col h-100">
-            <a href="open-bill.html" class="bm-bottom-nav-link active h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col h-100">
-            <a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col h-100">
-            <a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-truck-front d-block fs-5 mb-1"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col h-100">
-            <a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-box-seam d-block fs-5 mb-1"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col h-100">
-            <a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none">
-              <i class="bi bi-cash-coin d-block fs-5 mb-1"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+        <div class="row g-0 w-100 h-100 text-center small fw-medium">
+          <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col h-100"><a href="open-bill.html" class="bm-bottom-nav-link active text-success h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col h-100"><a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col h-100"><a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col h-100"><a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col h-100"><a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1080;"
-    >
-      <div
-        id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="4000"
-      >
+    <!-- Toast Notification -->
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
         <div class="d-flex px-3 py-2">
-          <div class="toast-body fw-medium" id="mainToastBody">
-            </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="ปิด"
-          ></button>
+          <div class="toast-body fw-medium fs-6" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
       import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, query, where, orderBy, limit, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -478,7 +368,7 @@
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // Form
+      // Form Elements
       const openBillForm = document.getElementById("openBillForm");
       const jobDateInput = document.getElementById("jobDate");
       const openBillTodayLabel = document.getElementById("openBillTodayLabel");
@@ -489,7 +379,14 @@
       const modelInput = document.getElementById("model");
       const mileageInput = document.getElementById("mileage");
       const problemInput = document.getElementById("problem");
+      const estimatedTimeInput = document.getElementById("estimatedTime"); // New
       const prioritySelect = document.getElementById("priority");
+      
+      // Additional Info Elements
+      const paymentMethodInput = document.getElementById("paymentMethod"); // New
+      const mechanicNameInput = document.getElementById("mechanicName"); // New
+      const jobNotesInput = document.getElementById("jobNotes"); // New
+
       const customerNameDatalist = document.getElementById("customerNameDatalist");
       const plateDatalist = document.getElementById("plateDatalist");
 
@@ -510,13 +407,6 @@
       const resetFormBtn = document.getElementById("resetFormBtn");
       const saveBillBtn = document.getElementById("saveBillBtn");
       const saveBillSpinner = document.getElementById("saveBillSpinner");
-      const saveBillBtnText = document.getElementById("saveBillBtnText");
-
-      // FAB
-      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
-      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
-      const fabStockInBtn = document.getElementById("fabStockInBtn");
-      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
       // Toast
       const mainToastEl = document.getElementById("mainToast");
@@ -531,15 +421,14 @@
       let isSavingBill = false;
 
       // --- Helpers ---
-      function showToast(msg, variant="primary") {
+      function showToast(msg, variant="success") {
         if(mainToastEl && mainToastBody) {
             mainToastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow-lg rounded-pill`;
-            mainToastBody.innerHTML = `<i class="bi bi-info-circle-fill me-2"></i>${msg}`;
+            mainToastBody.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-circle'}-fill me-2 fs-5"></i>${msg}`;
             mainToast.show();
         } else alert(msg);
       }
       function formatNumber(v) { return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function formatDateThai(date) { return date.toLocaleDateString("th-TH", {day:"numeric", month:"long", year:"numeric"}); }
       function getTodayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
       // --- Theme & Profile ---
@@ -557,8 +446,8 @@
 
       function applyTheme(theme) {
         const t = theme==="dark"?"dark":"light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-"+t);
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark", "bg-light", "bg-dark");
+        bodyEl.classList.add("bm-theme-"+t, t==="light"?"bg-light":"bg-dark");
       }
 
       // --- Table Row Creation ---
@@ -566,26 +455,26 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>
-            <select class="form-select form-select-sm part-stock-select rounded-3 border-secondary-subtle">
+            <select class="form-select form-select-sm part-stock-select rounded-3">
               <option value="">-- เลือกอะไหล่ --</option>
               ${stockOptionsHtml}
             </select>
           </td>
           <td class="text-center">
             <div class="input-group input-group-sm flex-nowrap justify-content-center">
-              <button class="btn btn-light border part-qty-decrease bm-qty-btn" type="button"><i class="bi bi-dash"></i></button>
-              <input type="number" class="form-control text-center part-qty-input border-secondary-subtle" value="1" min="1" style="max-width: 50px;" />
-              <button class="btn btn-light border part-qty-increase bm-qty-btn" type="button"><i class="bi bi-plus"></i></button>
+              <button class="btn btn-outline-secondary part-qty-decrease bm-qty-btn" type="button"><i class="bi bi-dash"></i></button>
+              <input type="number" class="form-control text-center part-qty-input fw-bold" value="1" min="1" style="max-width: 60px;" />
+              <button class="btn btn-outline-secondary part-qty-increase bm-qty-btn" type="button"><i class="bi bi-plus"></i></button>
             </div>
           </td>
           <td class="text-end">
-            <input type="number" class="form-control form-control-sm text-end part-unit-price-input rounded-3 border-secondary-subtle" placeholder="0.00" min="0" step="0.01" />
+            <input type="number" class="form-control form-control-sm text-end part-unit-price-input rounded-3" placeholder="0.00" min="0" step="0.01" />
           </td>
-          <td class="text-end align-middle fw-semibold text-dark">
+          <td class="text-end align-middle fw-bold text-dark fs-6">
             <span class="part-line-total-text">0.00</span>
           </td>
           <td class="text-center align-middle">
-            <button class="btn btn-sm btn-link text-danger part-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill"></i></button>
+            <button class="btn btn-sm btn-link text-danger part-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill fs-5"></i></button>
           </td>
         `;
         return tr;
@@ -594,9 +483,9 @@
       function createLaborRow() {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><input type="text" class="form-control form-control-sm labor-name-input rounded-3 border-secondary-subtle" placeholder="ระบุรายการค่าแรง..." /></td>
-          <td class="text-end"><input type="number" class="form-control form-control-sm text-end labor-price-input rounded-3 border-secondary-subtle" placeholder="0.00" min="0" step="0.01" /></td>
-          <td class="text-center align-middle"><button class="btn btn-sm btn-link text-danger labor-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill"></i></button></td>
+          <td><input type="text" class="form-control form-control-sm labor-name-input rounded-3" placeholder="ระบุรายการค่าแรง..." /></td>
+          <td class="text-end"><input type="number" class="form-control form-control-sm text-end labor-price-input rounded-3 fw-bold" placeholder="0.00" min="0" step="0.01" /></td>
+          <td class="text-center align-middle"><button class="btn btn-sm btn-link text-danger labor-remove-row-btn p-0" type="button"><i class="bi bi-trash-fill fs-5"></i></button></td>
         `;
         return tr;
       }
@@ -642,7 +531,7 @@
            stockLoadingState.className="d-none";
            
            if(!partsTbody.querySelector("tr")) partsTbody.appendChild(createPartRow());
-           else { // Refresh dropdowns if already exist
+           else {
               partsTbody.querySelectorAll(".part-stock-select").forEach(sel => {
                  const val = sel.value;
                  sel.innerHTML = `<option value="">-- เลือกอะไหล่ --</option>${stockOptionsHtml}`;
@@ -724,13 +613,14 @@
                }
             });
 
-            if(parts.length===0 && labor.length===0) throw new Error("ต้องมีรายการอย่างน้อย 1 รายการ");
+            if(parts.length===0 && labor.length===0) throw new Error("ต้องมีรายการอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ");
 
             const branchId = currentUserProfile.branchId;
             const jobData = {
                date, customerName:name, customerPhone:customerPhoneInput.value.trim(),
                plate, brand:brandInput.value.trim(), model:modelInput.value.trim(), mileage:mileageInput.value,
-               problem, priority:prioritySelect.value, status:"repairing",
+               problem, estimatedTime: estimatedTimeInput.value.trim(), priority:prioritySelect.value, status:"repairing",
+               paymentMethod: paymentMethodInput.value, mechanicName: mechanicNameInput.value.trim(), notes: jobNotesInput.value.trim(),
                items:parts, laborItems:labor, partsTotal:partsTot, laborTotal:laborTot, totalAmount:partsTot+laborTot,
                createdBy:currentUser.uid, createdByName:currentUserProfile.displayName, branchId, isDeleted:false,
                createdAt: serverTimestamp()
@@ -749,6 +639,7 @@
             // Transaction & Log
             await addDoc(collection(db,"transactions"), {
                date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
+               paymentMethod: paymentMethodInput.value, // บันทึกช่องทางชำระเงินใน Txn ด้วย
                amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
                createdAt:serverTimestamp(), createdBy:currentUser.uid
             });
@@ -758,17 +649,21 @@
                refId:docRef.id, branchId, createdAt:serverTimestamp(), createdBy:currentUser.uid, createdByName:currentUserProfile.displayName
             });
 
-            showToast("บันทึกบิลสำเร็จ","success");
+            showToast("บันทึกบิลสำเร็จเรียบร้อย!","success");
+            
+            // Reset state
             openBillForm.reset();
             jobDateInput.value = getTodayISO();
+            mechanicNameInput.value = currentUserProfile.displayName; // รีเซ็ตชื่อช่างกลับเป็น User ปัจจุบัน
             partsTbody.innerHTML=""; laborTbody.innerHTML="";
             partsTbody.appendChild(createPartRow()); laborTbody.appendChild(createLaborRow());
             recalcTotals();
             loadHistory(branchId);
+            window.scrollTo({top: 0, behavior: 'smooth'});
 
          } catch(err) {
             console.error(err);
-            showToast(err.message||"บันทึกไม่สำเร็จ","danger");
+            showToast(err.message||"บันทึกไม่สำเร็จ โปรดลองอีกครั้ง","danger");
          } finally {
             isSavingBill=false;
             saveBillSpinner.classList.add("d-none");
@@ -783,18 +678,18 @@
            const profile = await ensureUserProfile(user);
            currentUser = user; currentUserProfile = profile;
            
-           const name = profile.displayName||"ผู้ใช้งาน";
+           const name = profile.displayName||"ช่างเทคนิค";
            if(userDisplayNameText) userDisplayNameText.textContent = name;
-           if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
            if(userAvatarInitial) userAvatarInitial.textContent = name.charAt(0).toUpperCase();
-           if(userRoleText) userRoleText.textContent = profile.role==="admin"?"Admin":"Staff";
+           if(userRoleText) userRoleText.textContent = profile.role==="admin"?"ผู้ดูแลระบบ":"ช่างซ่อม";
            if(profile.role!=="admin" && settingsMenuItem) settingsMenuItem.classList.add("d-none");
+           if(mechanicNameInput) mechanicNameInput.value = name; // Set default mechanic name
 
            const t = localStorage.getItem("bm-theme-"+user.uid)||profile.theme||"light";
            applyTheme(t);
 
            jobDateInput.value = getTodayISO();
-           if(openBillTodayLabel) openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-event me-1 text-primary"></i> ${new Date().toLocaleDateString('th-TH')}`;
+           if(openBillTodayLabel) openBillTodayLabel.innerHTML = `<i class="bi bi-calendar-check-fill me-1 text-success"></i> ${new Date().toLocaleDateString('th-TH')}`;
 
            setupEventListeners();
            await loadStock(profile.branchId);
@@ -803,7 +698,7 @@
            if(!partsTbody.querySelector("tr")) partsTbody.appendChild(createPartRow());
            if(!laborTbody.querySelector("tr")) laborTbody.appendChild(createLaborRow());
 
-        } catch(e) { console.error(e); showToast("Init Failed","danger"); }
+        } catch(e) { console.error(e); showToast("การเชื่อมต่อระบบล้มเหลว","danger"); }
       });
 
       function setupEventListeners() {
@@ -853,18 +748,13 @@
             partsTbody.innerHTML=""; laborTbody.innerHTML="";
             partsTbody.appendChild(createPartRow()); laborTbody.appendChild(createLaborRow());
             jobDateInput.value = getTodayISO();
+            mechanicNameInput.value = currentUserProfile.displayName;
             recalcTotals();
          });
 
          // Auto-fill
          plateInput.addEventListener("blur", ()=>autoFill("plate", plateInput.value));
          customerNameInput.addEventListener("blur", ()=>autoFill("name", customerNameInput.value));
-
-         // FAB
-         fabOpenBillBtn?.addEventListener("click", ()=>window.scrollTo({top:0,behavior:'smooth'}));
-         fabAddTxnBtn?.addEventListener("click", ()=>window.location.href="finance.html");
-         fabStockInBtn?.addEventListener("click", ()=>window.location.href="stock.html");
-         fabAddVehicleBtn?.addEventListener("click", ()=>window.location.href="vehicles.html");
       }
     </script>
   </body>
