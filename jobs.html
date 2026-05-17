@@ -643,10 +643,20 @@
       function updateDateRangeSummary() {
         const start = jobsStartDateInput.value;
         const end = jobsEndDateInput.value;
-        if (!start && !end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-range me-1 text-success'></i> ข้อมูลทั้งหมด";
-        else if (start && end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start) + " - " + formatDateThaiFromString(end);
-        else if (start) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ตั้งแต่ " + formatDateThaiFromString(start);
-        else if (end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ถึง " + formatDateThaiFromString(end);
+        if (!start && !end) {
+           jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-range me-1 text-success'></i> ข้อมูลทั้งหมด";
+        } else if (start && end) {
+           if (start === end) {
+               // ถ้าเป็นวันเดียวกัน ให้โชว์แค่วันเดียวสั้นๆ
+               jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start);
+           } else {
+               jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start) + " - " + formatDateThaiFromString(end);
+           }
+        } else if (start) {
+           jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ตั้งแต่ " + formatDateThaiFromString(start);
+        } else if (end) {
+           jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ถึง " + formatDateThaiFromString(end);
+        }
       }
 
       function setJobsLoadingState(isLoading, isFirstPage = false) {
