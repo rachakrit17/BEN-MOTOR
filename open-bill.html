@@ -17,15 +17,27 @@
     <link rel="stylesheet" href="css/style.css" />
     
     <style>
-      /* เพิ่ม Custom Style เล็กน้อยให้ UI ดูพรีเมียมขึ้น */
+      /* Custom Style UI พรีเมียม */
       .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
       .card-premium:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important; }
       .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
       .bg-soft-success { background-color: rgba(25, 135, 84, 0.05); }
+      
+      /* สไตล์สำหรับการพิมพ์ (Print) */
+      @media print {
+        body * { visibility: hidden; }
+        #printArea, #printArea * { visibility: visible; }
+        #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+        .modal { position: absolute; left: 0; top: 0; margin: 0; padding: 0; overflow: visible!important; }
+        .d-print-none { display: none !important; }
+        .table-print { width: 100%; border-collapse: collapse; }
+        .table-print th, .table-print td { border: 1px solid #ddd; padding: 8px; font-size: 14px; }
+        .table-print th { background-color: #f8f9fa !important; -webkit-print-color-adjust: exact; }
+      }
     </style>
   </head>
   <body class="bm-theme-light bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom d-print-none">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
           <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
@@ -63,7 +75,7 @@
       </div>
     </nav>
 
-    <main class="bm-main-content pb-5 mt-5 pt-3">
+    <main class="bm-main-content pb-5 mt-5 pt-3 d-print-none">
       <div class="container py-4">
         <div class="row mb-4 align-items-end">
           <div class="col">
@@ -79,7 +91,6 @@
 
         <form id="openBillForm" novalidate>
           
-          <!-- Section 1: ข้อมูลลูกค้าและรถ -->
           <section class="mb-4">
             <div class="card card-premium shadow-sm rounded-4 border-0">
               <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4">
@@ -155,8 +166,7 @@
             </div>
           </section>
 
-          <!-- Section 2: รายการอะไหล่ -->
-		  <section class="mb-4">
+          <section class="mb-4">
             <div class="card card-premium shadow-sm rounded-4 border-0">
               <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
                 <h2 class="h6 fw-bold text-warning mb-0 d-flex align-items-center">
@@ -191,7 +201,6 @@
             </div>
           </section>
 
-          <!-- Section 3: รายการค่าแรง -->
           <section class="mb-4">
             <div class="card card-premium shadow-sm rounded-4 border-0">
               <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
@@ -221,11 +230,9 @@
             </div>
           </section>
 
-          <!-- Section 4: สรุปยอดและบันทึก -->
           <section class="mb-5">
             <div class="card shadow-lg rounded-4 border-0 bg-white overflow-hidden">
               <div class="row g-0">
-                <!-- ฝั่งซ้าย: ข้อมูลเพิ่มเติม -->
                 <div class="col-12 col-lg-5 p-4 bg-light border-end">
                   <h6 class="fw-bold text-dark mb-3"><i class="bi bi-info-square me-2"></i>รายละเอียดเพิ่มเติม</h6>
                   
@@ -248,7 +255,6 @@
                   </div>
                 </div>
 
-                <!-- ฝั่งขวา: สรุปยอดเงิน -->
                 <div class="col-12 col-lg-7 p-4">
                   <div class="row mb-3">
                     <div class="col-6 text-muted">รวมค่าอะไหล่:</div>
@@ -289,7 +295,7 @@
                     </button>
                     <button type="submit" class="btn btn-success rounded-pill px-5 py-3 shadow fw-bold fs-5 hover-elevate" id="saveBillBtn">
                       <span class="spinner-border spinner-border-sm me-2 d-none" id="saveBillSpinner" role="status" aria-hidden="true"></span>
-                      <span id="saveBillBtnText"><i class="bi bi-printer me-2"></i> บันทึกบิลซ่อม</span>
+                      <span id="saveBillBtnText"><i class="bi bi-save2 me-2"></i> บันทึกบิลซ่อม</span>
                     </button>
                   </div>
                 </div>
@@ -302,8 +308,89 @@
       </div>
     </main>
 
-    <!-- FAB Button & Bottom Nav คงไว้ตามเดิม -->
-    <div class="bm-fab-container">
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+          <div class="modal-header border-bottom-0 pb-0 d-print-none">
+            <h5 class="modal-title fw-bold text-success" id="receiptModalLabel"><i class="bi bi-check-circle-fill me-2"></i>บันทึกข้อมูลสำเร็จ!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-4" id="printArea">
+            <div class="text-center mb-4">
+              <h3 class="fw-bold text-dark mb-1">BEN MOTOR</h3>
+              <p class="text-muted mb-1">ร้านซ่อมรถมอเตอร์ไซค์</p>
+              <h5 class="fw-bold mt-3 mb-0 border-bottom pb-2 d-inline-block">ใบแจ้งซ่อม / ใบเสร็จรับเงิน</h5>
+            </div>
+            
+            <div class="row mb-4 text-dark" style="font-size: 14px;">
+              <div class="col-6">
+                <div><strong>วันที่:</strong> <span id="r_date"></span></div>
+                <div><strong>ลูกค้า:</strong> <span id="r_customer"></span></div>
+                <div><strong>เบอร์โทร:</strong> <span id="r_phone"></span></div>
+              </div>
+              <div class="col-6 text-end">
+                <div><strong>ทะเบียน:</strong> <span id="r_plate"></span></div>
+                <div><strong>ยี่ห้อ/รุ่น:</strong> <span id="r_brand_model"></span></div>
+                <div><strong>ช่างผู้ซ่อม:</strong> <span id="r_mechanic"></span></div>
+              </div>
+              <div class="col-12 mt-2">
+                <div class="bg-light p-2 rounded border"><strong>อาการที่แจ้ง:</strong> <span id="r_problem"></span></div>
+              </div>
+            </div>
+
+            <table class="table table-print mb-4">
+              <thead>
+                <tr>
+                  <th class="text-center" style="width: 10%;">ลำดับ</th>
+                  <th style="width: 50%;">รายการ</th>
+                  <th class="text-center" style="width: 10%;">จำนวน</th>
+                  <th class="text-end" style="width: 15%;">ราคา/หน่วย</th>
+                  <th class="text-end" style="width: 15%;">รวม (บาท)</th>
+                </tr>
+              </thead>
+              <tbody id="r_items_tbody">
+                </tbody>
+            </table>
+
+            <div class="row">
+              <div class="col-7">
+                <div class="small text-muted"><strong>หมายเหตุ:</strong> <span id="r_notes">-</span></div>
+                <div class="small text-muted mt-1"><strong>ช่องทางชำระเงิน:</strong> <span id="r_payment"></span></div>
+              </div>
+              <div class="col-5">
+                <table class="table table-sm table-borderless text-end text-dark">
+                  <tr>
+                    <td>รวมค่าอะไหล่:</td>
+                    <td style="width: 40%;" id="r_parts_total">0.00</td>
+                  </tr>
+                  <tr>
+                    <td>รวมค่าแรง:</td>
+                    <td id="r_labor_total">0.00</td>
+                  </tr>
+                  <tr class="border-top border-dark fw-bold fs-5">
+                    <td>ยอดรวมสุทธิ:</td>
+                    <td class="text-success" id="r_grand_total">0.00</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            
+            <div class="text-center mt-5 mb-2 d-print-block text-muted small">
+               <p>ขอบคุณที่ใช้บริการ BEN MOTOR<br>เปิดทุกวัน 08:30-23:00</p>
+            </div>
+          </div>
+          
+          <div class="modal-footer border-top-0 d-print-none bg-light rounded-bottom-4">
+            <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-success px-4 rounded-pill fw-bold" onclick="window.print()">
+              <i class="bi bi-printer me-2"></i> พิมพ์ / บันทึก PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bm-fab-container d-print-none">
       <div class="dropdown dropup">
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2 active fw-bold" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff"></i></span>เปิดบิลซ่อมใหม่</button></li>
@@ -314,7 +401,7 @@
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg d-print-none">
       <div class="container-fluid px-0 h-100">
         <div class="row g-0 w-100 h-100 text-center small fw-medium">
           <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
@@ -327,8 +414,7 @@
       </div>
     </nav>
 
-    <!-- Toast Notification -->
-    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 d-print-none" style="z-index: 1080;">
       <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
         <div class="d-flex px-3 py-2">
           <div class="toast-body fw-medium fs-6" id="mainToastBody"></div>
@@ -379,13 +465,13 @@
       const modelInput = document.getElementById("model");
       const mileageInput = document.getElementById("mileage");
       const problemInput = document.getElementById("problem");
-      const estimatedTimeInput = document.getElementById("estimatedTime"); // New
+      const estimatedTimeInput = document.getElementById("estimatedTime");
       const prioritySelect = document.getElementById("priority");
       
       // Additional Info Elements
-      const paymentMethodInput = document.getElementById("paymentMethod"); // New
-      const mechanicNameInput = document.getElementById("mechanicName"); // New
-      const jobNotesInput = document.getElementById("jobNotes"); // New
+      const paymentMethodInput = document.getElementById("paymentMethod");
+      const mechanicNameInput = document.getElementById("mechanicName");
+      const jobNotesInput = document.getElementById("jobNotes");
 
       const customerNameDatalist = document.getElementById("customerNameDatalist");
       const plateDatalist = document.getElementById("plateDatalist");
@@ -408,10 +494,11 @@
       const saveBillBtn = document.getElementById("saveBillBtn");
       const saveBillSpinner = document.getElementById("saveBillSpinner");
 
-      // Toast
+      // Toast & Modal
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
+      const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
 
       let currentUser = null;
       let currentUserProfile = null;
@@ -430,6 +517,11 @@
       }
       function formatNumber(v) { return Number(v||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2}); }
       function getTodayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+      function formatDateThai(dateStr) { 
+        if(!dateStr) return "-";
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
 
       // --- Theme & Profile ---
       async function ensureUserProfile(user) {
@@ -511,7 +603,6 @@
         laborTotalDisplay.textContent = formatNumber(labor)+" ฿";
         grandTotalDisplay.textContent = formatNumber(grand)+" ฿";
         
-        // Calculate Change
         const received = parseFloat(receivedAmountInput.value)||0;
         const change = received - grand;
         changeAmountDisplay.value = formatNumber(Math.max(0, change));
@@ -573,6 +664,51 @@
          }
       }
 
+      // --- สร้าง Popup ใบเสร็จ ---
+      function generateReceiptPreview(jobData) {
+        document.getElementById('r_date').textContent = formatDateThai(jobData.date);
+        document.getElementById('r_customer').textContent = jobData.customerName || "-";
+        document.getElementById('r_phone').textContent = jobData.customerPhone || "-";
+        document.getElementById('r_plate').textContent = jobData.plate || "-";
+        document.getElementById('r_brand_model').textContent = `${jobData.brand||''} ${jobData.model||''}`.trim() || "-";
+        document.getElementById('r_mechanic').textContent = jobData.mechanicName || "-";
+        document.getElementById('r_problem').textContent = jobData.problem || "-";
+        document.getElementById('r_notes').textContent = jobData.notes || "-";
+        document.getElementById('r_payment').textContent = jobData.paymentMethod === 'cash' ? "เงินสด" : "โอนเงิน";
+
+        const tbody = document.getElementById('r_items_tbody');
+        tbody.innerHTML = '';
+        let index = 1;
+
+        // วนลูปอะไหล่
+        jobData.items.forEach(item => {
+          tbody.innerHTML += `
+            <tr>
+              <td class="text-center">${index++}</td>
+              <td>${item.stockName}</td>
+              <td class="text-center">${item.qty}</td>
+              <td class="text-end">${formatNumber(item.unitPrice)}</td>
+              <td class="text-end">${formatNumber(item.lineTotal)}</td>
+            </tr>`;
+        });
+
+        // วนลูปค่าแรง
+        jobData.laborItems.forEach(item => {
+          tbody.innerHTML += `
+            <tr>
+              <td class="text-center">${index++}</td>
+              <td>(ค่าแรง) ${item.name}</td>
+              <td class="text-center">-</td>
+              <td class="text-end">-</td>
+              <td class="text-end">${formatNumber(item.price)}</td>
+            </tr>`;
+        });
+
+        document.getElementById('r_parts_total').textContent = formatNumber(jobData.partsTotal);
+        document.getElementById('r_labor_total').textContent = formatNumber(jobData.laborTotal);
+        document.getElementById('r_grand_total').textContent = formatNumber(jobData.totalAmount);
+      }
+
       // --- Saving ---
       async function saveBill(e) {
          e.preventDefault();
@@ -595,10 +731,11 @@
 
             partsTbody.querySelectorAll("tr").forEach(tr=>{
                const sId = tr.querySelector("select").value;
+               const stockName = tr.querySelector("select").options[tr.querySelector("select").selectedIndex].text.replace(/^.*?-\s*/, ''); // ตัด Code ออกตอนโชว์ในบิล
                const qty = parseFloat(tr.querySelector(".part-qty-input").value)||0;
                const pr = parseFloat(tr.querySelector(".part-unit-price-input").value)||0;
                if(sId && qty>0) {
-                  const item = { stockId:sId, stockName:stockMap[sId]?.name||"", qty, unitPrice:pr, lineTotal:qty*pr };
+                  const item = { stockId:sId, stockName:stockName||"", qty, unitPrice:pr, lineTotal:qty*pr };
                   parts.push(item);
                   partsTot+=item.lineTotal;
                }
@@ -639,7 +776,7 @@
             // Transaction & Log
             await addDoc(collection(db,"transactions"), {
                date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
-               paymentMethod: paymentMethodInput.value, // บันทึกช่องทางชำระเงินใน Txn ด้วย
+               paymentMethod: paymentMethodInput.value, 
                amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
                createdAt:serverTimestamp(), createdBy:currentUser.uid
             });
@@ -651,15 +788,18 @@
 
             showToast("บันทึกบิลสำเร็จเรียบร้อย!","success");
             
-            // Reset state
+            // สรุปข้อมูลลงใน Popup ใบเสร็จ และโชว์ขึ้นมา
+            generateReceiptPreview(jobData);
+            receiptModal.show();
+            
+            // Reset ฟอร์มเคลียร์เตรียมรับคันต่อไป
             openBillForm.reset();
             jobDateInput.value = getTodayISO();
-            mechanicNameInput.value = currentUserProfile.displayName; // รีเซ็ตชื่อช่างกลับเป็น User ปัจจุบัน
+            mechanicNameInput.value = currentUserProfile.displayName; 
             partsTbody.innerHTML=""; laborTbody.innerHTML="";
             partsTbody.appendChild(createPartRow()); laborTbody.appendChild(createLaborRow());
             recalcTotals();
             loadHistory(branchId);
-            window.scrollTo({top: 0, behavior: 'smooth'});
 
          } catch(err) {
             console.error(err);
@@ -683,7 +823,7 @@
            if(userAvatarInitial) userAvatarInitial.textContent = name.charAt(0).toUpperCase();
            if(userRoleText) userRoleText.textContent = profile.role==="admin"?"ผู้ดูแลระบบ":"ช่างซ่อม";
            if(profile.role!=="admin" && settingsMenuItem) settingsMenuItem.classList.add("d-none");
-           if(mechanicNameInput) mechanicNameInput.value = name; // Set default mechanic name
+           if(mechanicNameInput) mechanicNameInput.value = name; 
 
            const t = localStorage.getItem("bm-theme-"+user.uid)||profile.theme||"light";
            applyTheme(t);
