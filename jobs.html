@@ -5,61 +5,40 @@
     <title>BEN MOTOR – รายการงานซ่อม</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="manifest" href="img/site.webmanifest">
     
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      /* อัปเกรด UI เล็กน้อยให้ดูเจ๋งขึ้น */
+      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+      .card-premium:hover, .bm-stat-card:hover, .bm-list-card:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
+      .bm-stat-card { transition: all 0.3s ease; }
+      .table-hover tbody tr:hover { background-color: rgba(25, 135, 84, 0.03); }
+    </style>
   </head>
-  <body class="bm-theme-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+  <body class="bm-theme-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
+          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
-            id="themeToggleBtn"
-            type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
-          >
+          <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent" id="themeToggleBtn" type="button" aria-label="สลับโหมดธีม" style="width: 2.5rem; height: 2.5rem;">
             <i class="bi bi-moon fs-5"></i>
           </button>
 
           <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
-              type="button"
-              id="userMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
@@ -68,63 +47,29 @@
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4">
+              <li><a class="dropdown-item py-2" href="reports.html"><i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด</a></li>
+              <li><a class="dropdown-item py-2" href="price-check.html"><i class="bi bi-tags me-2 text-warning"></i> เช็คราคา</a></li>
+              <li><a class="dropdown-item py-2" href="customer-history.html"><i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า & รถ</a></li>              
+              <li><a class="dropdown-item py-2" href="activity-log.html"><i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ</a></li>              
+              <li><a class="dropdown-item py-2 d-none" href="settings.html" id="settingsMenuItem"><i class="bi bi-gear me-2"></i> ตั้งค่าระบบ</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+              <li><button class="dropdown-item py-2 text-danger fw-medium" type="button" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <main class="bm-main-content pb-5">
+    <main class="bm-main-content pb-5 mt-5 pt-3">
       <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-end mb-4 mt-2">
-          <div>
-            <h1 class="h4 mb-1 fw-bold text-dark">งานซ่อมย้อนหลัง</h1>
-            <p class="small text-muted mb-0">
-              จัดการรายการซ่อม ตรวจสอบสถานะ และดูยอดเงินรวม
-            </p>
+        <div class="row mb-4 align-items-end">
+          <div class="col">
+            <h1 class="h3 mb-1 fw-bold text-dark">งานซ่อมย้อนหลัง</h1>
+            <p class="small text-muted mb-0"><i class="bi bi-card-checklist me-1"></i> จัดการรายการซ่อม ตรวจสอบสถานะ และดูยอดเงินรวม</p>
           </div>
-          <div class="text-end">
-            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-normal" id="jobsDateRangeSummary">
+          <div class="col-auto text-end">
+            <span class="badge bg-white text-dark border shadow-sm px-3 py-2 rounded-pill fw-medium fs-6" id="jobsDateRangeSummary">
               -
             </span>
           </div>
@@ -132,53 +77,53 @@
 
         <section class="mb-4">
            <div class="bm-dashboard-grid">
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">จำนวนงานที่พบ</div>
-                 <div class="bm-stat-value text-primary" id="statTotalJobs">0</div>
-                 <div class="bm-stat-sub text-muted">รายการ</div>
+              <div class="bm-stat-card shadow-sm border-0 bg-white rounded-4 p-3">
+                 <div class="bm-stat-label mb-1 text-muted fw-medium">จำนวนงานที่พบ</div>
+                 <div class="bm-stat-value text-primary fw-bold fs-3" id="statTotalJobs">0</div>
+                 <div class="bm-stat-sub text-muted small">รายการ</div>
               </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">ยอดรวมทั้งหมด</div>
-                 <div class="bm-stat-value text-success" id="statTotalRevenue">0</div>
-                 <div class="bm-stat-sub text-muted">บาท</div>
+              <div class="bm-stat-card shadow-sm border-0 bg-white rounded-4 p-3">
+                 <div class="bm-stat-label mb-1 text-muted fw-medium">ยอดรวมทั้งหมด</div>
+                 <div class="bm-stat-value text-success fw-bold fs-3" id="statTotalRevenue">0</div>
+                 <div class="bm-stat-sub text-muted small">บาท (รวมที่ค้างชำระ)</div>
               </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">เฉลี่ยต่อคัน</div>
-                 <div class="bm-stat-value text-dark" id="statAvgRevenue">0</div>
-                 <div class="bm-stat-sub text-muted">บาท/คัน</div>
+              <div class="bm-stat-card shadow-sm border-0 bg-white rounded-4 p-3">
+                 <div class="bm-stat-label mb-1 text-muted fw-medium">เฉลี่ยต่อคัน</div>
+                 <div class="bm-stat-value text-dark fw-bold fs-3" id="statAvgRevenue">0</div>
+                 <div class="bm-stat-sub text-muted small">บาท/คัน</div>
               </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">กำลังซ่อม</div>
-                 <div class="bm-stat-value text-warning" id="statPendingJobs">0</div>
-                 <div class="bm-stat-sub text-muted">คัน</div>
+              <div class="bm-stat-card shadow-sm border-0 bg-white rounded-4 p-3">
+                 <div class="bm-stat-label mb-1 text-muted fw-medium">กำลังซ่อม</div>
+                 <div class="bm-stat-value text-warning fw-bold fs-3" id="statPendingJobs">0</div>
+                 <div class="bm-stat-sub text-muted small">คัน</div>
               </div>
            </div>
         </section>
 
         <section class="mb-4">
-          <div class="card border-0 shadow-sm rounded-4">
+          <div class="card card-premium border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-3">
-                 <h2 class="h6 fw-bold text-success mb-0">
-                   <i class="bi bi-funnel-fill me-2"></i> ตัวกรองค้นหา
+                 <h2 class="h6 fw-bold text-success mb-0 d-flex align-items-center">
+                   <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle me-2 d-flex"><i class="bi bi-funnel-fill"></i></span> ตัวกรองค้นหา
                  </h2>
-                 <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="exportCsvBtn">
+                 <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-medium hover-elevate" id="exportCsvBtn">
                     <i class="bi bi-file-earmark-spreadsheet me-1"></i> ส่งออก CSV
                  </button>
               </div>
               
               <form id="jobsFilterForm" class="row g-3 align-items-end">
                 <div class="col-6 col-md-3">
-                  <label for="jobsStartDate" class="form-label small text-muted mb-1">วันที่เริ่มต้น</label>
-                  <input type="date" class="form-control form-control-sm bg-light" id="jobsStartDate" />
+                  <label for="jobsStartDate" class="form-label small text-muted mb-1 fw-medium">วันที่เริ่มต้น</label>
+                  <input type="date" class="form-control bg-light" id="jobsStartDate" />
                 </div>
                 <div class="col-6 col-md-3">
-                  <label for="jobsEndDate" class="form-label small text-muted mb-1">วันที่สิ้นสุด</label>
-                  <input type="date" class="form-control form-control-sm bg-light" id="jobsEndDate" />
+                  <label for="jobsEndDate" class="form-label small text-muted mb-1 fw-medium">วันที่สิ้นสุด</label>
+                  <input type="date" class="form-control bg-light" id="jobsEndDate" />
                 </div>
                 <div class="col-6 col-md-2">
-                  <label for="jobsStatusFilter" class="form-label small text-muted mb-1">สถานะงาน</label>
-                  <select id="jobsStatusFilter" class="form-select form-select-sm bg-light">
+                  <label for="jobsStatusFilter" class="form-label small text-muted mb-1 fw-medium">สถานะงาน</label>
+                  <select id="jobsStatusFilter" class="form-select bg-light fw-medium">
                     <option value="all" selected>ทั้งหมด</option>
                     <option value="repairing">กำลังซ่อมอยู่</option>
                     <option value="done">ซ่อมเสร็จแล้ว</option>
@@ -186,18 +131,18 @@
                   </select>
                 </div>
                 <div class="col-12 col-md-4">
-                  <label for="jobsSearchInput" class="form-label small text-muted mb-1">ค้นหา (ชื่อ, ทะเบียน, ยี่ห้อ, ปัญหา)</label>
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                  <label for="jobsSearchInput" class="form-label small text-muted mb-1 fw-medium">ค้นหา (ชื่อ, ทะเบียน, ยี่ห้อ, อาการ)</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
                     <input type="text" class="form-control bg-light border-start-0 ps-0" id="jobsSearchInput" placeholder="พิมพ์คำค้น..." />
-                    <button type="submit" class="btn btn-success px-3" id="jobsSearchBtn">ค้นหา</button>
+                    <button type="submit" class="btn btn-success px-4 fw-bold shadow-sm" id="jobsSearchBtn">ค้นหา</button>
                   </div>
                 </div>
               </form>
 
-              <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-2 border-top gap-3">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-3 border-top gap-3">
                 <div class="d-flex align-items-center gap-2 w-100 w-md-auto overflow-auto pb-1 pb-md-0">
-                   <span class="small text-muted me-1 text-nowrap">ช่วงเวลา:</span>
+                   <span class="small text-muted me-1 fw-medium text-nowrap">ช่วงเวลาด่วน:</span>
                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="presetTodayBtn">วันนี้</button>
                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="preset7DaysBtn">7 วัน</button>
                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="preset30DaysBtn">30 วัน</button>
@@ -205,13 +150,13 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2 ms-md-auto">
-                    <span class="small text-muted me-1">มุมมอง:</span>
-                    <div class="btn-group btn-group-sm bg-light p-1 rounded-pill border" role="group">
+                    <span class="small text-muted me-1 fw-medium">มุมมอง:</span>
+                    <div class="btn-group btn-group-sm bg-light p-1 rounded-pill border shadow-sm" role="group">
                         <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 active text-success fw-bold" id="tableViewBtn">
-                            <i class="bi bi-table"></i> ตาราง
+                            <i class="bi bi-table me-1"></i> ตาราง
                         </button>
-                        <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 text-success" id="cardViewBtn">
-                            <i class="bi bi-grid-fill"></i> การ์ด
+                        <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 text-secondary fw-medium" id="cardViewBtn">
+                            <i class="bi bi-grid-fill me-1"></i> การ์ด
                         </button>
                     </div>
                 </div>
@@ -222,30 +167,29 @@
         </section>
 
         <section class="mb-3 d-flex justify-content-between align-items-center px-2">
-           <div id="jobsCountInfo" class="small text-muted d-none">
-              </div>
-           <div id="jobsLoadingState" class="small text-primary d-none">
+           <div id="jobsCountInfo" class="small text-muted d-none bg-white px-3 py-1 rounded-pill border shadow-sm"></div>
+           <div id="jobsLoadingState" class="small text-success d-none fw-medium">
               <span class="spinner-border spinner-border-sm me-2" role="status"></span> กำลังโหลดข้อมูล...
            </div>
         </section>
 
         <section id="jobsTableView" class="mb-4">
-          <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+          <div class="card card-premium border-0 shadow-sm rounded-4 overflow-hidden bg-white">
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                   <thead class="bg-light text-secondary small text-uppercase">
                     <tr>
-                      <th class="ps-4 py-3 fw-normal" style="min-width: 110px;">วันที่</th>
-                      <th class="py-3 fw-normal" style="min-width: 150px;">ลูกค้า</th>
-                      <th class="py-3 fw-normal" style="min-width: 100px;">ทะเบียน</th>
-                      <th class="py-3 fw-normal" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
-                      <th class="py-3 fw-normal" style="min-width: 130px;">สถานะ</th>
-                      <th class="text-end py-3 fw-normal" style="min-width: 110px;">ยอดรวม (฿)</th>
-                      <th class="text-center py-3 fw-normal" style="min-width: 80px;">จัดการ</th>
+                      <th class="ps-4 py-3 fw-semibold" style="min-width: 110px;">วันที่</th>
+                      <th class="py-3 fw-semibold" style="min-width: 150px;">ลูกค้า</th>
+                      <th class="py-3 fw-semibold" style="min-width: 100px;">ทะเบียน</th>
+                      <th class="py-3 fw-semibold" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
+                      <th class="py-3 fw-semibold" style="min-width: 130px;">สถานะงาน</th>
+                      <th class="text-end py-3 fw-semibold" style="min-width: 130px;">ยอดรวม / การชำระ</th>
+                      <th class="text-center py-3 fw-semibold" style="min-width: 80px;">จัดการ</th>
                     </tr>
                   </thead>
-                  <tbody id="jobsTableBody" class="border-top-0">
+                  <tbody id="jobsTableBody" class="border-top-0 bg-white">
                     </tbody>
                 </table>
               </div>
@@ -259,174 +203,119 @@
         </section>
 
         <section class="mb-5 text-center">
-          <button
-            type="button"
-            class="btn btn-white border shadow-sm rounded-pill px-4 py-2 text-muted d-none"
-            id="loadMoreJobsBtn"
-          >
-            <span
-              class="spinner-border spinner-border-sm me-2 d-none"
-              id="loadMoreJobsSpinner"
-              role="status"
-              aria-hidden="true"
-            ></span>
+          <button type="button" class="btn btn-white border shadow-sm rounded-pill px-4 py-2 text-muted fw-medium hover-elevate d-none" id="loadMoreJobsBtn">
+            <span class="spinner-border spinner-border-sm me-2 d-none" id="loadMoreJobsSpinner" role="status" aria-hidden="true"></span>
             <span id="loadMoreJobsBtnText">โหลดเพิ่มเติม</span>
             <i class="bi bi-chevron-down ms-1"></i>
           </button>
         </section>
 
-        <div style="height: 3rem;"></div>
+        <div style="height: 4rem;"></div>
       </div>
     </main>
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabOpenBillBtn">
-              <span class="bg-primary bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>
-              เปิดบิลซ่อมใหม่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn">
-              <span class="bg-success bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span>
-              เพิ่มรายการเงิน
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn">
-              <span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span>
-              บันทึกซื้ออะไหล่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn">
-              <span class="bg-info bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span>
-              เพิ่มรถรับซื้อเข้า
-            </button>
-          </li>
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span>เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span>บันทึกซื้ออะไหล่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabAddVehicleBtn"><span class="bg-info bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span>เพิ่มรถรับซื้อเข้า</button></li>
         </ul>
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
-      <div class="container-fluid px-0">
-        <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block fs-5"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link">
-              <i class="bi bi-receipt-cutoff d-block fs-5"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link active">
-              <i class="bi bi-wrench-adjustable-circle d-block fs-5"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block fs-5"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block fs-5"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block fs-5"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
+      <div class="container-fluid px-0 h-100">
+        <div class="row g-0 w-100 h-100 text-center small fw-medium">
+          <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col h-100"><a href="open-bill.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col h-100"><a href="jobs.html" class="bm-bottom-nav-link active text-success h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col h-100"><a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col h-100"><a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col h-100"><a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
-    <div
-      class="modal fade"
-      id="jobDetailModal"
-      tabindex="-1"
-      aria-labelledby="jobDetailModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="jobDetailModal" tabindex="-1" aria-labelledby="jobDetailModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg rounded-4">
-          <div class="modal-header border-bottom-0 pb-0">
-            <h1 class="modal-title fs-5 fw-bold text-primary" id="jobDetailModalLabel">
+          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+            <h1 class="modal-title fs-5 fw-bold text-success" id="jobDetailModalLabel">
               <i class="bi bi-file-earmark-text me-2"></i> รายละเอียดงานซ่อม
             </h1>
             <div class="ms-auto d-flex gap-2">
-                 <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" id="jobDetailPrintBtn" title="พิมพ์ใบงาน">
-                    <i class="bi bi-printer-fill"></i> <span class="d-none d-sm-inline ms-1">พิมพ์</span>
+                 <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium hover-elevate" id="jobDetailPrintBtn" title="พิมพ์ใบงาน">
+                    <i class="bi bi-printer-fill me-1"></i> <span class="d-none d-sm-inline">พิมพ์</span>
                  </button>
-                 <button
-                   type="button"
-                   class="btn-close ms-0"
-                   data-bs-dismiss="modal"
-                   aria-label="ปิด"
-                 ></button>
+                 <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="ปิด"></button>
             </div>
           </div>
-          <div class="modal-body pt-3">
+          <div class="modal-body p-4 pt-3">
             <div id="jobDetailLoadingState" class="alert alert-light border text-center text-muted small py-3 d-none">
-              <div class="spinner-border spinner-border-sm me-2" role="status"></div> กำลังโหลดรายละเอียด...
+              <div class="spinner-border spinner-border-sm me-2 text-success" role="status"></div> กำลังโหลดรายละเอียด...
+            </div>
+
+            <div id="pendingPaymentBlock" class="alert alert-danger d-none mb-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center rounded-4 border-danger-subtle gap-3 shadow-sm">
+                <div>
+                    <h6 class="mb-1 fw-bold text-danger"><i class="bi bi-exclamation-circle-fill me-1"></i> บิลนี้ยังค้างชำระ (รอจ่ายเงิน)</h6>
+                    <small class="text-danger opacity-75 d-block">กรุณากดรับเงินเมื่อลูกค้าชำระแล้ว ยอดถึงจะถูกบันทึกเป็นรายได้ของร้าน</small>
+                </div>
+                <div class="d-flex gap-2 align-items-center bg-white p-2 rounded-3 border border-danger-subtle">
+                    <select id="receivePaymentMethod" class="form-select form-select-sm border-0 fw-medium text-dark" style="width: auto; box-shadow: none;">
+                        <option value="cash">💵 เงินสด</option>
+                        <option value="transfer">📱 โอนเงิน</option>
+                    </select>
+                    <button id="btnReceivePayment" class="btn btn-sm btn-success fw-bold text-nowrap shadow-sm px-3 rounded-pill hover-elevate">
+                       <i class="bi bi-check2-circle me-1"></i> รับเงิน
+                    </button>
+                </div>
             </div>
 
             <div class="card border-0 bg-light rounded-4 mb-3">
-              <div class="card-body">
+              <div class="card-body p-4">
                 <div class="row g-3 small">
-                  <div class="col-12 col-md-6 border-end-md">
-                    <div class="mb-2"><span class="text-muted d-block text-xs">วันที่รับงาน</span> <span id="jobDetailDate" class="fw-semibold text-dark fs-6">-</span></div>
-                    <div class="mb-2"><span class="text-muted d-block text-xs">ลูกค้า</span> <span id="jobDetailCustomerName" class="fw-medium">-</span></div>
-                    <div><span class="text-muted d-block text-xs">เบอร์โทรศัพท์</span> <span id="jobDetailCustomerPhone">-</span></div>
+                  <div class="col-12 col-md-6 border-end-md border-secondary-subtle">
+                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">วันที่รับงาน</span> <span id="jobDetailDate" class="fw-bold text-dark fs-6">-</span></div>
+                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ลูกค้า</span> <span id="jobDetailCustomerName" class="fw-bold text-dark">-</span></div>
+                    <div><span class="text-muted d-block text-xs fw-medium">เบอร์โทรศัพท์</span> <span id="jobDetailCustomerPhone" class="text-dark fw-medium">-</span></div>
                   </div>
                   <div class="col-12 col-md-6 ps-md-3">
-                    <div class="mb-2"><span class="text-muted d-block text-xs">ทะเบียนรถ</span> <span id="jobDetailPlate" class="fw-semibold text-primary fs-6">-</span></div>
-                    <div class="mb-2"><span class="text-muted d-block text-xs">ยี่ห้อ / รุ่น</span> <span id="jobDetailBrandModel">-</span></div>
-                    <div><span class="text-muted d-block text-xs">เลขไมล์</span> <span id="jobDetailMileage">-</span></div>
+                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ทะเบียนรถ</span> <span id="jobDetailPlate" class="fw-bold text-primary fs-5">-</span></div>
+                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ยี่ห้อ / รุ่น</span> <span id="jobDetailBrandModel" class="fw-medium text-dark">-</span></div>
+                    <div><span class="text-muted d-block text-xs fw-medium">เลขไมล์</span> <span id="jobDetailMileage" class="fw-medium text-dark">-</span></div>
                   </div>
-                  <div class="col-12 pt-2 border-top">
-                     <span class="text-muted d-block text-xs mb-1">อาการ / ปัญหา</span>
-                     <div id="jobDetailProblem" class="bg-white p-2 rounded border-0 text-dark">-</div>
+                  <div class="col-12 pt-3 border-top border-secondary-subtle mt-3">
+                     <span class="text-muted d-block text-xs mb-1 fw-medium">อาการ / ปัญหาที่แจ้ง</span>
+                     <div id="jobDetailProblem" class="bg-white p-3 rounded-3 border-0 text-dark fw-medium shadow-sm">-</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="card border border-warning-subtle bg-warning bg-opacity-10 rounded-4 mb-3">
-               <div class="card-body py-3">
+            <div class="card border border-warning-subtle bg-warning bg-opacity-10 rounded-4 mb-4">
+               <div class="card-body p-4">
                   <div class="row align-items-center g-3">
                      <div class="col-12 col-md-6">
-                        <div class="small text-muted mb-1">สถานะปัจจุบัน</div>
+                        <div class="small text-dark fw-bold mb-2">สถานะปัจจุบัน</div>
                         <div class="d-flex align-items-center gap-2">
                            <span id="jobDetailStatusBadge" class="badge rounded-pill px-3 py-2">-</span>
                            <span id="jobDetailPriorityBadge" class="badge rounded-pill px-3 py-2">-</span>
                         </div>
-                        <div class="text-xs text-muted mt-2">
-                           เปิดบิลโดย: <span id="jobDetailCreatedBy" class="fw-medium">-</span>
+                        <div class="text-xs text-muted mt-2 fw-medium">
+                           ผู้เปิดบิล: <span id="jobDetailCreatedBy" class="text-dark">-</span>
                         </div>
                      </div>
                      <div class="col-12 col-md-6">
-                        <label for="jobDetailStatusSelect" class="form-label small text-dark fw-semibold mb-1">อัปเดตสถานะงาน</label>
-                        <div class="input-group input-group-sm">
-                           <select id="jobDetailStatusSelect" class="form-select border-warning-subtle">
+                        <label for="jobDetailStatusSelect" class="form-label small text-dark fw-bold mb-2">อัปเดตสถานะงานซ่อม</label>
+                        <div class="input-group">
+                           <select id="jobDetailStatusSelect" class="form-select border-warning-subtle fw-medium">
                               <option value="repairing">กำลังซ่อมอยู่</option>
                               <option value="done">ซ่อมเสร็จแล้ว</option>
                               <option value="picked_up">ลูกค้ารับรถแล้ว</option>
                            </select>
-                           <button type="button" class="btn btn-warning text-dark" id="jobDetailSaveStatusBtn">
+                           <button type="button" class="btn btn-warning text-dark fw-bold px-4 shadow-sm" id="jobDetailSaveStatusBtn">
                               <span class="spinner-border spinner-border-sm me-1 d-none" id="jobDetailSaveStatusSpinner"></span>
                               <span id="jobDetailSaveStatusBtnText">บันทึก</span>
                            </button>
@@ -436,51 +325,51 @@
                </div>
             </div>
 
-            <div class="card border-0 shadow-sm rounded-4 mb-3 overflow-hidden">
-               <div class="card-header bg-white border-bottom py-2">
-                  <span class="fw-bold text-dark small"><i class="bi bi-list-check me-1"></i> รายการซ่อม</span>
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+               <div class="card-header bg-white border-bottom py-3 px-4">
+                  <span class="fw-bold text-dark"><i class="bi bi-list-check me-2 text-success"></i> รายการซ่อมทั้งหมด</span>
                </div>
                <div class="table-responsive">
-                  <table class="table table-sm align-middle mb-0">
+                  <table class="table align-middle mb-0">
                      <thead class="bg-light text-secondary">
-                        <tr>
-                           <th class="ps-3 border-0 fw-normal">รายการ (อะไหล่/ค่าแรง)</th>
-                           <th class="text-end border-0 fw-normal">จำนวน</th>
-                           <th class="text-end border-0 fw-normal">หน่วยละ</th>
-                           <th class="text-end pe-3 border-0 fw-normal">รวม</th>
+                        <tr class="small text-uppercase fw-semibold">
+                           <th class="ps-4 border-0 py-3">รายการ (อะไหล่/ค่าแรง)</th>
+                           <th class="text-center border-0 py-3" style="width: 80px;">จำนวน</th>
+                           <th class="text-end border-0 py-3" style="width: 100px;">หน่วยละ</th>
+                           <th class="text-end pe-4 border-0 py-3" style="width: 120px;">รวม</th>
                         </tr>
                      </thead>
-                     <tbody id="jobDetailPartsTbody"></tbody>
-                     <tbody id="jobDetailLaborTbody" class="border-top-0"></tbody>
+                     <tbody id="jobDetailPartsTbody" class="bg-white"></tbody>
+                     <tbody id="jobDetailLaborTbody" class="border-top-0 bg-white"></tbody>
                      <tfoot class="bg-light">
                         <tr>
-                           <td colspan="3" class="text-end small text-muted py-2">รวมค่าอะไหล่</td>
-                           <td class="text-end pe-3 small fw-medium py-2" id="jobDetailPartsTotal">0.00 ฿</td>
+                           <td colspan="3" class="text-end small text-muted py-2 fw-medium">รวมค่าอะไหล่</td>
+                           <td class="text-end pe-4 small fw-bold text-dark py-2" id="jobDetailPartsTotal">0.00 ฿</td>
                         </tr>
                         <tr>
-                           <td colspan="3" class="text-end small text-muted py-2 border-0">รวมค่าแรง</td>
-                           <td class="text-end pe-3 small fw-medium py-2 border-0" id="jobDetailLaborTotal">0.00 ฿</td>
+                           <td colspan="3" class="text-end small text-muted py-2 border-0 fw-medium">รวมค่าแรง</td>
+                           <td class="text-end pe-4 small fw-bold text-dark py-2 border-0" id="jobDetailLaborTotal">0.00 ฿</td>
                         </tr>
-                        <tr class="table-primary border-primary">
-                           <td colspan="3" class="text-end fw-bold text-primary py-2 border-0">ยอดรวมสุทธิ</td>
-                           <td class="text-end pe-3 fw-bold text-primary fs-6 py-2 border-0" id="jobDetailGrandTotal">0.00 ฿</td>
+                        <tr class="bg-soft-success">
+                           <td colspan="3" class="text-end fw-bold text-success py-3 border-0 fs-6">ยอดรวมสุทธิ</td>
+                           <td class="text-end pe-4 fw-bold text-success fs-5 py-3 border-0" id="jobDetailGrandTotal">0.00 ฿</td>
                         </tr>
                      </tfoot>
                   </table>
                </div>
             </div>
 
-            <div class="accordion accordion-flush rounded-4 border overflow-hidden" id="accordionLogs">
+            <div class="accordion accordion-flush rounded-4 border overflow-hidden shadow-sm" id="accordionLogs">
               <div class="accordion-item">
                 <h2 class="accordion-header">
-                  <button class="accordion-button collapsed small py-2 bg-light text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLogs">
-                    <i class="bi bi-clock-history me-2"></i> ประวัติกิจกรรม
+                  <button class="accordion-button collapsed py-3 bg-light text-dark fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLogs">
+                    <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติกิจกรรมของบิลนี้
                   </button>
                 </h2>
                 <div id="flush-collapseLogs" class="accordion-collapse collapse" data-bs-parent="#accordionLogs">
                   <div class="accordion-body p-0">
                      <ul class="list-group list-group-flush small" id="jobDetailLogsList">
-                        <li class="list-group-item text-center text-muted">กำลังโหลด...</li>
+                        <li class="list-group-item text-center text-muted py-4">กำลังโหลด...</li>
                      </ul>
                   </div>
                 </div>
@@ -488,71 +377,39 @@
             </div>
 
           </div>
-          <div class="modal-footer border-top-0 pt-0 pb-3">
-             <button
-               type="button"
-               class="btn btn-link btn-sm text-danger text-decoration-none me-auto d-none"
-               id="jobDetailSoftDeleteBtn"
-             >
-               <i class="bi bi-trash me-1"></i> ซ่อนบิล (Admin)
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0 bg-white">
+             <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none me-auto d-none fw-medium" id="jobDetailSoftDeleteBtn">
+               <i class="bi bi-trash-fill me-1"></i> ลบบิล (Admin)
              </button>
              
-             <button type="button" class="btn btn-sm btn-outline-primary rounded-pill d-none" id="jobDetailEditBtn">
-                <i class="bi bi-pencil-square me-1"></i> แก้ไข
+             <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-bold hover-elevate d-none" id="jobDetailEditBtn">
+                <i class="bi bi-pencil-square me-1"></i> แก้ไขบิล
              </button>
 
-            <button
-              type="button"
-              class="btn btn-light rounded-pill px-4"
-              data-bs-dismiss="modal"
-            >
-              ปิด
+            <button type="button" class="btn btn-secondary rounded-pill px-4 fw-medium shadow-sm hover-elevate" data-bs-dismiss="modal">
+              ปิดหน้าต่าง
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1080;"
-    >
-      <div
-        id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="4000"
-      >
-        <div class="d-flex px-2">
-          <div class="toast-body" id="mainToastBody">
-            </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="ปิด"
-          ></button>
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex px-3 py-2">
+          <div class="toast-body fw-medium fs-6" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-      import {
-        getAuth, onAuthStateChanged, signOut,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-      import {
-        getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, limit, startAfter, serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, query, where, orderBy, limit, startAfter, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
       // --- Firebase Config ---
       const firebaseConfig = {
@@ -574,14 +431,12 @@
       const bodyEl = document.body;
       const themeToggleBtn = document.getElementById("themeToggleBtn");
       
-      // User Menu
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
       const userAvatarInitial = document.getElementById("userAvatarInitial");
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // Filter Inputs
       const jobsFilterForm = document.getElementById("jobsFilterForm");
       const jobsStartDateInput = document.getElementById("jobsStartDate");
       const jobsEndDateInput = document.getElementById("jobsEndDate");
@@ -590,26 +445,22 @@
       const jobsSearchBtn = document.getElementById("jobsSearchBtn");
       const exportCsvBtn = document.getElementById("exportCsvBtn");
 
-      // Presets
       const presetTodayBtn = document.getElementById("presetTodayBtn");
       const preset7DaysBtn = document.getElementById("preset7DaysBtn");
       const preset30DaysBtn = document.getElementById("preset30DaysBtn");
       const presetAllBtn = document.getElementById("presetAllBtn");
       const jobsDateRangeSummary = document.getElementById("jobsDateRangeSummary");
 
-      // Stats Elements
       const statTotalJobs = document.getElementById("statTotalJobs");
       const statTotalRevenue = document.getElementById("statTotalRevenue");
       const statAvgRevenue = document.getElementById("statAvgRevenue");
       const statPendingJobs = document.getElementById("statPendingJobs");
 
-      // View Toggles
       const tableViewBtn = document.getElementById("tableViewBtn");
       const cardViewBtn = document.getElementById("cardViewBtn");
       const jobsTableView = document.getElementById("jobsTableView");
       const jobsCardView = document.getElementById("jobsCardView");
 
-      // List Rendering
       const jobsLoadingState = document.getElementById("jobsLoadingState");
       const jobsCountInfo = document.getElementById("jobsCountInfo");
       const jobsTableBody = document.getElementById("jobsTableBody");
@@ -618,13 +469,11 @@
       const loadMoreJobsSpinner = document.getElementById("loadMoreJobsSpinner");
       const loadMoreJobsBtnText = document.getElementById("loadMoreJobsBtnText");
 
-      // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
       const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
       const fabStockInBtn = document.getElementById("fabStockInBtn");
       const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
-      // Modal Elements
       const jobDetailModalEl = document.getElementById("jobDetailModal");
       const jobDetailModalLabel = document.getElementById("jobDetailModalLabel");
       const jobDetailLoadingState = document.getElementById("jobDetailLoadingState");
@@ -665,20 +514,20 @@
       // --- Variables ---
       let currentUser = null;
       let currentUserProfile = null;
-      const JOBS_PAGE_SIZE = 25; // เพิ่มจำนวนต่อหน้าเล็กน้อย
+      const JOBS_PAGE_SIZE = 25;
       let jobsLastVisible = null;
       let isLoadingJobs = false;
-      let loadedJobs = []; // เก็บข้อมูลทั้งหมดที่โหลดมาแล้วใน session นี้
+      let loadedJobs = [];
       let currentFilter = { startDate: "", endDate: "", status: "all", searchText: "" };
       let currentJobDetailId = null;
       let currentJobDetailData = null;
       let isSavingJobStatus = false;
 
       // --- Helpers ---
-      function showToast(message, variant = "primary") {
+      function showToast(message, variant = "success") {
         if (!mainToastEl || !mainToastBody) return;
         mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
-        mainToastBody.textContent = message;
+        mainToastBody.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-circle'}-fill me-2 fs-5"></i>${message}`;
         mainToast.show();
       }
 
@@ -722,27 +571,27 @@
         return `${year}-${month}-${day}`;
       }
 
-      // --- Theme ---
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark", "bg-light", "bg-dark");
+        bodyEl.classList.add("bm-theme-" + normalized, normalized === "light" ? "bg-light" : "bg-dark");
         const icon = themeToggleBtn?.querySelector("i");
         if (icon) {
           icon.classList.toggle("bi-sun", normalized === "dark");
           icon.classList.toggle("bi-moon", normalized === "light");
         }
       }
+      
       function saveThemeForUser(uid, theme) {
         if (!uid) return;
         try { localStorage.setItem("bm-theme-" + uid, theme); } catch (e) {}
       }
+      
       function readThemeForUser(uid, fallbackTheme) {
         if (!uid) return fallbackTheme || "light";
         try { return localStorage.getItem("bm-theme-" + uid) || fallbackTheme || "light"; } catch (e) { return fallbackTheme || "light"; }
       }
 
-      // --- Auth / Profile ---
       async function ensureUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
         const snap = await getDoc(userRef);
@@ -753,32 +602,31 @@
         const isFirstUser = existingSnap.empty;
         const role = isFirstUser ? "admin" : "staff";
         const newUserData = {
-          displayName: user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่"),
+          displayName: user.displayName || (user.email ? user.email.split("@")[0] : "ช่างซ่อม"),
           role, createdAt: serverTimestamp(), branchId: null, theme: "light", disabled: false,
         };
         await setDoc(userRef, newUserData);
         return { id: user.uid, ...newUserData };
       }
 
-      // --- Status & UI Helpers ---
       function getStatusInfo(status) {
         switch (status) {
-          case "repairing": return { text: "กำลังซ่อม", className: "bg-warning-subtle text-warning-emphasis fw-medium border border-warning-subtle", icon: "bi-wrench" };
-          case "done": return { text: "ซ่อมเสร็จ", className: "bg-info-subtle text-info-emphasis fw-medium border border-info-subtle", icon: "bi-check-circle" };
-          case "picked_up": return { text: "รับรถแล้ว", className: "bg-success-subtle text-success-emphasis fw-medium border border-success-subtle", icon: "bi-emoji-smile" };
-          default: return { text: "ไม่ทราบ", className: "bg-secondary", icon: "bi-question" };
+          case "repairing": return { text: "กำลังซ่อม", className: "bg-warning-subtle text-warning-emphasis fw-bold border border-warning-subtle", icon: "bi-tools" };
+          case "done": return { text: "ซ่อมเสร็จ", className: "bg-info-subtle text-info-emphasis fw-bold border border-info-subtle", icon: "bi-check2-circle" };
+          case "picked_up": return { text: "รับรถแล้ว", className: "bg-success text-white fw-bold shadow-sm", icon: "bi-emoji-smile-fill" };
+          default: return { text: "ไม่ทราบ", className: "bg-secondary text-white", icon: "bi-question-circle" };
         }
       }
+      
       function getPriorityInfo(priority) {
         switch (priority) {
-          case "high": return { text: "ด่วนมาก", className: "bg-danger text-white" };
-          case "normal": return { text: "ปกติ", className: "bg-light text-muted border" };
-          case "low": return { text: "ไม่ด่วน", className: "bg-light text-muted border" };
-          default: return { text: "-", className: "bg-light text-muted" };
+          case "high": return { text: "ด่วนมาก", className: "bg-danger text-white shadow-sm" };
+          case "normal": return { text: "ปกติ", className: "bg-light text-muted border fw-medium" };
+          case "low": return { text: "ไม่ด่วน", className: "bg-light text-muted border fw-medium" };
+          default: return { text: "-", className: "d-none" };
         }
       }
 
-      // --- Filter Logic ---
       function setDatePreset(days) {
         const today = getTodayISODateString();
         if (days === 'all') {
@@ -795,19 +643,17 @@
       function updateDateRangeSummary() {
         const start = jobsStartDateInput.value;
         const end = jobsEndDateInput.value;
-        if (!start && !end) jobsDateRangeSummary.textContent = "ทั้งหมด";
-        else if (start && end) jobsDateRangeSummary.textContent = formatDateThaiFromString(start) + " - " + formatDateThaiFromString(end);
-        else if (start) jobsDateRangeSummary.textContent = "ตั้งแต่ " + formatDateThaiFromString(start);
-        else if (end) jobsDateRangeSummary.textContent = "ถึง " + formatDateThaiFromString(end);
+        if (!start && !end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-range me-1 text-success'></i> ข้อมูลทั้งหมด";
+        else if (start && end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start) + " - " + formatDateThaiFromString(end);
+        else if (start) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ตั้งแต่ " + formatDateThaiFromString(start);
+        else if (end) jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> ถึง " + formatDateThaiFromString(end);
       }
 
-      // --- Render Logic ---
       function setJobsLoadingState(isLoading, isFirstPage = false) {
         isLoadingJobs = isLoading;
         if (jobsLoadingState) {
           if (isLoading && isFirstPage) {
              jobsLoadingState.classList.remove("d-none");
-             jobsLoadingState.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status"></span> กำลังโหลด...`;
           } else if (!isLoading) {
              jobsLoadingState.classList.add("d-none");
           }
@@ -825,13 +671,11 @@
         }
       }
 
-      // NEW: Calculate Stats based on Loaded Jobs
       function calculateStats(jobs) {
-         let total = 0;
+         let total = jobs.length;
          let revenue = 0;
          let pending = 0;
          
-         total = jobs.length;
          jobs.forEach(j => {
             revenue += Number(j.totalAmount) || 0;
             if (j.status === "repairing") pending++;
@@ -849,48 +693,52 @@
         const keyword = (searchText || "").trim().toLowerCase();
         let filteredJobs = loadedJobs;
 
-        // Client-side filtering for search text
         if (keyword) {
           filteredJobs = loadedJobs.filter((job) => [
              job.customerName, job.customerPhone, job.plate, job.brand, job.model, job.problem
           ].some(f => (f||"").toLowerCase().includes(keyword)));
         }
 
-        // Update counts and stats
         if (jobsCountInfo) {
           jobsCountInfo.classList.remove("d-none");
-          jobsCountInfo.innerHTML = `<i class="bi bi-info-circle me-1"></i> พบงานซ่อม <span class="fw-bold text-dark">${filteredJobs.length}</span> งาน`;
+          jobsCountInfo.innerHTML = `<i class="bi bi-info-circle-fill me-1 text-primary"></i> พบงานซ่อม <span class="fw-bold text-dark fs-6">${filteredJobs.length}</span> งาน`;
         }
         calculateStats(filteredJobs);
 
-        // Render Table
+        // Render Table View
         if (jobsTableBody) {
           jobsTableBody.innerHTML = "";
           if (filteredJobs.length === 0) {
-            jobsTableBody.innerHTML = `<tr><td colspan="7" class="text-center small text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-2 opacity-50"></i>ไม่พบข้อมูลงานซ่อมตามเงื่อนไข</td></tr>`;
+            jobsTableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-5"><i class="bi bi-inbox fs-1 d-block mb-3 opacity-25"></i>ไม่พบข้อมูลงานซ่อมตามเงื่อนไขที่ค้นหา</td></tr>`;
           } else {
             filteredJobs.forEach((job) => {
               const statusInfo = getStatusInfo(job.status);
               const priorityInfo = getPriorityInfo(job.priority);
               const tr = document.createElement("tr");
               
-              // Hightlight row logic can be added here
+              // แจ้งเตือนสถานะการชำระเงิน
+              const paymentBadge = job.paymentMethod === 'pending' 
+                ? '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle rounded-pill ms-2" style="font-size: 0.7rem;"><i class="bi bi-clock-history"></i> รอจ่ายเงิน</span>'
+                : '<span class="badge bg-success bg-opacity-10 text-success border border-success-subtle rounded-pill ms-2" style="font-size: 0.7rem;"><i class="bi bi-check2"></i> จ่ายแล้ว</span>';
               
               tr.innerHTML = `
-                <td class="ps-4 text-muted small">${formatDateThaiFromString(job.date)}</td>
-                <td class="fw-medium text-dark">${job.customerName || "-"}</td>
-                <td><span class="badge bg-light text-dark border fw-normal">${job.plate || "-"}</span></td>
-                <td class="small text-muted">${(job.brand || "-") + " " + (job.model || "-")}</td>
+                <td class="ps-4 text-muted small fw-medium">${formatDateThaiFromString(job.date)}</td>
+                <td class="fw-bold text-dark">${job.customerName || "-"}</td>
+                <td><span class="badge bg-light text-primary border border-primary-subtle fw-bold fs-6 shadow-sm">${job.plate || "-"}</span></td>
+                <td class="small text-muted fw-medium">${(job.brand || "-") + " " + (job.model || "-")}</td>
                 <td>
-                  <span class="badge ${statusInfo.className} rounded-pill px-2 py-1 small fw-normal">
+                  <span class="badge ${statusInfo.className} rounded-pill px-3 py-2 small">
                      <i class="bi ${statusInfo.icon} me-1"></i>${statusInfo.text}
                   </span>
-                  ${job.priority === 'high' ? `<span class="badge ${priorityInfo.className} rounded-pill ms-1 small">ด่วน</span>` : ""}
+                  ${job.priority === 'high' ? `<span class="badge ${priorityInfo.className} rounded-pill ms-1 px-2 py-2 small">ด่วน</span>` : ""}
                 </td>
-                <td class="text-end fw-bold text-dark">${formatNumber(job.totalAmount || 0)}</td>
+                <td class="text-end">
+                  <div class="fw-bold text-dark fs-6">${formatNumber(job.totalAmount || 0)}</div>
+                  ${paymentBadge}
+                </td>
                 <td class="text-center">
-                  <button type="button" class="btn btn-sm btn-light border text-primary job-detail-btn rounded-circle" data-job-id="${job.id}" title="ดูรายละเอียด">
-                    <i class="bi bi-chevron-right"></i>
+                  <button type="button" class="btn btn-sm btn-light border text-primary job-detail-btn rounded-circle shadow-sm hover-elevate" data-job-id="${job.id}" title="ดูรายละเอียด">
+                    <i class="bi bi-search"></i>
                   </button>
                 </td>
               `;
@@ -899,34 +747,42 @@
           }
         }
 
-        // Render Cards
+        // Render Card View
         if (jobsCardContainer) {
           jobsCardContainer.innerHTML = "";
           if (filteredJobs.length === 0) {
-            jobsCardContainer.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border py-4 text-muted">ไม่พบข้อมูล</div></div>`;
+            jobsCardContainer.innerHTML = `<div class="col-12"><div class="alert alert-light text-center border py-5 text-muted fw-medium"><i class="bi bi-search mb-2 d-block fs-3 opacity-50"></i> ไม่พบข้อมูล</div></div>`;
           } else {
             filteredJobs.forEach((job) => {
               const statusInfo = getStatusInfo(job.status);
               const col = document.createElement("div");
               col.className = "col-12 col-md-6 col-lg-4";
+              
+              const paymentBadgeCard = job.paymentMethod === 'pending'
+                ? '<span class="badge bg-danger-subtle text-danger rounded-pill border border-danger-subtle ms-2"><i class="bi bi-clock-history"></i> ค้างชำระ</span>'
+                : '<span class="badge bg-success-subtle text-success rounded-pill border border-success-subtle ms-2"><i class="bi bi-check2"></i> จ่ายแล้ว</span>';
+
               col.innerHTML = `
-                <div class="card h-100 border shadow-sm rounded-4 bm-list-card job-detail-btn cursor-pointer position-relative overflow-hidden" data-job-id="${job.id}" style="cursor: pointer;">
-                  ${job.priority === 'high' ? '<div class="position-absolute top-0 end-0 p-2"><span class="badge bg-danger rounded-circle p-1" style="width:10px;height:10px;"> </span></div>' : ''}
-                  <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h6 class="fw-bold text-primary mb-0 fs-5">${job.plate || "-"}</h6>
-                      <span class="badge ${statusInfo.className} rounded-pill">${statusInfo.text}</span>
+                <div class="card h-100 border-0 shadow-sm rounded-4 bm-list-card job-detail-btn position-relative overflow-hidden bg-white" data-job-id="${job.id}" style="cursor: pointer; transition: all 0.2s;">
+                  ${job.priority === 'high' ? '<div class="position-absolute top-0 end-0 p-2"><span class="badge bg-danger shadow-sm px-2 py-1 rounded-bottom-3 rounded-top-0">ด่วนมาก</span></div>' : ''}
+                  <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                      <h6 class="fw-bold text-primary mb-0 fs-5 border border-primary-subtle bg-light px-2 py-1 rounded-3">${job.plate || "-"}</h6>
+                      <span class="badge ${statusInfo.className} rounded-pill px-3 py-2 shadow-sm">${statusInfo.text}</span>
                     </div>
-                    <div class="small text-dark fw-medium mb-1"><i class="bi bi-person me-1 text-muted"></i> ${job.customerName || "-"}</div>
-                    <div class="small text-muted mb-2 ps-3">${(job.brand || "-")} ${(job.model || "-")}</div>
+                    <div class="small text-dark fw-bold mb-1 fs-6"><i class="bi bi-person-circle me-2 text-muted"></i>${job.customerName || "-"}</div>
+                    <div class="small text-muted mb-3 ps-4 fw-medium">${(job.brand || "-")} ${(job.model || "-")}</div>
                     
-                    <div class="bg-light rounded p-2 small text-muted mb-2 text-truncate border border-light">
-                       <i class="bi bi-wrench me-1"></i> ${job.problem || "-"}
+                    <div class="bg-light rounded-3 p-3 small text-muted mb-3 text-truncate border border-light shadow-sm">
+                       <i class="bi bi-wrench-adjustable me-2 text-dark"></i> <span class="fw-medium">${job.problem || "-"}</span>
                     </div>
                     
-                    <div class="d-flex justify-content-between align-items-end mt-2 pt-2 border-top border-light opacity-75">
-                       <span class="small text-muted"><i class="bi bi-calendar3"></i> ${formatDateThaiFromString(job.date)}</span>
-                       <span class="fw-bold text-dark fs-6">${formatNumber(job.totalAmount)} ฿</span>
+                    <div class="d-flex justify-content-between align-items-end mt-2 pt-3 border-top border-secondary-subtle">
+                       <span class="small text-muted fw-medium"><i class="bi bi-calendar-event me-1"></i> ${formatDateThaiFromString(job.date)}</span>
+                       <div class="text-end">
+                         <span class="fw-bold text-success fs-5">${formatNumber(job.totalAmount)} ฿</span>
+                         <div class="mt-1">${paymentBadgeCard}</div>
+                       </div>
                     </div>
                   </div>
                 </div>
@@ -937,7 +793,6 @@
         }
       }
 
-      // --- Data Loading ---
       async function loadJobsWithFilter(reset = false) {
         if (isLoadingJobs) return;
         if (!currentUserProfile) return;
@@ -992,7 +847,6 @@
           if (!snap.empty) jobsLastVisible = snap.docs[snap.docs.length - 1];
 
           if (loadMoreJobsBtn) {
-            // Check if we likely have more by seeing if we got a full page
             if (snap.size === JOBS_PAGE_SIZE) loadMoreJobsBtn.classList.remove("d-none");
             else loadMoreJobsBtn.classList.add("d-none");
           }
@@ -1006,7 +860,6 @@
         }
       }
 
-      // --- Export CSV ---
       function exportToCSV() {
          if(!loadedJobs || loadedJobs.length === 0) {
             showToast("ไม่มีข้อมูลสำหรับส่งออก", "warning");
@@ -1015,7 +868,7 @@
 
          const bom = "\uFEFF";
          let csvContent = "data:text/csv;charset=utf-8," + bom;
-         csvContent += "วันที่,ลูกค้า,เบอร์โทร,ทะเบียน,ยี่ห้อ/รุ่น,อาการ,สถานะ,ยอดรวม\n";
+         csvContent += "วันที่,ลูกค้า,เบอร์โทร,ทะเบียน,ยี่ห้อ/รุ่น,อาการ,สถานะ,การชำระเงิน,ยอดรวม\n";
 
          loadedJobs.forEach(job => {
             const row = [
@@ -1026,6 +879,7 @@
                `"${(job.brand || "")} ${(job.model || "")}"`,
                `"${(job.problem || "").replace(/"/g, '""')}"`,
                getStatusInfo(job.status).text,
+               job.paymentMethod === 'pending' ? "รอจ่ายเงิน" : "ชำระแล้ว",
                job.totalAmount || 0
             ];
             csvContent += row.join(",") + "\n";
@@ -1040,7 +894,6 @@
          document.body.removeChild(link);
       }
 
-      // --- Detail Modal ---
       async function openJobDetail(jobId) {
         if (!jobId || !currentUserProfile) return;
         currentJobDetailId = jobId;
@@ -1061,7 +914,6 @@
         jobDetailStatusBadge.textContent = "-";
         jobDetailStatusBadge.className = "badge bg-secondary rounded-pill px-3 py-2";
         jobDetailPriorityBadge.textContent = "";
-        
         jobDetailCreatedBy.textContent = "-";
         
         jobDetailPartsTbody.innerHTML = "";
@@ -1069,9 +921,12 @@
         jobDetailPartsTotal.textContent = "0.00 ฿";
         jobDetailLaborTotal.textContent = "0.00 ฿";
         jobDetailGrandTotal.textContent = "0.00 ฿";
-        jobDetailLogsList.innerHTML = `<li class="list-group-item text-center small text-muted">กำลังโหลด...</li>`;
+        jobDetailLogsList.innerHTML = `<li class="list-group-item text-center small text-muted py-4">กำลังโหลด...</li>`;
 
-        if (jobDetailEditBtn) jobDetailEditBtn.classList.add("d-none"); // Hide first
+        if (jobDetailEditBtn) jobDetailEditBtn.classList.add("d-none"); 
+        
+        const pendingBlock = document.getElementById("pendingPaymentBlock");
+        if(pendingBlock) pendingBlock.classList.add("d-none"); // ซ่อนแถบรับเงินไว้ก่อนโหลดเสร็จ
 
         jobDetailModal.show();
 
@@ -1089,7 +944,7 @@
           const dateThai = formatDateThaiFromString(data.date);
           const statusInfo = getStatusInfo(data.status || "repairing");
           
-          jobDetailModalLabel.innerHTML = `<i class="bi bi-file-earmark-text me-2"></i> ใบงาน: ${data.plate || "-"}`;
+          jobDetailModalLabel.innerHTML = `<i class="bi bi-file-earmark-text me-2 text-success"></i> ทะเบียน: <span class="text-primary">${data.plate || "-"}</span>`;
           jobDetailDate.textContent = dateThai;
           jobDetailCustomerName.textContent = data.customerName || "-";
           jobDetailCustomerPhone.textContent = data.customerPhone || "-";
@@ -1099,11 +954,11 @@
           jobDetailProblem.textContent = data.problem || "-";
 
           jobDetailStatusBadge.textContent = statusInfo.text;
-          jobDetailStatusBadge.className = "badge " + statusInfo.className + " rounded-pill px-3 py-2";
+          jobDetailStatusBadge.className = "badge " + statusInfo.className + " rounded-pill px-4 py-2 fs-6 shadow-sm";
           
           if(data.priority === 'high') {
              jobDetailPriorityBadge.textContent = "ด่วนมาก";
-             jobDetailPriorityBadge.className = "badge bg-danger rounded-pill px-3 py-2 ms-1";
+             jobDetailPriorityBadge.className = "badge bg-danger rounded-pill px-3 py-2 ms-2 shadow-sm";
           } else {
              jobDetailPriorityBadge.textContent = "";
              jobDetailPriorityBadge.className = "d-none";
@@ -1112,28 +967,35 @@
           jobDetailCreatedBy.textContent = data.createdByName || "ไม่ทราบ";
           jobDetailStatusSelect.value = data.status || "repairing";
 
-          // Items
+          // เช็คสถานะการชำระเงินเพื่อโชว์แถบรับเงิน
+          if (pendingBlock) {
+             if (data.paymentMethod === 'pending') {
+                pendingBlock.classList.remove("d-none");
+             } else {
+                pendingBlock.classList.add("d-none");
+             }
+          }
+
           const items = data.items || [];
-          jobDetailPartsTbody.innerHTML = items.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-2">ไม่มีรายการอะไหล่</td></tr>`;
-          items.forEach(item => {
+          jobDetailPartsTbody.innerHTML = items.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-4">ไม่มีรายการอะไหล่</td></tr>`;
+          items.forEach((item, index) => {
              jobDetailPartsTbody.innerHTML += `
                 <tr>
-                   <td class="ps-3">${item.stockName || "-"}</td>
-                   <td class="text-end">${item.qty ?? "-"}</td>
-                   <td class="text-end">${formatNumber(item.unitPrice ?? 0)}</td>
-                   <td class="text-end pe-3">${formatNumber(item.lineTotal ?? 0)}</td>
+                   <td class="ps-4 fw-medium text-dark"><span class="text-muted small me-2">${index+1}.</span> ${item.stockName || "-"}</td>
+                   <td class="text-center fw-bold">${item.qty ?? "-"}</td>
+                   <td class="text-end text-muted">${formatNumber(item.unitPrice ?? 0)}</td>
+                   <td class="text-end pe-4 fw-bold text-dark">${formatNumber(item.lineTotal ?? 0)}</td>
                 </tr>`;
           });
 
-          // Labor
           const laborItems = data.laborItems || [];
-          jobDetailLaborTbody.innerHTML = laborItems.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-2">ไม่มีค่าแรง</td></tr>`;
-          laborItems.forEach(li => {
+          jobDetailLaborTbody.innerHTML = laborItems.length ? "" : `<tr><td colspan="4" class="text-center small text-muted py-3">ไม่มีค่าแรง</td></tr>`;
+          laborItems.forEach((li, index) => {
              jobDetailLaborTbody.innerHTML += `
                 <tr>
-                   <td class="ps-3">${li.name || "-"}</td>
-                   <td class="text-end" colspan="2"></td>
-                   <td class="text-end pe-3">${formatNumber(li.price ?? 0)}</td>
+                   <td class="ps-4 fw-medium text-info"><i class="bi bi-wrench me-2"></i> ${li.name || "-"}</td>
+                   <td class="text-center" colspan="2"></td>
+                   <td class="text-end pe-4 fw-bold text-info">${formatNumber(li.price ?? 0)}</td>
                 </tr>`;
           });
 
@@ -1141,12 +1003,10 @@
           jobDetailLaborTotal.textContent = formatNumber(Number(data.laborTotal) || 0) + " ฿";
           jobDetailGrandTotal.textContent = formatNumber(Number(data.totalAmount) || 0) + " ฿";
 
-          // Admin Controls
           if (jobDetailSoftDeleteBtn) {
             jobDetailSoftDeleteBtn.classList.toggle("d-none", currentUserProfile.role !== "admin");
           }
           
-          // Edit Button (Link to open-bill)
           if (jobDetailEditBtn) {
              jobDetailEditBtn.classList.remove("d-none");
              jobDetailEditBtn.onclick = () => {
@@ -1173,29 +1033,28 @@
           
           jobDetailLogsList.innerHTML = "";
           if (logsSnap.empty) {
-            jobDetailLogsList.innerHTML = `<li class="list-group-item text-center text-muted small py-3">ไม่มีประวัติกิจกรรม</li>`;
+            jobDetailLogsList.innerHTML = `<li class="list-group-item text-center text-muted small py-4 border-0">ไม่มีประวัติกิจกรรม</li>`;
           } else {
             logsSnap.forEach((docSnap) => {
               const log = docSnap.data();
               const li = document.createElement("li");
-              li.className = "list-group-item small px-0";
+              li.className = "list-group-item small px-3 py-3 border-bottom";
               li.innerHTML = `
-                <div class="d-flex justify-content-between mb-1">
-                   <span class="fw-medium text-dark">${log.message || "-"}</span>
-                   <span class="text-xs text-muted bg-light border rounded px-1">${formatDateTimeFromTimestamp(log.createdAt)}</span>
+                <div class="d-flex justify-content-between mb-2">
+                   <span class="fw-bold text-dark"><i class="bi bi-caret-right-fill text-success" style="font-size: 0.7rem;"></i> ${log.message || "-"}</span>
+                   <span class="text-xs text-muted bg-light border border-secondary-subtle rounded-pill px-2 py-1 shadow-sm">${formatDateTimeFromTimestamp(log.createdAt)}</span>
                 </div>
-                <div class="text-muted text-xs"><i class="bi bi-person me-1"></i> ${log.createdByName || "ระบบ"}</div>
+                <div class="text-muted text-xs ms-3"><i class="bi bi-person-badge me-1"></i> ผู้บันทึก: ${log.createdByName || "ระบบ"}</div>
               `;
               jobDetailLogsList.appendChild(li);
             });
           }
         } catch (error) {
            console.error(error);
-           jobDetailLogsList.innerHTML = `<li class="list-group-item text-danger text-center small">โหลด Log ไม่สำเร็จ</li>`;
+           jobDetailLogsList.innerHTML = `<li class="list-group-item text-danger text-center small py-3">โหลด Log ไม่สำเร็จ</li>`;
         }
       }
 
-      // --- Actions: Status Update ---
       async function handleUpdateJobStatus() {
         if (!currentJobDetailId || !currentJobDetailData || isSavingJobStatus) return;
         const newStatus = jobDetailStatusSelect.value;
@@ -1223,19 +1082,18 @@
             refType: "job", refId: currentJobDetailId, branchId: currentUserProfile.branchId
           });
 
-          // Update local data
           loadedJobs = loadedJobs.map(j => j.id === currentJobDetailId ? { ...j, status: newStatus } : j);
           currentJobDetailData.status = newStatus;
           
           jobDetailStatusBadge.textContent = statusInfoNew.text;
-          jobDetailStatusBadge.className = "badge " + statusInfoNew.className + " rounded-pill px-3 py-2";
+          jobDetailStatusBadge.className = "badge " + statusInfoNew.className + " rounded-pill px-4 py-2 fs-6 shadow-sm";
 
-          showToast("บันทึกสถานะเรียบร้อย", "success");
-          renderJobs(currentFilter.searchText); // Re-render list
+          showToast("อัปเดตสถานะเรียบร้อย", "success");
+          renderJobs(currentFilter.searchText); 
           loadJobActivityLogs(currentJobDetailId, currentUserProfile.branchId);
         } catch (error) {
           console.error(error);
-          showToast("บันทึกไม่สำเร็จ", "danger");
+          showToast("อัปเดตไม่สำเร็จ กรุณาลองใหม่", "danger");
         } finally {
           isSavingJobStatus = false;
           jobDetailSaveStatusSpinner.classList.add("d-none");
@@ -1243,24 +1101,22 @@
         }
       }
 
-      // --- Actions: Delete ---
       async function handleSoftDeleteJob() {
         if (!currentJobDetailId || currentUserProfile.role !== "admin") return;
-        if (!confirm("ต้องการซ่อนบิลนี้ใช่หรือไม่? \n(สามารถดูได้ในฐานข้อมูลเท่านั้น)")) return;
+        if (!confirm("ต้องการลบ/ซ่อนบิลนี้ใช่หรือไม่? \n(ลบแล้วข้อมูลจะหายไปจากหน้านี้ แต่สามารถดูในฐานข้อมูลหลังบ้านได้)")) return;
         try {
           await updateDoc(doc(db, "jobs", currentJobDetailId), { isDeleted: true, updatedAt: serverTimestamp() });
           await addDoc(collection(db, "activityLogs"), {
              createdAt: serverTimestamp(), createdBy: currentUser.uid, createdByName: currentUserProfile.displayName,
              type: "job_deleted", message: "ลบ/ซ่อน ใบงาน", refType: "job", refId: currentJobDetailId, branchId: currentUserProfile.branchId
           });
-          showToast("ซ่อนบิลแล้ว", "success");
+          showToast("ลบบิลออกจากระบบแล้ว", "success");
           loadedJobs = loadedJobs.filter(j => j.id !== currentJobDetailId);
           renderJobs(currentFilter.searchText);
           jobDetailModal.hide();
-        } catch (e) { showToast("เกิดข้อผิดพลาด", "danger"); }
+        } catch (e) { showToast("เกิดข้อผิดพลาดในการลบ", "danger"); }
       }
 
-      // --- Actions: Print ---
       function printCurrentJob() {
          if(!currentJobDetailData) return;
          const d = currentJobDetailData;
@@ -1302,7 +1158,7 @@
                   <div><b>วันที่:</b> ${formatDateThaiFromString(d.date)}</div>
                   <div><b>ลูกค้า:</b> ${d.customerName} (${d.customerPhone})</div>
                   <div><b>รถ:</b> ${d.plate} ${d.brand} ${d.model}</div>
-                  <div><b>เลขไมล์:</b> ${d.mileage || '-'}</div>
+                  <div><b>สถานะการจ่าย:</b> ${d.paymentMethod === 'pending' ? 'ค้างชำระ' : 'ชำระแล้ว'}</div>
                </div>
                <table>
                   <thead><tr><th>รายการ</th><th align="right">จำนวน</th><th align="right">รวม</th></tr></thead>
@@ -1315,7 +1171,7 @@
                   </div>
                </div>
                <div class="footer">
-                  <p>ขอบคุณที่ใช้บริการ</p>
+                  <p>ขอบคุณที่ใช้บริการครับ</p>
                </div>
                <script>
                   window.onload = function() { window.print(); window.close(); }
@@ -1326,7 +1182,6 @@
          printWindow.document.close();
       }
 
-      // --- Setup ---
       function setupEventListenersForPage() {
         if (logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
         
@@ -1338,42 +1193,37 @@
           });
         }
 
-        // FAB Navigation
         if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
         if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
         if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
         if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
 
-        // Filter Presets
         presetTodayBtn?.addEventListener("click", () => { setDatePreset(1); loadJobsWithFilter(true); });
         preset7DaysBtn?.addEventListener("click", () => { setDatePreset(7); loadJobsWithFilter(true); });
         preset30DaysBtn?.addEventListener("click", () => { setDatePreset(30); loadJobsWithFilter(true); });
         presetAllBtn?.addEventListener("click", () => { setDatePreset('all'); loadJobsWithFilter(true); });
 
-        // Filter Form
         jobsFilterForm?.addEventListener("submit", (e) => {
            e.preventDefault();
            updateDateRangeSummary();
            loadJobsWithFilter(true);
         });
 
-        // View Toggles
         tableViewBtn?.addEventListener("click", () => {
-           tableViewBtn.classList.add("active", "text-primary", "fw-bold"); tableViewBtn.classList.remove("text-secondary");
-           cardViewBtn.classList.remove("active", "text-primary", "fw-bold"); cardViewBtn.classList.add("text-secondary");
+           tableViewBtn.classList.add("active", "text-success", "fw-bold"); tableViewBtn.classList.remove("text-secondary", "fw-medium");
+           cardViewBtn.classList.remove("active", "text-success", "fw-bold"); cardViewBtn.classList.add("text-secondary", "fw-medium");
            jobsTableView.classList.remove("d-none");
            jobsCardView.classList.add("d-none");
         });
         cardViewBtn?.addEventListener("click", () => {
-           cardViewBtn.classList.add("active", "text-primary", "fw-bold"); cardViewBtn.classList.remove("text-secondary");
-           tableViewBtn.classList.remove("active", "text-primary", "fw-bold"); tableViewBtn.classList.add("text-secondary");
+           cardViewBtn.classList.add("active", "text-success", "fw-bold"); cardViewBtn.classList.remove("text-secondary", "fw-medium");
+           tableViewBtn.classList.remove("active", "text-success", "fw-bold"); tableViewBtn.classList.add("text-secondary", "fw-medium");
            jobsCardView.classList.remove("d-none");
            jobsTableView.classList.add("d-none");
         });
 
         loadMoreJobsBtn?.addEventListener("click", () => loadJobsWithFilter(false));
 
-        // Click on Row/Card to open detail
         const handleDetailClick = (e) => {
            const btn = e.target.closest(".job-detail-btn");
            if(btn) openJobDetail(btn.dataset.jobId);
@@ -1381,13 +1231,81 @@
         jobsTableBody?.addEventListener("click", handleDetailClick);
         jobsCardContainer?.addEventListener("click", handleDetailClick);
 
-        // Modal Actions
         jobDetailSaveStatusBtn?.addEventListener("click", handleUpdateJobStatus);
         jobDetailSoftDeleteBtn?.addEventListener("click", handleSoftDeleteJob);
         jobDetailPrintBtn?.addEventListener("click", printCurrentJob);
-        
-        // Export
         exportCsvBtn?.addEventListener("click", exportToCSV);
+
+        // --- เพิ่ม Event ปุ่มรับชำระเงินค้างจ่าย (ใหม่) ---
+        const btnReceivePayment = document.getElementById("btnReceivePayment");
+        if(btnReceivePayment) {
+            btnReceivePayment.addEventListener("click", async () => {
+                if(!currentJobDetailData || !currentJobDetailId) return;
+                
+                const method = document.getElementById("receivePaymentMethod").value;
+                const methodText = method === 'cash' ? 'เงินสด' : 'โอนเงิน';
+                
+                if(!confirm(`ยืนยันรับชำระเงินยอด ${formatNumber(currentJobDetailData.totalAmount)} บาท\nด้วยช่องทาง "${methodText}" ใช่หรือไม่?\n\n*ระบบจะบันทึกยอดนี้เข้าระบบบัญชีรายรับทันที`)) return;
+                
+                btnReceivePayment.disabled = true;
+                btnReceivePayment.innerHTML = `<span class="spinner-border spinner-border-sm"></span> กำลังบันทึก...`;
+
+                try {
+                    // 1. อัปเดตตาราง Jobs ให้รู้ว่าจ่ายแล้ว
+                    await updateDoc(doc(db, "jobs", currentJobDetailId), {
+                        paymentMethod: method,
+                        updatedAt: serverTimestamp()
+                    });
+
+                    // 2. ดันยอดเงินเข้า Transactions 
+                    await addDoc(collection(db, "transactions"), {
+                        date: getTodayISODateString(),
+                        type: "income",
+                        category: "ค่าซ่อม",
+                        description: `ค่าซ่อม ${currentJobDetailData.plate} (${currentJobDetailData.customerName}) - ชำระย้อนหลัง`,
+                        paymentMethod: method,
+                        amount: currentJobDetailData.totalAmount,
+                        sourceType: "job",
+                        sourceId: currentJobDetailId,
+                        branchId: currentUserProfile.branchId,
+                        isDeleted: false,
+                        createdAt: serverTimestamp(),
+                        createdBy: currentUser.uid
+                    });
+
+                    // 3. เก็บประวัติ Log 
+                    await addDoc(collection(db, "activityLogs"), {
+                        type: "payment_received",
+                        message: `รับชำระเงินแล้ว (${methodText}) ยอด ${formatNumber(currentJobDetailData.totalAmount)} ฿`,
+                        refId: currentJobDetailId,
+                        refType: "job",
+                        branchId: currentUserProfile.branchId,
+                        createdAt: serverTimestamp(),
+                        createdBy: currentUser.uid,
+                        createdByName: currentUserProfile.displayName
+                    });
+
+                    showToast("รับชำระเงินและบันทึกเป็นรายได้สำเร็จ!", "success");
+                    
+                    // ปรับ UI ให้เรียบร้อย
+                    document.getElementById("pendingPaymentBlock").classList.add("d-none");
+                    currentJobDetailData.paymentMethod = method;
+                    
+                    // อัปเดต Data ในตาราง/การ์ด ทันที ไม่ต้องรีเฟรชหน้าใหม่
+                    loadedJobs = loadedJobs.map(j => j.id === currentJobDetailId ? { ...j, paymentMethod: method } : j);
+                    renderJobs(currentFilter.searchText);
+
+                    loadJobActivityLogs(currentJobDetailId, currentUserProfile.branchId);
+
+                } catch(error) {
+                    console.error(error);
+                    showToast("เกิดข้อผิดพลาดในการบันทึกบัญชี", "danger");
+                } finally {
+                    btnReceivePayment.disabled = false;
+                    btnReceivePayment.innerHTML = `<i class="bi bi-check2-circle me-1"></i> รับเงิน`;
+                }
+            });
+        }
       }
 
       // --- Main Execution ---
@@ -1399,21 +1317,19 @@
            currentUserProfile = profile;
            if (profile.disabled) { await signOut(auth); window.location.href = "index.html"; return; }
            
-           // Set User Info
            if (userDisplayNameText) userDisplayNameText.textContent = profile.displayName || "-";
-           if (userRoleText) userRoleText.textContent = profile.role === "admin" ? "Admin" : "Staff";
+           if (userRoleText) userRoleText.textContent = profile.role === "admin" ? "Admin" : "ช่างซ่อม";
            if (userAvatarInitial) userAvatarInitial.textContent = (profile.displayName || "U").trim()[0].toUpperCase();
            if (settingsMenuItem) settingsMenuItem.classList.toggle("d-none", profile.role !== "admin");
 
            applyTheme(readThemeForUser(user.uid, profile.theme));
            setupEventListenersForPage();
            
-           // Initial Load (Default: Last 30 days or 7 days as preferred)
            setDatePreset(30); 
            loadJobsWithFilter(true);
         } catch (error) {
            console.error(error);
-           showToast("เกิดข้อผิดพลาดในการโหลดข้อมูล", "danger");
+           showToast("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล", "danger");
         }
       });
     </script>
