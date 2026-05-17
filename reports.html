@@ -849,7 +849,8 @@
                forecastList.push({ name: item.name, code: item.code, currentQty, rate, daysLeft });
             }
 
-            if(currentQty <= 5 && currentQty > 0) {
+            // 🔥 แก้ไขบักตรงนี้: เช็คจากขั้นต่ำ (minQty) และให้รวมของที่เหลือ 0 ชิ้นด้วย
+            if(currentQty <= Number(item.minQty || 0)) {
                lowStockList.push(item);
             }
          });
@@ -872,7 +873,8 @@
          lowStockTbody.innerHTML = "";
          if(lowStockList.length === 0) lowStockTbody.innerHTML = `<tr><td class="text-center py-5 text-success fw-bold"><i class="bi bi-check-circle-fill fs-3 d-block mb-2"></i> สต๊อกเพียงพอทุกรายการ</td></tr>`;
          lowStockList.forEach(i => {
-            lowStockTbody.innerHTML += `<tr><td class="ps-4 py-3 d-flex justify-content-between align-items-center"><span class="fw-bold text-dark">${i.name}</span><span class="badge bg-danger rounded-pill px-3 py-1 shadow-sm">เหลือ ${i.qty}</span></td></tr>`;
+            // ปรับชื่อให้เล็กลงหน่อย จะได้ไม่ล้นกล่อง
+            lowStockTbody.innerHTML += `<tr><td class="ps-4 py-3 d-flex justify-content-between align-items-center"><span class="fw-bold text-dark text-truncate" style="max-width:180px;">${i.name}</span><span class="badge bg-danger rounded-pill px-3 py-1 shadow-sm">เหลือ ${i.qty}</span></td></tr>`;
          });
 
          const ninetyDaysAgo = new Date(); ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
