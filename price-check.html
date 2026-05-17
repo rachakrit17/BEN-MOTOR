@@ -33,7 +33,7 @@
   </head>
 
   <body class="bm-theme-light bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom btn-no-print">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
           <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
@@ -55,8 +55,6 @@
               </span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4 p-2">
-              <li><div class="px-3 py-2 d-sm-none"><strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong></div></li>
-              <li><hr class="dropdown-divider d-sm-none"></li>
               <li><a class="dropdown-item py-2 fw-medium rounded-3" href="dashboard.html"><i class="bi bi-speedometer2 me-2 text-primary"></i> แดชบอร์ด</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
@@ -205,6 +203,16 @@
       </div>
     </main>
 
+    <div class="bm-fab-container btn-no-print">
+      <div class="dropdown dropup">
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0 rounded-4 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span> เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span> เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span> บันทึกซื้ออะไหล่</button></li>
+        </ul>
+      </div>
+    </div>
+
     <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg btn-no-print">
       <div class="container-fluid px-0 h-100">
         <div class="row g-0 w-100 h-100 text-center small fw-medium">
@@ -256,7 +264,7 @@
                  </div>
                  <div class="col-md-6">
                     <label class="form-label small fw-bold text-dark">รุ่นรถที่รองรับ / ข้อมูลสเปก</label>
-                    <input type="text" id="modalModel" class="form-control" placeholder="เช่น Wave110i, MSX125, Kaze, ใช้ได้ทั่วไป" />
+                    <input type="text" id="modalModel" class="form-control" placeholder="เช่น Wave110i, PCX, ใช้ได้ทั่วไป" />
                  </div>
               </div>
 
@@ -404,6 +412,11 @@
       const modalMarginDisplay = document.getElementById("modalMarginDisplay");
       const modalAuditLabel = document.getElementById("modalAuditLabel");
 
+      // FAB Elements
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
@@ -505,7 +518,11 @@
          const sort = sortFilter.value;
 
          let filtered = allPriceItems.filter(item => {
-             const matchTerm = !term || (item.name + (item.code||'') + (item.modelInfo||'') + item.category).toLowerCase().includes(term);
+             const name = item.name || "";
+             const code = item.code || "";
+             const modelInfo = item.modelInfo || "";
+             const category = item.category || "";
+             const matchTerm = !term || (name + code + modelInfo + category).toLowerCase().includes(term);
              const matchType = type === "all" || item.kind === type;
              const matchCat = cat === "all" || item.category === cat;
              return matchTerm && matchType && matchCat;
@@ -714,6 +731,11 @@
          savePriceItemBtn.addEventListener("click", saveData);
          confirmDeleteBtn.addEventListener("click", deleteItem);
          [modalSellPrice, modalCostPrice].forEach(el => el.addEventListener("input", updateModalMargin));
+
+         // ผูกระบบปุ่มลอย FAB ตัวปัญหาให้วิ่งไปแต่ละหน้าได้ถูกต้อง
+         if(fabOpenBillBtn) fabOpenBillBtn.onclick = () => window.location.href="open-bill.html";
+         if(fabAddTxnBtn) fabAddTxnBtn.onclick = () => window.location.href="finance.html";
+         if(fabStockInBtn) fabStockInBtn.onclick = () => window.location.href="stock.html";
       }
 
       // --- Main Execution ---
@@ -727,7 +749,6 @@
                 currentUserProfile = { id: snap.id, ...snap.data() };
                 if (currentUserProfile.disabled) { await signOut(auth); window.location.href = "index.html"; return; }
                 
-                // UI Init ข้อมูลโปรไฟล์ร้าน BEN MOTOR
                 const name = currentUserProfile.displayName || "ช่างเทคนิค";
                 userDisplayNameText.textContent = name;
                 if (document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
@@ -743,7 +764,6 @@
                     openAddPriceModalBtn.classList.remove("d-none");
                 }
 
-                // สั่งรันสคริปต์ผูก Event และโหลดราคาขึ้นหน้าจอออโต้ทันที!
                 setupEvents();
                 loadData();
             } else {
