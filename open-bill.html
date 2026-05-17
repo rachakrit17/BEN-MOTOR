@@ -279,6 +279,7 @@
                     <select id="paymentMethod" class="form-select">
                       <option value="cash" selected>💵 เงินสด</option>
                       <option value="transfer">📱 โอนเงินผ่านธนาคาร</option>
+                      <option value="pending">⏳ รอจ่ายเงิน (ค้างชำระ)</option>
                     </select>
                   </div>
                   
@@ -712,7 +713,13 @@
         document.getElementById('r_mechanic').textContent = jobData.mechanicName || "-";
         document.getElementById('r_problem').textContent = jobData.problem || "-";
         document.getElementById('r_notes').textContent = jobData.notes || "-";
-        document.getElementById('r_payment').textContent = jobData.paymentMethod === 'cash' ? "เงินสด" : "โอนเงิน";
+        let paymentText = "เงินสด";
+        if (jobData.paymentMethod === 'transfer') {
+            paymentText = "โอนเงิน";
+        } else if (jobData.paymentMethod === 'pending') {
+            paymentText = "รอจ่ายเงิน (ค้างชำระ)";
+        }
+        document.getElementById('r_payment').textContent = paymentText;
 
         const tbody = document.getElementById('r_items_tbody');
         tbody.innerHTML = '';
