@@ -1,1036 +1,1054 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <title>BEN MOTOR – รายงานวิเคราะห์ธุรกิจ</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <link rel="icon" type="image/x-icon" href="img/icon.ico" />
-    <link rel="stylesheet" href="css/style.css" />
-
-    <style>
-      /* อัปเกรด UI พรีเมียม */
-      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
-      .card-premium:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
-      .bm-stat-card { transition: all 0.3s ease; border-radius: 1rem; border: none; }
-      .bm-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
-      .table-hover tbody tr:hover { background-color: rgba(25, 135, 84, 0.03); }
-      
-      /* สไตล์ Nav Pills สำหรับรายงาน */
-      .nav-pills .nav-link { color: #6c757d; font-weight: 500; transition: all 0.3s ease; border-radius: 50rem; padding: 0.6rem 1.2rem; }
-      .nav-pills .nav-link.active { background-color: #198754; color: #fff; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); transform: translateY(-1px); }
-      .nav-pills .nav-link:hover:not(.active) { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
-
-      @media print {
-        .bm-topbar, .bm-bottom-nav, .bm-fab-container, #themeToggleBtn, .btn-no-print {
-          display: none !important;
-        }
-        body { padding-top: 0; padding-bottom: 0; background-color: #fff; }
-        .bm-main-content { min-height: auto; }
-        .card { border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid; }
-        .nav-pills { display: none !important; }
-        .tab-content > .tab-pane { display: block !important; opacity: 1 !important; margin-bottom: 2rem; }
-        .bm-chart-container { height: 250px !important; }
-      }
-    </style>
-  </head>
-
-  <body class="bm-theme-light bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
-          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
-        </span>
-        <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent" id="themeToggleBtn" type="button">
-            <i class="bi bi-moon fs-5"></i>
-          </button>
-          <div class="dropdown">
-            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown">
-              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
-                <span id="userAvatarInitial" class="fw-bold">U</span>
-              </span>
-              <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
-                <span class="text-muted text-xs" id="userRoleText">-</span>
-              </span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-4 p-2">
-               <li><a class="dropdown-item py-2 fw-medium rounded-3" href="dashboard.html"><i class="bi bi-speedometer2 me-2 text-primary"></i> แดชบอร์ด</a></li>
-               <li><hr class="dropdown-divider" /></li>
-               <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <main class="bm-main-content pb-5 mt-5 pt-3">
-      <div class="container py-3">
-        
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 mt-2 gap-3">
-          <div>
-            <h1 class="h4 mb-1 fw-bold text-dark d-flex align-items-center">
-              <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle me-3 d-flex"><i class="bi bi-pie-chart-fill"></i></span>รายงานวิเคราะห์ธุรกิจ
-            </h1>
-            <p class="small text-muted mb-0 ms-1 mt-2">
-              <i class="bi bi-info-circle me-1"></i> วิเคราะห์รายได้, เปรียบเทียบยอดขาย, และพยากรณ์สต๊อก (Full Analytics)
-            </p>
-          </div>
-          <div>
-              <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-medium shadow-sm hover-elevate btn-no-print" onclick="window.print()">
-                <i class="bi bi-printer me-2"></i> พิมพ์รายงาน
-              </button>
-          </div>
-        </div>
-
-        <section class="mb-4 btn-no-print">
-          <div class="card border-0 shadow-sm rounded-4 card-premium bg-white">
-            <div class="card-body p-4">
-              <div class="row g-3 align-items-center mb-4">
-                <div class="col-12 col-lg-8">
-                  <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="fw-bold text-dark me-2"><i class="bi bi-calendar3 me-1 text-primary"></i> เลือกช่วงเวลา:</span>
-                    <div class="btn-group shadow-sm" role="group">
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn fw-medium px-3" data-range="today">วันนี้</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn fw-medium px-3" data-range="yesterday">เมื่อวาน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn fw-medium px-3" data-range="7d">7 วัน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn fw-medium px-3" data-range="30d">30 วัน</button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn fw-medium px-3" data-range="thisMonth">เดือนนี้</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-4 text-lg-end">
-                  <span class="badge bg-light text-dark border border-secondary-subtle px-3 py-2 rounded-pill shadow-sm" id="reportsLoadingState">รอโหลดข้อมูล...</span>
-                </div>
-              </div>
-
-              <div class="row g-3 align-items-end p-3 bg-light rounded-4 border border-secondary-subtle shadow-sm">
-                <div class="col-6 col-md-4">
-                  <label class="form-label small mb-1 fw-bold text-dark">เริ่มต้น</label>
-                  <input type="date" class="form-control" id="reportStartDateInput" />
-                </div>
-                <div class="col-6 col-md-4">
-                  <label class="form-label small mb-1 fw-bold text-dark">สิ้นสุด</label>
-                  <input type="date" class="form-control" id="reportEndDateInput" />
-                </div>
-                <div class="col-12 col-md-4 text-md-end">
-                  <button type="button" class="btn btn-success w-100 px-4 fw-bold shadow-sm rounded-pill hover-elevate py-2" id="loadReportBtn">
-                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loadReportSpinner"></span>
-                    <span id="loadReportBtnText"><i class="bi bi-magic me-2"></i> ประมวลผลรายงาน</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <ul class="nav nav-pills mb-4 nav-fill gap-2 p-2 bg-white rounded-5 shadow-sm border btn-no-print" id="reportTabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill fw-bold" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-pane" type="button">
-              <i class="bi bi-wallet2 me-1"></i> การเงิน & ภาพรวม
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill fw-bold" id="operations-tab" data-bs-toggle="tab" data-bs-target="#operations-pane" type="button">
-              <i class="bi bi-tools me-1"></i> งานซ่อม & ลูกค้า
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill fw-bold" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory-pane" type="button">
-              <i class="bi bi-box-seam me-1"></i> สต๊อก & สินค้า
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill fw-bold" id="profit-tab" data-bs-toggle="tab" data-bs-target="#profit-pane" type="button">
-              <i class="bi bi-graph-up-arrow me-1"></i> วิเคราะห์กำไร
-            </button>
-          </li>
-        </ul>
-
-        <div class="tab-content" id="reportTabsContent">
-          
-          <div class="tab-pane fade show active" id="overview-pane" role="tabpanel">
-            <div class="row g-3 mb-4">
-              <div class="col-12 col-md-4">
-                <div class="card bm-stat-card h-100 border-0 shadow-sm bg-success bg-opacity-10 border-start border-4 border-success p-2">
-                  <div class="card-body py-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-arrow-down-left-circle-fill text-success fs-4 me-2"></i>
-                        <span class="text-success fw-bold">รายรับรวม</span>
-                      </div>
-                      <span class="badge bg-white text-dark border shadow-sm rounded-pill px-2" id="trendIncomeBadge">...%</span>
-                    </div>
-                    <div class="h3 mb-1 fw-bold text-success" id="reportMoneyIncomeText">0.00 ฿</div>
-                    <div class="small fw-medium text-muted mt-1" id="reportMoneyIncomePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="card bm-stat-card h-100 border-0 shadow-sm bg-danger bg-opacity-10 border-start border-4 border-danger p-2">
-                  <div class="card-body py-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-arrow-up-right-circle-fill text-danger fs-4 me-2"></i>
-                        <span class="text-danger fw-bold">รายจ่ายรวม</span>
-                      </div>
-                      <span class="badge bg-white text-dark border shadow-sm rounded-pill px-2" id="trendExpenseBadge">...%</span>
-                    </div>
-                    <div class="h3 mb-1 fw-bold text-danger" id="reportMoneyExpenseText">0.00 ฿</div>
-                    <div class="small fw-medium text-muted mt-1" id="reportMoneyExpensePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="card bm-stat-card h-100 border-0 shadow-sm bg-primary bg-opacity-10 border-start border-4 border-primary p-2">
-                  <div class="card-body py-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-wallet2 text-primary fs-4 me-2"></i>
-                        <span class="text-primary fw-bold">กระแสเงินสด (Net)</span>
-                      </div>
-                      <span class="badge bg-white text-dark border shadow-sm rounded-pill px-2" id="trendNetBadge">...%</span>
-                    </div>
-                    <div class="h3 mb-1 fw-bold text-primary" id="reportMoneyNetText">0.00 ฿</div>
-                     <div class="small fw-medium text-primary text-opacity-75 mt-1" id="reportMoneyNetPrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card shadow-sm border-0 mb-4 rounded-4 card-premium">
-              <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                   <h6 class="fw-bold text-dark mb-0"><i class="bi bi-bar-chart-line-fill text-success me-2"></i>แนวโน้มรายรับ-รายจ่ายรายวัน</h6>
-                   <div class="btn-group btn-group-sm btn-no-print shadow-sm">
-                      <button class="btn btn-outline-success fw-medium" id="exportReportCsvBtn" onclick="alert('ระบบ Export กำลังอยู่ในการพัฒนาครับ')"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
-                      <button class="btn btn-outline-primary fw-medium" id="exportReportJsonBtn" onclick="alert('ระบบ Export กำลังอยู่ในการพัฒนาครับ')"><i class="bi bi-filetype-json me-1"></i> JSON</button>
-                   </div>
-                </div>
-                <div class="bm-chart-container" style="position: relative; height: 350px; width: 100%;">
-                  <canvas id="incomeExpenseChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-pane fade" id="operations-pane" role="tabpanel">
-            <div class="row g-4">
-              
-              <div class="col-12 col-lg-8">
-                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-wrench-adjustable-circle-fill text-warning me-2"></i>ประสิทธิภาพงานซ่อม</h6>
-                <div class="row g-3 mb-4">
-                  <div class="col-12 col-md-4">
-                    <div class="p-4 bg-white rounded-4 border-0 shadow-sm h-100 text-center bm-stat-card border-bottom border-4 border-secondary">
-                      <div class="text-muted small fw-bold mb-2">จำนวนบิลซ่อม</div>
-                      <div class="h2 mb-1 fw-bold text-dark" id="reportJobsCountText">0</div>
-                      <div class="text-xs text-muted fw-medium">บิล</div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <div class="p-4 bg-white rounded-4 border-0 shadow-sm h-100 text-center bm-stat-card border-bottom border-4 border-warning">
-                      <div class="text-muted small fw-bold mb-2">รายได้งานซ่อมรวม</div>
-                      <div class="h2 mb-1 fw-bold text-warning" id="reportJobsTotalText">0.00</div>
-                      <div class="text-xs text-muted fw-medium">บาท</div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <div class="p-4 bg-white rounded-4 border-0 shadow-sm h-100 text-center bm-stat-card border-bottom border-4 border-info">
-                      <div class="text-muted small fw-bold mb-2">เฉลี่ยต่อบิล</div>
-                      <div class="h2 mb-1 fw-bold text-info" id="reportJobsAvgText">0.00</div>
-                      <div class="text-xs text-muted fw-medium">บาท / บิล</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card border-0 shadow-sm rounded-4 card-premium">
-                  <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4">
-                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-people-fill text-primary me-2"></i>Top 5 ลูกค้าที่มียอดใช้จ่ายสูงสุด</h6>
-                  </div>
-                  <div class="card-body p-0">
-                    <div class="table-responsive">
-                      <table class="table table-hover align-middle mb-0 small">
-                        <thead class="bg-light text-muted">
-                          <tr>
-                            <th class="ps-4 py-3 fw-semibold">อันดับ</th>
-                            <th class="py-3 fw-semibold">ชื่อลูกค้า</th>
-                            <th class="text-center py-3 fw-semibold">จำนวนบิล</th>
-                            <th class="text-end pe-4 py-3 fw-semibold">ยอดรวม (บาท)</th>
-                          </tr>
-                        </thead>
-                        <tbody id="topCustomersTbody" class="bg-white">
-                          <tr><td colspan="4" class="text-center text-muted py-4">ไม่มีข้อมูล</td></tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-4">
-                 <div class="card border-0 shadow-sm rounded-4 h-100 card-premium">
-                    <div class="card-body p-4">
-                      <h6 class="fw-bold text-center mb-4 text-dark"><i class="bi bi-pie-chart-fill text-primary me-2"></i>โครงสร้างรายได้งานซ่อม</h6>
-                      <div style="height: 250px; position: relative;">
-                        <canvas id="jobStructureChart"></canvas>
-                      </div>
-                      <div class="mt-4 p-3 bg-light rounded-4 border">
-                        <div class="d-flex justify-content-between border-bottom border-secondary-subtle pb-2 mb-2">
-                          <span class="text-dark fw-medium"><i class="bi bi-circle-fill text-primary me-2" style="font-size: 10px;"></i>ค่าอะไหล่</span>
-                          <span class="fw-bold fs-6 text-dark" id="structPartsText">0.00 ฿</span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                          <span class="text-dark fw-medium"><i class="bi bi-circle-fill text-warning me-2" style="font-size: 10px;"></i>ค่าแรงช่าง</span>
-                          <span class="fw-bold fs-6 text-dark" id="structLaborText">0.00 ฿</span>
-                        </div>
-                      </div>
-                    </div>
-                 </div>
-              </div>
-
-              <div class="col-12 mt-4">
-                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-car-front-fill text-info me-2"></i>สรุปธุรกิจซื้อ-ขายรถ</h6>
-                <div class="row g-3">
-                  <div class="col-6 col-md-3">
-                    <div class="card shadow-sm border-0 bg-info bg-opacity-10 rounded-4 bm-stat-card">
-                      <div class="card-body py-3 px-4">
-                         <div class="small fw-bold text-info-emphasis mb-1">ซื้อรถเข้า (คัน)</div>
-                         <div class="h3 fw-bold text-dark mb-0" id="reportVehiclesBuyCountText">0</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <div class="card shadow-sm border-0 bg-success bg-opacity-10 rounded-4 bm-stat-card">
-                      <div class="card-body py-3 px-4">
-                         <div class="small fw-bold text-success mb-1">ขายรถออก (คัน)</div>
-                         <div class="h3 fw-bold text-dark mb-0" id="reportVehiclesSoldCountText">0</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <div class="card shadow-sm border-0 border-start border-4 border-success rounded-4 bm-stat-card bg-white">
-                      <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
-                         <div>
-                           <div class="small text-muted fw-bold mb-1">กำไรสุทธิจากการขายรถ</div>
-                           <div class="h3 fw-bold text-success mb-0" id="reportVehiclesProfitText">0.00 ฿</div>
-                         </div>
-                         <i class="bi bi-cash-stack display-4 text-success opacity-25"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="tab-pane fade" id="inventory-pane" role="tabpanel">
-            
-            <div class="card shadow-sm border-0 mb-4 rounded-4 card-premium">
-              <div class="card-header bg-white py-4 border-0 px-4">
-                <h2 class="h6 fw-bold mb-0 text-dark">
-                  <i class="bi bi-graph-down-arrow text-primary me-2"></i>พยากรณ์สต๊อก (Inventory Forecasting)
-                </h2>
-                <p class="text-muted text-xs mb-0 mt-2 fw-medium">
-                  * คำนวณจากอัตราการใช้เฉลี่ยรายวันในช่วงเวลาที่เลือก เพื่อคาดการณ์ว่าสินค้าจะหมดในกี่วันข้างหน้า
-                </p>
-              </div>
-              <div class="card-body p-0">
-                <div class="table-responsive custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
-                  <table class="table table-hover align-middle mb-0 small">
-                    <thead class="bg-light text-secondary sticky-top border-bottom shadow-sm">
-                      <tr>
-                        <th class="ps-4 py-3 fw-semibold">สินค้า / รหัส</th>
-                        <th class="text-end py-3 fw-semibold">คงเหลือปัจจุบัน</th>
-                        <th class="text-end py-3 fw-semibold">ใช้วันละ (ชิ้น)</th>
-                        <th class="text-center py-3 fw-semibold">หมดภายใน (วัน)</th>
-                        <th class="text-center pe-4 py-3 fw-semibold">ระดับความเสี่ยง</th>
-                      </tr>
-                    </thead>
-                    <tbody id="forecastTbody" class="bg-white">
-                      <tr><td colspan="5" class="text-center py-5 text-muted fw-medium"><span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <div class="row g-4">
-              <div class="col-12 col-lg-4">
-                 <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
-                    <div class="card-header bg-warning bg-opacity-10 py-3 border-0 px-4">
-                       <h6 class="fw-bold mb-0 text-warning-emphasis"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>ของใกล้หมด (< 5 ชิ้น)</h6>
-                    </div>
-                    <div class="card-body p-0 small">
-                       <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
-                          <table class="table table-sm table-hover mb-0">
-                             <tbody id="lowStockTbody" class="bg-white">
-                                <tr><td class="text-center py-4 text-success fw-bold"><i class="bi bi-check-circle me-1"></i> ไม่มีรายการเตือน</td></tr>
-                             </tbody>
-                          </table>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-
-              <div class="col-12 col-lg-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
-                  <div class="card-header bg-danger bg-opacity-10 py-3 border-0 px-4">
-                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-recycle me-2"></i>Dead Stock (>90 วัน)</h6>
-                  </div>
-                  <div class="card-body p-0 small">
-                    <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
-                      <table class="table table-sm table-hover mb-0">
-                        <thead class="text-muted bg-light">
-                           <tr><th class="ps-4 py-2 fw-medium">สินค้า</th><th class="text-end pe-4 py-2 fw-medium">คงเหลือ</th></tr>
-                        </thead>
-                        <tbody id="deadStockTbody" class="bg-white">
-                          <tr><td colspan="2" class="text-center py-4 text-muted">ไม่มีข้อมูล</td></tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-lg-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
-                  <div class="card-header bg-success bg-opacity-10 py-3 border-0 px-4">
-                    <h6 class="fw-bold mb-0 text-success"><i class="bi bi-trophy-fill me-2"></i>สินค้าขายดี (Top 10)</h6>
-                  </div>
-                  <div class="card-body p-0 small">
-                    <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
-                      <table class="table table-sm table-hover mb-0">
-                        <thead class="text-muted bg-light">
-                           <tr><th class="ps-4 py-2 fw-medium">สินค้า</th><th class="text-end pe-4 py-2 fw-medium">ยอดใช้ (ชิ้น)</th></tr>
-                        </thead>
-                        <tbody id="topSellingTbody" class="bg-white">
-                          <tr><td colspan="2" class="text-center py-4 text-muted">ไม่มีข้อมูล</td></tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-pane fade" id="profit-pane" role="tabpanel">
-            <div class="row g-4">
-              <div class="col-12 col-md-6">
-                <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
-                  <div class="card-body d-flex flex-column align-items-center p-4">
-                    <h6 class="fw-bold text-dark mb-4 w-100 text-center"><i class="bi bi-pie-chart-fill text-success me-2"></i>สัดส่วนกำไรสุทธิ (Estimated Profit)</h6>
-                    <div style="height: 300px; width: 100%; position: relative;">
-                      <canvas id="profitBreakdownChart"></canvas>
-                    </div>
-                    <div class="mt-4 p-3 bg-light rounded-4 border border-secondary-subtle text-center small text-muted w-100">
-                      *เปรียบเทียบสัดส่วนรายได้หลักระหว่าง: <br><strong class="text-dark">รายได้งานซ่อม</strong> และ <strong class="text-dark">กำไรจากการขายรถ</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <div class="d-flex flex-column gap-3 h-100">
-                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-warning rounded-4 bm-stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <div class="text-muted small fw-bold mb-1">รายได้จากงานซ่อม (Jobs Revenue)</div>
-                        <div class="h3 fw-bold text-dark mb-0" id="analysisJobRevenue">0.00 ฿</div>
-                        <div class="text-xs text-muted mt-2 fw-medium bg-light d-inline-block px-2 py-1 rounded">จากทั้งหมด <span id="analysisJobCount" class="fw-bold text-dark">0</span> บิล</div>
-                      </div>
-                      <i class="bi bi-wrench-adjustable-circle display-4 text-warning opacity-25"></i>
-                    </div>
-                  </div>
-
-                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-info rounded-4 bm-stat-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <div class="text-muted small fw-bold mb-1">กำไรจากการขายรถ (Vehicles Profit)</div>
-                        <div class="h3 fw-bold text-success mb-0" id="analysisVehicleProfit">0.00 ฿</div>
-                        <div class="text-xs text-muted mt-2 fw-medium bg-light d-inline-block px-2 py-1 rounded">คำนวณจาก (ราคาขาย - ราคาซื้อ)</div>
-                      </div>
-                      <i class="bi bi-car-front-fill display-4 text-info opacity-25"></i>
-                    </div>
-                  </div>
-
-                  <div class="card border-0 shadow-sm p-4 bg-danger bg-opacity-10 rounded-4 bm-stat-card mt-auto">
-                     <div class="d-flex align-items-center">
-                        <i class="bi bi-wallet2 text-danger display-5 me-4"></i>
-                        <div>
-                           <div class="small fw-bold text-danger-emphasis mb-1">รายจ่ายอื่นๆ (Other Expenses)</div>
-                           <div class="h4 fw-bold text-danger mb-0" id="analysisOtherExpense">0.00 ฿</div>
-                           <div class="text-xs text-danger text-opacity-75 fw-medium mt-1">รายจ่ายทั่วไปที่บันทึกผ่านระบบการเงิน</div>
-                        </div>
-                     </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div> 
-        <div style="height: 5rem;"></div>
-      </div>
-    </main>
-
-    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
-      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-        <div class="d-flex px-3 py-2">
-          <div class="toast-body fw-medium fs-6 d-flex align-items-center" id="mainToastBody"></div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
-        </div>
-      </div>
-    </div>
-
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-      import { getFirestore, collection, doc, getDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-      const firebaseConfig = {
-        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
-        authDomain: "ben-motor.firebaseapp.com",
-        projectId: "ben-motor",
-        storageBucket: "ben-motor.firebasestorage.app",
-        messagingSenderId: "814162692446",
-        appId: "1:814162692446:web:7753156248d76938fce7cf",
-        measurementId: "G-TVDDW82Q5B"
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
-
-      // --- DOM Elements ---
-      const bodyEl = document.body;
-      const themeToggleBtn = document.getElementById("themeToggleBtn");
-      const logoutBtn = document.getElementById("logoutBtn");
-      
-      const reportsLoadingState = document.getElementById("reportsLoadingState");
-      const reportStartDateInput = document.getElementById("reportStartDateInput");
-      const reportEndDateInput = document.getElementById("reportEndDateInput");
-      const loadReportBtn = document.getElementById("loadReportBtn");
-      const loadReportSpinner = document.getElementById("loadReportSpinner");
-      const loadReportBtnText = document.getElementById("loadReportBtnText");
-
-      // Overview Tab Elements
-      const reportMoneyIncomeText = document.getElementById("reportMoneyIncomeText");
-      const reportMoneyExpenseText = document.getElementById("reportMoneyExpenseText");
-      const reportMoneyNetText = document.getElementById("reportMoneyNetText");
-      const reportMoneyIncomePrevText = document.getElementById("reportMoneyIncomePrevText");
-      const reportMoneyExpensePrevText = document.getElementById("reportMoneyExpensePrevText");
-      const reportMoneyNetPrevText = document.getElementById("reportMoneyNetPrevText");
-      const trendIncomeBadge = document.getElementById("trendIncomeBadge");
-      const trendExpenseBadge = document.getElementById("trendExpenseBadge");
-      const trendNetBadge = document.getElementById("trendNetBadge");
-
-      // Operations Tab Elements
-      const reportJobsCountText = document.getElementById("reportJobsCountText");
-      const reportJobsTotalText = document.getElementById("reportJobsTotalText");
-      const reportJobsAvgText = document.getElementById("reportJobsAvgText");
-      const reportVehiclesBuyCountText = document.getElementById("reportVehiclesBuyCountText");
-      const reportVehiclesSoldCountText = document.getElementById("reportVehiclesSoldCountText");
-      const reportVehiclesProfitText = document.getElementById("reportVehiclesProfitText");
-      const structPartsText = document.getElementById("structPartsText");
-      const structLaborText = document.getElementById("structLaborText");
-      const topCustomersTbody = document.getElementById("topCustomersTbody");
-
-      // Inventory Tab Elements
-      const forecastTbody = document.getElementById("forecastTbody");
-      const deadStockTbody = document.getElementById("deadStockTbody");
-      const lowStockTbody = document.getElementById("lowStockTbody");
-      const topSellingTbody = document.getElementById("topSellingTbody");
-
-      // Profit Tab Elements
-      const analysisJobRevenue = document.getElementById("analysisJobRevenue");
-      const analysisVehicleProfit = document.getElementById("analysisVehicleProfit");
-      const analysisOtherExpense = document.getElementById("analysisOtherExpense");
-      const analysisJobCount = document.getElementById("analysisJobCount");
-
-      // Chart Canvases
-      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
-      const profitBreakdownChartCanvas = document.getElementById("profitBreakdownChart");
-      const jobStructureChartCanvas = document.getElementById("jobStructureChart");
-
-      let currentUser = null;
-      let chartInstances = {};
-
-      let currentData = { transactions: [], jobs: [], vehiclesBuy: [], vehiclesSold: [], start: null, end: null };
-      let previousData = { transactions: [], start: null, end: null };
-      let allStockItems = [];
-
-      // --- Helpers ---
-      function showToast(msg, variant="success") {
-        const toastEl = document.getElementById("mainToast");
-        const body = document.getElementById("mainToastBody");
-        toastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow-lg rounded-pill`;
-        body.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-triangle'}-fill me-2 fs-5"></i> ${msg}`;
-        bootstrap.Toast.getOrCreateInstance(toastEl).show();
-      }
-
-      function formatNumber(num) { return Number(num || 0).toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-      function formatInt(num) { return Number(num || 0).toLocaleString("th-TH", { maximumFractionDigits: 0 }); }
-      function getTodayISO() { return new Date().toISOString().split('T')[0]; }
-
-      function calculateTrend(current, previous) {
-        if (!previous || previous === 0) return { percent: 100, isUp: true, text: "+100%" };
-        const diff = current - previous;
-        const percent = (diff / previous) * 100;
-        return { 
-           percent: Math.abs(percent).toFixed(1), 
-           isUp: percent >= 0, 
-           text: (percent >= 0 ? "+" : "") + percent.toFixed(1) + "%" 
-        };
-      }
-
-      function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
-         let finalClass = "badge border rounded-pill px-3 py-2 shadow-sm";
-         let iconHtml = "";
-
-         if (trend.isUp) {
-            const colorClass = goodIfUp ? "bg-success text-white border-success" : "bg-danger text-white border-danger";
-            finalClass += " " + colorClass; 
-            iconHtml = `<i class="bi bi-arrow-up-short fs-6"></i> ${trend.text}`;
-         } else {
-            const colorClass = goodIfUp ? "bg-danger text-white border-danger" : "bg-success text-white border-success";
-            finalClass += " " + colorClass;
-            iconHtml = `<i class="bi bi-arrow-down-short fs-6"></i> ${trend.text}`;
-         }
-
-         badgeEl.className = finalClass;
-         badgeEl.innerHTML = iconHtml;
-      }
-
-      // --- Setup Chart Defaults ---
-      Chart.defaults.font.family = "'Kanit', sans-serif";
-      Chart.defaults.color = '#6c757d';
-
-      // --- Main Data Loading ---
-      async function loadReports(startStr, endStr) {
-         if(!currentUser) return;
-         setLoading(true);
-         
-         currentData.start = startStr; currentData.end = endStr;
-         
-         const d1 = new Date(startStr); const d2 = new Date(endStr);
-         const diffTime = Math.abs(d2 - d1);
-         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-         
-         const prevEnd = new Date(d1); prevEnd.setDate(prevEnd.getDate() - 1);
-         const prevStart = new Date(prevEnd); prevStart.setDate(prevStart.getDate() - diffDays + 1);
-         
-         previousData.start = prevStart.toISOString().split('T')[0];
-         previousData.end = prevEnd.toISOString().split('T')[0];
-
-         try {
-            const branchId = (await getDoc(doc(db, "users", currentUser.uid))).data()?.branchId;
-
-            const txQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("date","asc"));
-            const jobsQuery = query(collection(db, "jobs"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
-            const vehBuyQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("buyDate",">=",startStr), where("buyDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
-            const vehSoldQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("status","==","sold"), where("sellDate",">=",startStr), where("sellDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
-            
-            const prevTxQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",previousData.start), where("date","<=",previousData.end), ...(branchId?[where("branchId","==",branchId)]:[]));
-            const stockQuery = query(collection(db, "stock"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
-
-            const [txSnap, jobsSnap, vBuySnap, vSoldSnap, prevTxSnap, stockSnap] = await Promise.all([
-               getDocs(txQuery), getDocs(jobsQuery), getDocs(vehBuyQuery), getDocs(vehSoldQuery), getDocs(prevTxQuery), getDocs(stockQuery)
-            ]);
-
-            currentData.transactions = txSnap.docs.map(d => ({id:d.id, ...d.data()}));
-            currentData.jobs = jobsSnap.docs.map(d => ({id:d.id, ...d.data()}));
-            currentData.vehiclesBuy = vBuySnap.docs.map(d => ({id:d.id, ...d.data()}));
-            currentData.vehiclesSold = vSoldSnap.docs.map(d => ({id:d.id, ...d.data()}));
-            
-            previousData.transactions = prevTxSnap.docs.map(d => ({id:d.id, ...d.data()}));
-            allStockItems = stockSnap.docs.map(d => ({id:d.id, ...d.data()}));
-
-            renderOverview();
-            renderOperations();
-            renderInventory();
-            renderProfit();
-            
-            showToast("อัปเดตรายงานเรียบร้อย", "success");
-
-         } catch (error) {
-            console.error(error);
-            showToast("เกิดข้อผิดพลาดในการโหลดข้อมูล", "danger");
-         } finally {
-            setLoading(false);
-         }
-      }
-
-      // --- Rendering Logic ---
-      function renderOverview() {
-         let inc = 0, exp = 0;
-         const dailyMap = {};
-         
-         let curr = new Date(currentData.start);
-         const last = new Date(currentData.end);
-         while(curr <= last){
-            dailyMap[curr.toISOString().split('T')[0]] = { income: 0, expense: 0 };
-            curr.setDate(curr.getDate()+1);
-         }
-
-         currentData.transactions.forEach(t => {
-            const amt = Number(t.amount||0);
-            if(t.type === "income") inc += amt; else exp += amt;
-            if(dailyMap[t.date]) {
-               if(t.type === "income") dailyMap[t.date].income += amt; else dailyMap[t.date].expense += amt;
-            }
-         });
-
-         let prevInc = 0, prevExp = 0;
-         previousData.transactions.forEach(t => {
-            if(t.type === "income") prevInc += Number(t.amount||0); else prevExp += Number(t.amount||0);
-         });
-
-         reportMoneyIncomeText.textContent = formatNumber(inc) + " ฿";
-         reportMoneyExpenseText.textContent = formatNumber(exp) + " ฿";
-         reportMoneyNetText.textContent = formatNumber(inc - exp) + " ฿";
-
-         reportMoneyIncomePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc)} ฿`;
-         reportMoneyExpensePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevExp)} ฿`;
-         reportMoneyNetPrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc - prevExp)} ฿`;
-
-         renderTrendBadge(trendIncomeBadge, calculateTrend(inc, prevInc), true);
-         renderTrendBadge(trendExpenseBadge, calculateTrend(exp, prevExp), false); 
-         renderTrendBadge(trendNetBadge, calculateTrend(inc-exp, prevInc-prevExp), true);
-
-         // Chart
-         const labels = Object.keys(dailyMap).sort();
-         const dataInc = labels.map(d => dailyMap[d].income);
-         const dataExp = labels.map(d => dailyMap[d].expense);
-
-         if(chartInstances.line) chartInstances.line.destroy();
-         const ctxLine = incomeExpenseChartCanvas.getContext('2d');
-         chartInstances.line = new Chart(ctxLine, {
-            type: 'bar',
-            data: {
-               labels: labels.map(d => { const p=d.split('-'); return `${p[2]}/${p[1]}`; }),
-               datasets: [
-                  { label: 'รายรับ', data: dataInc, backgroundColor: 'rgba(25, 135, 84, 0.8)', borderRadius: 4, borderWidth: 0, barThickness: 'flex', maxBarThickness: 40 },
-                  { label: 'รายจ่าย', data: dataExp, backgroundColor: 'rgba(220, 53, 69, 0.8)', borderRadius: 4, borderWidth: 0, barThickness: 'flex', maxBarThickness: 40 }
-               ]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins: { 
-                    legend: {position:'top', align:'end', labels: {usePointStyle: true, boxWidth: 10, font:{weight:'bold'}}},
-                    tooltip: { mode: 'index', intersect: false, backgroundColor: 'rgba(0,0,0,0.8)', padding: 12, titleFont: {size: 14}, bodyFont: {size: 14, weight: 'bold'} }
-                }, 
-                scales: { 
-                    x: { grid: {display: false}, border: {display: false} },
-                    y: { grid: { borderDash: [4, 4], color: 'rgba(0,0,0,0.05)' }, border: {display: false} }
-                } 
-            }
-         });
-      }
-
-      function renderOperations() {
-         const jobs = currentData.jobs;
-         let totalJobRev = 0;
-         let totalPartsRev = 0;
-         let totalLaborRev = 0;
-         const customerMap = {};
-
-         jobs.forEach(j => {
-            const total = Number(j.totalAmount||0);
-            totalJobRev += total;
-            
-            let calculatedFromItems = false; 
-
-            if(j.items && Array.isArray(j.items) && j.items.length > 0) {
-               let tempParts = 0;
-               let tempLabor = 0;
-
-               j.items.forEach(item => {
-                  const lineTotal = (Number(item.price||0) * Number(item.qty||1));
-                  const itemName = item.name || "";
-                  const isLabor = item.isLabor === true || itemName.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
-                  if(isLabor) tempLabor += lineTotal;
-                  else tempParts += lineTotal;
-               });
-
-               if(tempParts + tempLabor > 0) {
-                   totalPartsRev += tempParts;
-                   totalLaborRev += tempLabor;
-                   calculatedFromItems = true;
-               }
-            } 
-            
-            if(!calculatedFromItems) {
-               totalPartsRev += total * 0.7;
-               totalLaborRev += total * 0.3;
-            }
-
-            const custName = j.customerName || "ลูกค้าทั่วไป";
-            if(!customerMap[custName]) customerMap[custName] = { count: 0, total: 0 };
-            customerMap[custName].count++;
-            customerMap[custName].total += total;
-         });
-
-         reportJobsCountText.textContent = formatInt(jobs.length);
-         reportJobsTotalText.textContent = formatNumber(totalJobRev);
-         reportJobsAvgText.textContent = formatNumber(jobs.length ? totalJobRev/jobs.length : 0);
-
-         structPartsText.textContent = formatNumber(totalPartsRev) + " ฿";
-         structLaborText.textContent = formatNumber(totalLaborRev) + " ฿";
-
-         if(chartInstances.struct) chartInstances.struct.destroy();
-         chartInstances.struct = new Chart(jobStructureChartCanvas, {
-            type: 'doughnut',
-            data: {
-               labels: ['ค่าอะไหล่', 'ค่าแรง'],
-               datasets: [{ data: [totalPartsRev, totalLaborRev], backgroundColor: ['#0d6efd', '#ffc107'], borderWidth: 2, borderColor: '#fff', hoverOffset: 5 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, cutout: '75%' }
-         });
-
-         const sortedCust = Object.entries(customerMap).sort(([,a], [,b]) => b.total - a.total).slice(0, 5);
-         
-         topCustomersTbody.innerHTML = "";
-         if(sortedCust.length === 0) topCustomersTbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-5"><i class="bi bi-person-x fs-3 d-block mb-2 opacity-50"></i>ไม่มีข้อมูลลูกค้าในช่วงนี้</td></tr>`;
-         sortedCust.forEach(([name, data], idx) => {
-             // ไฮไลท์อันดับ 1-3
-             let rankBadge = `<span class="badge bg-light text-dark border rounded-circle shadow-sm" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;">${idx+1}</span>`;
-             if(idx === 0) rankBadge = `<span class="badge bg-warning text-dark border-warning rounded-circle shadow" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;"><i class="bi bi-trophy-fill"></i></span>`;
-             else if(idx === 1) rankBadge = `<span class="badge bg-secondary text-white rounded-circle shadow-sm" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;">2</span>`;
-             else if(idx === 2) rankBadge = `<span class="badge bg-primary bg-opacity-75 text-white rounded-circle shadow-sm" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;">3</span>`;
-
-            topCustomersTbody.innerHTML += `
-               <tr>
-                  <td class="ps-4">${rankBadge}</td>
-                  <td class="fw-bold text-dark">${name}</td>
-                  <td class="text-center"><span class="badge bg-light text-dark border fw-normal">${data.count} บิล</span></td>
-                  <td class="text-end pe-4 fw-bold text-success">${formatNumber(data.total)} ฿</td>
-               </tr>`;
-         });
-
-         let vProfit = 0;
-         currentData.vehiclesSold.forEach(v => {
-            vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0)));
-         });
-         reportVehiclesBuyCountText.textContent = formatInt(currentData.vehiclesBuy.length);
-         reportVehiclesSoldCountText.textContent = formatInt(currentData.vehiclesSold.length);
-         reportVehiclesProfitText.textContent = formatNumber(vProfit) + " ฿";
-      }
-
-      function renderInventory() {
-         const usageMap = {};
-         currentData.jobs.forEach(j => {
-            if(j.items && Array.isArray(j.items)) {
-               j.items.forEach(i => {
-                  const k = i.stockId || i.stockName;
-                  if(k && i.stockId) usageMap[i.stockId] = (usageMap[i.stockId]||0) + Number(i.qty||0);
-               });
-            }
-         });
-
-         const daysInRange = Math.max(1, Math.ceil(Math.abs(new Date(currentData.end)-new Date(currentData.start))/(1000*60*60*24)));
-         const forecastList = [];
-         const lowStockList = [];
-
-         allStockItems.forEach(item => {
-            const used = usageMap[item.id] || 0;
-            const currentQty = Number(item.qty || 0);
-            
-            if(currentQty > 0 && used > 0) {
-               const rate = used / daysInRange;
-               const daysLeft = Math.floor(currentQty / rate);
-               forecastList.push({ name: item.name, code: item.code, currentQty, rate, daysLeft });
-            }
-
-            if(currentQty <= 5 && currentQty > 0) {
-               lowStockList.push(item);
-            }
-         });
-
-         forecastList.sort((a,b) => a.daysLeft - b.daysLeft);
-         forecastTbody.innerHTML = "";
-         if(forecastList.length===0) forecastTbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted fw-medium"><i class="bi bi-graph-down fs-3 d-block mb-2 opacity-50"></i> ข้อมูลไม่เพียงพอในการพยากรณ์</td></tr>`;
-         forecastList.slice(0, 20).forEach(i => {
-            const badge = i.daysLeft<7 ? `<span class="badge bg-danger shadow-sm px-3 py-2">หมดเร็วๆนี้ (วิกฤต)</span>` : (i.daysLeft<30 ? `<span class="badge bg-warning text-dark shadow-sm px-3 py-2">เฝ้าระวัง</span>` : `<span class="badge bg-success shadow-sm px-3 py-2">ปกติ</span>`);
-            forecastTbody.innerHTML += `
-            <tr>
-              <td class="ps-4 py-3"><div class="fw-bold text-dark">${i.name}</div><div class="text-xs text-muted"><i class="bi bi-upc-scan me-1"></i>${i.code||"-"}</div></td>
-              <td class="text-end fw-bold fs-6">${formatInt(i.currentQty)}</td>
-              <td class="text-end fw-medium text-secondary">${i.rate.toFixed(2)}</td>
-              <td class="text-center fw-bold text-primary fs-5">${i.daysLeft}</td>
-              <td class="text-center pe-4">${badge}</td>
-            </tr>`;
-         });
-
-         lowStockTbody.innerHTML = "";
-         if(lowStockList.length === 0) lowStockTbody.innerHTML = `<tr><td class="text-center py-5 text-success fw-bold"><i class="bi bi-check-circle-fill fs-3 d-block mb-2"></i> สต๊อกเพียงพอทุกรายการ</td></tr>`;
-         lowStockList.forEach(i => {
-            lowStockTbody.innerHTML += `<tr><td class="ps-4 py-3 d-flex justify-content-between align-items-center"><span class="fw-bold text-dark">${i.name}</span><span class="badge bg-danger rounded-pill px-3 shadow-sm">เหลือ ${i.qty}</span></td></tr>`;
-         });
-
-         const ninetyDaysAgo = new Date(); ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-         const deadList = allStockItems.filter(i => {
-            const lastUpd = i.updatedAt ? i.updatedAt.toDate() : (i.createdAt ? i.createdAt.toDate() : new Date());
-            return Number(i.qty) > 0 && lastUpd < ninetyDaysAgo;
-         });
-         deadStockTbody.innerHTML = "";
-         if(deadList.length===0) deadStockTbody.innerHTML = `<tr><td colspan="2" class="text-center py-5 text-success fw-bold"><i class="bi bi-emoji-smile-fill fs-3 d-block mb-2"></i> เยี่ยม! ไม่พบสินค้าค้างนาน</td></tr>`;
-         deadList.slice(0, 10).forEach(i => {
-            deadStockTbody.innerHTML += `<tr><td class="ps-4 py-3 text-truncate fw-medium text-dark" style="max-width: 150px;">${i.name}</td><td class="text-end pe-4 fw-bold text-danger">${i.qty}</td></tr>`;
-         });
-
-         const topList = Object.keys(usageMap).map(id => {
-            const item = allStockItems.find(s => s.id === id);
-            return { name: item ? item.name : "สินค้าที่ถูกลบ", qty: usageMap[id] };
-         }).sort((a,b) => b.qty - a.qty).slice(0, 10);
-         
-         topSellingTbody.innerHTML = "";
-         if(topList.length===0) topSellingTbody.innerHTML = `<tr><td colspan="2" class="text-center py-5 text-muted fw-medium"><i class="bi bi-inbox fs-3 d-block mb-2 opacity-50"></i> ไม่มีข้อมูล</td></tr>`;
-         topList.forEach(i => {
-             topSellingTbody.innerHTML += `<tr><td class="ps-4 py-3 text-truncate fw-bold text-dark" style="max-width: 150px;">${i.name}</td><td class="text-end pe-4 fw-bold text-success fs-6">${i.qty}</td></tr>`;
-         });
-      }
-
-      function renderProfit() {
-         let jobRev = 0;
-         currentData.jobs.forEach(j => jobRev += Number(j.totalAmount||0));
-         
-         let vProfit = 0;
-         currentData.vehiclesSold.forEach(v => vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0))));
-
-         let otherExp = 0;
-         currentData.transactions.forEach(t => {
-            if(t.type === 'expense') otherExp += Number(t.amount||0);
-         });
-
-         analysisJobRevenue.textContent = formatNumber(jobRev) + " ฿";
-         analysisJobCount.textContent = formatInt(currentData.jobs.length);
-         analysisVehicleProfit.textContent = formatNumber(vProfit) + " ฿";
-         analysisOtherExpense.textContent = formatNumber(otherExp) + " ฿";
-
-         if(chartInstances.profit) chartInstances.profit.destroy();
-         chartInstances.profit = new Chart(profitBreakdownChartCanvas, {
-            type: 'pie',
-            data: {
-               labels: ['รายได้งานซ่อม', 'กำไรขายรถ'],
-               datasets: [{
-                  data: [jobRev, vProfit],
-                  backgroundColor: ['#ffc107', '#0dcaf0'],
-                  borderWidth: 2,
-                  borderColor: '#fff',
-                  hoverOffset: 10
-               }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: {usePointStyle: true, padding: 20, font: {weight: 'bold'}} } } }
-         });
-      }
-
-      function setLoading(isLoading) {
-         if(isLoading) {
-            loadReportSpinner.classList.remove("d-none");
-            loadReportBtn.disabled = true;
-            reportsLoadingState.innerHTML = `<span class="spinner-border spinner-border-sm me-1 text-primary"></span> กำลังประมวลผล...`;
-            reportsLoadingState.className = "badge bg-light text-primary border border-primary-subtle px-3 py-2 rounded-pill shadow-sm";
-         } else {
-            loadReportSpinner.classList.add("d-none");
-            loadReportBtn.disabled = false;
-            reportsLoadingState.innerHTML = `<i class="bi bi-check2-circle me-1"></i> ข้อมูลล่าสุด`;
-            reportsLoadingState.className = "badge bg-success text-white border-success px-3 py-2 rounded-pill shadow-sm";
-         }
-      }
-
-      function setDateRange(key) {
-         // อัปเดตปุ่ม Preset สีเขียว
-         document.querySelectorAll(".bm-report-range-preset-btn").forEach(b => {
-             b.classList.remove("active", "btn-success", "text-white");
-             b.classList.add("btn-outline-secondary");
-             if(b.dataset.range === key) {
-                b.classList.remove("btn-outline-secondary");
-                b.classList.add("active", "btn-success", "text-white");
-             }
-         });
-
-         let start = "", end = getTodayISO();
-         const d = new Date();
-         if(key === "today") { start = end; }
-         else if(key === "yesterday") {
-            d.setDate(d.getDate() - 1);
-            start = end = d.toISOString().split('T')[0];
-         } else if(key === "7d") {
-            d.setDate(d.getDate() - 6);
-            start = d.toISOString().split('T')[0];
-         } else if(key === "30d") {
-            d.setDate(d.getDate() - 29);
-            start = d.toISOString().split('T')[0];
-         } else if(key === "thisMonth") {
-            start = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
-         }
-         
-         reportStartDateInput.value = start;
-         reportEndDateInput.value = end;
-         loadReports(start, end);
-      }
-
-      // --- Init ---
-      onAuthStateChanged(auth, async (user) => {
-         if (!user) { window.location.href = "index.html"; return; }
-         currentUser = user;
-
-         // Load Profile
-         const snap = await getDoc(doc(db, "users", user.uid));
-         if(snap.exists()) {
-            const d = snap.data();
-            document.getElementById("userDisplayNameText").textContent = d.displayName || "User";
-            if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = d.displayName || "User";
-            document.getElementById("userAvatarInitial").textContent = (d.displayName||"U").charAt(0).toUpperCase();
-            document.getElementById("userRoleText").textContent = d.role === "admin" ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
-         }
-         
-         // Theme
-         const t = localStorage.getItem("bm-theme-" + user.uid) || "light";
-         bodyEl.classList.add("bm-theme-" + t);
-         if (t === "dark") {
-             bodyEl.classList.add("bg-dark");
-             bodyEl.classList.remove("bg-light");
-             themeToggleBtn.querySelector("i").className = "bi bi-sun fs-5";
-         } else {
-             themeToggleBtn.querySelector("i").className = "bi bi-moon fs-5";
-         }
-
-         // Events
-         document.querySelectorAll(".bm-report-range-preset-btn").forEach(b => {
-            b.addEventListener("click", () => setDateRange(b.dataset.range));
-         });
-         
-         loadReportBtn.addEventListener("click", () => {
-             // เคลียร์ปุ่ม Preset ถ้าผู้ใช้เลือกวันเอง
-             document.querySelectorAll(".bm-report-range-preset-btn").forEach(b => {
-                 b.classList.remove("active", "btn-success", "text-white");
-                 b.classList.add("btn-outline-secondary");
-             });
-             loadReports(reportStartDateInput.value, reportEndDateInput.value);
-         });
-
-         if(logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
-         if(themeToggleBtn) themeToggleBtn.addEventListener("click", () => {
-            const isDark = bodyEl.classList.contains("bm-theme-dark");
-            const newTheme = isDark ? "light" : "dark";
-            bodyEl.className = newTheme === "dark" ? "bm-theme-dark bg-dark" : "bm-theme-light bg-light";
-            themeToggleBtn.querySelector("i").className = newTheme === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
-            localStorage.setItem("bm-theme-" + user.uid, newTheme);
-         });
-
-         setDateRange("30d");
-      });
-    </script>
-  </body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>BEN MOTOR – รายงานวิเคราะห์ธุรกิจ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="icon" type="image/x-icon" href="img/icon.ico" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      @media print {
+        .bm-topbar, .bm-bottom-nav, .bm-fab-container, #themeToggleBtn, .btn-no-print {
+          display: none !important;
+        }
+        body { padding-top: 0; padding-bottom: 0; background-color: #fff; }
+        .bm-main-content { min-height: auto; }
+        .card { border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid; }
+        .nav-pills { display: none !important; }
+        .tab-content > .tab-pane { display: block !important; opacity: 1 !important; margin-bottom: 2rem; }
+        .bm-chart-container { height: 250px !important; }
+      }
+    </style>
+  </head>
+
+  <body class="bm-theme-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1 fw-bold text-success">
+          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        </span>
+        <div class="d-flex align-items-center gap-2">
+          <button
+            class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent"
+            id="themeToggleBtn"
+            type="button"
+          >
+            <i class="bi bi-moon fs-5"></i>
+          </button>
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+            >
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
+                <span id="userAvatarInitial" class="fw-bold">U</span>
+              </span>
+              <span class="small text-start d-none d-sm-block">
+                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
+                <span class="text-muted text-xs" id="userRoleText">-</span>
+              </span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
+               <li><a class="dropdown-item py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i> แดชบอร์ด</a></li>
+               <li><hr class="dropdown-divider" /></li>
+               <li><button class="dropdown-item py-2 text-danger" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="bm-main-content">
+      <div class="container py-3">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+          <div>
+            <h1 class="h5 mb-1 fw-bold text-success">
+              <i class="bi bi-pie-chart-fill me-2"></i>รายงานวิเคราะห์ธุรกิจ
+            </h1>
+            <p class="small text-muted mb-0">
+              วิเคราะห์รายได้, เปรียบเทียบยอดขาย, และพยากรณ์สต๊อก (Full Analytics)
+            </p>
+          </div>
+          <button class="btn btn-outline-dark btn-sm rounded-pill btn-no-print" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> พิมพ์
+          </button>
+        </div>
+
+        <section class="mb-4 btn-no-print">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body small">
+              <div class="row g-2 align-items-center mb-3">
+                <div class="col-12 col-lg-8">
+                  <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <span class="fw-semibold text-muted me-1"><i class="bi bi-calendar-range me-1"></i>เลือกช่วงเวลา:</span>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="today">วันนี้</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="yesterday">เมื่อวาน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="7d">7 วัน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="30d">30 วัน</button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm bm-report-range-preset-btn" data-range="thisMonth">เดือนนี้</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-4 text-lg-end">
+                  <span class="badge bg-light text-dark border" id="reportsLoadingState">รอโหลดข้อมูล...</span>
+                </div>
+              </div>
+
+              <div class="row g-2 align-items-end p-2 bg-light rounded-3 border">
+                <div class="col-6 col-md-3">
+                  <label class="form-label small mb-1 fw-bold text-muted">เริ่มต้น</label>
+                  <input type="date" class="form-control form-control-sm" id="reportStartDateInput" />
+                </div>
+                <div class="col-6 col-md-3">
+                  <label class="form-label small mb-1 fw-bold text-muted">สิ้นสุด</label>
+                  <input type="date" class="form-control form-control-sm" id="reportEndDateInput" />
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                  <button type="button" class="btn btn-success btn-sm px-4" id="loadReportBtn">
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="loadReportSpinner"></span>
+                    <span id="loadReportBtnText"><i class="bi bi-search me-1"></i> ประมวลผลรายงาน</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <ul class="nav nav-pills mb-4 nav-fill gap-2 p-1 bg-white rounded-3 shadow-sm border" id="reportTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview-pane" type="button">
+              <i class="bi bi-wallet2 me-1"></i> การเงิน & ภาพรวม
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="operations-tab" data-bs-toggle="tab" data-bs-target="#operations-pane" type="button">
+              <i class="bi bi-wrench-adjustable me-1"></i> งานซ่อม & ลูกค้า
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory-pane" type="button">
+              <i class="bi bi-box-seam me-1"></i> สต๊อก & สินค้า
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill" id="profit-tab" data-bs-toggle="tab" data-bs-target="#profit-pane" type="button">
+              <i class="bi bi-graph-up-arrow me-1"></i> กำไรสุทธิ
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="reportTabsContent">
+          
+          <div class="tab-pane fade show active" id="overview-pane" role="tabpanel">
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-arrow-down-circle-fill text-success me-2"></i>
+                        <span class="text-muted small fw-semibold">รายรับรวม</span>
+                      </div>
+                      <span class="badge bg-light text-muted border rounded-pill" id="trendIncomeBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-success" id="reportMoneyIncomeText">0.00 ฿</div>
+                    <div class="small text-muted mt-1" id="reportMoneyIncomePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-arrow-up-circle-fill text-danger me-2"></i>
+                        <span class="text-muted small fw-semibold">รายจ่ายรวม</span>
+                      </div>
+                      <span class="badge bg-light text-muted border rounded-pill" id="trendExpenseBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-danger" id="reportMoneyExpenseText">0.00 ฿</div>
+                    <div class="small text-muted mt-1" id="reportMoneyExpensePrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card bm-stat-card h-100 border-0 shadow-sm bg-primary-subtle border-primary">
+                  <div class="card-body py-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-wallet2 text-primary me-2"></i>
+                        <span class="text-muted small fw-semibold">กระแสเงินสด (Net)</span>
+                      </div>
+                      <span class="badge bg-white text-primary border rounded-pill" id="trendNetBadge">...%</span>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-primary" id="reportMoneyNetText">0.00 ฿</div>
+                     <div class="small text-primary text-opacity-75 mt-1" id="reportMoneyNetPrevText">เทียบกับช่วงก่อน: 0.00 ฿</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                   <h6 class="fw-bold text-secondary mb-0"><i class="bi bi-bar-chart-line me-2"></i>แนวโน้มรายรับ-รายจ่ายรายวัน</h6>
+                   <div class="btn-group btn-group-sm btn-no-print">
+                      <button class="btn btn-outline-success" id="exportReportCsvBtn"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
+                      <button class="btn btn-outline-secondary" id="exportReportJsonBtn"><i class="bi bi-filetype-json me-1"></i> JSON</button>
+                   </div>
+                </div>
+                <div class="bm-chart-container" style="position: relative; height: 320px; width: 100%;">
+                  <canvas id="incomeExpenseChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="operations-pane" role="tabpanel">
+            <div class="row g-4">
+              
+              <div class="col-12 col-lg-8">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-wrench-adjustable-circle me-2"></i>ประสิทธิภาพงานซ่อม</h6>
+                <div class="row g-3 mb-4">
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">จำนวนบิลซ่อม</div>
+                      <div class="h3 mb-0 fw-bold text-dark" id="reportJobsCountText">0</div>
+                      <div class="text-xs text-muted">บิล</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">รายได้งานซ่อมรวม</div>
+                      <div class="h3 mb-0 fw-bold text-warning" id="reportJobsTotalText">0.00</div>
+                      <div class="text-xs text-muted">บาท</div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <div class="p-3 bg-white rounded-3 border shadow-sm h-100 text-center">
+                      <div class="text-muted small mb-1">เฉลี่ยต่อบิล</div>
+                      <div class="h3 mb-0 fw-bold text-info" id="reportJobsAvgText">0.00</div>
+                      <div class="text-xs text-muted">บาท/บิล</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                  <div class="card-header bg-transparent border-0 pt-3 pb-2">
+                    <h6 class="fw-bold mb-0 text-secondary"><i class="bi bi-people-fill me-2"></i>Top 5 ลูกค้าที่มียอดใช้จ่ายสูงสุด</h6>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-hover align-middle mb-0 small">
+                        <thead class="bg-light text-secondary">
+                          <tr>
+                            <th class="ps-3">#</th>
+                            <th>ชื่อลูกค้า</th>
+                            <th class="text-center">จำนวนบิล</th>
+                            <th class="text-end pe-3">ยอดรวม (บาท)</th>
+                          </tr>
+                        </thead>
+                        <tbody id="topCustomersTbody">
+                          <tr><td colspan="4" class="text-center text-muted py-3">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                 <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                      <h6 class="fw-bold text-center mb-3">โครงสร้างรายได้งานซ่อม</h6>
+                      <div style="height: 220px; position: relative;">
+                        <canvas id="jobStructureChart"></canvas>
+                      </div>
+                      <div class="mt-3 small">
+                        <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                          <span class="text-muted"><i class="bi bi-circle-fill text-primary me-1" style="font-size: 8px;"></i>ค่าอะไหล่</span>
+                          <span class="fw-bold" id="structPartsText">0.00 ฿</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <span class="text-muted"><i class="bi bi-circle-fill text-warning me-1" style="font-size: 8px;"></i>ค่าแรงช่าง</span>
+                          <span class="fw-bold" id="structLaborText">0.00 ฿</span>
+                        </div>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="col-12">
+                <h6 class="fw-bold text-info mb-3"><i class="bi bi-car-front-fill me-2"></i>สรุปธุรกิจซื้อ-ขายรถ</h6>
+                <div class="row g-3">
+                  <div class="col-6 col-md-3">
+                    <div class="card shadow-sm border-0 bg-info-subtle">
+                      <div class="card-body py-2 px-3">
+                         <div class="small text-muted">ซื้อเข้า (คัน)</div>
+                         <div class="h4 fw-bold text-dark mb-0" id="reportVehiclesBuyCountText">0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="card shadow-sm border-0 bg-success-subtle">
+                      <div class="card-body py-2 px-3">
+                         <div class="small text-muted">ขายออก (คัน)</div>
+                         <div class="h4 fw-bold text-dark mb-0" id="reportVehiclesSoldCountText">0</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="card shadow-sm border-0 border-start border-4 border-success">
+                      <div class="card-body py-2 d-flex align-items-center justify-content-between">
+                         <div>
+                           <div class="small text-muted fw-bold">กำไรขั้นต้นจากการขายรถ</div>
+                           <div class="h4 fw-bold text-success mb-0" id="reportVehiclesProfitText">0.00 ฿</div>
+                         </div>
+                         <i class="bi bi-cash-stack fs-1 text-success opacity-25"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="inventory-pane" role="tabpanel">
+            
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-header bg-white py-3 border-0">
+                <h2 class="h6 fw-bold mb-0 text-primary">
+                  <i class="bi bi-graph-down-arrow me-2"></i>พยากรณ์สต๊อก (Inventory Forecasting)
+                </h2>
+                <p class="text-muted text-xs mb-0 mt-1">
+                  คำนวณจากอัตราการใช้เฉลี่ยรายวันในช่วงเวลาที่เลือก เพื่อคาดการณ์ว่าสินค้าจะหมดในกี่วัน
+                </p>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 400px;">
+                  <table class="table table-hover align-middle mb-0 small">
+                    <thead class="bg-light text-secondary sticky-top">
+                      <tr>
+                        <th class="ps-3">สินค้า</th>
+                        <th class="text-end">คงเหลือ</th>
+                        <th class="text-end">ใช้วันละ (ชิ้น)</th>
+                        <th class="text-center">หมดภายใน (วัน)</th>
+                        <th class="text-center pe-3">ความเสี่ยง</th>
+                      </tr>
+                    </thead>
+                    <tbody id="forecastTbody">
+                      <tr><td colspan="5" class="text-center py-4 text-muted">กำลังประมวลผล...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-12 col-lg-4">
+                 <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-warning bg-opacity-10 py-3 border-0">
+                       <h6 class="fw-bold mb-0 text-warning text-dark-emphasis"><i class="bi bi-exclamation-triangle-fill me-2"></i>ของใกล้หมด (< 5 ชิ้น)</h6>
+                    </div>
+                    <div class="card-body p-0 small">
+                       <div class="table-responsive" style="max-height: 300px;">
+                          <table class="table table-sm table-hover mb-0">
+                             <tbody id="lowStockTbody">
+                                <tr><td class="text-center py-3 text-muted">ไม่มีรายการเตือน</td></tr>
+                             </tbody>
+                          </table>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-header bg-danger bg-opacity-10 py-3 border-0">
+                    <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-recycle me-2"></i>Dead Stock (>90 วัน)</h6>
+                  </div>
+                  <div class="card-body p-0 small">
+                    <div class="table-responsive" style="max-height: 300px;">
+                      <table class="table table-sm table-hover mb-0">
+                        <thead class="text-muted">
+                           <tr><th class="ps-3">สินค้า</th><th class="text-end pe-3">คงเหลือ</th></tr>
+                        </thead>
+                        <tbody id="deadStockTbody">
+                          <tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-header bg-success bg-opacity-10 py-3 border-0">
+                    <h6 class="fw-bold mb-0 text-success"><i class="bi bi-trophy-fill me-2"></i>สินค้าขายดี (Top 10)</h6>
+                  </div>
+                  <div class="card-body p-0 small">
+                    <div class="table-responsive" style="max-height: 300px;">
+                      <table class="table table-sm table-hover mb-0">
+                        <thead class="text-muted">
+                           <tr><th class="ps-3">สินค้า</th><th class="text-end pe-3">ยอดใช้</th></tr>
+                        </thead>
+                        <tbody id="topSellingTbody">
+                          <tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="profit-pane" role="tabpanel">
+            <div class="row g-4">
+              <div class="col-12 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                  <div class="card-body d-flex flex-column align-items-center">
+                    <h6 class="fw-bold text-secondary mb-3 w-100 text-center">สัดส่วนกำไรสุทธิ (Estimated Profit)</h6>
+                    <div style="height: 280px; width: 100%; position: relative;">
+                      <canvas id="profitBreakdownChart"></canvas>
+                    </div>
+                    <div class="mt-3 text-center small text-muted px-4">
+                      *เปรียบเทียบระหว่าง: <strong>รายได้งานซ่อม</strong> และ <strong>กำไรจากการขายรถ</strong> (หมายเหตุ: ยังไม่หักค่าใช้จ่ายดำเนินงานอื่นๆ ของร้าน เช่น ค่าน้ำค่าไฟ)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="d-flex flex-column gap-3 h-100">
+                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-warning">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="text-muted small fw-bold">รายได้จากงานซ่อม (Jobs Revenue)</div>
+                        <div class="h3 fw-bold text-dark mb-0" id="analysisJobRevenue">0.00 ฿</div>
+                        <div class="text-xs text-muted mt-1">จากทั้งหมด <span id="analysisJobCount" class="fw-bold">0</span> บิล</div>
+                      </div>
+                      <i class="bi bi-wrench-adjustable-circle fs-1 text-warning opacity-25"></i>
+                    </div>
+                  </div>
+
+                  <div class="card border-0 shadow-sm p-4 bg-white border-start border-4 border-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div class="text-muted small fw-bold">กำไรจากการขายรถ (Vehicles Profit)</div>
+                        <div class="h3 fw-bold text-success mb-0" id="analysisVehicleProfit">0.00 ฿</div>
+                        <div class="text-xs text-muted mt-1">คำนวณจาก (ราคาขาย - ราคาซื้อ)</div>
+                      </div>
+                      <i class="bi bi-car-front-fill fs-1 text-info opacity-25"></i>
+                    </div>
+                  </div>
+
+                  <div class="card border-0 shadow-sm p-3 bg-danger-subtle">
+                     <div class="d-flex align-items-center">
+                        <i class="bi bi-wallet2 text-danger fs-3 me-3"></i>
+                        <div>
+                           <div class="small fw-bold text-danger-emphasis">รายจ่ายอื่นๆ (Transactions)</div>
+                           <div class="h5 fw-bold text-danger mb-0" id="analysisOtherExpense">0.00 ฿</div>
+                           <div class="text-xs text-muted">ค่าใช้จ่ายทั่วไปที่บันทึกในระบบ</div>
+                        </div>
+                     </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <div style="height: 5rem;"></div>
+      </div>
+    </main>
+	<nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
+      <div class="container-fluid px-0">
+        <div class="row g-0 w-100 text-center small">
+          <div class="col"><a href="dashboard.html" class="bm-bottom-nav-link"><i class="bi bi-speedometer2 d-block fs-5"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col"><a href="open-bill.html" class="bm-bottom-nav-link"><i class="bi bi-receipt-cutoff d-block fs-5"></i><span>เปิดบิล</span></a></div>
+          <div class="col"><a href="jobs.html" class="bm-bottom-nav-link"><i class="bi bi-wrench-adjustable-circle d-block fs-5"></i><span>งานซ่อม</span></a></div>
+          <div class="col"><a href="vehicles.html" class="bm-bottom-nav-link"><i class="bi bi-truck-front d-block fs-5"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col"><a href="stock.html" class="bm-bottom-nav-link"><i class="bi bi-box-seam d-block fs-5"></i><span>สต๊อก</span></a></div>
+          <div class="col"><a href="finance.html" class="bm-bottom-nav-link"><i class="bi bi-cash-coin d-block fs-5"></i><span>เงินเข้าออก</span></a></div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
+      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex">
+          <div class="toast-body fw-medium" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" id="hiddenDownloadLink" style="display: none;"></a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, getDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
+        authDomain: "ben-motor.firebaseapp.com",
+        projectId: "ben-motor",
+        storageBucket: "ben-motor.firebasestorage.app",
+        messagingSenderId: "814162692446",
+        appId: "1:814162692446:web:7753156248d76938fce7cf",
+        measurementId: "G-TVDDW82Q5B"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // --- DOM Elements ---
+      const bodyEl = document.body;
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      
+      // Filter Elements
+      const reportsLoadingState = document.getElementById("reportsLoadingState");
+      const reportStartDateInput = document.getElementById("reportStartDateInput");
+      const reportEndDateInput = document.getElementById("reportEndDateInput");
+      const loadReportBtn = document.getElementById("loadReportBtn");
+      const loadReportSpinner = document.getElementById("loadReportSpinner");
+      const loadReportBtnText = document.getElementById("loadReportBtnText");
+
+      // Overview Tab Elements
+      const reportMoneyIncomeText = document.getElementById("reportMoneyIncomeText");
+      const reportMoneyExpenseText = document.getElementById("reportMoneyExpenseText");
+      const reportMoneyNetText = document.getElementById("reportMoneyNetText");
+      const reportMoneyIncomePrevText = document.getElementById("reportMoneyIncomePrevText");
+      const reportMoneyExpensePrevText = document.getElementById("reportMoneyExpensePrevText");
+      const reportMoneyNetPrevText = document.getElementById("reportMoneyNetPrevText");
+      const trendIncomeBadge = document.getElementById("trendIncomeBadge");
+      const trendExpenseBadge = document.getElementById("trendExpenseBadge");
+      const trendNetBadge = document.getElementById("trendNetBadge");
+      const exportReportJsonBtn = document.getElementById("exportReportJsonBtn");
+      const exportReportCsvBtn = document.getElementById("exportReportCsvBtn");
+      const hiddenDownloadLink = document.getElementById("hiddenDownloadLink");
+
+      // Operations Tab Elements
+      const reportJobsCountText = document.getElementById("reportJobsCountText");
+      const reportJobsTotalText = document.getElementById("reportJobsTotalText");
+      const reportJobsAvgText = document.getElementById("reportJobsAvgText");
+      const reportVehiclesBuyCountText = document.getElementById("reportVehiclesBuyCountText");
+      const reportVehiclesSoldCountText = document.getElementById("reportVehiclesSoldCountText");
+      const reportVehiclesProfitText = document.getElementById("reportVehiclesProfitText");
+      const structPartsText = document.getElementById("structPartsText");
+      const structLaborText = document.getElementById("structLaborText");
+      const topCustomersTbody = document.getElementById("topCustomersTbody");
+
+      // Inventory Tab Elements
+      const forecastTbody = document.getElementById("forecastTbody");
+      const deadStockTbody = document.getElementById("deadStockTbody");
+      const lowStockTbody = document.getElementById("lowStockTbody");
+      const topSellingTbody = document.getElementById("topSellingTbody");
+
+      // Profit Tab Elements
+      const analysisJobRevenue = document.getElementById("analysisJobRevenue");
+      const analysisVehicleProfit = document.getElementById("analysisVehicleProfit");
+      const analysisOtherExpense = document.getElementById("analysisOtherExpense");
+      const analysisJobCount = document.getElementById("analysisJobCount");
+
+      // Chart Canvases
+      const incomeExpenseChartCanvas = document.getElementById("incomeExpenseChart");
+      const profitBreakdownChartCanvas = document.getElementById("profitBreakdownChart");
+      const jobStructureChartCanvas = document.getElementById("jobStructureChart");
+
+      let currentUser = null;
+      let chartInstances = {};
+
+      // Data Stores
+      let currentData = {
+        transactions: [], jobs: [], vehiclesBuy: [], vehiclesSold: [], start: null, end: null
+      };
+      let previousData = {
+        transactions: [], start: null, end: null
+      };
+      let allStockItems = [];
+
+      // --- Helpers ---
+      function showToast(msg, variant="primary") {
+        const toastEl = document.getElementById("mainToast");
+        const body = document.getElementById("mainToastBody");
+        toastEl.className = `toast align-items-center text-bg-${variant} border-0 shadow`;
+        body.textContent = msg;
+        bootstrap.Toast.getOrCreateInstance(toastEl).show();
+      }
+
+      function formatNumber(num) {
+        return Number(num || 0).toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function formatInt(num) {
+        return Number(num || 0).toLocaleString("th-TH", { maximumFractionDigits: 0 });
+      }
+      function getTodayISO() {
+        return new Date().toISOString().split('T')[0];
+      }
+
+      function calculateTrend(current, previous) {
+        if (!previous || previous === 0) return { percent: 100, isUp: true, text: "+100%" };
+        const diff = current - previous;
+        const percent = (diff / previous) * 100;
+        return { 
+           percent: Math.abs(percent).toFixed(1), 
+           isUp: percent >= 0, 
+           text: (percent >= 0 ? "+" : "") + percent.toFixed(1) + "%" 
+        };
+      }
+
+function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
+         // Base classes (คลาสพื้นฐาน)
+         let finalClass = "badge border rounded-pill";
+         let iconHtml = "";
+
+         // ตรวจสอบทิศทาง (ขึ้น/ลง) เพื่อเลือกสีและไอคอน
+         if (trend.isUp) {
+            // ถ้าขึ้น: ดี=สีเขียว / ไม่ดี=สีแดง
+            const colorClass = goodIfUp ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger";
+            finalClass += " " + colorClass; 
+            iconHtml = `<i class="bi bi-arrow-up-short"></i> ${trend.text}`;
+         } else {
+            // ถ้าลง: ดี=สีแดง / ไม่ดี=สีเขียว (เช่น รายจ่ายลดลงถือว่าดี)
+            // *หมายเหตุ: Logic เดิมของคุณกำหนดไว้แบบนี้ (Good if Up)
+            // ถ้า GoodIfUp=true แปลว่า "ขึ้นดี" -> ลงไม่ดี (แดง)
+            // ถ้า GoodIfUp=false แปลว่า "ขึ้นไม่ดี" (แดง) -> ลงดี (เขียว)
+            const colorClass = goodIfUp ? "bg-danger-subtle text-danger" : "bg-success-subtle text-success";
+            finalClass += " " + colorClass;
+            iconHtml = `<i class="bi bi-arrow-down-short"></i> ${trend.text}`;
+         }
+
+         // กำหนดค่ากลับไปที่ Element ทีเดียวจบ (แก้ Error ตรงนี้)
+         badgeEl.className = finalClass;
+         badgeEl.innerHTML = iconHtml;
+      }
+
+      // --- Main Data Loading ---
+      async function loadReports(startStr, endStr) {
+         if(!currentUser) return;
+         setLoading(true);
+         
+         currentData.start = startStr; currentData.end = endStr;
+         
+         // Calculate Previous Period
+         const d1 = new Date(startStr); const d2 = new Date(endStr);
+         const diffTime = Math.abs(d2 - d1);
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+         
+         const prevEnd = new Date(d1); prevEnd.setDate(prevEnd.getDate() - 1);
+         const prevStart = new Date(prevEnd); prevStart.setDate(prevStart.getDate() - diffDays + 1);
+         
+         previousData.start = prevStart.toISOString().split('T')[0];
+         previousData.end = prevEnd.toISOString().split('T')[0];
+
+         try {
+            const branchId = (await getDoc(doc(db, "users", currentUser.uid))).data()?.branchId;
+
+            // 1. Fetch Current Data
+            const txQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("date","asc"));
+            const jobsQuery = query(collection(db, "jobs"), where("isDeleted","==",false), where("date",">=",startStr), where("date","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            const vehBuyQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("buyDate",">=",startStr), where("buyDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            const vehSoldQuery = query(collection(db, "vehicles"), where("isDeleted","==",false), where("status","==","sold"), where("sellDate",">=",startStr), where("sellDate","<=",endStr), ...(branchId?[where("branchId","==",branchId)]:[]));
+            
+            // 2. Fetch Previous Data (Only Transactions for Trend)
+            const prevTxQuery = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",previousData.start), where("date","<=",previousData.end), ...(branchId?[where("branchId","==",branchId)]:[]));
+
+            // 3. Fetch Stock (One time)
+            const stockQuery = query(collection(db, "stock"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
+
+            const [txSnap, jobsSnap, vBuySnap, vSoldSnap, prevTxSnap, stockSnap] = await Promise.all([
+               getDocs(txQuery), getDocs(jobsQuery), getDocs(vehBuyQuery), getDocs(vehSoldQuery), getDocs(prevTxQuery), getDocs(stockQuery)
+            ]);
+
+            currentData.transactions = txSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.jobs = jobsSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.vehiclesBuy = vBuySnap.docs.map(d => ({id:d.id, ...d.data()}));
+            currentData.vehiclesSold = vSoldSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            
+            previousData.transactions = prevTxSnap.docs.map(d => ({id:d.id, ...d.data()}));
+            allStockItems = stockSnap.docs.map(d => ({id:d.id, ...d.data()}));
+
+            // Process All Sections
+            renderOverview();
+            renderOperations();
+            renderInventory();
+            renderProfit();
+            
+            showToast("อัปเดตรายงานเรียบร้อย", "success");
+
+         } catch (error) {
+            console.error(error);
+            showToast("เกิดข้อผิดพลาด: " + error.message, "danger");
+         } finally {
+            setLoading(false);
+         }
+      }
+
+      // --- Rendering Logic ---
+
+      function renderOverview() {
+         // Current
+         let inc = 0, exp = 0;
+         const dailyMap = {};
+         
+         // Init date range
+         let curr = new Date(currentData.start);
+         const last = new Date(currentData.end);
+         while(curr <= last){
+            dailyMap[curr.toISOString().split('T')[0]] = { income: 0, expense: 0 };
+            curr.setDate(curr.getDate()+1);
+         }
+
+         currentData.transactions.forEach(t => {
+            const amt = Number(t.amount||0);
+            if(t.type === "income") inc += amt; else exp += amt;
+            if(dailyMap[t.date]) {
+               if(t.type === "income") dailyMap[t.date].income += amt; else dailyMap[t.date].expense += amt;
+            }
+         });
+
+         // Previous
+         let prevInc = 0, prevExp = 0;
+         previousData.transactions.forEach(t => {
+            if(t.type === "income") prevInc += Number(t.amount||0); else prevExp += Number(t.amount||0);
+         });
+
+         // Update UI Stats
+         reportMoneyIncomeText.textContent = formatNumber(inc) + " ฿";
+         reportMoneyExpenseText.textContent = formatNumber(exp) + " ฿";
+         reportMoneyNetText.textContent = formatNumber(inc - exp) + " ฿";
+
+         reportMoneyIncomePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc)} ฿`;
+         reportMoneyExpensePrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevExp)} ฿`;
+         reportMoneyNetPrevText.textContent = `เทียบก่อนหน้า: ${formatNumber(prevInc - prevExp)} ฿`;
+
+         // Trends
+         renderTrendBadge(trendIncomeBadge, calculateTrend(inc, prevInc), true);
+         renderTrendBadge(trendExpenseBadge, calculateTrend(exp, prevExp), false); // Expense up is bad
+         renderTrendBadge(trendNetBadge, calculateTrend(inc-exp, prevInc-prevExp), true);
+
+         // Chart
+         const labels = Object.keys(dailyMap).sort();
+         const dataInc = labels.map(d => dailyMap[d].income);
+         const dataExp = labels.map(d => dailyMap[d].expense);
+
+         if(chartInstances.line) chartInstances.line.destroy();
+         chartInstances.line = new Chart(incomeExpenseChartCanvas, {
+            type: 'bar',
+            data: {
+               labels: labels.map(d => d.slice(5)), // MM-DD
+               datasets: [
+                  { label: 'รายรับ', data: dataInc, backgroundColor: '#198754', borderRadius: 3 },
+                  { label: 'รายจ่าย', data: dataExp, backgroundColor: '#dc3545', borderRadius: 3 }
+               ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {position:'bottom'} }, scales: { x: { grid: {display: false} } } }
+         });
+      }
+
+      function renderOperations() {
+         // Jobs Stats
+         const jobs = currentData.jobs;
+         let totalJobRev = 0;
+         let totalPartsRev = 0;
+         let totalLaborRev = 0;
+         const customerMap = {};
+
+         jobs.forEach(j => {
+            const total = Number(j.totalAmount||0);
+            totalJobRev += total;
+            
+// Analyze Items for Structure
+            let calculatedFromItems = false; // ตัวแปรเช็คว่าดึงจากรายการสินค้าได้จริงไหม
+
+            if(j.items && Array.isArray(j.items) && j.items.length > 0) {
+               let tempParts = 0;
+               let tempLabor = 0;
+
+               j.items.forEach(item => {
+                  const lineTotal = (Number(item.price||0) * Number(item.qty||1));
+                  
+                  const itemName = item.name || "";
+                  const isLabor = item.isLabor === true || itemName.toLowerCase().includes('ค่าแรง') || item.type === 'labor';
+                  
+                  if(isLabor) tempLabor += lineTotal;
+                  else tempParts += lineTotal;
+               });
+
+               // ถ้าคำนวณไส้ในออกมาแล้วมีค่ามากกว่า 0 ให้นับว่าใช้ได้
+               if(tempParts + tempLabor > 0) {
+                   totalPartsRev += tempParts;
+                   totalLaborRev += tempLabor;
+                   calculatedFromItems = true;
+               }
+            } 
+            
+            // ถ้าดึงจากรายการไม่ได้ (หรือเป็น 0) ให้ใช้สูตรสำรอง (อะไหล่ 70% : ค่าแรง 30%) จากยอดรวมแทน
+            if(!calculatedFromItems) {
+               totalPartsRev += total * 0.7;
+               totalLaborRev += total * 0.3;
+            }
+
+            // Customer Ranking
+            const custName = j.customerName || "ลูกค้าทั่วไป";
+            if(!customerMap[custName]) customerMap[custName] = { count: 0, total: 0 };
+            customerMap[custName].count++;
+            customerMap[custName].total += total;
+         });
+
+         reportJobsCountText.textContent = formatInt(jobs.length);
+         reportJobsTotalText.textContent = formatNumber(totalJobRev);
+         reportJobsAvgText.textContent = formatNumber(jobs.length ? totalJobRev/jobs.length : 0);
+
+         // Structure Chart
+         structPartsText.textContent = formatNumber(totalPartsRev) + " ฿";
+         structLaborText.textContent = formatNumber(totalLaborRev) + " ฿";
+
+         if(chartInstances.struct) chartInstances.struct.destroy();
+         chartInstances.struct = new Chart(jobStructureChartCanvas, {
+            type: 'doughnut',
+            data: {
+               labels: ['ค่าอะไหล่', 'ค่าแรง'],
+               datasets: [{ data: [totalPartsRev, totalLaborRev], backgroundColor: ['#0d6efd', '#ffc107'], borderWidth: 0 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, cutout: '70%' }
+         });
+
+         // Top Customers
+         const sortedCust = Object.entries(customerMap)
+            .sort(([,a], [,b]) => b.total - a.total)
+            .slice(0, 5);
+         
+         topCustomersTbody.innerHTML = "";
+         if(sortedCust.length === 0) topCustomersTbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">ไม่มีข้อมูล</td></tr>`;
+         sortedCust.forEach(([name, data], idx) => {
+            topCustomersTbody.innerHTML += `
+               <tr>
+                  <td class="ps-3"><span class="badge bg-light text-dark border rounded-circle" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;">${idx+1}</span></td>
+                  <td class="fw-medium">${name}</td>
+                  <td class="text-center text-muted">${data.count}</td>
+                  <td class="text-end pe-3 fw-bold text-success">${formatNumber(data.total)}</td>
+               </tr>`;
+         });
+
+         // Vehicles
+         let vProfit = 0;
+         currentData.vehiclesSold.forEach(v => {
+            vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0)));
+         });
+         reportVehiclesBuyCountText.textContent = formatInt(currentData.vehiclesBuy.length);
+         reportVehiclesSoldCountText.textContent = formatInt(currentData.vehiclesSold.length);
+         reportVehiclesProfitText.textContent = formatNumber(vProfit) + " ฿";
+      }
+
+      function renderInventory() {
+         const usageMap = {};
+         currentData.jobs.forEach(j => {
+            if(j.items && Array.isArray(j.items)) {
+               j.items.forEach(i => {
+                  const k = i.stockId || i.stockName;
+                  if(k && i.stockId) usageMap[i.stockId] = (usageMap[i.stockId]||0) + Number(i.qty||0);
+               });
+            }
+         });
+
+         // Forecast & Low Stock
+         const daysInRange = Math.max(1, Math.ceil(Math.abs(new Date(currentData.end)-new Date(currentData.start))/(1000*60*60*24)));
+         const forecastList = [];
+         const lowStockList = [];
+
+         allStockItems.forEach(item => {
+            const used = usageMap[item.id] || 0;
+            const currentQty = Number(item.qty || 0);
+            
+            // Forecast logic
+            if(currentQty > 0 && used > 0) {
+               const rate = used / daysInRange;
+               const daysLeft = Math.floor(currentQty / rate);
+               forecastList.push({ name: item.name, code: item.code, currentQty, rate, daysLeft });
+            }
+
+            // Low Stock logic (< 5)
+            if(currentQty <= 5 && currentQty > 0) {
+               lowStockList.push(item);
+            }
+         });
+
+         // Render Forecast
+         forecastList.sort((a,b) => a.daysLeft - b.daysLeft);
+         forecastTbody.innerHTML = "";
+         if(forecastList.length===0) forecastTbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">ข้อมูลไม่เพียงพอในการพยากรณ์</td></tr>`;
+         forecastList.slice(0, 20).forEach(i => {
+            const badge = i.daysLeft<7 ? `<span class="badge bg-danger">วิกฤต</span>` : (i.daysLeft<30 ? `<span class="badge bg-warning text-dark">เฝ้าระวัง</span>` : `<span class="badge bg-success">ปกติ</span>`);
+            forecastTbody.innerHTML += `<tr><td class="ps-3"><div class="fw-bold">${i.name}</div><div class="text-xs text-muted">${i.code||""}</div></td><td class="text-end fw-bold">${formatInt(i.currentQty)}</td><td class="text-end small">${i.rate.toFixed(2)}</td><td class="text-center fw-bold text-primary">${i.daysLeft}</td><td class="text-center pe-3">${badge}</td></tr>`;
+         });
+
+         // Render Low Stock
+         lowStockTbody.innerHTML = "";
+         if(lowStockList.length === 0) lowStockTbody.innerHTML = `<tr><td class="text-center py-3 text-success"><i class="bi bi-check-circle me-1"></i> สต๊อกเพียงพอทุกรายการ</td></tr>`;
+         lowStockList.forEach(i => {
+            lowStockTbody.innerHTML += `<tr><td class="ps-3 d-flex justify-content-between align-items-center"><span>${i.name}</span><span class="badge bg-danger rounded-pill">${i.qty}</span></td></tr>`;
+         });
+
+         // Render Dead Stock (>90 days)
+         const ninetyDaysAgo = new Date(); ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+         const deadList = allStockItems.filter(i => {
+            const lastUpd = i.updatedAt ? i.updatedAt.toDate() : (i.createdAt ? i.createdAt.toDate() : new Date());
+            return Number(i.qty) > 0 && lastUpd < ninetyDaysAgo;
+         });
+         deadStockTbody.innerHTML = "";
+         if(deadList.length===0) deadStockTbody.innerHTML = `<tr><td colspan="2" class="text-center py-3 text-success">เยี่ยม! ไม่พบสินค้าค้างนาน</td></tr>`;
+         deadList.slice(0, 10).forEach(i => {
+            deadStockTbody.innerHTML += `<tr><td class="ps-3 text-truncate" style="max-width: 150px;">${i.name}</td><td class="text-end pe-3 fw-bold text-danger">${i.qty}</td></tr>`;
+         });
+
+         // Render Top Selling
+         const topList = Object.keys(usageMap).map(id => {
+            const item = allStockItems.find(s => s.id === id);
+            return { name: item ? item.name : "สินค้าที่ถูกลบ", qty: usageMap[id] };
+         }).sort((a,b) => b.qty - a.qty).slice(0, 10);
+         
+         topSellingTbody.innerHTML = "";
+         if(topList.length===0) topSellingTbody.innerHTML = `<tr><td colspan="2" class="text-center py-3 text-muted">ไม่มีข้อมูล</td></tr>`;
+         topList.forEach(i => {
+             topSellingTbody.innerHTML += `<tr><td class="ps-3 text-truncate" style="max-width: 150px;">${i.name}</td><td class="text-end pe-3 fw-bold text-success">${i.qty}</td></tr>`;
+         });
+      }
+
+      function renderProfit() {
+         let jobRev = 0;
+         currentData.jobs.forEach(j => jobRev += Number(j.totalAmount||0));
+         
+         let vProfit = 0;
+         currentData.vehiclesSold.forEach(v => vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0))));
+
+         let otherExp = 0;
+         currentData.transactions.forEach(t => {
+            if(t.type === 'expense') otherExp += Number(t.amount||0);
+         });
+
+         analysisJobRevenue.textContent = formatNumber(jobRev) + " ฿";
+         analysisJobCount.textContent = formatInt(currentData.jobs.length);
+         analysisVehicleProfit.textContent = formatNumber(vProfit) + " ฿";
+         analysisOtherExpense.textContent = formatNumber(otherExp) + " ฿";
+
+         if(chartInstances.profit) chartInstances.profit.destroy();
+         chartInstances.profit = new Chart(profitBreakdownChartCanvas, {
+            type: 'pie',
+            data: {
+               labels: ['รายได้งานซ่อม', 'กำไรขายรถ'],
+               datasets: [{
+                  data: [jobRev, vProfit],
+                  backgroundColor: ['#ffc107', '#0dcaf0'],
+                  hoverOffset: 10
+               }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+         });
+      }
+
+      function setLoading(isLoading) {
+         if(isLoading) {
+            loadReportSpinner.classList.remove("d-none");
+            loadReportBtn.disabled = true;
+            reportsLoadingState.textContent = "กำลังประมวลผล...";
+            reportsLoadingState.className = "badge bg-warning text-dark border";
+         } else {
+            loadReportSpinner.classList.add("d-none");
+            loadReportBtn.disabled = false;
+            reportsLoadingState.textContent = "ข้อมูลล่าสุด";
+            reportsLoadingState.className = "badge bg-success text-white border";
+         }
+      }
+
+      function setDateRange(key) {
+         let start = "", end = getTodayISO();
+         const d = new Date();
+         if(key === "today") { start = end; }
+         else if(key === "yesterday") {
+            d.setDate(d.getDate() - 1);
+            start = end = d.toISOString().split('T')[0];
+         } else if(key === "7d") {
+            d.setDate(d.getDate() - 6);
+            start = d.toISOString().split('T')[0];
+         } else if(key === "30d") {
+            d.setDate(d.getDate() - 29);
+            start = d.toISOString().split('T')[0];
+         } else if(key === "thisMonth") {
+            start = new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
+         }
+         
+         reportStartDateInput.value = start;
+         reportEndDateInput.value = end;
+         loadReports(start, end);
+      }
+
+      // --- Init ---
+      onAuthStateChanged(auth, async (user) => {
+         if (!user) { window.location.href = "index.html"; return; }
+         currentUser = user;
+
+         // Theme
+         const t = localStorage.getItem("bm-theme-" + user.uid) || "light";
+         bodyEl.classList.add("bm-theme-" + t);
+
+         // Load Profile
+         const snap = await getDoc(doc(db, "users", user.uid));
+         if(snap.exists()) {
+            const d = snap.data();
+            document.getElementById("userDisplayNameText").textContent = d.displayName || "User";
+            document.getElementById("userAvatarInitial").textContent = (d.displayName||"U").charAt(0).toUpperCase();
+            document.getElementById("userRoleText").textContent = d.role === "admin" ? "Admin" : "Staff";
+         }
+
+         // Events
+         document.querySelectorAll(".bm-report-range-preset-btn").forEach(b => {
+            b.addEventListener("click", () => setDateRange(b.dataset.range));
+         });
+         
+         loadReportBtn.addEventListener("click", () => loadReports(reportStartDateInput.value, reportEndDateInput.value));
+
+         if(logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
+         if(themeToggleBtn) themeToggleBtn.addEventListener("click", () => {
+           const isDark = bodyEl.classList.contains("bm-theme-dark");
+           bodyEl.classList.replace("bm-theme-" + (isDark?"dark":"light"), "bm-theme-" + (isDark?"light":"dark"));
+           localStorage.setItem("bm-theme-" + user.uid, isDark ? "light" : "dark");
+        });
+
+         // Default Load
+         setDateRange("30d");
+      });
+    </script>
+  </body>
 </html>
