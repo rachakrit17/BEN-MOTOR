@@ -5,134 +5,115 @@
     <title>BEN MOTOR – ประวัติลูกค้า &amp; รถ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      /* อัปเกรด UI พรีเมียมของร้าน BEN MOTOR */
+      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; border-radius: 1rem; }
+      .card-premium:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
+      .bm-stat-card { transition: all 0.3s ease; border-radius: 1rem; border: none; background-color: #fff; }
+      .bm-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
+      .form-control:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
+      .cursor-pointer { cursor: pointer; }
+      
+      /* สไตล์ลิสต์ประวัติ Timeline */
+      .timeline-item-premium { border-left: 3px solid #dee2e6; transition: all 0.2s ease; background-color: #fff; border-radius: 0.5rem; }
+      .timeline-item-premium:hover { background-color: rgba(25, 135, 84, 0.02)!important; border-left-color: #198754!important; }
+      
+      @media print {
+        .bm-topbar, .bm-bottom-nav, .btn-no-print, .no-print-section { display: none !important; }
+        body { padding-top: 0; padding-bottom: 0; background-color: #fff; }
+        .bm-main-content { min-height: auto; }
+        .card { border: none !important; box-shadow: none !important; }
+        .table th, .table td { color: #000 !important; }
+      }
+    </style>
   </head>
 
-  <body class="bm-theme-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+  <body class="bm-theme-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom btn-no-print">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
+          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
         </span>
         <div class="d-flex align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent"
-            id="themeToggleBtn"
-            type="button"
-          >
+          <button class="btn btn-sm btn-outline-secondary rounded-circle border-0 bg-transparent" id="themeToggleBtn" type="button">
             <i class="bi bi-moon fs-5"></i>
           </button>
           <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
-              type="button"
-              id="userMenuButton"
-              data-bs-toggle="dropdown"
-            >
+            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown">
               <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">Loading...</span><br />
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-               <li><a class="dropdown-item py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i> แดชบอร์ด</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-4 p-2">
+               <li><a class="dropdown-item py-2 fw-medium rounded-3" href="dashboard.html"><i class="bi bi-speedometer2 me-2 text-primary"></i> แดชบอร์ด</a></li>
                <li><hr class="dropdown-divider" /></li>
-               <li><button class="dropdown-item py-2 text-danger" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
+               <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <main class="bm-main-content">
+    <main class="bm-main-content pb-5 mt-5 pt-3">
       <div class="container py-3">
         
-        <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
           <div>
-            <h1 class="h5 mb-1 fw-bold text-success">
-              <i class="bi bi-person-lines-fill me-2"></i>ประวัติลูกค้า &amp; รถ
+            <h1 class="h4 mb-1 fw-bold text-dark d-flex align-items-center">
+              <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle me-3 d-flex"><i class="bi bi-person-lines-fill"></i></span>ประวัติลูกค้า &amp; รถ
             </h1>
-            <p class="small text-muted mb-0">
-              ค้นหาข้อมูล ดูประวัติซ่อม และวิเคราะห์การใช้บริการ
+            <p class="small text-muted mb-0 ms-1 mt-2">
+              <i class="bi bi-info-circle me-1"></i> ค้นหาข้อมูล ดูประวัติซ่อม และวิเคราะห์การใช้บริการของลูกค้าในอู่
             </p>
           </div>
-          <span class="badge text-bg-secondary shadow-sm">
-            โหมดดูข้อมูล
+          <span class="badge bg-white text-secondary border shadow-sm px-3 py-2 rounded-pill fw-bold">
+             <i class="bi bi-eye-fill text-primary me-1"></i> โหมดดูข้อมูล
           </span>
         </div>
 
         <section id="initialStateBox" class="mb-4">
-          <div class="alert alert-info small mb-0 shadow-sm border-0 d-flex align-items-center">
-            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
-            <div>
-              พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้า แล้วกด <strong>ค้นหา</strong> เพื่อดูประวัติย้อนหลังทั้งหมด
+          <div class="alert alert-success bg-success bg-opacity-10 border-success-subtle small mb-0 shadow-sm rounded-3 d-flex align-items-center py-3">
+            <i class="bi bi-info-circle-fill me-3 fs-4 text-success"></i>
+            <div class="text-success-emphasis fw-medium">
+              พิมพ์ชื่อ, เบอร์โทร หรือทะเบียนรถของลูกค้า แล้วกด <strong>ค้นหา</strong> เพื่อดูประวัติรายรับและการซ่อมย้อนหลังทั้งหมด
             </div>
           </div>
         </section>
 
-        <section class="mb-4">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body">
-              <form id="searchForm" class="row g-2 align-items-end">
-                <div class="col-12 col-md-6 col-lg-7">
-                  <label for="searchKeyword" class="form-label small mb-1 fw-bold text-muted">
-                    คีย์เวิร์ดค้นหา
-                  </label>
-                  <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0">
+        <section class="mb-4 no-print-section">
+          <div class="card border-0 shadow-sm rounded-4 card-premium bg-white">
+            <div class="card-body p-4">
+              <form id="searchForm" class="row g-3 align-items-end">
+                <div class="col-12 col-md-6 col-lg-8">
+                  <label for="searchKeyword" class="form-label small mb-1 fw-bold text-dark">คำค้นหาข้อมูลลูกค้า</label>
+                  <div class="input-group shadow-sm">
+                    <span class="input-group-text bg-light border-end-0">
                       <i class="bi bi-search text-muted"></i>
                     </span>
-                    <input
-                      type="search"
-                      class="form-control border-start-0 ps-0"
-                      id="searchKeyword"
-                      placeholder="เช่น 089xxxxxxx, สมชาย, 1กข1234"
-                      autocomplete="off"
-                    />
+                    <input type="search" class="form-control border-start-0 ps-0 text-dark fw-medium" id="searchKeyword" placeholder="เช่น 089xxxxxxx, สมชาย, 1กข1234" autocomplete="off" required />
                   </div>
                 </div>
                 <div class="col-6 col-md-3 col-lg-2">
-                  <button
-                    type="submit"
-                    class="btn btn-success w-100"
-                    id="searchBtn"
-                  >
-                    ค้นหา
-                  </button>
+                  <button type="submit" class="btn btn-success w-100 fw-bold hover-elevate py-2 rounded-pill shadow-sm" id="searchBtn">ค้นหาข้อมูล</button>
                 </div>
-                <div class="col-6 col-md-3 col-lg-3">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary w-100"
-                    id="resetBtn"
-                  >
+                <div class="col-6 col-md-3 col-lg-2">
+                  <button type="button" class="btn btn-outline-secondary w-100 fw-medium hover-elevate py-2 rounded-pill" id="resetBtn">
                     <i class="bi bi-arrow-counterclockwise me-1"></i> ล้างค่า
                   </button>
                 </div>
               </form>
-              <div class="d-flex justify-content-between align-items-center mt-2">
-                <p class="small text-muted mb-0 text-xs" id="searchHint">
-                  <i class="bi bi-magic me-1"></i>ระบบจะค้นหาจาก <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อ</strong> อัตโนมัติ
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-light">
+                <p class="small text-muted mb-0 text-xs fw-medium" id="searchHint">
+                  <i class="bi bi-magic text-primary me-1"></i>ระบบอัจฉริยะจะแยกแยะ <strong>เบอร์โทร, ทะเบียนรถ หรือชื่อลูกค้า</strong> ค้นหาให้โดยอัตโนมัติ
                 </p>
               </div>
             </div>
@@ -140,45 +121,43 @@
         </section>
 
         <section id="loadingState" class="mb-3 d-none">
-          <div class="text-center py-4">
-            <div class="spinner-border text-primary mb-2" role="status"></div>
-            <div class="small text-muted">กำลังดึงข้อมูลประวัติทั้งหมด...</div>
+          <div class="text-center py-5">
+            <div class="spinner-border text-success mb-3" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+            <div class="small text-success fw-bold">กำลังดึงข้อมูลประวัติและประมวลผลทั้งหมด...</div>
           </div>
         </section>
 
         <section id="noResultBox" class="mb-3 d-none">
-          <div class="alert alert-warning small mb-0 shadow-sm border-0 d-flex align-items-center">
-            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-            <div>
-              ไม่พบข้อมูลลูกค้าตามคำค้นนี้ในระบบ กรุณาลองใช้ข้อมูลอื่น (เช่น ทะเบียนรถ)
+          <div class="alert alert-danger bg-danger bg-opacity-10 border-danger-subtle small mb-0 shadow-sm rounded-3 d-flex align-items-center py-3">
+            <i class="bi bi-exclamation-triangle-fill me-3 fs-4 text-danger"></i>
+            <div class="text-danger-emphasis fw-bold">
+              ไม่พบข้อมูลลูกค้าหรือประวัติรถตามคำค้นนี้ในฐานข้อมูลร้าน กรุณาตรวจสอบและลองใช้ข้อมูลอื่น (เช่น ทะเบียนรถตัวติดกัน)
             </div>
           </div>
         </section>
 
         <section id="customerSummarySection" class="mb-4 d-none">
-          <div class="card bm-card-summary shadow-sm">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-2 card-premium">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
                 <div class="d-flex align-items-center">
-                  <div
-                    class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center me-3 bm-avatar-circle-lg shadow-sm"
-                  >
-                    <span id="summaryAvatarInitial" class="fw-bold fs-4">C</span>
+                  <div class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-3 bm-avatar-circle-lg shadow" id="summaryAvatarInitial" style="width: 60px; height: 60px;">
+                    <span class="fw-bold fs-3">C</span>
                   </div>
                   <div>
-                    <div class="small text-muted mb-0">ชื่อลูกค้า</div>
-                    <h2 class="h5 mb-1 fw-bold text-dark" id="summaryCustomerName">-</h2>
-                    <div class="d-flex flex-wrap gap-2 align-items-center small text-muted">
-                        <span><i class="bi bi-telephone me-1"></i><span id="summaryCustomerPhone">-</span></span>
+                    <div class="text-muted small fw-bold mb-1">ข้อมูลผู้เข้ารับบริการหลัก</div>
+                    <h2 class="h4 mb-1 fw-bold text-dark" id="summaryCustomerName">-</h2>
+                    <div class="d-flex flex-wrap gap-3 align-items-center small text-secondary fw-semibold mt-1">
+                        <span><i class="bi bi-telephone-fill text-success me-1"></i><span id="summaryCustomerPhone">-</span></span>
                     </div>
-                    <div class="small text-muted mt-1" id="summaryOtherPhonesRow" style="display: none;">
-                      <span class="badge bg-light text-secondary border">เบอร์อื่น: <span id="summaryOtherPhones">-</span></span>
+                    <div class="small text-muted mt-2" id="summaryOtherPhonesRow" style="display: none;">
+                      <span class="badge bg-light text-secondary border px-2 py-1">เบอร์โทรอื่น: <span id="summaryOtherPhones">-</span></span>
                     </div>
                   </div>
                 </div>
-                <div class="text-end small">
-                  <span class="text-muted d-block mb-1">ผลการค้นหาจาก:</span>
-                  <span id="summarySearchTypeLabel" class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2 rounded-pill">
+                <div class="text-md-end">
+                  <span class="text-muted small d-block mb-1 fw-medium">ผลวิเคราะห์จากประเภท:</span>
+                  <span id="summarySearchTypeLabel" class="badge bg-success bg-opacity-10 text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold">
                     -
                   </span>
                 </div>
@@ -186,53 +165,53 @@
 
               <hr class="opacity-10 my-4" />
 
-              <div class="row g-3">
-                <div class="col-6 col-md-3">
-                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">งานซ่อมทั้งหมด</div>
-                    <div class="h4 mb-0 fw-bold text-primary" id="summaryJobsCount">0</div>
-                    <div class="small text-muted">บิล</div>
+              <div class="bm-dashboard-grid">
+                <div class="bm-stat-card shadow-sm border p-3 bg-light bg-opacity-50">
+                  <div class="text-muted small mb-1 fw-medium">งานซ่อมทั้งหมด</div>
+                  <div class="d-flex align-items-end justify-content-between">
+                     <div class="h3 mb-0 fw-bold text-primary" id="summaryJobsCount">0</div>
+                     <span class="text-muted small fw-bold">บิลซ่อม</span>
                   </div>
                 </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">ยอดใช้จ่ายรวม</div>
-                    <div class="h4 mb-0 fw-bold text-success" id="summaryTotalAmount">0 ฿</div>
-                    <div class="small text-muted">บาท</div>
+                <div class="bm-stat-card shadow-sm border p-3 bg-light bg-opacity-50">
+                  <div class="text-muted small mb-1 fw-medium">ยอดใช้จ่ายรวม</div>
+                  <div class="d-flex align-items-end justify-content-between">
+                     <div class="h3 mb-0 fw-bold text-success" id="summaryTotalAmount">0 ฿</div>
+                     <span class="text-muted small fw-bold">บาท</span>
                   </div>
                 </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">เฉลี่ยต่อบิล</div>
-                    <div class="h4 mb-0 fw-bold text-dark" id="summaryAveragePerJob">0 ฿</div>
-                    <div class="small text-muted">บาท/ครั้ง</div>
+                <div class="bm-stat-card shadow-sm border p-3 bg-light bg-opacity-50">
+                  <div class="text-muted small mb-1 fw-medium">เฉลี่ยต่อบิลซ่อม</div>
+                  <div class="d-flex align-items-end justify-content-between">
+                     <div class="h3 mb-0 fw-bold text-warning-emphasis" id="summaryAveragePerJob">0 ฿</div>
+                     <span class="text-muted small fw-bold">บาท / ครั้ง</span>
                   </div>
                 </div>
-                <div class="col-6 col-md-3">
-                  <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
-                    <div class="small text-muted mb-1">จำนวนรถ</div>
-                    <div class="h4 mb-0 fw-bold text-info" id="summaryVehiclesCount">0</div>
-                    <div class="small text-muted">คันที่เคยเข้า</div>
+                <div class="bm-stat-card shadow-sm border p-3 bg-light bg-opacity-50">
+                  <div class="text-muted small mb-1 fw-medium">จำนวนรถในครอบครอง</div>
+                  <div class="d-flex align-items-end justify-content-between">
+                     <div class="h3 mb-0 fw-bold text-info-emphasis" id="summaryVehiclesCount">0</div>
+                     <span class="text-muted small fw-bold">คันที่เคยเข้า</span>
                   </div>
                 </div>
               </div>
 
-              <div class="row g-3 mt-2">
+              <div class="row g-3 mt-3">
                 <div class="col-12 col-md-6">
-                  <div class="d-flex align-items-center p-2 bg-light rounded border">
-                    <i class="bi bi-calendar-event me-2 text-muted"></i>
-                    <div class="small">
-                      <span class="text-muted">ครั้งแรก:</span>
-                      <span class="fw-semibold ms-1" id="summaryFirstVisit">-</span>
+                  <div class="d-flex align-items-center p-3 bg-light rounded-3 border shadow-sm">
+                    <i class="bi bi-calendar-check-fill me-3 text-secondary fs-5"></i>
+                    <div>
+                      <span class="text-muted d-block small fw-medium">เข้ามาซ่อมครั้งแรกเมื่อ</span>
+                      <span class="fw-bold text-dark fs-6" id="summaryFirstVisit">-</span>
                     </div>
                   </div>
                 </div>
                 <div class="col-12 col-md-6">
-                  <div class="d-flex align-items-center p-2 bg-light rounded border">
-                    <i class="bi bi-clock-history me-2 text-muted"></i>
-                    <div class="small">
-                      <span class="text-muted">ล่าสุด:</span>
-                      <span class="fw-semibold ms-1" id="summaryLastVisit">-</span>
+                  <div class="d-flex align-items-center p-3 bg-light rounded-3 border shadow-sm">
+                    <i class="bi bi-clock-history me-3 text-success fs-5"></i>
+                    <div>
+                      <span class="text-muted d-block small fw-medium">เข้ามาใช้บริการล่าสุดเมื่อ</span>
+                      <span class="fw-bold text-dark fs-6" id="summaryLastVisit">-</span>
                     </div>
                   </div>
                 </div>
@@ -242,238 +221,140 @@
         </section>
 
         <section id="historySection" class="mb-4 d-none">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="h6 mb-0 fw-bold text-dark">
-              <i class="bi bi-clock-history me-2 text-primary"></i>ประวัติการทำรายการ
+          <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+            <h2 class="h5 mb-0 fw-bold text-dark">
+              <i class="bi bi-kanban-fill me-2 text-primary"></i>เส้นทางประวัติกิจกรรมและไทม์ไลน์
             </h2>
-            <span class="badge bg-light text-dark border" id="historyCountLabel">-</span>
+            <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2 shadow-sm fw-bold" id="historyCountLabel">-</span>
           </div>
 
-          <div id="historyEmptyBox" class="alert alert-light border small d-none text-center py-4">
-            <i class="bi bi-inbox fs-4 d-block mb-2 text-muted"></i>
-            ยังไม่มีประวัติการใช้บริการสำหรับลูกค้าคนนี้
+          <div id="historyEmptyBox" class="alert alert-light border shadow-sm text-center py-5 rounded-4 bg-white">
+            <i class="bi bi-inbox fs-2 d-block mb-2 text-muted opacity-50"></i>
+            <div class="fw-medium text-muted">ยังไม่มีประวัติล็อกกิจกรรมซ่อมหรือซื้อขายสำหรับลูกค้าคนนี้</div>
           </div>
 
-          <ul class="list-group list-group-flush" id="historyTimeline">
-            </ul>
+          <ul class="list-group list-group-flush d-flex flex-column gap-3 shadow-none bg-transparent" id="historyTimeline">
+          </ul>
         </section>
 
         <div style="height: 5rem;"></div>
       </div>
     </main>
 
-    <div class="bm-fab-container">
+    <div class="bm-fab-container btn-no-print">
       <div class="dropdown dropup">
-
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow border-0" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-2 text-primary"></i> เปิดบิลซ่อมใหม่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-2 text-success"></i> เพิ่มรายการเงิน
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-2 text-warning"></i> บันทึกซื้ออะไหล่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddVehicleBtn">
-              <i class="bi bi-truck-front me-2 text-info"></i> เพิ่มรถรับซื้อ
-            </button>
-          </li>
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0 rounded-4 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span> เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span> เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span> บันทึกซื้ออะไหล่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddVehicleBtn"><span class="bg-info bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span> เพิ่มรถรับซื้อ</button></li>
         </ul>
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
-      <div class="container-fluid px-0">
-        <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link">
-              <i class="bi bi-receipt-cutoff d-block"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link">
-              <i class="bi bi-box-seam d-block"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg btn-no-print">
+      <div class="container-fluid px-0 h-100">
+        <div class="row g-0 w-100 h-100 text-center small fw-medium">
+          <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col h-100"><a href="open-bill.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col h-100"><a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col h-100"><a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col h-100"><a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col h-100"><a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
-    <div
-      class="position-fixed top-0 start-50 translate-middle-x p-3"
-      style="z-index: 1090;"
-    >
-      <div
-        id="mainToast"
-        class="toast align-items-center text-bg-primary border-0 shadow"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        data-bs-delay="4000"
-      >
-        <div class="d-flex">
-          <div class="toast-body fw-medium" id="mainToastBody">
-          </div>
-          <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="ปิด"
-          ></button>
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 d-print-none" style="z-index: 1090;">
+      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex px-3 py-2">
+          <div class="toast-body d-flex align-items-center fw-medium fs-6" id="mainToastBody"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow">
-          <div class="modal-header border-bottom-0 pb-0">
-            <h5 class="modal-title fw-bold text-primary" id="detailModalTitle">
-              รายละเอียด
-            </h5>
+        <div class="modal-content border-0 shadow-lg rounded-4">
+          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+            <h5 class="modal-title fw-bold text-success" id="detailModalTitle"><i class="bi bi-file-earmark-text me-2"></i>รายละเอียดบิลงานซ่อม</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="p-3 bg-light rounded-3 border mb-3">
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="badge bg-white text-dark border shadow-sm" id="dmDateBadge">-</span>
-                    <span class="badge bg-warning text-dark" id="dmStatusBadge">-</span>
+          <div class="modal-body p-4 pt-3">
+            <div class="bg-light p-3 rounded-4 mb-3 border border-secondary-subtle shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-white text-dark border shadow-sm px-3 py-2 fw-medium rounded-pill" id="dmDateBadge">-</span>
+                    <span class="badge fs-6 rounded-pill px-3 py-1 shadow-sm" id="dmStatusBadge">-</span>
                 </div>
-                <div class="h5 fw-bold mb-1" id="dmCarInfo">-</div>
-                <div class="small text-muted"><i class="bi bi-person me-1"></i> <span id="dmCustomerName">-</span></div>
+                <div class="h5 fw-bold text-dark mb-2" id="dmCarInfo">-</div>
+                <div class="small text-muted fw-medium"><i class="bi bi-person-circle me-1 text-secondary"></i> ลูกค้า: <span id="dmCustomerName" class="text-dark fw-bold">-</span></div>
             </div>
 
             <div class="mb-3">
-                <label class="small text-muted fw-bold">อาการที่แจ้ง / รายละเอียด</label>
-                <div class="p-2 bg-white border rounded text-secondary small" id="dmProblem">
-                    -
-                </div>
+                <label class="small text-muted fw-bold mb-1">🎯 อาการรถที่แจ้งจัดซ่อม / รายละเอียดหน้างาน</label>
+                <div class="p-3 bg-white border rounded-3 text-dark fw-medium small shadow-sm border-start border-4 border-warning" id="dmProblem">-</div>
             </div>
 
             <div class="mb-3">
-                <label class="small text-muted fw-bold mb-1">รายการอะไหล่และค่าบริการ</label>
-                <div class="table-responsive rounded border">
-                    <table class="table table-sm table-striped mb-0 small" style="font-size: 0.8rem;">
-                        <thead class="table-light">
+                <label class="small text-muted fw-bold mb-2">📦 รายการตัดอะไหล่สต๊อกและค่าบริการช่าง</label>
+                <div class="table-responsive rounded-3 border shadow-sm">
+                    <table class="table table-hover align-middle mb-0 small" style="font-size: 0.85rem;">
+                        <thead class="table-light text-secondary">
                             <tr>
-                                <th>รายการ</th>
-                                <th class="text-end" style="width: 25%;">ราคา</th>
+                                <th class="ps-3 py-2">รายการอะไหล่ / บริการ</th>
+                                <th class="text-end pe-3 py-2" style="width: 30%;">รวม (บาท)</th>
                             </tr>
                         </thead>
-                        <tbody id="dmItemsTableBody">
-                            </tbody>
-                        <tfoot class="table-group-divider">
+                        <tbody id="dmItemsTableBody" class="bg-white">
+                        </tbody>
+                        <tfoot class="table-group-divider bg-light fw-bold">
                             <tr>
-                                <td class="text-end fw-bold">รวมสุทธิ</td>
-                                <td class="text-end fw-bold text-success" id="dmTotalAmount">-</td>
+                                <td class="text-end py-2 ps-3 text-dark">ยอดเงินสุทธิรวมทั้งสิ้น:</td>
+                                <td class="text-end pe-3 py-2 text-success fs-6 fw-bold" id="dmTotalAmount">-</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
 
-             <div class="d-flex justify-content-between text-muted text-xs border-top pt-2">
-                <div>บันทึกโดย: <span id="dmBy">-</span></div>
-                <div><span id="dmTimestamp">-</span></div>
+             <div class="d-flex justify-content-between text-muted text-xs border-top pt-3 mt-2 fw-medium px-1">
+                <div><i class="bi bi-person-check-fill me-1"></i> ช่างผู้ดูแลบิล: <span id="dmBy" class="text-dark fw-bold">-</span></div>
+                <div><i class="bi bi-clock-fill me-1"></i> <span id="dmTimestamp">-</span></div>
             </div>
           </div>
-          <div class="modal-footer border-top-0 pt-0">
-            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">ปิด</button>
-            <a href="#" id="dmEditLink" class="btn btn-success rounded-pill px-4">
-                <i class="bi bi-pencil-square me-1"></i> แก้ไขบิล
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0 bg-white">
+            <button type="button" class="btn btn-light border px-4 rounded-pill fw-medium hover-elevate" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+            <a href="#" id="dmEditLink" class="btn btn-success px-4 rounded-pill fw-bold shadow-sm hover-elevate">
+                <i class="bi bi-pencil-square me-1"></i> เข้าไปแก้ไขบิลซ่อม
             </a>
           </div>
         </div>
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-	<script type="module">
-      // ============================================================
-      // Import Firebase SDK
-      // ============================================================
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-      import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-      import {
-        getFirestore,
-        collection,
-        doc,
-        getDoc,
-        getDocs,
-        query,
-        where,
-        orderBy,
-        limit,
-        setDoc
-      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { getFirestore, collection, doc, getDoc, getDocs, query, where, limit, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      // ============================================================
-      // Firebase Configuration
-      // ============================================================
+      // --- Firebase Config ---
       const firebaseConfig = {
         apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
         authDomain: "ben-motor.firebaseapp.com",
         projectId: "ben-motor",
         storageBucket: "ben-motor.firebasestorage.app",
         messagingSenderId: "814162692446",
-        appId: "1:814162692446:web:7753156248d76938fce7cf",
-        measurementId: "G-TVDDW82Q5B"
+        appId: "1:814162692446:web:7753156248d76938fce7cf"
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // ============================================================
-      // DOM Elements Reference
-      // ============================================================
+      // --- DOM Elements ---
       const bodyEl = document.body;
-      
-      // Topbar
       const themeToggleBtn = document.getElementById("themeToggleBtn");
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
@@ -481,7 +362,7 @@
       const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
-      // Search Section
+      // Search
       const searchForm = document.getElementById("searchForm");
       const searchKeywordInput = document.getElementById("searchKeyword");
       const searchBtn = document.getElementById("searchBtn");
@@ -490,7 +371,7 @@
       const loadingState = document.getElementById("loadingState");
       const noResultBox = document.getElementById("noResultBox");
 
-      // Customer Summary Section
+      // Summary
       const customerSummarySection = document.getElementById("customerSummarySection");
       const summaryAvatarInitial = document.getElementById("summaryAvatarInitial");
       const summaryCustomerName = document.getElementById("summaryCustomerName");
@@ -505,56 +386,47 @@
       const summaryFirstVisit = document.getElementById("summaryFirstVisit");
       const summaryLastVisit = document.getElementById("summaryLastVisit");
 
-      // History Timeline Section
+      // History
       const historySection = document.getElementById("historySection");
       const historyTimeline = document.getElementById("historyTimeline");
       const historyEmptyBox = document.getElementById("historyEmptyBox");
       const historyCountLabel = document.getElementById("historyCountLabel");
 
-      // Modals
+      // Modals & FAB
       const detailModalEl = document.getElementById("detailModal");
-      const detailModal = new bootstrap.Modal(detailModalEl);
+      const detailModal = bootstrap.Modal.getOrCreateInstance(detailModalEl);
       
-      // FAB
       const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
       const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
       const fabStockInBtn = document.getElementById("fabStockInBtn");
       const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
-      // Toasts
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
       const mainToast = bootstrap.Toast.getOrCreateInstance(mainToastEl);
 
-      // State Variables
       let currentUser = null;
       let currentUserProfile = null;
-      let currentHistoryData = []; // Store fetched data for modal use
+      let currentHistoryData = []; 
 
-      // ============================================================
-      // Helper Functions
-      // ============================================================
-      function showToast(message, variant = "primary") {
-        if (!mainToastEl || !mainToastBody) return;
-        mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow";
-        mainToastBody.textContent = message;
+      // --- Helpers ---
+      function showToast(message, variant = "success") {
+        mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
+        mainToastBody.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-triangle'}-fill me-2 fs-5"></i> ${message}`;
         mainToast.show();
       }
 
       function formatNumber(value) {
-        if (typeof value !== "number" || isNaN(value)) return "0";
-        return value.toLocaleString("th-TH", { maximumFractionDigits: 2 });
+        if (typeof value !== "number" || isNaN(value)) return "0.00";
+        return value.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       }
 
       function formatDateThaiFromString(dateStr) {
         if (!dateStr) return "-";
-        const [year, month, day] = dateStr.split("-").map((v) => parseInt(v, 10));
-        if (!year || !month || !day) return dateStr;
-        const d = new Date(year, month - 1, day);
-        const thaiMonths = [
-          "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-          "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
-        ];
+        const parts = dateStr.split("-").map(v => parseInt(v, 10));
+        if (parts.length < 3 || isNaN(parts[0])) return dateStr;
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        const thaiMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
         return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
       }
 
@@ -565,81 +437,43 @@
         return `${formatDateThaiFromString(dateStr)} ${timeStr} น.`;
       }
 
-      // ============================================================
-      // Theme Management
-      // ============================================================
       function applyTheme(theme) {
         const normalized = theme === "dark" ? "dark" : "light";
-        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark");
-        bodyEl.classList.add("bm-theme-" + normalized);
-
+        bodyEl.classList.remove("bm-theme-light", "bm-theme-dark", "bg-light", "bg-dark");
+        bodyEl.classList.add("bm-theme-" + normalized, normalized === "dark" ? "bg-dark" : "bg-light");
         const icon = themeToggleBtn?.querySelector("i");
         if (icon) {
-          icon.classList.toggle("bi-sun", normalized === "dark");
-          icon.classList.toggle("bi-moon", normalized === "light");
+          icon.className = normalized === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
         }
       }
 
-      function saveThemeForUser(uid, theme) {
-        if (!uid) return;
-        try { localStorage.setItem("bm-theme-" + uid, theme); }
-        catch (e) { console.warn("Theme storage error", e); }
-      }
-
-      function readThemeForUser(uid, fallbackTheme) {
-        if (!uid) return fallbackTheme || "light";
-        try { return localStorage.getItem("bm-theme-" + uid) || fallbackTheme || "light"; }
-        catch (e) { return fallbackTheme || "light"; }
-      }
-
-      // ============================================================
-      // User Profile Logic
-      // ============================================================
       async function ensureUserProfile(user) {
         const userRef = doc(db, "users", user.uid);
         const snap = await getDoc(userRef);
-        if (snap.exists()) {
-          return { id: snap.id, ...snap.data() };
-        }
-        const usersCol = collection(db, "users");
-        const q = query(usersCol, limit(1));
-        const existingSnap = await getDocs(q);
-        const isFirstUser = existingSnap.empty;
-        const role = isFirstUser ? "admin" : "staff";
+        if (snap.exists()) return { id: snap.id, ...snap.data() };
+        
+        const q = query(collection(db, "users"), limit(1));
+        const role = (await getDocs(q)).empty ? "admin" : "staff";
         const newUserData = {
-          displayName: user.displayName || (user.email ? user.email.split("@")[0] : "ผู้ใช้ใหม่"),
-          role,
-          createdAt: new Date(),
-          branchId: null,
-          theme: "light",
-          disabled: false,
+          displayName: user.displayName || user.email.split("@")[0],
+          role, createdAt: new Date(), branchId: null, theme: "light", disabled: false,
         };
         await setDoc(userRef, newUserData);
         return { id: user.uid, ...newUserData };
       }
 
-      // ============================================================
-      // Search Logic
-      // ============================================================
       function detectSearchType(keyword) {
         const trimmed = (keyword || "").trim();
         if (!trimmed) return null;
-        // Clean spaces for plate detection
-        const cleanPlate = trimmed.replace(/\s+/g, '');
-        
-        const onlyDigitsAndSymbol = /^[0-9+\-\s]+$/.test(trimmed);
+        const onlyDigits = /^[0-9+\-\s]+$/.test(trimmed);
         const hasDigit = /[0-9]/.test(trimmed);
         const hasLetter = /[A-Za-zก-ฮ]/.test(trimmed);
 
-        if (onlyDigitsAndSymbol && trimmed.replace(/[^0-9]/g, "").length >= 6) return "phone";
-        // Simple heuristic: if it has letters and digits, likely a plate (e.g. 1กข1234)
+        if (onlyDigits && trimmed.replace(/[^0-9]/g, "").length >= 6) return "phone";
         if (hasDigit && hasLetter) return "plate"; 
-        // If it has letters but no digits, likely a name
         if (hasLetter && !hasDigit) return "name";
-        // Fallback: treat as plate if short
-        if (cleanPlate.length < 8) return "plate";
-        
-        return "name"; // Default
+        if (trimmed.replace(/\s+/g, '').length < 8) return "plate";
+        return "name";
       }
 
       function getSearchTypeLabel(type) {
@@ -652,12 +486,10 @@
       function setLoading(isLoading) {
         if (isLoading) {
           loadingState.classList.remove("d-none");
-          searchBtn.disabled = true;
-          resetBtn.disabled = true;
+          searchBtn.disabled = true; resetBtn.disabled = true;
         } else {
           loadingState.classList.add("d-none");
-          searchBtn.disabled = false;
-          resetBtn.disabled = false;
+          searchBtn.disabled = false; resetBtn.disabled = false;
         }
       }
 
@@ -672,78 +504,58 @@
         currentHistoryData = [];
       }
 
+      // --- Core Advanced Search Workflow ---
       async function searchCustomerHistory(keyword) {
         const trimmed = (keyword || "").trim();
-        if (!trimmed) {
-          showToast("กรุณากรอกคีย์เวิร์ดก่อนค้นหา", "warning");
-          return;
-        }
+        if (!trimmed) { showToast("กรุณากรอกข้อมูลเพื่อค้นหาด่วน", "warning"); return; }
 
         const searchType = detectSearchType(trimmed);
-        if (!searchType) {
-          showToast("รูปแบบคีย์เวิร์ดไม่ชัดเจน กรุณาลองใหม่", "warning");
-          return;
-        }
+        if (!searchType) { showToast("รูปแบบคำค้นหาไม่ชัดเจน", "warning"); return; }
 
         resetView();
         initialStateBox.classList.add("d-none");
-        noResultBox.classList.add("d-none");
         setLoading(true);
 
         const branchId = currentUserProfile?.branchId || null;
 
         try {
-          // 1. Fetch Jobs
-          const jobsCol = collection(db, "jobs");
+          // ดึงแบบยืดหยุ่นไม่ใช้เรียงลำดับซ้อนใน Firebase ป้องกัน Compound Missing Index Crash
           const jobsConstraints = [where("isDeleted", "==", false)];
           if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
 
-          if (searchType === "phone") {
-              jobsConstraints.push(where("customerPhone", "==", trimmed));
-          } else if (searchType === "plate") {
-              // Try basic match. If needed, we might search multiple variants in real app, but here simple match
-              jobsConstraints.push(where("plate", "==", trimmed)); 
-          } else if (searchType === "name") {
-              // Exact match for now (Firestore limits substring search). 
-              // In production, we might use a separate search index (Algolia/Typesense).
-              // Here we rely on exact name or try logical guesswork.
-              jobsConstraints.push(where("customerName", "==", trimmed));
-          }
-
-          // Fetch limit to prevent overload (e.g., 200 items)
-          const jobsQuery = query(jobsCol, ...jobsConstraints, orderBy("date", "desc"), limit(200));
-          const jobsSnap = await getDocs(jobsQuery);
+          const jobsSnap = await getDocs(query(collection(db, "jobs"), ...jobsConstraints));
           
-          const jobs = [];
+          let jobs = [];
           jobsSnap.forEach(doc => {
-              jobs.push({ id: doc.id, ...doc.data() });
+             const d = doc.data();
+             let isMatch = false;
+             if (searchType === "phone" && d.customerPhone === trimmed) isMatch = true;
+             else if (searchType === "plate" && d.plate === trimmed) isMatch = true;
+             else if (searchType === "name" && d.customerName && d.customerName.includes(trimmed)) isMatch = true;
+             
+             if (isMatch) jobs.push({ id: doc.id, ...d });
           });
 
-          // 2. Fetch Vehicles
-          // Logic: Find vehicles that match the plates found in jobs, OR match the search keyword directly
-          const vehicles = [];
+          // จัดเรียงวันที่ฝั่ง Client-Side ทะลวงบล็อกดัชนีของ Firebase
+          jobs.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+          // ดึงข้อมูลรถรับซื้อ/ขาย
           const vehiclesCol = collection(db, "vehicles");
           const plateSet = new Set();
-          
           jobs.forEach(j => { if (j.plate) plateSet.add(j.plate.trim()); });
           if (searchType === "plate") plateSet.add(trimmed);
 
           const plateList = Array.from(plateSet).filter(Boolean);
+          const vehicles = [];
 
-          // Chunk queries if too many plates (Firestore 'in' limit is 10)
           if (plateList.length > 0) {
             const chunkSize = 10;
             for (let i = 0; i < plateList.length; i += chunkSize) {
               const chunk = plateList.slice(i, i + chunkSize);
-              const constraints = [where("plate", "in", chunk)];
-              if (branchId) constraints.push(where("branchId", "==", branchId));
-              const snap = await getDocs(query(vehiclesCol, ...constraints));
+              const snap = await getDocs(query(vehiclesCol, where("isDeleted", "==", false), where("plate", "in", chunk)));
               snap.forEach(doc => vehicles.push({ id: doc.id, ...doc.data() }));
             }
           }
-
-          // Special case: if searched by name, vehicles might not be linked by plate yet.
-          // We can't easily search vehicles by ownerName without an index, so we rely on plates found in jobs.
 
           if (jobs.length === 0 && vehicles.length === 0) {
             setLoading(false);
@@ -751,7 +563,6 @@
             return;
           }
 
-          // 3. Build UI
           buildCustomerSummary(jobs, vehicles, trimmed, searchType);
           buildHistoryTimeline(jobs, vehicles);
 
@@ -759,12 +570,7 @@
         } catch (error) {
           console.error("Search error:", error);
           setLoading(false);
-          // Handle index errors or permission errors gracefully
-          if (error.message && error.message.includes("requires an index")) {
-             showToast("ระบบกำลังสร้างดัชนีค้นหา (รอ 1-2 นาที)", "warning");
-          } else {
-             showToast("ค้นหาไม่สำเร็จ (" + (error.code || "unknown") + ")", "danger");
-          }
+          showToast("ค้นหาประวัติขัดข้อง โปรดรีเฟรชลองใหม่", "danger");
         }
       }
 
@@ -786,15 +592,13 @@
 
         vehicles.forEach(v => { if (v.plate) allPlates.add(v.plate.trim()); });
 
-        // Heuristic: Most frequent name/phone is likely the main one
         let selectedName = Object.entries(nameCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
         let selectedPhone = Object.entries(phoneCount).sort((a,b) => b[1] - a[1])[0]?.[0] || "-";
         
-        // Override with search term if empty
         if (jobs.length === 0 && searchType === "phone") selectedPhone = keyword;
         if (jobs.length === 0 && searchType === "name") selectedName = keyword;
 
-        summaryCustomerName.textContent = selectedName !== "-" ? selectedName : "ไม่พบชื่อ";
+        summaryCustomerName.textContent = selectedName !== "-" ? selectedName : "ลูกค้าหน้าร้าน";
         summaryCustomerPhone.textContent = selectedPhone;
         summaryAvatarInitial.textContent = selectedName !== "-" ? selectedName.trim().charAt(0).toUpperCase() : "C";
 
@@ -808,7 +612,6 @@
 
         summarySearchTypeLabel.textContent = getSearchTypeLabel(searchType);
 
-        // Stats Calculation
         const jobsCount = jobs.length;
         let totalAmount = 0;
         let dates = [];
@@ -817,7 +620,7 @@
           totalAmount += Number(j.totalAmount) || 0;
           if (j.date) dates.push(j.date);
         });
-        dates.sort(); // Sort strings YYYY-MM-DD works correctly
+        dates.sort();
 
         summaryJobsCount.textContent = String(jobsCount);
         summaryTotalAmount.textContent = formatNumber(totalAmount) + " ฿";
@@ -831,61 +634,34 @@
         historySection.classList.remove("d-none");
         historyTimeline.innerHTML = "";
         historyEmptyBox.classList.add("d-none");
-
-        currentHistoryData = []; // Clear old data cache
+        currentHistoryData = []; 
 
         jobs.forEach(j => {
-          let dateKey = j.date;
-          if (!dateKey && j.createdAt?.toDate) dateKey = j.createdAt.toDate().toISOString().slice(0, 10);
-          
-          const item = {
-            id: j.id,
-            kind: "job", 
-            dateKey, 
-            rawDate: j.date,
+          let dateKey = j.date || (j.createdAt?.toDate ? j.createdAt.toDate().toISOString().slice(0, 10) : "");
+          currentHistoryData.push({
+            id: j.id, kind: "job", dateKey, rawDate: j.date,
             createdAt: j.createdAt?.toDate ? j.createdAt.toDate() : null,
-            plate: j.plate || "-", 
-            brand: j.brand || "", 
-            model: j.model || "",
-            problem: j.problem || "", 
-            status: j.status || "repairing",
-            totalAmount: Number(j.totalAmount) || 0, 
-            createdByName: j.createdByName,
-            customerName: j.customerName,
-            items: j.items || [] // Store items for modal
-          };
-          currentHistoryData.push(item);
+            plate: j.plate || "-", brand: j.brand || "", model: j.model || "",
+            problem: j.problem || "", status: j.status || "repairing",
+            totalAmount: Number(j.totalAmount) || 0, createdByName: j.createdByName,
+            customerName: j.customerName, items: j.items || []
+          });
         });
 
         vehicles.forEach(v => {
           const brandModel = [v.brand, v.model].filter(Boolean).join(" ");
-          // Buy Event
           if (v.buyDate) {
             currentHistoryData.push({
-              id: v.id + "_buy",
-              kind: "vehicle_buy", 
-              dateKey: v.buyDate, 
-              rawDate: v.buyDate,
+              id: v.id + "_buy", kind: "vehicle_buy", dateKey: v.buyDate, rawDate: v.buyDate,
               createdAt: v.createdAt?.toDate ? v.createdAt.toDate() : null,
-              plate: v.plate || "-", 
-              brandModel, 
-              buyPrice: Number(v.buyPrice) || 0,
-              createdByName: v.createdByName
+              plate: v.plate || "-", brandModel, buyPrice: Number(v.buyPrice) || 0, createdByName: v.createdByName
             });
           }
-          // Sell Event
           if (v.sellDate) {
             currentHistoryData.push({
-              id: v.id + "_sell",
-              kind: "vehicle_sell", 
-              dateKey: v.sellDate, 
-              rawDate: v.sellDate,
+              id: v.id + "_sell", kind: "vehicle_sell", dateKey: v.sellDate, rawDate: v.sellDate,
               createdAt: v.updatedAt?.toDate ? v.updatedAt.toDate() : null,
-              plate: v.plate || "-", 
-              brandModel, 
-              sellPrice: Number(v.sellPrice) || 0,
-              profit: v.profit, 
-              createdByName: v.createdByName
+              plate: v.plate || "-", brandModel, sellPrice: Number(v.sellPrice) || 0, profit: v.profit, createdByName: v.createdByName
             });
           }
         });
@@ -896,19 +672,16 @@
           return;
         }
 
-        // Sort: Newest first
-        currentHistoryData.sort((a, b) => (b.dateKey || "") > (a.dateKey || "") ? 1 : -1);
-        historyCountLabel.textContent = currentHistoryData.length + " รายการ";
+        // เรียงลำดับจากใหม่สุดไปเก่าสุดฝั่ง Client เพื่อความปลอดภัยสูงสุด
+        currentHistoryData.sort((a, b) => (b.dateKey || "").localeCompare(a.dateKey || ""));
+        historyCountLabel.textContent = currentHistoryData.length + " รายการประวัติ";
 
         const frag = document.createDocumentFragment();
 
         currentHistoryData.forEach((entry, index) => {
           const li = document.createElement("li");
-          // Add cursor pointer only for jobs to indicate clickability
-          li.className = "list-group-item small p-3 " + (entry.kind === 'job' ? 'list-group-item-action' : '');
-          if(entry.kind === 'job') li.style.cursor = "pointer";
-
-          // Bind click event for Job details
+          li.className = "list-group-item border-0 p-3 mb-2 shadow-sm timeline-item-premium " + (entry.kind === 'job' ? 'cursor-pointer' : '');
+          
           if (entry.kind === 'job') {
              li.onclick = () => openJobDetail(index);
           }
@@ -920,73 +693,73 @@
             const statusMap = {
               repairing: { text: "กำลังซ่อม", class: "bg-warning text-dark" },
               done: { text: "ซ่อมเสร็จ", class: "bg-info text-dark" },
-              picked_up: { text: "รับรถแล้ว", class: "bg-success" },
-              cancel: { text: "ยกเลิก", class: "bg-danger" }
+              picked_up: { text: "รับรถแล้ว", class: "bg-success text-white" },
+              cancel: { text: "ยกเลิก", class: "bg-danger text-white" }
             };
-            const st = statusMap[entry.status] || { text: "ไม่ระบุ", class: "bg-secondary" };
+            const st = statusMap[entry.status] || { text: "ไม่ระบุ", class: "bg-secondary text-white" };
             const brandModel = [entry.brand, entry.model].filter(Boolean).join(" ");
-            const problemShort = (entry.problem || "-").length > 50 ? (entry.problem || "").substring(0, 50) + "..." : (entry.problem || "-");
+            const problemShort = (entry.problem || "-").length > 60 ? (entry.problem || "").substring(0, 60) + "..." : (entry.problem || "-");
 
             htmlContent = `
               <div class="d-flex align-items-start">
-                <div class="me-3 mt-1 text-primary"><i class="bi bi-wrench-adjustable-circle fs-5"></i></div>
+                <div class="me-3 text-primary"><i class="bi bi-wrench-adjustable-circle-fill fs-4"></i></div>
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
-                      <span class="fw-bold text-dark">งานซ่อม</span> <i class="bi bi-dot"></i> ทะเบียน <span class="fw-semibold">${entry.plate}</span>
-                      <span class="badge ${st.class} ms-1 rounded-pill" style="font-size:0.65rem;">${st.text}</span>
+                      <span class="fw-bold text-dark fs-6">บิลงานซ่อมรถ</span> <i class="bi bi-dot text-muted"></i> ทะเบียน: <span class="badge bg-light text-primary border border-primary-subtle fw-bold font-monospace">${entry.plate}</span>
+                      <span class="badge ${st.class} ms-1 rounded-pill shadow-sm" style="font-size:0.65rem;">${st.text}</span>
                     </div>
                     <div class="text-end ms-2">
-                       <span class="fw-bold text-success">${formatNumber(entry.totalAmount)} ฿</span>
+                       <span class="fw-bold text-success fs-5">${formatNumber(entry.totalAmount)} ฿</span>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mt-1">
-                     <div class="text-muted text-truncate me-2" style="max-width: 200px;">
-                        ${brandModel ? `<span class="badge bg-light text-secondary border me-1">${brandModel}</span>` : ""}
-                        <span>${problemShort}</span>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                     <div class="text-dark small text-truncate" style="max-width: 250px;">
+                        ${brandModel ? `<span class="badge bg-white text-secondary border me-1">${brandModel}</span>` : ""}
+                        <span class="fw-medium">${problemShort}</span>
                      </div>
-                     <div class="text-muted text-xs text-nowrap">${dateText}</div>
+                     <div class="text-muted text-xs bg-light px-2 py-1 rounded-pill fw-medium"><i class="bi bi-calendar-event me-1"></i>${dateText}</div>
                   </div>
                 </div>
               </div>
             `;
           } else if (entry.kind === "vehicle_buy") {
-             htmlContent = `
+            htmlContent = `
               <div class="d-flex align-items-start">
-                <div class="me-3 mt-1 text-info"><i class="bi bi-truck-front fs-5"></i></div>
+                <div class="me-3 text-info"><i class="bi bi-arrow-down-left-circle-fill fs-4"></i></div>
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
-                      <span class="fw-bold">ซื้อรถเข้า</span> - ทะเบียน ${entry.plate}
+                      <span class="badge bg-info text-white me-2">เต็นท์รถ</span><span class="fw-bold text-dark fs-6">รับซื้อรถเข้าสต๊อก</span> <i class="bi bi-dot text-muted"></i> ทะเบียน: <span class="badge bg-light text-dark border font-monospace fw-bold">${entry.plate}</span>
                     </div>
                     <div class="text-end ms-2">
-                       <div class="fw-semibold">${dateText}</div>
+                       <div class="text-muted text-xs bg-light px-2 py-1 rounded-pill fw-medium">${dateText}</div>
                     </div>
                   </div>
-                   <div class="text-muted mt-1 small">
-                    <span class="me-2">${entry.brandModel || "-"}</span> | 
-                    ราคาซื้อ: <span class="text-dark fw-medium">${formatNumber(entry.buyPrice)} ฿</span>
+                   <div class="text-muted mt-2 small fw-medium">
+                    <span class="badge bg-white text-secondary border me-2">${entry.brandModel || "-"}</span>
+                    ทุนซื้อเข้า: <span class="text-danger fw-bold fs-6">${formatNumber(entry.buyPrice)} ฿</span>
                   </div>
                 </div>
               </div>
             `;
           } else if (entry.kind === "vehicle_sell") {
-             const profitText = typeof entry.profit === "number" ? `<span class="text-success ms-2">(กำไร ${formatNumber(entry.profit)})</span>` : "";
-             htmlContent = `
+            const profitText = typeof entry.profit === "number" ? `<span class="badge bg-success bg-opacity-10 text-success ms-2 border border-success-subtle">กำไรบวก: +${formatNumber(entry.profit)} ฿</span>` : "";
+            htmlContent = `
               <div class="d-flex align-items-start">
-                <div class="me-3 mt-1 text-success"><i class="bi bi-truck-front-fill fs-5"></i></div>
+                <div class="me-3 text-success"><i class="bi bi-arrow-up-right-circle-fill fs-4"></i></div>
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-start">
                     <div>
-                      <span class="fw-bold">ขายรถออก</span> - ทะเบียน ${entry.plate}
+                      <span class="badge bg-success text-white me-2">เต็นท์รถ</span><span class="fw-bold text-dark fs-6">ขายรถออกหน้าร้าน</span> <i class="bi bi-dot text-muted"></i> ทะเบียน: <span class="badge bg-light text-dark border font-monospace fw-bold">${entry.plate}</span>
                     </div>
                     <div class="text-end ms-2">
-                       <div class="fw-semibold text-success">${dateText}</div>
+                       <div class="text-muted text-xs bg-light px-2 py-1 rounded-pill fw-medium">${dateText}</div>
                     </div>
                   </div>
-                  <div class="text-muted mt-1 small">
-                    <span class="me-2">${entry.brandModel || "-"}</span> | 
-                    ราคาขาย: <span class="text-dark fw-medium">${formatNumber(entry.sellPrice)} ฿</span>
+                  <div class="text-muted mt-2 small fw-medium">
+                    <span class="badge bg-white text-secondary border me-2">${entry.brandModel || "-"}</span>
+                    ราคาขายออก: <span class="text-success fw-bold fs-6">${formatNumber(entry.sellPrice)} ฿</span>
                     ${profitText}
                   </div>
                 </div>
@@ -995,9 +768,9 @@
           }
 
           const footer = `
-            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top text-muted text-xs">
-              <div><i class="bi bi-person-circle me-1"></i>${entry.createdByName || "-"}</div>
-              <div>${entry.kind === 'job' ? '<i class="bi bi-eye me-1"></i>ดูรายละเอียด' : ''}</div>
+            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top text-muted text-xs fw-medium">
+              <div><i class="bi bi-person-circle text-secondary me-1"></i>ลงระบบโดยช่าง: <span class="text-dark fw-bold">${entry.createdByName || "ระบบอู่"}</span></div>
+              <div class="text-primary">${entry.kind === 'job' ? '<i class="bi bi-zoom-in me-1"></i>คลิกเพื่อดูใบเสร็จ' : ''}</div>
             </div>
           `;
 
@@ -1008,33 +781,28 @@
         historyTimeline.appendChild(frag);
       }
 
-      // ============================================================
-      // Modal Logic
-      // ============================================================
       window.openJobDetail = function(index) {
           const data = currentHistoryData[index];
           if (!data || data.kind !== 'job') return;
 
-          // Populate Header
           document.getElementById('dmDateBadge').textContent = data.rawDate ? formatDateThaiFromString(data.rawDate) : "-";
           
           const statusMap = {
-              repairing: { text: "กำลังซ่อม", class: "bg-warning text-dark" },
-              done: { text: "ซ่อมเสร็จ", class: "bg-info text-dark" },
-              picked_up: { text: "รับรถแล้ว", class: "bg-success text-white" },
-              cancel: { text: "ยกเลิก", class: "bg-danger text-white" }
+              repairing: { text: "กำลังซ่อมแซม", class: "bg-warning text-dark" },
+              done: { text: "ซ่อมเสร็จแล้ว", class: "bg-info text-dark" },
+              picked_up: { text: "ส่งมอบรถเรียบร้อย", class: "bg-success text-white shadow-sm" },
+              cancel: { text: "ยกเลิกงานซ่อม", class: "bg-danger text-white" }
           };
           const st = statusMap[data.status] || { text: data.status, class: "bg-secondary text-white" };
           const badge = document.getElementById('dmStatusBadge');
           badge.textContent = st.text;
-          badge.className = "badge " + st.class;
+          badge.className = "badge rounded-pill px-3 py-2 " + st.class;
 
           const brandModel = [data.brand, data.model, data.plate].filter(Boolean).join(" ");
           document.getElementById('dmCarInfo').textContent = brandModel || "ไม่ระบุข้อมูลรถ";
-          document.getElementById('dmCustomerName').textContent = data.customerName || "-";
-          document.getElementById('dmProblem').textContent = data.problem || "ไม่มีรายละเอียดอาการ";
+          document.getElementById('dmCustomerName').textContent = data.customerName || "ลูกค้าทั่วไป";
+          document.getElementById('dmProblem').textContent = data.problem || "ไม่มีรายละเอียดระบุอาการ";
 
-          // Populate Table
           const tbody = document.getElementById('dmItemsTableBody');
           tbody.innerHTML = "";
           
@@ -1042,117 +810,84 @@
               data.items.forEach(item => {
                   const tr = document.createElement('tr');
                   tr.innerHTML = `
-                    <td>${item.name || "รายการ"} <span class="text-muted text-xs d-block">x${item.qty || 1} ${item.unit || ""}</span></td>
-                    <td class="text-end">${formatNumber(Number(item.total) || 0)}</td>
+                    <td class="py-2 ps-3 font-medium text-dark">${item.name || "รายการอะไหล่/ค่าแรง"} <span class="text-muted text-xs d-block fw-bold">x${item.qty || 1} ${item.unit || "ชิ้น"}</span></td>
+                    <td class="text-end pe-3 fw-bold font-monospace text-dark">${formatNumber(Number(item.total) || 0)} ฿</td>
                   `;
                   tbody.appendChild(tr);
               });
           } else {
-              tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-3">ไม่มีรายการอะไหล่</td></tr>`;
+              tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-4">ไม่มีข้อมูลบันทึกรายการอะไหล่ในบิลนี้</td></tr>`;
           }
 
           document.getElementById('dmTotalAmount').textContent = formatNumber(data.totalAmount) + " ฿";
-          document.getElementById('dmBy').textContent = data.createdByName || "-";
+          document.getElementById('dmBy').textContent = data.createdByName || "ช่างหน้าร้าน";
           document.getElementById('dmTimestamp').textContent = data.createdAt ? formatDateTimeThai(data.createdAt) : "-";
 
-          // Setup Edit Link
           const editBtn = document.getElementById('dmEditLink');
           editBtn.href = `open-bill.html?jobId=${data.id}`;
 
           detailModal.show();
       };
 
-      // ============================================================
-      // Event Listeners
-      // ============================================================
+      // --- Setup Events ---
       function setupEventListeners() {
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", async () => {
+         logoutBtn?.addEventListener("click", async () => {
             try { await signOut(auth); window.location.href = "index.html"; }
             catch (error) { console.error(error); showToast("ออกจากระบบไม่สำเร็จ", "danger"); }
-          });
-        }
+         });
 
-        if (themeToggleBtn) {
-          themeToggleBtn.addEventListener("click", async () => {
+         themeToggleBtn?.addEventListener("click", async () => {
             const current = bodyEl.classList.contains("bm-theme-dark") ? "dark" : "light";
             const next = current === "dark" ? "light" : "dark";
             applyTheme(next);
             if (currentUser?.uid) {
-              saveThemeForUser(currentUser.uid, next);
-              try { await setDoc(doc(db, "users", currentUser.uid), { theme: next }, { merge: true }); }
-              catch (e) {}
+               try { await updateDoc(doc(db, "users", currentUser.uid), { theme: next }); } catch (e) {}
             }
-          });
-        }
+         });
 
-        if (searchForm) {
-          searchForm.addEventListener("submit", (e) => {
+         searchForm?.addEventListener("submit", (e) => {
             e.preventDefault();
             searchCustomerHistory(searchKeywordInput.value);
-            // Hide keyboard on mobile
             searchKeywordInput.blur();
-          });
-          resetBtn.addEventListener("click", () => {
+         });
+         
+         resetBtn?.addEventListener("click", () => {
             searchKeywordInput.value = "";
             resetView();
             searchKeywordInput.focus();
-          });
-        }
+         });
 
-        // FAB Navigation
-        if (fabOpenBillBtn) fabOpenBillBtn.addEventListener("click", () => window.location.href = "open-bill.html");
-        if (fabAddTxnBtn) fabAddTxnBtn.addEventListener("click", () => window.location.href = "finance.html");
-        if (fabStockInBtn) fabStockInBtn.addEventListener("click", () => window.location.href = "stock.html");
-        if (fabAddVehicleBtn) fabAddVehicleBtn.addEventListener("click", () => window.location.href = "vehicles.html");
+         if (fabOpenBillBtn) fabOpenBillBtn.onclick = () => window.location.href = "open-bill.html";
+         if (fabAddTxnBtn) fabAddTxnBtn.onclick = () => window.location.href = "finance.html";
+         if (fabStockInBtn) fabStockInBtn.onclick = () => window.location.href = "stock.html";
+         if (fabAddVehicleBtn) fabAddVehicleBtn.onclick = () => window.location.href = "vehicles.html";
       }
 
-      // ============================================================
-      // Auth & Init
-      // ============================================================
+      // --- Main Init ---
       onAuthStateChanged(auth, async (user) => {
         if (!user) { window.location.href = "index.html"; return; }
         currentUser = user;
 
         try {
-          // Check/Create User Profile
-          let userProfile = null;
-          try {
-             userProfile = await ensureUserProfile(user);
-          } catch(e) {
-             console.log("Profile fetch/create logic fallback");
-          }
-
-          if (!userProfile) {
-             const snap = await getDoc(doc(db, "users", user.uid));
-             if (snap.exists()) userProfile = { id: snap.id, ...snap.data() };
-          }
-
-          if (!userProfile) {
-            showToast("ไม่พบข้อมูลผู้ใช้", "danger");
-            await signOut(auth); return;
-          }
-
-          currentUserProfile = userProfile;
+          const profile = await ensureUserProfile(user);
+          currentUserProfile = profile;
 
           if (currentUserProfile.disabled) {
             await signOut(auth);
-            showToast("บัญชีถูกระงับ", "danger");
             window.location.href = "index.html";
             return;
           }
 
-          // Update UI
-          if (userDisplayNameText) userDisplayNameText.textContent = currentUserProfile.displayName || "-";
-          if (userRoleText) userRoleText.textContent = currentUserProfile.role === "admin" ? "Admin" : "Staff";
-          if (userAvatarInitial) userAvatarInitial.textContent = (currentUserProfile.displayName || "U").trim().charAt(0).toUpperCase();
-          
-          if (settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== "admin");
+          // Render Profile Topbar
+          const name = currentUserProfile.displayName || "ช่างประจำร้าน";
+          if (userDisplayNameText) userDisplayNameText.textContent = name;
+          if (userRoleText) userRoleText.textContent = currentUserProfile.role === "admin" ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
+          if (userAvatarInitial) userAvatarInitial.textContent = name[0].toUpperCase();
 
-          applyTheme(readThemeForUser(user.uid, currentUserProfile.theme));
+          applyTheme(localStorage.getItem("bm-theme-" + user.uid) || currentUserProfile.theme || "light");
           setupEventListeners();
 
-          // Auto search if query param exists (e.g. redirected from dashboard)
+          // ระบบดึงข้อมูลค้นหาแบบอัตโนมัติกรณีกดลิงก์พ่วงมาจากหน้าอื่น
           const urlParams = new URLSearchParams(window.location.search);
           const q = urlParams.get('q');
           if(q) {
@@ -1162,7 +897,6 @@
 
         } catch (error) {
           console.error("Init Error:", error);
-          showToast("โหลดข้อมูลล้มเหลว: " + error.message, "danger");
         }
       });
     </script>
