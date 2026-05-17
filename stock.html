@@ -5,292 +5,229 @@
     <title>BEN MOTOR – สต๊อกอะไหล่</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="img/icon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="manifest" href="img/site.webmanifest">
     
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      /* อัปเกรด UI ให้พรีเมียม */
+      .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
+      .card-premium:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
+      .bm-stat-card { transition: all 0.3s ease; border-radius: 1rem; border: none; }
+      .bm-stat-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
+      .table-hover tbody tr:hover { background-color: rgba(25, 135, 84, 0.03); }
+      .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
+      
+      /* ไฮไลท์แถวสินค้าใกล้หมด */
+      .row-low-stock { background-color: rgba(220, 53, 69, 0.04) !important; }
+    </style>
   </head>
-  <body class="bm-theme-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm fixed-top bm-topbar">
+  <body class="bm-theme-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1 fw-bold text-success">
-          <i class="bi bi-speedometer2 me-1"></i> BEN MOTOR
+        <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
+          <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
         </span>
 
         <div class="d-flex align-items-center gap-2">
-          <button
-            class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent"
-            id="themeToggleBtn"
-            type="button"
-            aria-label="สลับโหมดธีม"
-            style="width: 2.5rem; height: 2.5rem;"
-          >
+          <button class="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-0 bg-transparent" id="themeToggleBtn" type="button" aria-label="สลับโหมดธีม" style="width: 2.5rem; height: 2.5rem;">
             <i class="bi bi-moon fs-5"></i>
           </button>
 
           <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0"
-              type="button"
-              id="userMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <span
-                class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm"
-                id="userAvatarCircle"
-              >
+            <button class="btn btn-sm btn-outline-light text-dark border-0 d-flex align-items-center pe-0" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="rounded-circle bg-gradient bg-success text-white d-inline-flex align-items-center justify-content-center me-2 bm-avatar-circle shadow-sm" id="userAvatarCircle">
                 <span id="userAvatarInitial" class="fw-bold">U</span>
               </span>
               <span class="small text-start d-none d-sm-block">
-                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span>
-                <br />
+                <span id="userDisplayNameText" class="fw-semibold">กำลังโหลด...</span><br />
                 <span class="text-muted text-xs" id="userRoleText">-</span>
               </span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 rounded-4">
-              <li>
-                <div class="px-3 py-2 d-sm-none">
-                   <strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong>
-                </div>
-              </li>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4">
+              <li><div class="px-3 py-2 d-sm-none"><strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong></div></li>
               <li><hr class="dropdown-divider d-sm-none"></li>
-              <li>
-                <a class="dropdown-item py-2" href="reports.html">
-                  <i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="price-check.html">
-                  <i class="bi bi-tags me-2 text-warning"></i> เช็คราคา
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item py-2" href="customer-history.html">
-                  <i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า &amp; รถ
-                </a>
-              </li>              
-              <li>
-                <a class="dropdown-item py-2" href="activity-log.html">
-                  <i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ
-                </a>
-              </li>              
-              <li>
-                <a
-                  class="dropdown-item py-2 d-none"
-                  href="settings.html"
-                  id="settingsMenuItem"
-                >
-                  <i class="bi bi-gear me-2"></i> ตั้งค่าระบบ
-                </a>
-              </li>
+              <li><a class="dropdown-item py-2" href="reports.html"><i class="bi bi-graph-up-arrow me-2 text-primary"></i> รายงานทั้งหมด</a></li>
+              <li><a class="dropdown-item py-2" href="price-check.html"><i class="bi bi-tags me-2 text-warning"></i> เช็คราคา</a></li>
+              <li><a class="dropdown-item py-2" href="customer-history.html"><i class="bi bi-person-lines-fill me-2 text-info"></i> ประวัติลูกค้า & รถ</a></li>              
+              <li><a class="dropdown-item py-2" href="activity-log.html"><i class="bi bi-clock-history me-2 text-secondary"></i> ประวัติการทำรายการ</a></li>              
+              <li><a class="dropdown-item py-2 d-none" href="settings.html" id="settingsMenuItem"><i class="bi bi-gear me-2"></i> ตั้งค่าระบบ</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button
-                  class="dropdown-item py-2 text-danger"
-                  type="button"
-                  id="logoutBtn"
-                >
-                  <i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ
-                </button>
-              </li>
+              <li><button class="dropdown-item py-2 text-danger fw-medium" type="button" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <main class="bm-main-content">
+    <main class="bm-main-content pb-5 mt-5 pt-3">
       <div class="container py-4">
         
-        <div class="row align-items-center mb-4 mt-2">
+        <div class="row align-items-end mb-4 mt-2">
           <div class="col-12 col-md-8">
-            <h1 class="h5 mb-1 fw-bold text-dark">
-              <i class="bi bi-box-seam-fill text-success me-2"></i>สต๊อกอะไหล่
+            <h1 class="h3 mb-1 fw-bold text-dark d-flex align-items-center">
+              <span class="bg-primary bg-opacity-10 text-primary p-2 rounded-circle me-3 d-flex"><i class="bi bi-box-seam-fill"></i></span> สต๊อกอะไหล่
             </h1>
-            <p class="small text-muted mb-0">
-              บริหารจัดการคลังสินค้า ตรวจสอบมูลค่าคงเหลือ และบันทึกรับเข้า
+            <p class="small text-muted mb-0 ms-1 mt-2">
+              <i class="bi bi-info-circle me-1"></i> บริหารจัดการคลังสินค้า ตรวจสอบมูลค่าคงเหลือ และบันทึกรับเข้า
             </p>
           </div>
         </div>
 
         <section class="mb-4">
-           <div class="bm-dashboard-grid">
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">สินค้าในสต๊อก</div>
-                 <div class="bm-stat-value text-dark" id="stockTotalItemsText">0</div>
-                 <div class="bm-stat-sub text-muted">รายการ</div>
-              </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">สินค้าใกล้หมด</div>
-                 <div class="bm-stat-value text-warning" id="stockLowItemsText">0</div>
-                 <div class="bm-stat-sub text-muted">รายการ</div>
-              </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">มูลค่าต้นทุนรวม</div>
-                 <div class="bm-stat-value text-secondary" id="stockTotalCostValueText">0.00</div>
-                 <div class="bm-stat-sub text-muted">บาท</div>
-              </div>
-              <div class="bm-stat-card shadow-sm">
-                 <div class="bm-stat-label mb-1">มูลค่าขายรวม</div>
-                 <div class="bm-stat-value text-success" id="stockTotalSaleValueText">0.00</div>
-                 <div class="bm-stat-sub text-muted">บาท</div>
-              </div>
-           </div>
-        </section>
-
-        <section class="mb-4">
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-header bg-transparent border-bottom-0 pt-3 pb-0 d-flex justify-content-between align-items-center">
-                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center fw-semibold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddStock" aria-expanded="false" id="toggleStockFormBtn">
-                  <i class="bi bi-plus-circle-fill me-2 fs-5"></i> <span id="stockFormTitleText">เพิ่มสินค้าใหม่</span>
+          <div class="card card-premium shadow-sm border-0 rounded-4">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center fw-bold text-success fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddStock" aria-expanded="false" id="toggleStockFormBtn">
+                  <i class="bi bi-plus-circle-fill me-2 fs-5"></i> <span id="stockFormTitleText">เพิ่มสินค้าใหม่ (Add New Item)</span>
                   <i class="bi bi-chevron-down ms-2 small"></i>
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary btn-sm d-none rounded-pill px-3"
-                  id="cancelEditStockBtn"
-                >
+                <button type="button" class="btn btn-outline-secondary btn-sm d-none rounded-pill px-4 fw-medium shadow-sm hover-elevate" id="cancelEditStockBtn">
                   <i class="bi bi-x-lg me-1"></i>ยกเลิกแก้ไข
                 </button>
             </div>
             <div class="collapse" id="collapseAddStock">
-              <div class="card-body pt-2">
-                <form id="stockItemForm" class="row g-3">
-                  <input type="hidden" id="stockItemIdInput" />
+              <div class="card-body px-4 pb-4 pt-2">
+                <div class="bg-light p-4 rounded-4 border">
+                  <form id="stockItemForm" class="row g-3">
+                    <input type="hidden" id="stockItemIdInput" />
 
-                  <div class="col-6 col-md-3">
-                    <label for="stockCodeInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-upc-scan me-1"></i>รหัสสินค้า
-                    </label>
-                    <input type="text" class="form-control bg-light" id="stockCodeInput" placeholder="เช่น OIL-10W40" required />
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockNameInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-tag me-1"></i>ชื่อสินค้า
-                    </label>
-                    <input type="text" class="form-control" id="stockNameInput" placeholder="เช่น น้ำมันเครื่อง" required />
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockCategoryInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-bookmarks me-1"></i>หมวดหมู่
-                    </label>
-                    <input type="text" class="form-control" id="stockCategoryInput" list="categoryList" placeholder="เลือกหรือพิมพ์ใหม่" required />
-                    <datalist id="categoryList"></datalist>
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockUnitInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-box me-1"></i>หน่วยนับ
-                    </label>
-                    <input type="text" class="form-control" id="stockUnitInput" placeholder="เช่น ชิ้น, ขวด, ลิตร" required />
-                  </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockCodeInput" class="form-label small mb-1 fw-bold text-dark"><i class="bi bi-upc-scan me-1"></i>รหัสสินค้า <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control text-primary fw-bold" id="stockCodeInput" placeholder="เช่น OIL-10W40" required />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockNameInput" class="form-label small mb-1 fw-bold text-dark"><i class="bi bi-tag me-1"></i>ชื่อสินค้า <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control fw-medium" id="stockNameInput" placeholder="เช่น น้ำมันเครื่อง" required />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockCategoryInput" class="form-label small mb-1 fw-bold text-dark"><i class="bi bi-bookmarks me-1"></i>หมวดหมู่ <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="stockCategoryInput" list="categoryList" placeholder="เลือกหรือพิมพ์ใหม่" required />
+                      <datalist id="categoryList"></datalist>
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockUnitInput" class="form-label small mb-1 fw-bold text-dark"><i class="bi bi-box me-1"></i>หน่วยนับ <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="stockUnitInput" placeholder="เช่น ชิ้น, ขวด" required />
+                    </div>
 
-                  <div class="col-6 col-md-3">
-                    <label for="stockQtyInput" class="form-label small mb-1 text-primary fw-semibold">
-                      <i class="bi bi-layers me-1"></i>คงเหลือปัจจุบัน
-                    </label>
-                    <input type="number" min="0" class="form-control border-primary" id="stockQtyInput" placeholder="0" required />
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockMinQtyInput" class="form-label small mb-1 text-warning fw-semibold">
-                      <i class="bi bi-exclamation-triangle me-1"></i>ขั้นต่ำ (แจ้งเตือน)
-                    </label>
-                    <input type="number" min="0" class="form-control border-warning" id="stockMinQtyInput" placeholder="0" required />
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockCostPriceInput" class="form-label small mb-1 text-muted">
-                      <i class="bi bi-coin me-1"></i>ราคาทุน (บาท)
-                    </label>
-                    <input type="number" min="0" step="0.01" class="form-control" id="stockCostPriceInput" placeholder="0.00" required />
-                  </div>
-                  <div class="col-6 col-md-3">
-                    <label for="stockSalePriceInput" class="form-label small mb-1 text-success fw-semibold">
-                      <i class="bi bi-cash-coin me-1"></i>ราคาขาย (บาท)
-                    </label>
-                    <input type="number" min="0" step="0.01" class="form-control border-success" id="stockSalePriceInput" placeholder="0.00" required />
-                  </div>
+                    <div class="col-12"><hr class="my-1 border-secondary opacity-25"></div>
 
-                  <div class="col-12 mt-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary px-4 shadow-sm" id="saveStockItemBtn">
-                      <span class="spinner-border spinner-border-sm me-2 d-none" id="saveStockItemSpinner" role="status"></span>
-                      <i class="bi bi-save2 me-2"></i><span id="saveStockItemBtnText">บันทึกสินค้า</span>
-                    </button>
-                  </div>
-                </form>
+                    <div class="col-6 col-md-3">
+                      <label for="stockQtyInput" class="form-label small mb-1 fw-bold text-primary"><i class="bi bi-layers me-1"></i>คงเหลือปัจจุบัน <span class="text-danger">*</span></label>
+                      <input type="number" min="0" class="form-control border-primary bg-primary bg-opacity-10 fw-bold" id="stockQtyInput" placeholder="0" required />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockMinQtyInput" class="form-label small mb-1 fw-bold text-warning-emphasis"><i class="bi bi-exclamation-triangle me-1"></i>ขั้นต่ำ (แจ้งเตือน) <span class="text-danger">*</span></label>
+                      <input type="number" min="0" class="form-control border-warning bg-warning bg-opacity-10 fw-bold" id="stockMinQtyInput" placeholder="0" required />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockCostPriceInput" class="form-label small mb-1 fw-bold text-danger"><i class="bi bi-box-arrow-in-down me-1"></i>ราคาทุน (บาท) <span class="text-danger">*</span></label>
+                      <input type="number" min="0" step="0.01" class="form-control border-danger-subtle fw-medium text-danger" id="stockCostPriceInput" placeholder="0.00" required />
+                    </div>
+                    <div class="col-6 col-md-3">
+                      <label for="stockSalePriceInput" class="form-label small mb-1 fw-bold text-success"><i class="bi bi-box-arrow-up me-1"></i>ราคาขาย (บาท) <span class="text-danger">*</span></label>
+                      <input type="number" min="0" step="0.01" class="form-control border-success-subtle fw-bold text-success" id="stockSalePriceInput" placeholder="0.00" required />
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-between align-items-center pt-3 mt-2 border-top">
+                      <div class="bg-white px-3 py-2 rounded-3 border shadow-sm small">
+                          <span class="text-muted fw-medium me-2">กำไรต่อชิ้นโดยประมาณ:</span>
+                          <span id="stockItemProfitPreview" class="fw-bold text-success">0.00 ฿</span>
+                      </div>
+                      <button type="submit" class="btn btn-primary px-5 py-2 shadow-sm fw-bold hover-elevate" id="saveStockItemBtn">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="saveStockItemSpinner" role="status"></span>
+                        <i class="bi bi-save2 me-2"></i><span id="saveStockItemBtnText">บันทึกสินค้า</span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section class="mb-4">
-          <div class="card border-0 shadow-sm rounded-4">
+           <div class="bm-dashboard-grid">
+              <div class="bm-stat-card shadow-sm bg-primary bg-opacity-10 border-start border-4 border-primary p-3">
+                 <div class="bm-stat-label mb-1 fw-bold text-primary"><i class="bi bi-boxes me-1"></i> สินค้าในสต๊อกทั้งหมด</div>
+                 <div class="bm-stat-value text-dark fs-3 fw-bold" id="stockTotalItemsText">0</div>
+                 <div class="bm-stat-sub text-muted small">รายการ (SKU)</div>
+              </div>
+              <div class="bm-stat-card shadow-sm bg-danger bg-opacity-10 border-start border-4 border-danger p-3">
+                 <div class="bm-stat-label mb-1 fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-1"></i> สินค้าใกล้หมด</div>
+                 <div class="bm-stat-value text-danger fs-3 fw-bold" id="stockLowItemsText">0</div>
+                 <div class="bm-stat-sub text-muted small">รายการ (ต้องสั่งเพิ่ม)</div>
+              </div>
+              <div class="bm-stat-card shadow-sm bg-warning bg-opacity-10 border-start border-4 border-warning p-3">
+                 <div class="bm-stat-label mb-1 fw-bold text-warning-emphasis"><i class="bi bi-safe-fill me-1"></i> มูลค่าทุนรวม (ทุนจม)</div>
+                 <div class="bm-stat-value text-dark fs-3 fw-bold" id="stockTotalCostValueText">0.00</div>
+                 <div class="bm-stat-sub text-muted small">บาท</div>
+              </div>
+              <div class="bm-stat-card shadow-sm bg-success bg-opacity-10 border-start border-4 border-success p-3">
+                 <div class="bm-stat-label mb-1 fw-bold text-success"><i class="bi bi-cash-stack me-1"></i> มูลค่าขายรวม (คาดหวัง)</div>
+                 <div class="bm-stat-value text-success fs-3 fw-bold" id="stockTotalSaleValueText">0.00</div>
+                 <div class="bm-stat-sub text-muted small">บาท</div>
+              </div>
+           </div>
+        </section>
+
+        <section class="mb-4">
+          <div class="card card-premium border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-3">
-                 <h2 class="h6 fw-bold text-success mb-0">
-                   <i class="bi bi-funnel-fill me-2"></i> ค้นหาและจัดการ
+                 <h2 class="h6 fw-bold text-success mb-0 d-flex align-items-center">
+                   <span class="bg-success bg-opacity-10 text-success p-2 rounded-circle me-2 d-flex"><i class="bi bi-search"></i></span> ค้นหาและจัดการ
                  </h2>
-                 <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="exportCsvBtn">
+                 <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-medium hover-elevate" id="exportCsvBtn">
                     <i class="bi bi-file-earmark-spreadsheet me-1"></i> ส่งออก CSV
                  </button>
               </div>
 
               <div class="row g-3 align-items-end">
                 <div class="col-12 col-md-6">
-                    <label class="form-label small text-muted mb-1">ค้นหา (รหัส, ชื่อสินค้า)</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
-                        <input type="text" id="searchStockInput" class="form-control bg-light border-start-0 ps-0" placeholder="พิมพ์คำค้น..." />
+                    <label class="form-label small text-muted mb-1 fw-medium">ค้นหา (รหัส, ชื่อสินค้า)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="searchStockInput" class="form-control bg-light border-start-0 ps-0" placeholder="พิมพ์คำค้นหา..." />
                     </div>
                 </div>
                 <div class="col-6 col-md-4">
-                    <label class="form-label small text-muted mb-1">หมวดหมู่</label>
-                    <select id="stockCategoryFilter" class="form-select form-select-sm bg-light">
+                    <label class="form-label small text-muted mb-1 fw-medium">กรองตามหมวดหมู่</label>
+                    <select id="stockCategoryFilter" class="form-select bg-light fw-medium">
                       <option value="all" selected>ทั้งหมด</option>
                     </select>
                 </div>
-                <div class="col-6 col-md-2 d-flex align-items-center justify-content-end pb-1">
-                    <div class="small text-muted" id="stockLoadingState">
-                        <span class="spinner-grow spinner-grow-sm text-primary me-1" role="status"></span> โหลด...
+                <div class="col-6 col-md-2 d-flex align-items-center justify-content-end pb-2">
+                    <div class="small text-success fw-bold" id="stockLoadingState">
+                        <span class="spinner-grow spinner-grow-sm me-1" role="status"></span> โหลด...
                     </div>
                 </div>
               </div>
 
-              <div class="d-flex flex-wrap gap-2 mt-3 pt-3 border-top">
+              <div class="d-flex flex-wrap align-items-center gap-2 mt-4 pt-3 border-top">
+                <span class="small text-muted fw-medium me-2">ตัวกรองด่วน:</span>
+                
                 <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeAll" value="all" checked>
-                <label class="btn btn-sm btn-light rounded-pill px-3 border" for="stockFilterModeAll">ทั้งหมด</label>
+                <label class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" for="stockFilterModeAll">ทั้งหมด</label>
 
                 <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeLow" value="low">
-                <label class="btn btn-sm btn-light rounded-pill px-3 border text-warning-emphasis" for="stockFilterModeLow">
+                <label class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-medium" for="stockFilterModeLow">
                     <i class="bi bi-exclamation-triangle-fill me-1"></i>ใกล้หมด
                 </label>
 
                 <input type="radio" class="btn-check" name="stockFilterMode" id="stockFilterModeFast" value="fast">
-                <label class="btn btn-sm btn-light rounded-pill px-3 border text-success-emphasis" for="stockFilterModeFast">
-                    <i class="bi bi-graph-up-arrow me-1"></i>ขายดี
+                <label class="btn btn-sm btn-outline-success rounded-pill px-3 fw-medium" for="stockFilterModeFast">
+                    <i class="bi bi-graph-up-arrow me-1"></i>ขายดี (คะแนน >= 10)
                 </label>
                 
-                <span class="ms-auto small text-muted align-self-center" id="stockCountInfo">
-                   <span id="stockCountNumber" class="fw-bold text-dark">0</span> รายการ
+                <span class="ms-auto small bg-light border rounded-pill px-3 py-1 text-muted" id="stockCountInfo">
+                   พบ <span id="stockCountNumber" class="fw-bold text-primary">0</span> รายการ
                 </span>
               </div>
             </div>
@@ -298,18 +235,19 @@
         </section>
 
         <section class="mb-3">
-          <div class="card shadow-sm border-0 overflow-hidden rounded-4">
+          <div class="card shadow-sm border-0 overflow-hidden rounded-4 card-premium bg-white">
             <div class="card-body p-0">
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                  <thead class="bg-light text-secondary small text-uppercase">
+                  <thead class="bg-light text-secondary small text-uppercase border-bottom">
                     <tr>
-                      <th class="ps-4 py-3 text-nowrap" style="min-width: 100px;">รหัส</th>
-                      <th class="py-3" style="min-width: 180px;">ชื่อสินค้า</th>
-                      <th class="py-3 text-nowrap" style="min-width: 120px;">หมวดหมู่</th>
-                      <th class="py-3 text-end text-nowrap" style="min-width: 130px;">คงเหลือ / ขั้นต่ำ</th>
-                      <th class="py-3 text-end text-nowrap" style="min-width: 110px;">ราคาขาย</th>
-                      <th class="py-3 text-center" style="min-width: 100px;">จัดการ</th>
+                      <th class="ps-4 py-3 text-nowrap fw-semibold" style="min-width: 120px;">รหัส</th>
+                      <th class="py-3 fw-semibold" style="min-width: 200px;">ชื่อสินค้า / หมวดหมู่</th>
+                      <th class="py-3 text-center text-nowrap fw-semibold" style="min-width: 140px;">คงเหลือ / ขั้นต่ำ</th>
+                      <th class="py-3 text-end text-nowrap fw-semibold" style="min-width: 100px;">ทุน/ชิ้น</th>
+                      <th class="py-3 text-end text-nowrap fw-semibold" style="min-width: 100px;">ขาย/ชิ้น</th>
+                      <th class="py-3 text-end text-nowrap fw-semibold" style="min-width: 100px;">กำไร/ชิ้น</th>
+                      <th class="py-3 text-center fw-semibold" style="min-width: 90px;">จัดการ</th>
                     </tr>
                   </thead>
                   <tbody id="stockTableBody" class="border-top-0">
@@ -321,11 +259,7 @@
         </section>
 
         <section class="mb-5 text-center">
-          <button
-            type="button"
-            class="btn btn-white border shadow-sm rounded-pill px-4 py-2 text-muted d-none"
-            id="loadMoreStockBtn"
-          >
+          <button type="button" class="btn btn-white border shadow-sm rounded-pill px-5 py-2 text-muted fw-medium hover-elevate d-none" id="loadMoreStockBtn">
             <span class="spinner-border spinner-border-sm me-2 d-none" id="loadMoreStockSpinner"></span>
             <span id="loadMoreStockBtnText">โหลดเพิ่มเติม</span> <i class="bi bi-chevron-down ms-1"></i>
           </button>
@@ -337,140 +271,98 @@
 
     <div class="bm-fab-container">
       <div class="dropdown dropup">
-
-        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0" aria-labelledby="fabDropdownButton">
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabOpenBillBtn">
-              <i class="bi bi-receipt-cutoff me-3 text-primary"></i> เปิดบิลซ่อมใหม่
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2" type="button" id="fabAddTxnBtn">
-              <i class="bi bi-cash-coin me-3 text-success"></i> เพิ่มรายการเงิน
-            </button>
-          </li>
-          <li>
-            <button class="dropdown-item d-flex align-items-center py-2 fw-semibold" type="button" id="fabStockInBtn">
-              <i class="bi bi-box-seam me-3 text-warning"></i> บันทึกซื้ออะไหล่
-            </button>
-          </li>
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg border-0 rounded-4 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span> เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span> เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-bold rounded-3 active" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span> บันทึกซื้ออะไหล่</button></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddVehicleBtn"><span class="bg-info bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span> เพิ่มรถรับซื้อเข้า</button></li>
         </ul>
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-body-tertiary border-top bm-bottom-nav fixed-bottom">
-      <div class="container-fluid px-0">
-        <div class="row g-0 w-100 text-center small">
-          <div class="col">
-            <a href="dashboard.html" class="bm-bottom-nav-link">
-              <i class="bi bi-speedometer2 d-block"></i>
-              <span>แดชบอร์ด</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="open-bill.html" class="bm-bottom-nav-link">
-              <i class="bi bi-receipt-cutoff d-block"></i>
-              <span>เปิดบิล</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="jobs.html" class="bm-bottom-nav-link">
-              <i class="bi bi-wrench-adjustable-circle d-block"></i>
-              <span>งานซ่อม</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="vehicles.html" class="bm-bottom-nav-link">
-              <i class="bi bi-truck-front d-block"></i>
-              <span>รถรับซื้อ</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="stock.html" class="bm-bottom-nav-link active">
-              <i class="bi bi-box-seam d-block"></i>
-              <span>สต๊อก</span>
-            </a>
-          </div>
-          <div class="col">
-            <a href="finance.html" class="bm-bottom-nav-link">
-              <i class="bi bi-cash-coin d-block"></i>
-              <span>เงินเข้าออก</span>
-            </a>
-          </div>
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
+      <div class="container-fluid px-0 h-100">
+        <div class="row g-0 w-100 h-100 text-center small fw-medium">
+          <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col h-100"><a href="open-bill.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col h-100"><a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col h-100"><a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col h-100"><a href="stock.html" class="bm-bottom-nav-link active text-success h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col h-100"><a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
         </div>
       </div>
     </nav>
 
-    <div
-      class="modal fade"
-      id="stockInModal"
-      tabindex="-1"
-      aria-labelledby="stockInModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="stockInModal" tabindex="-1" aria-labelledby="stockInModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content shadow border-0 rounded-4">
-          <div class="modal-header border-bottom-0 pb-0">
-            <h1 class="modal-title fs-5 fw-bold" id="stockInModalLabel">
-              <i class="bi bi-box-arrow-in-down me-2 text-primary"></i>บันทึกซื้ออะไหล่เข้า
+        <div class="modal-content shadow-lg border-0 rounded-4">
+          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+            <h1 class="modal-title fs-5 fw-bold text-dark" id="stockInModalLabel">
+              <i class="bi bi-box-arrow-in-down me-2 text-primary"></i>บันทึกรับของเข้าสต๊อก
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
           </div>
-          <div class="modal-body pt-3">
-            <div id="stockInLoadingState" class="text-center py-4 d-none">
-              <span class="spinner-border spinner-border-sm me-2"></span>กำลังโหลด...
+          <div class="modal-body p-4 pt-3">
+            <div id="stockInLoadingState" class="text-center py-4 d-none text-muted">
+              <span class="spinner-border spinner-border-sm me-2 text-primary"></span>กำลังโหลด...
             </div>
 
-            <div class="card border-0 bg-light rounded-4 mb-3">
-               <div class="card-body">
-                   <div class="d-flex justify-content-between align-items-center mb-1">
-                       <span class="badge bg-white text-dark border" id="stockInItemCodeText">-</span>
-                       <small class="text-muted"><span id="stockInItemCategoryText">-</span></small>
+            <div class="card border border-primary-subtle bg-primary bg-opacity-10 rounded-4 mb-4 shadow-sm">
+               <div class="card-body p-3">
+                   <div class="d-flex justify-content-between align-items-center mb-2">
+                       <span class="badge bg-white text-primary border border-primary-subtle fs-6 shadow-sm" id="stockInItemCodeText">-</span>
+                       <span class="badge bg-secondary rounded-pill" id="stockInItemCategoryText">-</span>
                    </div>
-                   <h5 class="fw-bold text-dark mb-1" id="stockInItemNameText">-</h5>
-                   <div class="text-muted small">
-                       คงเหลือปัจจุบัน: <span id="stockInItemQtyText" class="fw-bold text-primary">-</span>
+                   <h5 class="fw-bold text-dark mb-2" id="stockInItemNameText">-</h5>
+                   <div class="d-flex justify-content-between small border-top border-primary-subtle pt-2 mt-2">
+                       <span class="text-dark fw-medium">คงเหลือปัจจุบัน:</span>
+                       <span id="stockInItemQtyText" class="fw-bold text-primary fs-6">-</span>
                    </div>
-                   <div class="text-muted small">
-                       ทุนเฉลี่ยล่าสุด: <span id="stockInItemAvgCostText">-</span>
+                   <div class="d-flex justify-content-between small mt-1">
+                       <span class="text-dark fw-medium">ทุนเฉลี่ยล่าสุด:</span>
+                       <span id="stockInItemAvgCostText" class="fw-bold text-danger">-</span>
                    </div>
                </div>
             </div>
 
             <form id="stockInForm" class="row g-3">
-                <div class="col-6">
-                  <label class="form-label small mb-1">วันที่ซื้อเข้า</label>
-                  <input type="date" class="form-control" id="stockInDateInput" />
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small mb-1 fw-bold text-dark">วันที่ซื้อเข้า</label>
+                  <input type="date" class="form-control fw-medium" id="stockInDateInput" />
                 </div>
-                <div class="col-6">
-                  <label class="form-label small mb-1 fw-bold text-success">+ จำนวนเพิ่ม</label>
-                  <input type="number" min="1" class="form-control border-success" id="stockInQtyInput" placeholder="ระบุจำนวน" />
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small mb-1 fw-bold text-success">+ จำนวนรับเข้าใหม่</label>
+                  <div class="input-group">
+                     <span class="input-group-text bg-success-subtle text-success border-success-subtle"><i class="bi bi-plus-lg"></i></span>
+                     <input type="number" min="1" class="form-control border-success fw-bold text-success" id="stockInQtyInput" placeholder="ระบุจำนวน" />
+                  </div>
                 </div>
-                <div class="col-12 col-md-6">
-                  <label class="form-label small mb-1">ต้นทุนต่อหน่วย (บาท)</label>
-                  <input type="number" min="0" step="0.01" class="form-control" id="stockInCostPerUnitInput" placeholder="0.00" />
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small mb-1 fw-bold text-danger">ต้นทุนต่อหน่วย (รอบนี้)</label>
+                  <input type="number" min="0" step="0.01" class="form-control fw-bold" id="stockInCostPerUnitInput" placeholder="0.00" />
                 </div>
-                <div class="col-12 col-md-6">
-                  <label class="form-label small mb-1 text-muted">รวมเป็นเงิน (โดยประมาณ)</label>
-                  <div class="form-control bg-light border-0 fw-bold text-end" id="stockInTotalCostPreview">0.00 ฿</div>
+                <div class="col-12 col-sm-6">
+                  <label class="form-label small mb-1 text-muted fw-bold">รวมเป็นเงิน (โดยประมาณ)</label>
+                  <div class="form-control bg-light border-0 fw-bold text-end fs-5 text-dark" id="stockInTotalCostPreview">0.00 ฿</div>
                 </div>
                 
-                <div class="col-12">
-                   <div class="alert alert-info d-flex align-items-center small py-2 mb-0">
-                      <i class="bi bi-calculator me-2 fs-5"></i>
+                <div class="col-12 mt-4">
+                   <div class="alert alert-info border-info-subtle d-flex align-items-center small py-3 mb-0 rounded-3 shadow-sm">
+                      <i class="bi bi-calculator me-3 fs-3 text-info"></i>
                       <div>
-                         <div class="fw-semibold">ระบบจะคำนวณต้นทุนเฉลี่ยใหม่</div>
-                         <div class="text-xs">Weighted Average Cost จะถูกบันทึกเมื่อยืนยัน</div>
+                         <div class="fw-bold text-dark">ระบบจะคำนวณต้นทุนเฉลี่ยใหม่อัตโนมัติ</div>
+                         <div class="text-muted text-xs mt-1">(Weighted Average Cost) ยอดเงินรวมจะถูกบันทึกเป็นรายจ่ายเมื่อกดยืนยัน</div>
                       </div>
                    </div>
                 </div>
             </form>
           </div>
-          <div class="modal-footer border-top-0 pt-0 pb-3">
-            <button type="button" class="btn btn-secondary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
-            <button type="button" class="btn btn-primary btn-sm px-4 shadow-sm rounded-pill" id="stockInSaveBtn">
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0">
+            <button type="button" class="btn btn-light border fw-medium px-4 rounded-pill hover-elevate" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-primary px-4 shadow-sm rounded-pill fw-bold hover-elevate" id="stockInSaveBtn">
               <span class="spinner-border spinner-border-sm me-2 d-none" id="stockInSaveSpinner"></span>
-              <span id="stockInSaveBtnText">ยืนยันการรับเข้า</span>
+              <i class="bi bi-check2-circle me-1"></i> <span id="stockInSaveBtnText">ยืนยันการรับเข้า</span>
             </button>
           </div>
         </div>
@@ -478,19 +370,15 @@
     </div>
 
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
-      <div id="mainToast" class="toast align-items-center text-bg-primary border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
-        <div class="d-flex px-2">
-          <div class="toast-body d-flex align-items-center" id="mainToastBody"></div>
+      <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex px-3 py-2">
+          <div class="toast-body d-flex align-items-center fw-medium fs-6" id="mainToastBody"></div>
           <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -595,16 +483,16 @@
       const PAGE_SIZE = 25;
       let stockLastVisible = null;
       let isLoadingStock = false;
-      let stockItems = []; // All loaded items for client-side filtering support
+      let stockItems = []; 
       let isEditing = false;
       let currentStockInItem = null;
       let isSavingStockIn = false;
       let stockFilterMode = "all";
 
       // --- Helpers ---
-      function showToast(message, variant = "primary") {
+      function showToast(message, variant = "success") {
          mainToastEl.className = "toast align-items-center text-bg-" + variant + " border-0 shadow-lg rounded-pill";
-         mainToastBody.innerHTML = message;
+         mainToastBody.innerHTML = `<i class="bi bi-${variant==='success'?'check-circle':'exclamation-triangle'}-fill me-2 fs-5"></i> ${message}`;
          mainToast.show();
       }
       function formatNumber(val) {
@@ -614,7 +502,7 @@
          return new Date().toISOString().split("T")[0];
       }
       function applyTheme(theme) {
-         bodyEl.className = theme === "dark" ? "bm-theme-dark" : "bm-theme-light";
+         bodyEl.className = theme === "dark" ? "bm-theme-dark bg-dark" : "bm-theme-light bg-light";
          themeToggleBtn.querySelector("i").className = theme === "dark" ? "bi bi-sun fs-5" : "bi bi-moon fs-5";
       }
 
@@ -640,7 +528,7 @@
 
          // Update Datalist & Filter
          const currentFilterVal = stockCategoryFilter.value;
-         let filterHtml = `<option value="all">ทั้งหมด</option>`;
+         let filterHtml = `<option value="all">หมวดหมู่ทั้งหมด</option>`;
          let datalistHtml = "";
          Array.from(uniqueCats).sort().forEach(c => {
              filterHtml += `<option value="${c}" ${c===currentFilterVal?'selected':''}>${c}</option>`;
@@ -671,29 +559,43 @@
 
          stockTableBody.innerHTML = "";
          if(filtered.length === 0) {
-             stockTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-muted">ไม่พบข้อมูล</td></tr>`;
+             stockTableBody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-muted fw-medium"><i class="bi bi-box-seam fs-3 d-block mb-2 opacity-50"></i>ไม่พบข้อมูลสินค้า</td></tr>`;
          } else {
              filtered.forEach(item => {
                  const q = Number(item.qty)||0;
                  const m = Number(item.minQty)||0;
                  const isLow = q <= m;
+                 const cost = Number(item.costPrice)||0;
+                 const sale = Number(item.salePrice)||0;
+                 const profit = sale - cost;
+                 const profitClass = profit >= 0 ? "text-success" : "text-danger";
                  
                  const tr = document.createElement("tr");
+                 if(isLow) tr.classList.add("row-low-stock"); // ไฮไลท์แถว
+                 
                  tr.innerHTML = `
-                   <td class="ps-4 text-nowrap"><span class="badge bg-light text-dark border fw-normal">${item.code}</span></td>
-                   <td class="fw-medium text-dark">${item.name}</td>
-                   <td>${item.category}</td>
-                   <td class="text-end ${isLow?'text-danger fw-bold':''}">${q.toLocaleString()} <span class="text-muted fw-normal text-xs">/ ${m}</span></td>
-                   <td class="text-end">${formatNumber(item.salePrice)}</td>
+                   <td class="ps-4 text-nowrap"><span class="badge bg-white text-dark border border-secondary-subtle fw-bold shadow-sm px-2 py-1 fs-6">${item.code}</span></td>
+                   <td>
+                      <div class="fw-bold text-dark">${item.name}</div>
+                      <div class="text-muted small"><i class="bi bi-bookmark me-1"></i>${item.category}</div>
+                   </td>
+                   <td class="text-center">
+                      <div class="fs-5 ${isLow?'text-danger fw-bold':'text-primary fw-bold'}">${q.toLocaleString()}</div>
+                      <div class="text-muted text-xs">เตือนเมื่อเหลือ ${m}</div>
+                      ${isLow ? '<span class="badge bg-danger rounded-pill mt-1 px-2" style="font-size: 0.65rem;">ใกล้หมด</span>' : ''}
+                   </td>
+                   <td class="text-end text-danger fw-bold">${formatNumber(cost)}</td>
+                   <td class="text-end text-success fw-bold">${formatNumber(sale)}</td>
+                   <td class="text-end fw-bold ${profitClass}">${formatNumber(profit)}</td>
                    <td class="text-center">
                       <div class="dropdown">
-                        <button class="btn btn-sm btn-light border rounded-circle" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                           <li><button class="dropdown-item py-2 stock-in-btn" data-id="${item.id}"><i class="bi bi-box-arrow-in-down me-2 text-primary"></i>ซื้อเข้า</button></li>
-                           <li><button class="dropdown-item py-2 edit-btn" data-id="${item.id}"><i class="bi bi-pencil me-2 text-warning"></i>แก้ไข</button></li>
-                           <li><a class="dropdown-item py-2" href="activity-log.html?search=${item.code}"><i class="bi bi-clock-history me-2 text-info"></i>ประวัติ</a></li>
+                        <button class="btn btn-sm btn-light border text-primary rounded-circle shadow-sm hover-elevate" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2">
+                           <li><button class="dropdown-item py-2 fw-medium rounded-3 stock-in-btn" data-id="${item.id}"><i class="bi bi-box-arrow-in-down me-2 text-primary"></i>ซื้อเข้า (เพิ่มสต๊อก)</button></li>
+                           <li><button class="dropdown-item py-2 fw-medium rounded-3 edit-btn" data-id="${item.id}"><i class="bi bi-pencil me-2 text-warning"></i>แก้ไขข้อมูล</button></li>
+                           <li><a class="dropdown-item py-2 fw-medium rounded-3" href="activity-log.html?search=${item.code}"><i class="bi bi-clock-history me-2 text-info"></i>ประวัติความเคลื่อนไหว</a></li>
                            <li><hr class="dropdown-divider"></li>
-                           <li><button class="dropdown-item py-2 text-danger delete-btn" data-id="${item.id}"><i class="bi bi-trash me-2"></i>ลบ</button></li>
+                           <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3 delete-btn" data-id="${item.id}"><i class="bi bi-trash-fill me-2"></i>ลบรายการ</button></li>
                         </ul>
                       </div>
                    </td>
@@ -719,7 +621,7 @@
          }
          
          isLoadingStock = true;
-         stockLoadingState.innerHTML = `<span class="spinner-border spinner-border-sm text-primary"></span>`;
+         stockLoadingState.innerHTML = `<span class="spinner-border spinner-border-sm text-success"></span>`;
          if(loadMoreStockBtn) loadMoreStockBtn.classList.add("d-none");
 
          try {
@@ -744,7 +646,7 @@
 
          } catch(e) {
              console.error(e);
-             showToast("โหลดข้อมูลล้มเหลว", "danger");
+             showToast("โหลดข้อมูลล้มเหลว โปรดลองอีกครั้ง", "danger");
          } finally {
              isLoadingStock = false;
              stockLoadingState.textContent = "";
@@ -774,19 +676,16 @@
              if(isEditing) {
                  const id = stockItemIdInput.value;
                  await updateDoc(doc(db, "stock", id), data);
-                 // Update Local
                  const idx = stockItems.findIndex(i => i.id === id);
                  if(idx !== -1) stockItems[idx] = { ...stockItems[idx], ...data };
                  
-// ...
-await addDoc(collection(db, "activityLogs"), {
-   type: "stock_updated", message: `แก้ไขสินค้า ${data.name}`, refId: id, refType: "stock",
-   branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
-   createdBy: currentUser.uid,
-   createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
-});
-// ...
-                 showToast("แก้ไขสำเร็จ", "success");
+                 await addDoc(collection(db, "activityLogs"), {
+                     type: "stock_updated", message: `แก้ไขข้อมูลสินค้า ${data.name}`, refId: id, refType: "stock",
+                     branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+                     createdBy: currentUser.uid,
+                     createdByName: currentUserProfile.displayName || currentUser.email
+                 });
+                 showToast("แก้ไขข้อมูลสินค้าเรียบร้อย", "success");
                  resetForm();
              } else {
                  data.createdAt = serverTimestamp();
@@ -795,16 +694,15 @@ await addDoc(collection(db, "activityLogs"), {
                  const ref = await addDoc(collection(db, "stock"), data);
                  stockItems.push({ id: ref.id, ...data });
                  
-// ...
-await addDoc(collection(db, "activityLogs"), {
-   type: "stock_created", message: `เพิ่มสินค้าใหม่ ${data.name}`, refId: ref.id, refType: "stock",
-   branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
-   createdBy: currentUser.uid,
-   createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
-});
-// ...
-                 showToast("เพิ่มสินค้าสำเร็จ", "success");
+                 await addDoc(collection(db, "activityLogs"), {
+                     type: "stock_created", message: `เพิ่มสินค้าใหม่ ${data.name}`, refId: ref.id, refType: "stock",
+                     branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+                     createdBy: currentUser.uid,
+                     createdByName: currentUserProfile.displayName || currentUser.email
+                 });
+                 showToast("เพิ่มสินค้าใหม่เข้าระบบสำเร็จ", "success");
                  e.target.reset();
+                 document.getElementById("stockItemProfitPreview").textContent = "0.00 ฿";
              }
              updateStats();
              renderTable();
@@ -818,13 +716,25 @@ await addDoc(collection(db, "activityLogs"), {
       }
 
       async function handleDelete(id) {
-         if(!confirm("ต้องการลบสินค้านี้ใช่หรือไม่? (Soft Delete)")) return;
+         if(!confirm("⚠️ ต้องการลบสินค้านี้ใช่หรือไม่? (ข้อมูลจะถูกซ่อนจากหน้าจอ)")) return;
          try {
              await updateDoc(doc(db, "stock", id), { isDeleted: true, updatedAt: serverTimestamp() });
+             
+             // หาชื่อสินค้ามาใส่ Log
+             const item = stockItems.find(i => i.id === id);
+             if(item) {
+                 await addDoc(collection(db, "activityLogs"), {
+                     type: "stock_deleted", message: `ลบ/ซ่อนสินค้า ${item.name}`, refId: id, refType: "stock",
+                     branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+                     createdBy: currentUser.uid,
+                     createdByName: currentUserProfile.displayName || currentUser.email
+                 });
+             }
+             
              stockItems = stockItems.filter(i => i.id !== id);
              updateStats();
              renderTable();
-             showToast("ลบสินค้าเรียบร้อย", "success");
+             showToast("ลบรายการสินค้าเรียบร้อย", "success");
          } catch(e) {
              showToast("ลบไม่สำเร็จ", "danger");
          }
@@ -844,20 +754,30 @@ await addDoc(collection(db, "activityLogs"), {
           stockCostPriceInput.value = item.costPrice;
           stockSalePriceInput.value = item.salePrice;
           
-          stockFormTitleText.textContent = "แก้ไขข้อมูลสินค้า";
+          // อัปเดต Preview กำไรทันที
+          const profit = (item.salePrice || 0) - (item.costPrice || 0);
+          const previewEl = document.getElementById("stockItemProfitPreview");
+          previewEl.textContent = formatNumber(profit) + " ฿";
+          previewEl.className = profit >= 0 ? "fw-bold text-success" : "fw-bold text-danger";
+          
+          stockFormTitleText.textContent = "แก้ไขข้อมูลสินค้า (Edit Item)";
           saveStockItemBtnText.textContent = "อัปเดตข้อมูล";
           cancelEditStockBtn.classList.remove("d-none");
           
           const bsCollapse = new bootstrap.Collapse(collapseAddStock, { toggle: false });
           bsCollapse.show();
-          stockItemForm.scrollIntoView({ behavior: "smooth" });
+          stockItemForm.scrollIntoView({ behavior: "smooth", block: "center" });
+          setTimeout(() => stockCodeInput.focus(), 300);
       }
 
       function resetForm() {
           isEditing = false;
           stockItemForm.reset();
           stockItemIdInput.value = "";
-          stockFormTitleText.textContent = "เพิ่มสินค้าใหม่";
+          document.getElementById("stockItemProfitPreview").textContent = "0.00 ฿";
+          document.getElementById("stockItemProfitPreview").className = "fw-bold text-success";
+          
+          stockFormTitleText.textContent = "เพิ่มสินค้าใหม่ (Add New Item)";
           saveStockItemBtnText.textContent = "บันทึกสินค้า";
           cancelEditStockBtn.classList.add("d-none");
           const bsCollapse = new bootstrap.Collapse(collapseAddStock, { toggle: false });
@@ -882,6 +802,7 @@ await addDoc(collection(db, "activityLogs"), {
           stockInTotalCostPreview.textContent = "0.00 ฿";
           
           stockInModal.show();
+          setTimeout(() => stockInQtyInput.focus(), 500);
       }
 
       async function handleStockIn() {
@@ -890,7 +811,7 @@ await addDoc(collection(db, "activityLogs"), {
           const date = stockInDateInput.value;
           
           if(!qtyAdd || qtyAdd <= 0 || isNaN(newCost)) {
-              showToast("กรุณาระบุจำนวนและต้นทุนให้ถูกต้อง", "warning"); return;
+              showToast("กรุณาระบุจำนวนที่รับเข้าและต้นทุนให้ถูกต้อง", "warning"); return;
           }
           
           isSavingStockIn = true;
@@ -912,20 +833,18 @@ await addDoc(collection(db, "activityLogs"), {
               });
               
               await addDoc(collection(db, "transactions"), {
-                  type: "expense", category: "ซื้ออะไหล่", description: `ซื้อ ${currentStockInItem.name}`,
+                  type: "expense", category: "ซื้ออะไหล่", description: `ซื้อเข้าสต๊อก ${currentStockInItem.name} จำนวน ${qtyAdd}`,
                   amount: totalNewVal, date: date, sourceType: "stock", sourceId: currentStockInItem.id,
                   branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), isDeleted: false
               });
 
-// ...
-await addDoc(collection(db, "activityLogs"), {
-    type: "stock_in", message: `รับเข้า ${currentStockInItem.name} +${qtyAdd}`, 
-    refId: currentStockInItem.id, refType: "stock",
-    branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
-    createdBy: currentUser.uid,
-    createdByName: currentUserProfile.displayName || currentUser.email // <--- เพิ่ม
-});
-// ...
+              await addDoc(collection(db, "activityLogs"), {
+                  type: "stock_in", message: `รับเข้า ${currentStockInItem.name} +${qtyAdd} ${currentStockInItem.unit}`, 
+                  refId: currentStockInItem.id, refType: "stock",
+                  branchId: currentUserProfile.branchId, createdAt: serverTimestamp(), 
+                  createdBy: currentUser.uid,
+                  createdByName: currentUserProfile.displayName || currentUser.email
+              });
 
               // Update Local
               const idx = stockItems.findIndex(i => i.id === currentStockInItem.id);
@@ -934,7 +853,7 @@ await addDoc(collection(db, "activityLogs"), {
                   stockItems[idx].costPrice = avgCost;
               }
               
-              showToast("บันทึกรับเข้าเรียบร้อย", "success");
+              showToast("บันทึกซื้อเข้าสต๊อกเรียบร้อยแล้ว", "success");
               stockInModal.hide();
               updateStats();
               renderTable();
@@ -950,24 +869,38 @@ await addDoc(collection(db, "activityLogs"), {
       }
 
       function exportToCSV() {
-         if(!stockItems.length) { showToast("ไม่มีข้อมูล", "warning"); return; }
-         let csv = "\uFEFFรหัส,ชื่อสินค้า,หมวดหมู่,คงเหลือ,ราคาทุน,ราคาขาย\n";
+         if(!stockItems.length) { showToast("ไม่มีข้อมูลให้ส่งออก", "warning"); return; }
+         const bom = "\uFEFF";
+         let csv = bom + "รหัส,ชื่อสินค้า,หมวดหมู่,คงเหลือ,ขั้นต่ำ,ราคาทุน,ราคาขาย,กำไร/ชิ้น\n";
          stockItems.forEach(i => {
-             csv += `"${i.code}","${i.name}","${i.category}",${i.qty},${i.costPrice},${i.salePrice}\n`;
+             const profit = (Number(i.salePrice)||0) - (Number(i.costPrice)||0);
+             csv += `"${i.code}","${i.name}","${i.category}",${i.qty},${i.minQty},${i.costPrice},${i.salePrice},${profit}\n`;
          });
          const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
          const link = document.createElement("a");
          link.href = URL.createObjectURL(blob);
-         link.download = `stock_${getTodayISO()}.csv`;
+         link.download = `stock_export_${getTodayISO()}.csv`;
          link.click();
       }
 
       // --- Setup ---
       function setupEvents() {
-         toggleStockFormBtn.onclick = () => resetForm(); // Open creates new clean state
+         toggleStockFormBtn.onclick = () => { if(isEditing) resetForm(); };
          cancelEditStockBtn.onclick = () => resetForm();
          stockItemForm.onsubmit = handleSaveStock;
          
+         // Profit Preview in Form
+         const calcProfitPreview = () => {
+             const cost = parseFloat(document.getElementById("stockCostPriceInput").value) || 0;
+             const sale = parseFloat(document.getElementById("stockSalePriceInput").value) || 0;
+             const profit = sale - cost;
+             const previewEl = document.getElementById("stockItemProfitPreview");
+             previewEl.textContent = formatNumber(profit) + " ฿";
+             previewEl.className = profit >= 0 ? "fw-bold text-success fs-5" : "fw-bold text-danger fs-5";
+         };
+         document.getElementById("stockCostPriceInput").addEventListener("input", calcProfitPreview);
+         document.getElementById("stockSalePriceInput").addEventListener("input", calcProfitPreview);
+
          // Realtime search & filter
          searchStockInput.addEventListener("keyup", renderTable);
          stockCategoryFilter.addEventListener("change", renderTable);
@@ -979,19 +912,19 @@ await addDoc(collection(db, "activityLogs"), {
          });
          
          // Stock In Preview
-         const calcPreview = () => {
+         const calcStockInPreview = () => {
              const q = parseFloat(stockInQtyInput.value)||0;
              const c = parseFloat(stockInCostPerUnitInput.value)||0;
              stockInTotalCostPreview.textContent = formatNumber(q*c) + " ฿";
          };
-         stockInQtyInput.oninput = calcPreview;
-         stockInCostPerUnitInput.oninput = calcPreview;
+         stockInQtyInput.oninput = calcStockInPreview;
+         stockInCostPerUnitInput.oninput = calcStockInPreview;
          stockInSaveBtn.onclick = handleStockIn;
 
          // Load More
          loadMoreStockBtn.onclick = () => loadStock(false);
 
-         // Table Actions
+         // Table Actions (Event Delegation)
          stockTableBody.onclick = (e) => {
              const btnIn = e.target.closest(".stock-in-btn");
              if(btnIn) openStockIn(btnIn.dataset.id);
@@ -1032,9 +965,11 @@ await addDoc(collection(db, "activityLogs"), {
 
          if(currentUserProfile.disabled) { signOut(auth); return; }
 
-         userDisplayNameText.textContent = currentUserProfile.displayName || user.email;
-         userRoleText.textContent = currentUserProfile.role === 'admin' ? "Admin" : "Staff";
-         userAvatarInitial.textContent = (currentUserProfile.displayName||"U")[0].toUpperCase();
+         const name = currentUserProfile.displayName || "ผู้ใช้งาน";
+         userDisplayNameText.textContent = name;
+         if(document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
+         userRoleText.textContent = currentUserProfile.role === 'admin' ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
+         userAvatarInitial.textContent = name[0].toUpperCase();
          if(settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== 'admin');
          
          applyTheme(localStorage.getItem("bm-theme-"+user.uid) || currentUserProfile.theme);
