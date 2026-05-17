@@ -55,6 +55,8 @@
               </span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-4 p-2">
+              <li><div class="px-3 py-2 d-sm-none"><strong id="userDisplayNameTextMobile" class="small">ผู้ใช้งาน</strong></div></li>
+              <li><hr class="dropdown-divider d-sm-none"></li>
               <li><a class="dropdown-item py-2 fw-medium rounded-3" href="dashboard.html"><i class="bi bi-speedometer2 me-2 text-primary"></i> แดชบอร์ด</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li><button class="dropdown-item py-2 fw-medium text-danger rounded-3" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> ออกจากระบบ</button></li>
@@ -445,7 +447,7 @@
          }
       }
 
-      // --- Data Loading (Bypassing Firebase Indexes) ---
+      // --- Data Loading ---
       async function loadData() {
          if (!currentUserProfile) return;
          
@@ -529,7 +531,6 @@
              return;
          }
 
-         const isAdmin = currentUserProfile.role === 'admin';
          filtered.forEach(item => {
              const cost = Number(item.costPrice || 0);
              const sell = Number(item.sellPrice || 0);
@@ -563,8 +564,8 @@
                 <td class="text-end text-info-emphasis fw-bold font-monospace small">${labor > 0 ? formatNumber(labor) + ' ฿' : "-"}</td>
                 <td class="text-center small fw-semibold text-dark">${item.unit || "ชิ้น"}</td>
                 <td class="text-center no-print-section">
-                   <button class="btn btn-sm btn-light text-primary border rounded-circle shadow-sm me-1 hover-elevate" onclick="copyItem('${item.id}')" title="คัดลอกข้อความไปที่คลิปบอร์ด"><i class="bi bi-clipboard-check"></i></button>
-                   ${isAdmin ? `
+                   <button class="btn btn-sm btn-light text-primary border rounded-circle shadow-sm me-1 hover-elevate" onclick="copyItem('${item.id}')" title="คัดลอกข้อความราคาด่วน"><i class="bi bi-clipboard-check"></i></button>
+                   ${currentUserProfile.role === 'admin' ? `
                    <button class="btn btn-sm btn-light text-warning border rounded-circle shadow-sm me-1 hover-elevate" onclick="editItem('${item.id}')" title="แก้ไขรายการ"><i class="bi bi-pencil-fill"></i></button>
                    <button class="btn btn-sm btn-light text-danger border rounded-circle shadow-sm hover-elevate" onclick="askDelete('${item.id}')" title="ลบรายการ"><i class="bi bi-trash-fill"></i></button>
                    ` : `<i class="bi bi-lock-fill text-muted opacity-25"></i>`}
@@ -638,8 +639,6 @@
             savePriceItemBtn.disabled = true;
             if (id) {
                await updateDoc(doc(db, "priceItems", id), payload);
-               
-               // เขียนประวัติกิจกรรมลง Log หลังบ้าน
                await addDoc(collection(db, "activityLogs"), {
                   type: "priceItem_updated", message: `แก้ไขราคากลาง: ${payload.name} [หมวด ${payload.category}]`,
                   refId: id, refType: "priceItem", branchId: currentUserProfile.branchId, createdAt: now,
@@ -650,8 +649,6 @@
                payload.createdAt = now;
                payload.createdBy = currentUser.uid;
                const ref = await addDoc(collection(db, "priceItems"), payload);
-               
-               // เขียนประวัติกิจกรรมลง Log หลังบ้าน
                await addDoc(collection(db, "activityLogs"), {
                   type: "priceItem_created", message: `เพิ่มราคากลางใหม่: ${payload.name} ราคา ${formatNumber(payload.sellPrice)} ฿`,
                   refId: ref.id, refType: "priceItem", branchId: currentUserProfile.branchId, createdAt: now,
@@ -675,7 +672,6 @@
              const item = allPriceItems.find(i => i.id === deleteTargetId);
              await updateDoc(doc(db, "priceItems", deleteTargetId), { isDeleted: true, updatedAt: serverTimestamp() });
              
-             // เขียนประวัติกิจกรรมลง Log หลังบ้าน
              if(item) {
                 await addDoc(collection(db, "activityLogs"), {
                    type: "priceItem_deleted", message: `ลบราคากลาง: ${item.name}`,
@@ -692,49 +688,12 @@
          }
       }
 
-      // --- Main Execution Workflow ---
-      onAuthStateChanged(auth, async (user) => {
-         if (!user) { window.location.href = "index.html"; return; }
-         currentUser = user;
-         
-         try {
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if (snap.exists()) {
-                currentUserProfile = { id: snap.id, ...snap.data() };
-                if (currentUserProfile.disabled) { await signOut(auth); window.location.href = "index.html"; return; }
-                
-                // Set Profile Web Element View text
-                userDisplayNameText.textContent = currentUserProfile.displayName || "ช่างเทคนิค";
-                userRoleText.textContent = currentUserProfile.role === "admin" ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
-                userAvatarInitial.textContent = (currentUserProfile.displayName || "U")[0].toUpperCase();
-                priceCheckBranchLabel.innerHTML = `<i class="bi bi-geo-alt-fill me-1"></i> ${currentUserProfile.branchId ? 'สาขา: ' + currentUserProfile.branchId : 'รวมทุกสาขา'}`;
-                
-                // Theme Logic
-                const t = localStorage.getItem("bm-theme-" + user.uid) || currentUserProfile.theme || "light";
-                applyTheme(t);
-
-                // Permissions logic view setup
-                if (currentUserProfile.role !== "admin") {
-                    openAddPriceModalBtn.classList.add("d-none");
-                } else {
-                    openAddPriceModalBtn.classList.remove("d-none");
-                }
-
-                loadData();
-            } else {
-                currentUserProfile = { role: 'staff', branchId: null };
-                loadData();
-            }
-         } catch(err) {
-            console.error(err);
-         }
-
-         // Add DOM Listeners
+      function setupEvents() {
          themeToggleBtn?.addEventListener("click", () => {
             const isDark = bodyEl.classList.contains("bm-theme-dark");
             const newTheme = isDark ? "light" : "dark";
             applyTheme(newTheme);
-            localStorage.setItem("bm-theme-" + user.uid, newTheme);
+            localStorage.setItem("bm-theme-" + currentUser.uid, newTheme);
          });
 
          priceSearchInput.addEventListener("input", renderTable);
@@ -755,6 +714,46 @@
          savePriceItemBtn.addEventListener("click", saveData);
          confirmDeleteBtn.addEventListener("click", deleteItem);
          [modalSellPrice, modalCostPrice].forEach(el => el.addEventListener("input", updateModalMargin));
+      }
+
+      // --- Main Execution ---
+      onAuthStateChanged(auth, async (user) => {
+         if (!user) { window.location.href = "index.html"; return; }
+         currentUser = user;
+         
+         try {
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if (snap.exists()) {
+                currentUserProfile = { id: snap.id, ...snap.data() };
+                if (currentUserProfile.disabled) { await signOut(auth); window.location.href = "index.html"; return; }
+                
+                // UI Init ข้อมูลโปรไฟล์ร้าน BEN MOTOR
+                const name = currentUserProfile.displayName || "ช่างเทคนิค";
+                userDisplayNameText.textContent = name;
+                if (document.getElementById("userDisplayNameTextMobile")) document.getElementById("userDisplayNameTextMobile").textContent = name;
+                userRoleText.textContent = currentUserProfile.role === "admin" ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
+                userAvatarInitial.textContent = name[0].toUpperCase();
+                priceCheckBranchLabel.innerHTML = `<i class="bi bi-geo-alt-fill me-1"></i> ${currentUserProfile.branchId ? 'สาขา: ' + currentUserProfile.branchId : 'รวมทุกสาขา'}`;
+                
+                applyTheme(localStorage.getItem("bm-theme-" + user.uid) || currentUserProfile.theme || "light");
+
+                if (currentUserProfile.role !== "admin") {
+                    openAddPriceModalBtn.classList.add("d-none");
+                } else {
+                    openAddPriceModalBtn.classList.remove("d-none");
+                }
+
+                // สั่งรันสคริปต์ผูก Event และโหลดราคาขึ้นหน้าจอออโต้ทันที!
+                setupEvents();
+                loadData();
+            } else {
+                currentUserProfile = { role: 'staff', branchId: null };
+                setupEvents();
+                loadData();
+            }
+         } catch(err) {
+            console.error("Init price check component error:", err);
+         }
       });
     </script>
   </body>
