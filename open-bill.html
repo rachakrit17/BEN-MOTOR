@@ -818,13 +818,15 @@
                await updateDoc(sRef, { qty: newQty, updatedAt:serverTimestamp() });
             }
 
-            // Transaction & Log
-            await addDoc(collection(db,"transactions"), {
-               date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
-               paymentMethod: paymentMethodInput.value, 
-               amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
-               createdAt:serverTimestamp(), createdBy:currentUser.uid
-            });
+            // Transaction & Log (บันทึกรายรับเข้าบัญชีเฉพาะตอนที่ลูกค้าจ่ายเงินแล้ว)
+            if (paymentMethodInput.value !== 'pending') {
+               await addDoc(collection(db,"transactions"), {
+                  date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
+                  paymentMethod: paymentMethodInput.value, 
+                  amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
+                  createdAt:serverTimestamp(), createdBy:currentUser.uid
+               });
+            }
             
             await addDoc(collection(db,"activityLogs"), {
                type:"job_created", message:`เปิดบิลซ่อม ${plate} ยอด ${formatNumber(partsTot+laborTot)}`,
