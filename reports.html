@@ -37,7 +37,7 @@
   </head>
 
   <body class="bm-theme-light bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom btn-no-print">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
           <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
@@ -337,7 +337,7 @@
                 </p>
               </div>
               <div class="card-body p-0">
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <div class="table-responsive custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
                   <table class="table table-hover align-middle mb-0 small">
                     <thead class="bg-light text-secondary sticky-top border-bottom shadow-sm">
                       <tr>
@@ -360,10 +360,10 @@
               <div class="col-12 col-lg-4">
                  <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
                     <div class="card-header bg-warning bg-opacity-10 py-3 border-0 px-4">
-                       <h6 class="fw-bold mb-0 text-warning-emphasis"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>ของใกล้หมด (< 5 ชิ้น)</h6>
+                       <h6 class="fw-bold mb-0 text-warning-emphasis"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>ของใกล้หมด / หมดสต๊อก</h6>
                     </div>
                     <div class="card-body p-0 small">
-                       <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                       <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
                           <table class="table table-sm table-hover mb-0">
                              <tbody id="lowStockTbody" class="bg-white">
                                 <tr><td class="text-center py-4 text-success fw-bold"><i class="bi bi-check-circle me-1"></i> ไม่มีรายการเตือน</td></tr>
@@ -373,13 +373,14 @@
                     </div>
                  </div>
               </div>
+
               <div class="col-12 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
                   <div class="card-header bg-danger bg-opacity-10 py-3 border-0 px-4">
                     <h6 class="fw-bold mb-0 text-danger"><i class="bi bi-recycle me-2"></i>Dead Stock (>90 วัน)</h6>
                   </div>
                   <div class="card-body p-0 small">
-                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
                       <table class="table table-sm table-hover mb-0">
                         <thead class="text-muted bg-light">
                            <tr><th class="ps-4 py-2 fw-medium">สินค้า</th><th class="text-end pe-4 py-2 fw-medium">คงเหลือ</th></tr>
@@ -392,13 +393,14 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-12 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 rounded-4 card-premium">
                   <div class="card-header bg-success bg-opacity-10 py-3 border-0 px-4">
                     <h6 class="fw-bold mb-0 text-success"><i class="bi bi-trophy-fill me-2"></i>สินค้าขายดี (Top 10)</h6>
                   </div>
                   <div class="card-body p-0 small">
-                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                    <div class="table-responsive custom-scrollbar" style="max-height: 300px; overflow-y: auto;">
                       <table class="table table-sm table-hover mb-0">
                         <thead class="text-muted bg-light">
                            <tr><th class="ps-4 py-2 fw-medium">สินค้า</th><th class="text-end pe-4 py-2 fw-medium">ยอดใช้ (ชิ้น)</th></tr>
@@ -474,6 +476,30 @@
         <div style="height: 5rem;"></div>
       </div>
     </main>
+
+    <div class="bm-fab-container btn-no-print">
+      <div class="dropdown dropup">
+        <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span> เปิดบิลซ่อมใหม่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddTxnBtn"><span class="bg-success bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-cash-coin text-success"></i></span> เพิ่มรายการเงิน</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabStockInBtn"><span class="bg-warning bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-box-seam text-warning"></i></span> บันทึกซื้ออะไหล่</button></li>
+          <li><button class="dropdown-item d-flex align-items-center py-2 fw-medium rounded-3" type="button" id="fabAddVehicleBtn"><span class="bg-info bg-opacity-10 rounded-circle p-2 me-2 d-flex"><i class="bi bi-truck-front text-info"></i></span> เพิ่มรถรับซื้อเข้า</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg btn-no-print">
+      <div class="container-fluid px-0 h-100">
+        <div class="row g-0 w-100 h-100 text-center small fw-medium">
+          <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
+          <div class="col h-100"><a href="open-bill.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-receipt-cutoff d-block fs-5 mb-1"></i><span>เปิดบิล</span></a></div>
+          <div class="col h-100"><a href="jobs.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-wrench-adjustable-circle d-block fs-5 mb-1"></i><span>งานซ่อม</span></a></div>
+          <div class="col h-100"><a href="vehicles.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-truck-front d-block fs-5 mb-1"></i><span>รถรับซื้อ</span></a></div>
+          <div class="col h-100"><a href="stock.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-box-seam d-block fs-5 mb-1"></i><span>สต๊อก</span></a></div>
+          <div class="col h-100"><a href="finance.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-cash-coin d-block fs-5 mb-1"></i><span>เงินเข้าออก</span></a></div>
+        </div>
+      </div>
+    </nav>
 
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1090;">
       <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
@@ -555,6 +581,12 @@
       const profitBreakdownChartCanvas = document.getElementById("profitBreakdownChart");
       const jobStructureChartCanvas = document.getElementById("jobStructureChart");
 
+      // FAB Elements
+      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
+      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
+      const fabStockInBtn = document.getElementById("fabStockInBtn");
+      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
+
       let currentUser = null;
       let currentUserProfile = null;
       let chartInstances = {};
@@ -588,7 +620,7 @@
       }
 
       function renderTrendBadge(badgeEl, trend, goodIfUp = true) {
-         let finalClass = "badge border rounded-pill px-2 py-1 shadow-sm";
+         let finalClass = "badge border rounded-pill px-3 py-2 shadow-sm";
          let iconHtml = "";
 
          if (trend.isUp) {
@@ -608,7 +640,7 @@
       Chart.defaults.font.family = "'Kanit', sans-serif";
       Chart.defaults.color = '#6c757d';
 
-      // --- Main Data Loading (Client-Side Filtering to avoid Firebase Index Issues) ---
+      // --- Main Data Loading ---
       async function loadReports(startStr, endStr) {
          if(!currentUserProfile) return;
          setLoading(true);
@@ -627,8 +659,6 @@
 
          try {
             const branchId = currentUserProfile.branchId;
-
-            // ดึงข้อมูลทั้งหมดที่ "ยังไม่ถูกลบ" แล้วมาคัดกรองวันที่ด้วย JavaScript เพื่อป้องกัน Error จาก Firebase Missing Index
             const constraints = [where("isDeleted", "==", false)];
             if(branchId) constraints.push(where("branchId", "==", branchId));
 
@@ -642,13 +672,10 @@
             const allTx = []; txSnap.forEach(d => allTx.push({id:d.id, ...d.data()}));
             const allJobs = []; jobsSnap.forEach(d => allJobs.push({id:d.id, ...d.data()}));
             const allVehicles = []; vehSnap.forEach(d => allVehicles.push({id:d.id, ...d.data()}));
-            
             allStockItems = []; stockSnap.forEach(d => allStockItems.push({id:d.id, ...d.data()}));
 
-            // Filter in Javascript
             currentData.transactions = allTx.filter(t => t.date >= startStr && t.date <= endStr).sort((a,b) => a.date.localeCompare(b.date));
             previousData.transactions = allTx.filter(t => t.date >= previousData.start && t.date <= previousData.end);
-
             currentData.jobs = allJobs.filter(j => j.date >= startStr && j.date <= endStr);
             currentData.vehiclesBuy = allVehicles.filter(v => v.buyDate >= startStr && v.buyDate <= endStr);
             currentData.vehiclesSold = allVehicles.filter(v => v.status === "sold" && v.sellDate >= startStr && v.sellDate <= endStr);
@@ -746,7 +773,6 @@
          jobs.forEach(j => {
             const total = Number(j.totalAmount||0);
             totalJobRev += total;
-            
             let calculatedFromItems = false; 
 
             if(j.items && Array.isArray(j.items) && j.items.length > 0) {
@@ -808,9 +834,9 @@
 
             topCustomersTbody.innerHTML += `
                <tr>
-                  <td class="ps-4 py-3">${rankBadge}</td>
+                  <td class="ps-4">${rankBadge}</td>
                   <td class="fw-bold text-dark">${name}</td>
-                  <td class="text-center"><span class="badge bg-light text-dark border fw-medium">${data.count} บิล</span></td>
+                  <td class="text-center"><span class="badge bg-light text-dark border fw-normal">${data.count} บิล</span></td>
                   <td class="text-end pe-4 fw-bold text-success">${formatNumber(data.total)} ฿</td>
                </tr>`;
          });
@@ -849,7 +875,6 @@
                forecastList.push({ name: item.name, code: item.code, currentQty, rate, daysLeft });
             }
 
-            // 🔥 แก้ไขบักตรงนี้: เช็คจากขั้นต่ำ (minQty) และให้รวมของที่เหลือ 0 ชิ้นด้วย
             if(currentQty <= Number(item.minQty || 0)) {
                lowStockList.push(item);
             }
@@ -873,7 +898,6 @@
          lowStockTbody.innerHTML = "";
          if(lowStockList.length === 0) lowStockTbody.innerHTML = `<tr><td class="text-center py-5 text-success fw-bold"><i class="bi bi-check-circle-fill fs-3 d-block mb-2"></i> สต๊อกเพียงพอทุกรายการ</td></tr>`;
          lowStockList.forEach(i => {
-            // ปรับชื่อให้เล็กลงหน่อย จะได้ไม่ล้นกล่อง
             lowStockTbody.innerHTML += `<tr><td class="ps-4 py-3 d-flex justify-content-between align-items-center"><span class="fw-bold text-dark text-truncate" style="max-width:180px;">${i.name}</span><span class="badge bg-danger rounded-pill px-3 py-1 shadow-sm">เหลือ ${i.qty}</span></td></tr>`;
          });
 
@@ -903,7 +927,6 @@
       function renderProfit() {
          let jobRev = 0;
          currentData.jobs.forEach(j => jobRev += Number(j.totalAmount||0));
-         
          let vProfit = 0;
          currentData.vehiclesSold.forEach(v => vProfit += (typeof v.profit === 'number' ? v.profit : (Number(v.sellPrice||0) - Number(v.buyPrice||0))));
 
@@ -1028,7 +1051,12 @@
             localStorage.setItem("bm-theme-" + user.uid, newTheme);
          });
 
-         // Make charts re-render correctly when tabs are clicked
+         // FAB Links การนำทางปุ่มด่วน
+         if(fabOpenBillBtn) fabOpenBillBtn.onclick = () => window.location.href="open-bill.html";
+         if(fabAddTxnBtn) fabAddTxnBtn.onclick = () => window.location.href="finance.html";
+         if(fabStockInBtn) fabStockInBtn.onclick = () => window.location.href="stock.html";
+         if(fabAddVehicleBtn) fabAddVehicleBtn.onclick = () => window.location.href="vehicles.html";
+
          document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tabBtn => {
              tabBtn.addEventListener('shown.bs.tab', function (e) {
                  if(e.target.id === 'overview-tab' && chartInstances.line) chartInstances.line.resize();
