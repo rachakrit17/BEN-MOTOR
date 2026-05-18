@@ -97,14 +97,29 @@
         </div>
 
         <section class="mb-4">
+          
+          <div id="urgentJobsAlert" class="alert alert-danger d-none shadow-sm rounded-4 border-0 d-flex align-items-center mb-4">
+            <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-danger"></i>
+            <div>
+              <h6 class="fw-bold mb-1 text-danger">มีงานซ่อมด่วนที่กำลังรอคิว!</h6>
+              <span class="small fw-medium text-danger text-opacity-75">ขณะนี้มีรถค้างซ่อมสถานะ "ด่วนมาก" จำนวน <strong id="statUrgentJobs" class="fs-6">0</strong> คันในอู่</span>
+            </div>
+            <a href="jobs.html" class="btn btn-sm btn-danger ms-auto rounded-pill px-3 fw-bold shadow-sm">ดูงานซ่อม <i class="bi bi-arrow-right ms-1"></i></a>
+          </div>
+
           <div class="row g-3">
             <div class="col-6 col-lg-3">
               <div class="card bm-stat-card h-100 shadow-sm border-0 bg-success bg-opacity-10 rounded-4 overflow-hidden position-relative">
                 <div class="position-absolute top-0 end-0 p-3 opacity-25"><i class="bi bi-graph-up-arrow display-4 text-success"></i></div>
-                <div class="card-body p-4 position-relative z-1">
-                  <div class="text-success small fw-bold mb-1">รายได้วันนี้</div>
-                  <h3 class="fw-bold text-success mb-0" id="statIncomeToday">-</h3>
-                  <small class="text-success text-opacity-75 text-xs fw-medium">ยอดรับจริง (เงินสด/โอน)</small>
+                <div class="card-body p-4 position-relative z-1 d-flex flex-column justify-content-between">
+                  <div>
+                    <div class="text-success small fw-bold mb-1">รายได้วันนี้</div>
+                    <h3 class="fw-bold text-success mb-0" id="statIncomeToday">-</h3>
+                  </div>
+                  <div class="d-flex flex-column gap-1 mt-3">
+                     <span class="badge bg-white text-success border border-success-subtle text-start py-1 px-2 fw-medium w-100"><i class="bi bi-cash me-1"></i> เงินสด: <span id="statIncomeCash">0.00</span></span>
+                     <span class="badge bg-white text-success border border-success-subtle text-start py-1 px-2 fw-medium w-100"><i class="bi bi-phone me-1"></i> โอน: <span id="statIncomeTransfer">0.00</span></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -115,7 +130,7 @@
                 <div class="card-body p-4 position-relative z-1">
                   <div class="text-danger small fw-bold mb-1">รายจ่ายวันนี้</div>
                   <h3 class="fw-bold text-danger mb-0" id="statExpenseToday">-</h3>
-                  <small class="text-danger text-opacity-75 text-xs fw-medium">รวมซื้อของ/ค่าใช้จ่าย</small>
+                  <small class="text-danger text-opacity-75 text-xs fw-medium mt-2 d-block">รวมซื้อของ/ค่าใช้จ่าย</small>
                 </div>
               </div>
             </div>
@@ -126,7 +141,7 @@
                 <div class="card-body p-4 position-relative z-1">
                   <div class="text-primary small fw-bold mb-1">กำไรวันนี้</div>
                   <h3 class="fw-bold text-dark mb-0" id="statProfitToday">-</h3>
-                  <small class="text-primary text-opacity-75 text-xs fw-medium">รายรับ หัก รายจ่าย</small>
+                  <small class="text-primary text-opacity-75 text-xs fw-medium mt-2 d-block">รายรับ หัก รายจ่าย</small>
                 </div>
               </div>
             </div>
@@ -137,7 +152,7 @@
                 <div class="card-body p-4 position-relative z-1">
                   <div class="text-dark small fw-bold mb-1">เงินคงเหลือรวมในเก๊ะ</div>
                   <h3 class="fw-bold text-dark mb-0" id="statTotalBalance">-</h3>
-                  <small class="text-muted text-xs fw-medium">ยอดสะสมทั้งหมด</small>
+                  <small class="text-muted text-xs fw-medium mt-2 d-block">ยอดสะสมทั้งหมด</small>
                 </div>
               </div>
             </div>
@@ -176,7 +191,7 @@
                 </div>
                 <div class="col-4 col-sm-2">
                   <div class="p-3 border-0 rounded-4 text-center bg-white shadow-sm h-100 bm-stat-card">
-                    <div class="text-muted text-xs mb-1 fw-medium">ซื้ออะไหล่</div>
+                    <div class="text-muted text-xs mb-1 fw-medium">ซื้ออะไหล</div>
                     <h4 class="fw-bold text-secondary mb-0" id="statStockInToday">-</h4>
                   </div>
                 </div>
@@ -327,9 +342,14 @@
 
       const statTotalBalance = document.getElementById("statTotalBalance");
       const statIncomeToday = document.getElementById("statIncomeToday");
+      const statIncomeCash = document.getElementById("statIncomeCash"); // อัปเกรดใหม่
+      const statIncomeTransfer = document.getElementById("statIncomeTransfer"); // อัปเกรดใหม่
       const statExpenseToday = document.getElementById("statExpenseToday");
       const statProfitToday = document.getElementById("statProfitToday");
       
+      const urgentJobsAlert = document.getElementById("urgentJobsAlert"); // อัปเกรดใหม่
+      const statUrgentJobs = document.getElementById("statUrgentJobs"); // อัปเกรดใหม่
+
       const statJobsToday = document.getElementById("statJobsToday");
       const statJobsInGarage = document.getElementById("statJobsInGarage");
       const statVehiclesBoughtToday = document.getElementById("statVehiclesBoughtToday");
@@ -398,7 +418,6 @@
       function renderIncomeChart(labels, incData, expData) {
         if(incomeChartInstance) incomeChartInstance.destroy();
         
-        // เช็คว่ามีข้อมูลมั้ย
         const hasData = incData.some(v => v > 0) || expData.some(v => v > 0);
         if(!hasData) {
            chartEmptyState.classList.remove('d-none');
@@ -519,19 +538,24 @@
         if(currentDateLabel) currentDateLabel.textContent = formatDateThai(new Date());
 
         try {
-          // 1. Transactions & Balance
+          // 1. Transactions & Balance (แยกเงินสด/โอน)
           const dates7 = getLast7Days();
           const qTx = query(collection(db, "transactions"), where("isDeleted","==",false), where("date",">=",dates7[0]), ...(branchId?[where("branchId","==",branchId)]:[]));
           const txSnap = await getDocs(qTx);
 
-          let incToday=0, expToday=0, stockInCount=0;
+          let incToday=0, incCashToday=0, incTransferToday=0; 
+          let expToday=0, stockInCount=0;
           const dailyMap = {}; dates7.forEach(d => dailyMap[d] = { inc: 0, exp: 0 });
 
           txSnap.forEach(doc => {
             const d = doc.data();
             const amt = Number(d.amount||0);
             if(d.date === today) {
-              if(d.type==="income") incToday += amt;
+              if(d.type==="income") {
+                 incToday += amt;
+                 if(d.paymentMethod === 'transfer') incTransferToday += amt;
+                 else incCashToday += amt;
+              }
               else { expToday += amt; if(d.category==="ซื้ออะไหล่") stockInCount++; }
             }
             if(dailyMap[d.date]) {
@@ -550,6 +574,8 @@
 
           statTotalBalance.textContent = formatNumber(totalInc - totalExp) + " ฿";
           statIncomeToday.textContent = formatNumber(incToday) + " ฿";
+          statIncomeCash.textContent = formatNumber(incCashToday); // อัปเดตเงินสด
+          statIncomeTransfer.textContent = formatNumber(incTransferToday); // อัปเดตเงินโอน
           statExpenseToday.textContent = formatNumber(expToday) + " ฿";
           
           const profit = incToday - expToday;
@@ -560,23 +586,36 @@
 
           renderIncomeChart(dates7, dates7.map(d=>dailyMap[d].inc), dates7.map(d=>dailyMap[d].exp));
 
-          // 2. Jobs
+          // 2. Jobs (เช็คงานด่วน)
           const qJobs = query(collection(db,"jobs"), where("isDeleted","==",false), ...(branchId?[where("branchId","==",branchId)]:[]));
           const jobsSnap = await getDocs(qJobs);
-          let jobsToday=0, jobsGarage=0;
+          let jobsToday=0, jobsGarage=0, urgentJobsCount=0;
           let sRep=0, sDone=0, sPick=0;
 
           jobsSnap.forEach(doc => {
              const d = doc.data();
              if(d.date === today) jobsToday++;
-             if(d.status !== "picked_up") jobsGarage++;
+             if(d.status !== "picked_up") {
+                jobsGarage++;
+                if(d.priority === 'high') urgentJobsCount++;
+             }
              
              if(d.status === "repairing") sRep++;
              else if(d.status === "done") sDone++;
              else if(d.status === "picked_up") sPick++;
           });
+          
           statJobsToday.textContent = jobsToday;
           statJobsInGarage.textContent = jobsGarage;
+          
+          // โชว์/ซ่อน แจ้งเตือนงานด่วน
+          if(urgentJobsCount > 0) {
+             urgentJobsAlert.classList.remove('d-none');
+             statUrgentJobs.textContent = urgentJobsCount;
+          } else {
+             urgentJobsAlert.classList.add('d-none');
+          }
+          
           renderStatusChart(sRep, sDone, sPick);
 
           // 3. Vehicles
@@ -613,7 +652,7 @@
           });
           if(lowCount===0) lowStockTbody.innerHTML = `<tr><td colspan="3" class="text-center py-5 text-success fw-bold"><i class="bi bi-check-circle fs-3 d-block mb-2"></i>สต๊อกปกติ ไม่มีอะไหล่ขาด</td></tr>`;
 
-          // 5. Activity Logs (อัปเกรดแยกสี/ไอคอน)
+          // 5. Activity Logs
           const qLogs = query(collection(db,"activityLogs"), ...(branchId?[where("branchId","==",branchId)]:[]), orderBy("createdAt","desc"), limit(8));
           const logsSnap = await getDocs(qLogs);
           activityLogsList.innerHTML = "";
@@ -625,7 +664,6 @@
                 const d = doc.data();
                 const time = d.createdAt?.toDate().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}) || "-";
                 
-                // จัดประเภทไอคอน
                 let iconHtml = `<div class="log-icon-wrapper bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-info-circle"></i></div>`;
                 if(d.type === "payment_received" || d.type === "income") iconHtml = `<div class="log-icon-wrapper bg-success bg-opacity-10 text-success"><i class="bi bi-cash-coin"></i></div>`;
                 else if(d.type === "job_created") iconHtml = `<div class="log-icon-wrapper bg-primary bg-opacity-10 text-primary"><i class="bi bi-receipt"></i></div>`;
@@ -694,7 +732,7 @@
 
          refreshDashboardBtn?.addEventListener("click", () => {
             const icon = refreshDashboardBtn.querySelector('i');
-            icon.classList.add('bi-spin'); // ใส่ลูกเล่นหมุนตอนกดรีเฟรช
+            icon.classList.add('bi-spin'); 
             loadDashboardData(profile).then(() => {
                icon.classList.remove('bi-spin');
                showToast("อัปเดตข้อมูลล่าสุดแล้ว", "success");
