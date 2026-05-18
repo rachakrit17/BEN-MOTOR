@@ -16,13 +16,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🛑 รหัส API KEY ของ ChatGPT / OpenAI (ลูกพี่เบนก๊อปปี้คีย์แท้ sk-... มาวางบิดตรงนี้ได้เลยครับ)
-const OPENAI_API_KEY = ""; 
-
 let currentUid = null;
 let currentProfile = null;
 
-// 🧠 คลังความจำแชทบริสุทธิ์ (มีแค่ข้อความคุย User / Assistant) ตัดทิ้งเมื่อไหร่ก็ไม่มีวันเอ๋อ!
+// 🧠 คลังประวัติความจำแชทบริสุทธิ์ บันทึกดองลงคอมหน้าร้านถาวร
 let chatHistory = JSON.parse(localStorage.getItem("ben_motor_openai_clean_memory") || "[]");
 
 // --- 🛠️ 2. ระบบสร้างหน้าต่างแชทลอยได้หน้าร้านอัตโนมัติ (Dynamic UI Injection) ---
@@ -58,7 +55,7 @@ function injectAIWidget() {
         <div class="card-body p-3 ai-chat-box" id="dynamicAiChatBox">
             <div class="d-flex justify-content-start">
                 <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                    สวัสดีครับลูกพี่เบน! ปลดล็อกกล่อง ECU แก้ไขปัญหาวนลูปเมมโมรี่เรียบร้อย สั่งเปิดบิล คุมคลัง เช็คเงินระบบเสถียร 100% เลยครับ! 🔧🤖
+                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตโครงสร้างความจำบริสุทธิ์เรียบร้อย ปลอดภัยจาก GitHub 100% ครับ สั่งงานเปิดบิล คุมคลัง เช็คเงินได้เต็มระบบเลยครับ! 🔧🤖
                 </div>
             </div>
         </div>
@@ -86,7 +83,6 @@ function appendAiMessage(sender, text) {
     box.scrollTop = box.scrollHeight;
 }
 
-// 🧠 ฟังก์ชันดึงพิกัดสต๊อกสินค้าเรียลไทม์หน้าร้าน
 async function getLiveShopContext() {
     let context = `[ฐานข้อมูลสดเรียลไทม์อู่ BEN MOTOR]\n`;
     try {
@@ -106,7 +102,6 @@ async function getLiveShopContext() {
     return context;
 }
 
-// 🧠 พิมพ์เขียวตู้เครื่องมือสับรางระบบการเงินและบิลซ่อมหน้าร้านของแท้
 const aiFunctionTools = [
     {
         type: "function",
@@ -130,9 +125,9 @@ const aiFunctionTools = [
                         items: {
                             type: "object",
                             properties: {
-                                stockId: { type: "string", description: "IDอะไหล่ จากตารางคลังสินค้า (ใส่เฉพาะเมื่อเจอไอดีตรงเป๊ะในระบบ)" },
+                                stockId: { type: "string", description: "IDอะไหล่ จากตารางคลังสินค้า" },
                                 stockName: { type: "string", description: "ชื่อเรียกอะไหล่" },
-                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย (ประเมินราคาตลาดกลางมาด้วย ห้ามใส่เลข 0 เด็ดขาด เช่น น้ำมันเครื่องทั่วไป 140 บาท)" },
+                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย ห้ามใส่เลข 0 เด็ดขาด เช่น น้ำมันเครื่องทั่วไป 140 บาท" },
                                 qty: { type: "number", description: "จำนวนชิ้น" }
                             },
                             required: ["stockName", "unitPrice", "qty"]
@@ -191,7 +186,6 @@ const aiFunctionTools = [
     }
 ];
 
-// --- 🚀 3. ระบบประมวลผลกระแสข้อมูลผ่าน OpenAI ENGINE ---
 function setupAiCoreEngine() {
     const form = document.getElementById("dynamicAiForm");
     const input = document.getElementById("dynamicAiInput");
@@ -225,6 +219,29 @@ function setupAiCoreEngine() {
         const prompt = input.value.trim();
         if(!prompt) return;
 
+        // 🛠️ ท่าดักจับพิเศษ: ดึงกุญแจความปลอดภัยจากฮาร์ดดิสก์เครื่องคอมหน้าร้านมาเปิดระบบ
+        let OPENAI_API_KEY = localStorage.getItem("ben_motor_live_secure_key") || "";
+
+        // กรณีที่ 1: ถ้าเครื่องคอมนี้ยังไม่มีรหัสเปิดระบบ แล้วลูกพี่พิมพ์คีย์ตัวจริง (sk-...) ส่งเข้ามา
+        if (!OPENAI_API_KEY) {
+            if (prompt.startsWith("sk-")) {
+                localStorage.setItem("ben_motor_live_secure_key", prompt);
+                appendAiMessage("user", "****** (ระบุรหัสเปิดระบบ OpenAI API Key)");
+                appendAiMessage("ai", "✅ **สตาร์ทเครื่องติดเรียบร้อยครับลูกพี่เบน!** ระบบฝังรหัสลงเครื่องคอมเครื่องนี้อย่างปลอดภัยถาวรแล้ว (ไม่หลุดไปใน GitHub แน่นอน) ลองพิมพ์สั่งเปิดบิลซ่อมหรือวิเคราะห์อาการรถได้เลยครับ!");
+                input.value = "";
+                input.disabled = false;
+                sBtn.disabled = false;
+                return;
+            } else {
+                appendAiMessage("user", prompt);
+                appendAiMessage("ai", "❌ **J.A.R.V.I.S สตาร์ทเครื่องไม่ได้:** เนื่องจากเครื่องคอมพิวเตอร์เครื่องนี้ยังไม่ได้ป้อนรหัสเปิดระบบ (OpenAI API Key) ครับ<br><br>👉 **วิธีเปิดระบบง่ายๆ:** ให้ลูกพี่ก๊อปปี้รหัสคีย์แท้ของพี่ (รหัสยาวๆ ที่ขึ้นต้นด้วย sk-...) เอามาวางพิมพ์ส่งเข้ามาในช่องแชทนี้เหมือนพิมพ์คุยปกติได้เลยครับ! แล้วผมจะจำรหัสเปิดระบบให้เองครับ");
+                input.value = "";
+                input.disabled = false;
+                sBtn.disabled = false;
+                return;
+            }
+        }
+
         appendAiMessage("user", prompt);
         input.value = "";
         input.disabled = true;
@@ -236,7 +253,7 @@ function setupAiCoreEngine() {
         const loadingDiv = document.createElement("div");
         loadingDiv.id = loadingId;
         loadingDiv.className = "d-flex justify-content-start text-muted small p-2 animate-pulse";
-        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังวิเคราะห์ข้อมูลระบบ...</em>`;
+        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังประมวลผลคำสั่งผ่าน OpenAI...</em>`;
         box.appendChild(loadingDiv);
         box.scrollTop = box.scrollHeight;
 
@@ -248,13 +265,11 @@ function setupAiCoreEngine() {
 2. ชวนคุยเล่นทางเทคนิค ตอบคำถาม และปรึกษาอาการรถมอเตอร์ไซค์ทั่วไปสไตล์ช่างผู้เชี่ยวชาญเป็นกันเองกับคุณเบน มีความจำย้อนหลังต่อเนื่องห้ามลืมเรื่องที่คุย
 ${liveSnapshot}`;
 
-            // 🛠️ ปรับโฟลว์เด็ดขาด: สร้างอาเรย์สายไฟวิ่งประมวลผลแยกอิสระตัวแปรชั่วคราว ไม่เอาไปปนกับประวัติแชทกลางถาวรเด็ดขาด!
             let executionPayload = [
                 { role: "system", content: systemRuleInstruction },
                 ...chatHistory
             ];
 
-            // 🚀 PASS 1: ยิงเช็กเงื่อนไขกับโรงงาน OpenAI
             const res = await fetch(`https://api.openai.com/v1/chat/completions`, {
                 method: "POST",
                 headers: {
@@ -274,9 +289,7 @@ ${liveSnapshot}`;
 
             const responseMessage = resData.choices[0].message;
 
-            // 🚨 จังหวะสับรางระบบคุมร้าน Firebase (Tool/Function Calling Loop)
             if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
-                // ยัดข้อความเรียก Tool ประกบลงอาเรย์ประมวลผลชั่วคราว
                 executionPayload.push(responseMessage);
 
                 const toolCall = responseMessage.tool_calls[0];
@@ -290,7 +303,6 @@ ${liveSnapshot}`;
 
                 let executionResult = { status: "error", message: "ฟังก์ชันเกิดข้อผิดพลาด" };
 
-                // 🔴 RUN 1: เปิดบิลซ่อมลงตารางกลาง
                 if (fnName === "create_bill") {
                     const rawParts = args.parts || []; const rawLabor = args.laborItems || [];
                     const payMethod = args.paymentMethod || "cash";
@@ -345,13 +357,11 @@ ${liveSnapshot}`;
                     }
                     executionResult = { status: "success", message: `เปิดบิลสำเร็จ รถทะเบียน ${args.plate} ยอดเงินสุทธิเข้าเก๊ะคือ ${totalAmount} บาท` };
 
-                // 🔴 RUN 2: แก้ไขสับเปลี่ยนสถานะรถ
                 } else if (fnName === "update_job_status") {
                     const jRef = doc(db, "jobs", args.jobId);
                     await updateDoc(jRef, { status: args.status, updatedAt: serverTimestamp() });
                     executionResult = { status: "success", message: `เปลี่ยนรหัสใบงานซ่อม ${args.jobId} เป็นสถานะ ${args.status} เรียบร้อย` };
 
-                // 🔴 RUN 3: ลงประวัติงบการเงินอิสระ
                 } else if (fnName === "add_transaction") {
                     await addDoc(collection(db, "transactions"), {
                         date: today, type: args.type, category: args.category, description: args.description, method: args.method, paymentMethod: args.method, amount: Number(args.amount), sourceType: "manual", branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: uid
@@ -359,7 +369,6 @@ ${liveSnapshot}`;
                     executionResult = { status: "success", message: `ลงประวัติบัญชี ${args.description} ยอดเงิน ${args.amount} บาท เรียบร้อยแล้ว` };
                 }
 
-                // ประกบสายไฟฝั่ง Tool Message เข้าไปในอาเรย์ชั่วคราวเพื่อส่งให้ระบบสรุปคำพูด
                 executionPayload.push({
                     role: "tool",
                     tool_call_id: toolCall.id,
@@ -367,7 +376,6 @@ ${liveSnapshot}`;
                     content: JSON.stringify(executionResult)
                 });
 
-                // 🚀 PASS 2: ยิงรอบสองให้สรุปคำตอบเป็นภาษาคน
                 const secondRes = await fetch(`https://api.openai.com/v1/chat/completions`, {
                     method: "POST",
                     headers: {
@@ -383,26 +391,23 @@ ${liveSnapshot}`;
                 if (secondRes.ok && secondData.choices) {
                     const finalAiText = secondData.choices[0].message.content;
                     appendAiMessage("ai", finalAiText);
-                    // 🧠 สำคัญที่สุด: เซฟดองเข้าคลังความจำเฉพาะ คำพูดโต้ตอบเพียวๆ เท่านั้น!
                     chatHistory.push({ role: "assistant", content: finalAiText });
                 }
 
             } else {
-                // โหมดคุยเล่น ปรึกษางานช่าง ตอบคำถามปกติ
                 document.getElementById(loadingId)?.remove();
                 const aiText = responseMessage.content;
                 appendAiMessage("ai", aiText);
                 chatHistory.push({ role: "assistant", content: aiText });
             }
 
-            // สไลด์ความจำทิ้งแบบปลอดภัยหายห่วง 100% เพราะอาเรย์เป็นคู่บทสนทนาแท้ๆ ไม่มีวันช็อตกราวอีกต่อไป!
             if (chatHistory.length > 20) chatHistory.splice(0, 2);
             localStorage.setItem("ben_motor_openai_clean_memory", JSON.stringify(chatHistory));
 
         } catch (error) {
             console.error("AI Engine Crash:", error);
             document.getElementById(loadingId)?.remove();
-            appendAiMessage("ai", `❌ **กล่องระบบพังชั่วคราว:** ${error.message}`);
+            appendAiMessage("ai", `❌ **กล่องระบบเกิดข้อผิดพลาด:** ${error.message}`);
         } finally {
             input.disabled = false;
             sBtn.disabled = false;
