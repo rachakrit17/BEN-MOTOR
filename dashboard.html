@@ -786,14 +786,11 @@
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { GoogleGenerativeAI } from "@google/generative-ai";
 
-        // 🛑 เอา API KEY ที่ก๊อปปี้มา วางแทนตัวหนังสือสีแดงด้านล่างนี้เลยครับ 🛑
+        // 🛑 เอา API KEY ที่ก๊อปปี้มา วางแทนตัวหนังสือด้านล่างนี้เลยครับ 🛑
         const API_KEY = "AIzaSyB_3SHLgU79oXOgpP__EbgKg5jZtEwK8MY"; 
 
         const db = getFirestore();
         const genAI = new GoogleGenerativeAI(API_KEY);
-        
-        // เราใช้โมเดล Gemini 1.5 Flash เพราะคิดเลขไวและวิเคราะห์เก่ง
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         // --- UI Elements ---
         const aiToggleButton = document.getElementById("aiToggleButton");
@@ -825,16 +822,15 @@
             
             div.appendChild(bubble);
             aiChatBox.appendChild(div);
-            aiChatBox.scrollTop = aiChatBox.scrollHeight; // เลื่อนลงล่างสุดอัตโนมัติ
+            aiChatBox.scrollTop = aiChatBox.scrollHeight;
         }
 
-        // ฟังก์ชันดึงข้อมูลจากระบบ POS เพื่อป้อนให้ AI รู้จักร้านเรา
+        // ฟังก์ชันดึงข้อมูลจากระบบ POS
         async function fetchShopContext() {
             const today = new Date().toISOString().split("T")[0];
             let context = `ข้อมูลอู่ BEN MOTOR ณ ปัจจุบัน (วันที่ ${today}):\n\n`;
 
             try {
-                // ดึงรายรับ-รายจ่ายวันนี้
                 const txSnap = await getDocs(query(collection(db, "transactions"), where("date", "==", today), where("isDeleted", "==", false)));
                 let income = 0, expense = 0;
                 txSnap.forEach(doc => {
@@ -845,7 +841,6 @@
                 context += `- รายรับวันนี้: ${income} บาท\n`;
                 context += `- รายจ่ายวันนี้: ${expense} บาท\n`;
 
-                // ดึงรถค้างซ่อม
                 const jobsSnap = await getDocs(query(collection(db, "jobs"), where("isDeleted", "==", false)));
                 let pendingJobs = [];
                 jobsSnap.forEach(doc => {
@@ -856,7 +851,6 @@
                 });
                 context += `- รถค้างซ่อมในอู่ตอนนี้มี ${pendingJobs.length} คัน ได้แก่: ${pendingJobs.join(", ") || "ไม่มี"}\n`;
 
-                // ดึงสต๊อกใกล้หมด
                 const stockSnap = await getDocs(query(collection(db, "stock"), where("isDeleted", "==", false)));
                 let lowStock = [];
                 stockSnap.forEach(doc => {
@@ -880,13 +874,11 @@
             const prompt = aiChatInput.value.trim();
             if(!prompt) return;
 
-            // แสดงข้อความที่เราพิมพ์
             addMessage("user", prompt);
             aiChatInput.value = "";
             aiChatInput.disabled = true;
             aiSendBtn.disabled = true;
             
-            // แสดงสถานะกำลังพิมพ์...
             const loadingId = "loading-" + Date.now();
             const loadingDiv = document.createElement("div");
             loadingDiv.id = loadingId;
@@ -897,13 +889,10 @@
 
             try {
                 if (API_KEY === "ใส่_API_KEY_ของคุณเบนตรงนี้") {
-                    throw new Error("ลูกพี่ลืมใส่ API KEY ในโค้ดครับ! ไปเอาที่ Google AI Studio มาใส่ก่อนน้า");
+                    throw new Error("ลูกพี่ลืมใส่ API KEY ในโค้ดครับ!");
                 }
 
-                // 1. ดึงข้อมูล POS สดๆ ร้อนๆ
                 const shopContext = await fetchShopContext();
-
-                // 2. สร้างคำสั่ง (Prompt) ที่รวมความรู้ของร้าน + คำถาม
                 const finalPrompt = `
 คุณคือ AI อัจฉริยะประจำอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" หน้าที่คุณคือตอบคำถามเจ้าของร้าน (ชื่อคุณเบน) อย่างสุภาพ เป็นกันเอง แบบช่างคุยกัน และช่วยวิเคราะห์ข้อมูลร้าน
 
@@ -912,14 +901,31 @@ ${shopContext}
 คำถามจากคุณเบน: ${prompt}
                 `;
 
-                // 3. เรียก API Gemini
-                const result = await model.generateContent(finalPrompt);
-                const response = await result.response;
-                const text = response.text();
+                // 🛠️ ระบบ Auto-Fallback: รายชื่อโมเดลสำรอง (เรียงจากใหม่สุดไปเก่าสุด)
+                const fallbackModels = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-pro"];
+                let aiResponseText = "";
+                let success = false;
 
-                // ลบข้อความ "กำลังคิด..." และแสดงคำตอบ
+                // วนลูปทดสอบทีละรุ่น ถ้าพังให้สลับไปรุ่นถัดไป
+                for (const modelName of fallbackModels) {
+                    try {
+                        const currentModel = genAI.getGenerativeModel({ model: modelName });
+                        const result = await currentModel.generateContent(finalPrompt);
+                        aiResponseText = await result.response.text();
+                        success = true;
+                        console.log(`✅ ใช้โมเดล: ${modelName} สำเร็จ!`);
+                        break; // ทำงานสำเร็จ ให้ออกจากลูปเลย
+                    } catch (modelError) {
+                        console.warn(`⚠️ โมเดล ${modelName} ใช้งานไม่ได้ กำลังสลับไปรุ่นถัดไป...`, modelError.message);
+                    }
+                }
+
+                if (!success) {
+                    throw new Error("โมเดลของ Google AI ไม่พร้อมใช้งานสักรุ่นเลยครับ ลองเช็คโควต้า API Key ดูครับ");
+                }
+
                 document.getElementById(loadingId).remove();
-                addMessage("ai", text);
+                addMessage("ai", aiResponseText);
 
             } catch (error) {
                 console.error(error);
