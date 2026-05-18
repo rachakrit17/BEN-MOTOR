@@ -783,10 +783,9 @@
     </script>
 
     <script type="module">
-        // 🚨 อัปเดตบรรทัดนี้: เพิ่ม addDoc และ serverTimestamp สำหรับการบันทึกข้อมูล
         import { getFirestore, collection, getDocs, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🛑 API KEY ของลูกพี่เบน (ห้ามหลุดนะ!)
+        // 🛑 API KEY ของลูกพี่เบน
         const API_KEY = "AIzaSyC3ouXy8iqsZOawPqo6g9DH4w41pjSuyzA"; 
 
         const db = getFirestore();
@@ -818,54 +817,67 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
         }
 
-        async function fetchShopContext() {
-            const today = new Date().toISOString().split("T")[0];
-            let context = `[ข้อมูลอู่ BEN MOTOR เรียลไทม์ วันที่ ${today}]\n`;
-            try {
-                const txSnap = await getDocs(query(collection(db, "transactions"), where("date", "==", today), where("isDeleted", "==", false)));
-                let income = 0, expense = 0;
-                txSnap.forEach(doc => {
-                    const d = doc.data();
-                    if(d.type === 'income') income += Number(d.amount||0);
-                    else expense += Number(d.amount||0);
-                });
-                context += `- รายรับวันนี้: ${income} บาท | รายจ่าย: ${expense} บาท\n`;
-
-                const jobsSnap = await getDocs(query(collection(db, "jobs"), where("isDeleted", "==", false)));
-                let pendingJobs = [];
-                jobsSnap.forEach(doc => {
-                    const d = doc.data();
-                    if(d.status !== "picked_up") {
-                        pendingJobs.push(`${d.plate} (${d.brand} ${d.model} - อาการ: ${d.problem})`);
-                    }
-                });
-                context += `- รถค้างซ่อม: ${pendingJobs.length} คัน\n`;
-            } catch (error) {
-                console.error("Error fetching context for AI", error);
-            }
-            return context;
-        }
-
-        // 🧠 ประกาศ "เครื่องมือ" ให้ AI รู้ว่ามันทำอะไรได้บ้าง
+        // 🧠 ตู้เครื่องมือ J.A.R.V.I.S (อัปเกรดคุมทั้ง 4 ระบบหลัก)
         const aiTools = [{
-            functionDeclarations: [{
-                name: "open_new_bill",
-                description: "สร้างบิลซ่อมรถใหม่เข้าสู่ระบบ เมื่อผู้ใช้สั่งให้เปิดบิลหรือบันทึกข้อมูลรถเข้าซ่อม",
-                parameters: {
-                    type: "OBJECT",
-                    properties: {
-                        plate: { type: "STRING", description: "ทะเบียนรถ เช่น 1กข-9999" },
-                        brand: { type: "STRING", description: "ยี่ห้อรถ เช่น Honda, Yamaha" },
-                        model: { type: "STRING", description: "รุ่นรถ เช่น Wave 110i, PCX" },
-                        problem: { type: "STRING", description: "อาการเสีย หรือ รายการที่ต้องทำ" },
-                        estimatedPrice: { type: "NUMBER", description: "ราคาประเมิน (ถ้ามี) ถ้าไม่มีให้ใส่ 0" }
-                    },
-                    required: ["plate", "brand", "model", "problem"]
+            functionDeclarations: [
+                {
+                    name: "open_bill", // 1. ระบบงานซ่อม
+                    description: "เปิดบิลรถเข้าซ่อมใหม่",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            plate: { type: "STRING", description: "ทะเบียนรถ" },
+                            brand: { type: "STRING", description: "ยี่ห้อรถ" },
+                            model: { type: "STRING", description: "รุ่นรถ" },
+                            problem: { type: "STRING", description: "อาการ" },
+                            price: { type: "NUMBER", description: "ราคาประเมินเบื้องต้น" }
+                        },
+                        required: ["plate", "brand", "model", "problem"]
+                    }
+                },
+                {
+                    name: "add_finance", // 2. ระบบการเงิน (รับ/จ่าย)
+                    description: "บันทึกบัญชีรายรับหรือรายจ่าย",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            type: { type: "STRING", description: "ใส่ 'income' ถ้ารับเงินเข้า, 'expense' ถ้าจ่ายเงินออก" },
+                            amount: { type: "NUMBER", description: "ยอดเงิน" },
+                            note: { type: "STRING", description: "รายละเอียด" },
+                            paymentMethod: { type: "STRING", description: "ใส่ 'cash' หรือ 'transfer'" }
+                        },
+                        required: ["type", "amount", "note", "paymentMethod"]
+                    }
+                },
+                {
+                    name: "add_stock", // 3. ระบบสต๊อก
+                    description: "บันทึกการซื้ออะไหล่เข้าสต๊อกร้าน",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            itemName: { type: "STRING", description: "ชื่ออะไหล่" },
+                            qty: { type: "NUMBER", description: "จำนวนที่ซื้อเข้า" },
+                            cost: { type: "NUMBER", description: "ต้นทุนต่อชิ้น" }
+                        },
+                        required: ["itemName", "qty", "cost"]
+                    }
+                },
+                {
+                    name: "add_vehicle", // 4. ระบบรถรับซื้อ/ขายออก
+                    description: "บันทึกการรับซื้อรถมอเตอร์ไซค์เข้าอู่",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            plate: { type: "STRING", description: "ทะเบียนรถที่รับซื้อ" },
+                            brandModel: { type: "STRING", description: "ยี่ห้อและรุ่นรถ" },
+                            buyPrice: { type: "NUMBER", description: "ราคารับซื้อ" }
+                        },
+                        required: ["plate", "brandModel", "buyPrice"]
+                    }
                 }
-            }]
+            ]
         }];
 
-        // 🚀 ส่งข้อความและดักจับ Function
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -880,25 +892,27 @@
             const loadingDiv = document.createElement("div");
             loadingDiv.id = loadingId;
             loadingDiv.className = "d-flex justify-content-start text-muted small";
-            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังคิดและประมวลผล...</em>`;
+            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังสั่งการระบบ...</em>`;
             aiChatBox.appendChild(loadingDiv);
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
-                const shopContext = await fetchShopContext();
                 const finalPrompt = `
-คุณคือ AI ผู้จัดการอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" 
-คุยกับเจ้าของร้านชื่อ "คุณเบน" เป็นกันเอง สไตล์ช่าง
-ถ้าคุณเบนสั่งให้ "เปิดบิล" หรือ "รับรถเข้าซ่อม" ให้เรียกใช้เครื่องมือ open_new_bill ทันที
-${shopContext}
-คำสั่งจากคุณเบน: ${prompt}`;
+คุณคือ AI ควบคุมระบบ POS ร้าน "BEN MOTOR" 
+หน้าที่ของคุณคือเลือกใช้เครื่องมือ (Tools) ให้ตรงกับคำสั่งของคุณเบน:
+- สั่งซ่อมรถ/เปิดบิล -> ใช้ open_bill
+- สั่งลงบัญชี/จ่ายค่าของ/รับเงิน -> ใช้ add_finance
+- สั่งเติมอะไหล่เข้าอู่ -> ใช้ add_stock
+- สั่งรับซื้อรถมือสอง -> ใช้ add_vehicle
+ถ้าคุณเบนชวนคุยเล่น ให้ตอบกลับด้วยภาษาช่างมอเตอร์ไซค์
+คำสั่ง: ${prompt}`;
 
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: finalPrompt }] }],
-                        tools: aiTools // 👈 ส่งคู่มือการใช้งานเครื่องมือไปให้ AI
+                        tools: aiTools
                     })
                 });
 
@@ -908,29 +922,46 @@ ${shopContext}
                 if (response.ok && resData.candidates) {
                     const aiParts = resData.candidates[0].content.parts[0];
 
-                    // 🚨 เช็คว่า AI ตัดสินใจ "กดปุ่มเปิดบิล" หรือไม่?
-                    if (aiParts.functionCall && aiParts.functionCall.name === "open_new_bill") {
+                    if (aiParts.functionCall) {
+                        const fnName = aiParts.functionCall.name;
                         const args = aiParts.functionCall.args;
-                        addMessage("ai", `กำลังเขียนบิลลงระบบให้ครับลูกพี่...\n- ทะเบียน: ${args.plate}\n- รถ: ${args.brand} ${args.model}\n- อาการ: ${args.problem}`);
-                        
-                        // 💾 ยิงข้อมูลลง Firebase ตรงๆ เลย!
                         const today = new Date().toISOString().split("T")[0];
-                        await addDoc(collection(db, "jobs"), {
-                            plate: args.plate,
-                            brand: args.brand,
-                            model: args.model,
-                            problem: args.problem,
-                            estimatedPrice: args.estimatedPrice || 0,
-                            status: "repairing", // สถานะเริ่มต้นคือกำลังซ่อม
-                            date: today,
-                            priority: "normal",
-                            createdAt: serverTimestamp(),
-                            isDeleted: false
-                        });
 
-                        addMessage("ai", `✅ บันทึกบิลรถ **${args.plate}** เข้าฐานข้อมูลเรียบร้อยแล้วครับ! ลูกพี่ลองรีเฟรชหรือไปดูที่หน้างานซ่อมได้เลย!`);
+                        // สับราง 1: เปิดบิล (Jobs)
+                        if (fnName === "open_bill") {
+                            await addDoc(collection(db, "jobs"), {
+                                plate: args.plate, brand: args.brand, model: args.model, 
+                                problem: args.problem, estimatedPrice: args.price || 0,
+                                status: "repairing", date: today, createdAt: serverTimestamp(), isDeleted: false
+                            });
+                            addMessage("ai", `🔧 เปิดบิลลงระบบให้แล้ว!\n**รถ:** ${args.brand} ${args.model} (${args.plate})\n**อาการ:** ${args.problem}`);
+                        
+                        // สับราง 2: การเงิน (Transactions)
+                        } else if (fnName === "add_finance") {
+                            await addDoc(collection(db, "transactions"), {
+                                type: args.type, amount: Number(args.amount), note: args.note, 
+                                paymentMethod: args.paymentMethod, category: args.type === 'income' ? "รายรับ" : "รายจ่าย",
+                                date: today, createdAt: serverTimestamp(), isDeleted: false
+                            });
+                            addMessage("ai", `💰 บันทึกบัญชีให้แล้วลูกพี่!\n**รายการ:** ${args.note}\n**ยอด:** ${args.amount} บาท`);
+                        
+                        // สับราง 3: สต๊อกอะไหล่ (Stock)
+                        } else if (fnName === "add_stock") {
+                            await addDoc(collection(db, "stock"), {
+                                name: args.itemName, qty: Number(args.qty), buyPrice: Number(args.cost),
+                                minQty: 2, isDeleted: false
+                            });
+                            addMessage("ai", `📦 เอาของเข้าสต๊อกเรียบร้อย!\n**อะไหล่:** ${args.itemName}\n**จำนวน:** ${args.qty} ชิ้น`);
+
+                        // สับราง 4: ซื้อขายรถ (Vehicles)
+                        } else if (fnName === "add_vehicle") {
+                            await addDoc(collection(db, "vehicles"), {
+                                plate: args.plate, brandModel: args.brandModel, buyPrice: Number(args.buyPrice),
+                                status: "instock", buyDate: today, createdAt: serverTimestamp(), isDeleted: false
+                            });
+                            addMessage("ai", `🏍️ บันทึกรับซื้อรถเข้าอู่แล้ว!\n**รถ:** ${args.brandModel} (${args.plate})\n**ราคารับซื้อ:** ${args.buyPrice} บาท`);
+                        }
                     } else {
-                        // ถ้าไม่ได้สั่งเปิดบิล ก็ให้ AI ตอบแชทตามปกติ
                         addMessage("ai", aiParts.text);
                     }
                 } else {
@@ -940,7 +971,7 @@ ${shopContext}
             } catch (error) {
                 console.error(error);
                 if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("ai", `❌ พังครับลูกพี่: ${error.message}`);
+                addMessage("ai", `❌ ระบบขัดข้อง: ${error.message}`);
             } finally {
                 aiChatInput.disabled = false;
                 aiSendBtn.disabled = false;
