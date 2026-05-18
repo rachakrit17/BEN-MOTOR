@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, getDocs, query, where, addDoc, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ⚙️ 1. ปลั๊กพ่วงเชื่อมต่อฐานข้อมูล Firebase อู่ BEN MOTOR ตรงรุ่น
+// ⚙️ 1. พิกัดเชื่อมต่อระบบฐานข้อมูลหลังบ้าน Firebase อู่ BEN MOTOR
 const firebaseConfig = {
   apiKey: "AIzaSyBZuJ0Gpsz61oF0yrmKcreBsOfpJqPffYo",
   authDomain: "ben-motor.firebaseapp.com",
@@ -16,11 +16,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// 🛑 ช่องเสียบกุญแจรหัส OpenAI API KEY (ลูกพี่เบนก๊อปปี้คีย์ sk-... มาวางทับตรงนี้ได้เลยครับ)
+const OPENAI_API_KEY = "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"; 
+
 let currentUid = null;
 let currentProfile = null;
 
-// 🧠 คลังประวัติความจำแชท บันทึกดองลงคอมหน้าร้านถาวร
-let chatHistory = JSON.parse(localStorage.getItem("ben_motor_puter_permanent_memory") || "[]");
+// 🧠 คลังความจำแชทถาวรฝังคอมหน้าร้าน โครงสร้างทางการ OpenAI (role: user / assistant / tool)
+let chatHistory = JSON.parse(localStorage.getItem("ben_motor_openai_permanent_memory") || "[]");
 
 // --- 🛠️ 2. ระบบสร้างหน้าต่างแชทลอยได้หน้าร้านอัตโนมัติ (Dynamic UI Injection) ---
 function injectAIWidget() {
@@ -46,7 +49,7 @@ function injectAIWidget() {
     win.className = 'card ai-window border-0 rounded-4 d-none';
     win.innerHTML = `
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-            <h6 class="mb-0 fw-bold d-flex align-items-center"><i class="bi bi-robot text-warning me-2 fs-5"></i> J.A.R.V.I.S ระบบคุมร้านไร้ขีดจำกัด</h6>
+            <h6 class="mb-0 fw-bold d-flex align-items-center"><i class="bi bi-robot text-warning me-2 fs-5"></i> J.A.R.V.I.S ผู้จัดการระบบ ChatGPT</h6>
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-sm btn-outline-danger border-0 p-1" id="clearAiMemoryBtn" title="ล้างความจำแชท"><i class="bi bi-trash3 text-danger"></i></button>
                 <button type="button" class="btn-close btn-close-white" id="dynamicAiCloseBtn"></button>
@@ -55,7 +58,7 @@ function injectAIWidget() {
         <div class="card-body p-3 ai-chat-box" id="dynamicAiChatBox">
             <div class="d-flex justify-content-start">
                 <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตค่าตัวแปรอัปเกรดความฉลาดตลาดกลางเรียบร้อย ฟรีไม่มีตัดรอบแล้วครับ! 🔧🤖
+                    สวัสดีครับลูกพี่เบน! ระบบอัปเกรดเครื่องยนต์ขุมพลัง OpenAI แท้เรียบร้อย สั่งงานควบคุมระบบ POS สไตล์ช่างซ่อมได้เต็มพิกัดเลยครับ! 🔧🤖
                 </div>
             </div>
         </div>
@@ -83,7 +86,7 @@ function appendAiMessage(sender, text) {
     box.scrollTop = box.scrollHeight;
 }
 
-// 🧠 ฟังก์ชันสแกนข้อมูลสต๊อกเรียลไทม์ป้อนให้ AI หน้างาน
+// 🧠 ฟังก์ชันควานหาข้อมูลคลังและตารางงานสดๆ ดึงประกบหัวสมอง AI เรียลไทม์
 async function getLiveShopContext() {
     let context = `[ฐานข้อมูลสดเรียลไทม์อู่ BEN MOTOR]\n`;
     try {
@@ -103,7 +106,7 @@ async function getLiveShopContext() {
     return context;
 }
 
-// 🧠 🛠️ ชุดเครื่องมือฟังก์ชัน บังคับฟิลด์ตัวแปรประเภทข้อมูลเป็น "ตัวพิมพ์เล็กทั้งหมด"
+// 🧠 พิมพ์เขียวตู้เครื่องมือสับรางล็อกตรงตัวแปรระบบหลังบ้าน OpenAI Specification 100%
 const aiFunctionTools = [
     {
         type: "function",
@@ -123,13 +126,13 @@ const aiFunctionTools = [
                     paymentMethod: { type: "string", description: "วิธีการจ่ายเงิน: 'cash', 'transfer', 'pending'" },
                     parts: {
                         type: "array",
-                        description: "รายการอะไหล่สินค้า",
+                        description: "รายการอะไหล่สินค้าเบิกคลัง",
                         items: {
                             type: "object",
                             properties: {
                                 stockId: { type: "string", description: "IDอะไหล่ จากตารางคลังสินค้า (ใส่เฉพาะเมื่อเจอไอดีตรงเป๊ะในระบบ)" },
                                 stockName: { type: "string", description: "ชื่อเรียกอะไหล่" },
-                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย (วิเคราะห์ราคาตลาดกลางห้ามใส่เลข 0 เด็ดขาด เช่น น้ำมันเครื่องทั่วไปใส่ 140 บาท)" },
+                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย (ประเมินราคาตลาดกลางมาด้วย ห้ามใส่เลข 0 เด็ดขาด เช่น น้ำมันเครื่องทั่วไป 140 บาท)" },
                                 qty: { type: "number", description: "จำนวนชิ้น" }
                             },
                             required: ["stockName", "unitPrice", "qty"]
@@ -137,12 +140,12 @@ const aiFunctionTools = [
                     },
                     laborItems: {
                         type: "array",
-                        description: "รายการค่าแรงหรือบริการซ่อมแซมหน้าร้าน",
+                        description: "รายการค่าแรงช่างหรืองานบริการซ่อมที่ไม่ตัดคลังสินค้า",
                         items: {
                             type: "object",
                             properties: {
                                 name: { type: "string", description: "ชื่องานบริการซ่อม เช่น ค่าแรงปะยาง" },
-                                price: { type: "number", description: "ราคาค่าแรงช่าง" }
+                                price: { type: "number", description: "ราคาค่าแรงช่างหน่วยบาท" }
                             },
                             required: ["name", "price"]
                         }
@@ -162,7 +165,7 @@ const aiFunctionTools = [
                 type: "object",
                 properties: {
                     jobId: { type: "string", description: "IDงานซ่อม" },
-                    status: { type: "string", description: "สถานะใหม่: 'repairing', 'done', 'picked_up'" }
+                    status: { type: "string", description: "สถานะล็อกระบบ: 'repairing', 'done', 'picked_up'" }
                 },
                 required: ["jobId", "status"]
             }
@@ -172,15 +175,15 @@ const aiFunctionTools = [
         type: "function",
         function: {
             name: "add_transaction",
-            description: "บันทึกบัญชีรายรับ-รายจ่ายทั่วไปหน้าร้านอิสระ",
+            description: "บันทึกบัญชีรายรับ-รายจ่ายทั่วไปหน้าร้านอิสระที่ไม่ผ่านใบงานซ่อมรถ",
             parameters: {
                 type: "object",
                 properties: {
-                    type: { type: "string", description: "ใส่คำล็อกระบบ: 'income' หรือ 'expense'" },
-                    category: { type: "string", description: "หมวดหมู่บัญชี" },
-                    amount: { type: "number", description: "ยอดเงินสุทธิ" },
+                    type: { type: "string", description: "ล็อกคำสั่ง: 'income' หรือ 'expense'" },
+                    category: { type: "string", description: "หมวดหมู่บัญชี เช่น ค่าน้ำไฟ, อาหาร/เครื่องดื่ม" },
+                    amount: { type: "number", description: "ยอดเงินสุทธิหน่วยบาท" },
                     description: { type: "string", description: "คำอธิบายประวัติรายการบัญชี" },
-                    method: { type: "string", description: "ช่องทางเงิน: 'cash', 'transfer'" }
+                    method: { type: "string", description: "ช่องทางเคลื่อนไหวเงิน: 'cash', 'transfer'" }
                 },
                 required: ["type", "category", "amount", "description", "method"]
             }
@@ -188,6 +191,7 @@ const aiFunctionTools = [
     }
 ];
 
+// --- 🚀 3. ระบบทำงานร่วมกับเทคโนโลยี Official OpenAI API Engine ---
 function setupAiCoreEngine() {
     const form = document.getElementById("dynamicAiForm");
     const input = document.getElementById("dynamicAiInput");
@@ -197,7 +201,7 @@ function setupAiCoreEngine() {
 
     if(chatHistory.length > 0 && box.children.length <= 1) {
         chatHistory.forEach(msg => {
-            if(msg.content) {
+            if(msg.content && msg.role !== "system" && typeof msg.content === 'string') {
                 appendAiMessage(msg.role === "user" ? "user" : "ai", msg.content);
             }
         });
@@ -206,11 +210,11 @@ function setupAiCoreEngine() {
     cMemoryBtn?.addEventListener("click", () => {
         if(confirm("ลูกพี่เบน ต้องการล้างความทรงจำแชททั้งหมดของ J.A.R.V.I.S หรือไม่?")) {
             chatHistory = [];
-            localStorage.removeItem("ben_motor_puter_permanent_memory");
+            localStorage.removeItem("ben_motor_openai_permanent_memory");
             box.innerHTML = `
                 <div class="d-flex justify-content-start">
                     <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                        🧠 ล้างความจำเสร็จเรียบร้อยครับระบบสมองกล Puter พร้อมรับงานใหม่ครับลูกพี่เบน!
+                        🧠 ล้างความจำเสร็จเรียบร้อยครับระบบสมองกล OpenAI คลีนใสๆ พร้อมรับคำสั่งใหม่ครับลูกพี่เบน!
                     </div>
                 </div>`;
         }
@@ -231,8 +235,8 @@ function setupAiCoreEngine() {
         const loadingId = "ai-load-" + Date.now();
         const loadingDiv = document.createElement("div");
         loadingDiv.id = loadingId;
-        loadingDiv.className = "d-flex justify-content-start text-muted small p-2";
-        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางเปิดบิลผ่านระบบ Puter...</em>`;
+        loadingDiv.className = "d-flex justify-content-start text-muted small p-2 animate-pulse";
+        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังประมวลผลคำสั่งผ่าน OpenAI API...</em>`;
         box.appendChild(loadingDiv);
         box.scrollTop = box.scrollHeight;
 
@@ -244,125 +248,164 @@ function setupAiCoreEngine() {
 2. ชวนคุยเล่นทางเทคนิค ตอบคำถาม และปรึกษาอาการรถมอเตอร์ไซค์ทั่วไปสไตล์ช่างผู้เชี่ยวชาญเป็นกันเองกับคุณเบน มีความจำย้อนหลังต่อเนื่องห้ามลืมเรื่องที่คุย
 ${liveSnapshot}`;
 
-            // 🛠️ ฟิกซ์จุดตาย: แปลงประวัติการคุยทั้งหมดให้เป็น "สายเดียวยาวๆ (String)" ยิงเข้า Puter ตามกฎเหล็ก 100%
-            let formattedHistory = chatHistory.map(h => `${h.role === 'user' ? 'คุณเบน' : 'J.A.R.V.I.S'}: ${h.content}`).join("\n");
-            const finalStringPrompt = `${systemRuleInstruction}\n\n[บันทึกประวัติการคุยย้อนหลัง]:\n${formattedHistory}\n\nคุณเบนสั่งล่าสุด: ${prompt}`;
+            // ประกบ System Instruction นำหน้าประวัติการคุยส่งให้เซิร์ฟเวอร์ OpenAI
+            let messagesPayload = [
+                { role: "system", content: systemRuleInstruction },
+                ...chatHistory
+            ];
 
-            // 🚀 เรียกใช้งานผ่านเครื่องยนต์ Puter.js
-            window.puter.ai.chat(finalStringPrompt, {
-                model: "gpt-4o-mini", 
-                tools: aiFunctionTools
-            }).then(async (response) => {
-                document.getElementById(loadingId)?.remove();
-                
-                const msgObj = response.message || response;
-                
-                if (msgObj && msgObj.tool_calls && msgObj.tool_calls.length > 0) {
-                    const toolCall = msgObj.tool_calls[0];
-                    const fnName = toolCall.function.name;
-                    const args = JSON.parse(toolCall.function.arguments);
-                    
-                    const today = new Date().toISOString().split("T")[0];
-                    const branchId = currentProfile?.branchId || null;
-                    const uid = currentUid || "autonomous-system";
-                    const mechanicName = currentProfile?.displayName || "ช่างเบน";
-
-                    // 🔴 TOOL 1: เปิดบิลซ่อมรถลงตารางกลาง
-                    if (fnName === "create_bill") {
-                        const rawParts = args.parts || []; const rawLabor = args.laborItems || [];
-                        const payMethod = args.paymentMethod || "cash";
-                        let itemsArray = []; let laborArray = []; let partsTotal = 0; let laborTotal = 0;
-
-                        for(const p of rawParts) {
-                            let itemPrice = Number(p.unitPrice) || 140; 
-                            let itemName = p.stockName || "อะไหล่ทั่วไป";
-
-                            if(p.stockId) {
-                                const sRef = doc(db, "stock", p.stockId); const sSnap = await getDoc(sRef);
-                                if(sSnap.exists()) {
-                                    const sData = sSnap.data();
-                                    itemPrice = Number(sData.salePrice) || itemPrice;
-                                    itemName = sData.name || itemName;
-                                    const qty = Number(p.qty) || 1;
-                                    await updateDoc(sRef, { qty: Math.max(0, (Number(sData.qty)||0) - qty), updatedAt: serverTimestamp() });
-                                }
-                            }
-
-                            const qty = Number(p.qty) || 1;
-                            const lineTotal = qty * itemPrice;
-                            partsTotal += lineTotal;
-
-                            itemsArray.push({ stockId: p.stockId || "", stockName: itemName, qty, unitPrice: itemPrice, lineTotal });
-                        }
-
-                        for(const l of rawLabor) {
-                            const price = Number(l.price) || 0; laborTotal += price;
-                            laborArray.push({ name: l.name || "ค่าบริการ/ค่าแรงช่าง", price });
-                        }
-
-                        const discount = Number(args.discount) || 0;
-                        const totalAmount = Math.max(0, (partsTotal + laborTotal) - discount);
-                        const customerName = args.customerName || "ลูกค้าทั่วไป";
-
-                        const jobRef = await addDoc(collection(db, "jobs"), {
-                            date: today, customerName, customerPhone: args.customerPhone || "-",
-                            plate: args.plate || "-", brand: args.brand || "-", model: args.model || "-", mileage: "",
-                            problem: args.problem, status: "repairing", priority: args.priority || "normal",
-                            paymentMethod: payMethod, mechanicName, notes: "",
-                            items: itemsArray, laborItems: laborArray,
-                            partsTotal, laborTotal, discount, totalAmount, branchId, isDeleted: false,
-                            createdBy: uid, createdByName: mechanicName, createdAt: serverTimestamp()
-                        });
-
-                        if (totalAmount > 0 && payMethod !== 'pending') {
-                            await addDoc(collection(db, "transactions"), {
-                                date: today, type: "income", category: "ค่าซ่อม",
-                                description: `ค่าซ่อมรถมอเตอร์ไซค์ ทะเบียน ${args.plate} (${customerName})`,
-                                method: payMethod, paymentMethod: payMethod, amount: totalAmount,
-                                sourceType: "job", sourceId: jobRef.id, branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: uid
-                            });
-                        }
-
-                        const okReply = `🔧 **กล่องคุมระบบสั่งเปิดบิลและตัดสต๊อกตรงรุ่นสำเร็จ!**\n- ทะเบียนรถ: **${args.plate}**\n- ยอดสุทธิรวมเงินเข้าเก๊ะ: **${totalAmount.toLocaleString()} ฿**\n*(ระบบสับรางนำข้อมูลบันทึกลงระบบอู่เรียบร้อยครับ)*`;
-                        appendAiMessage("ai", okReply);
-                        chatHistory.push({ role: "assistant", content: `ทำการเปิดบิลซ่อมสำเร็จ รถทะเบียน ${args.plate} ยอดเงินสุทธิ ${totalAmount} บาทเรียบร้อย` });
-
-                    // 🔴 TOOL 2: อัปเดตสถานะงาน
-                    } else if (fnName === "update_job_status") {
-                        const jRef = doc(db, "jobs", args.jobId);
-                        await updateDoc(jRef, { status: args.status, updatedAt: serverTimestamp() });
-                        const fineLog = `✅ **เปลี่ยนสถานะใบงานสำเร็จ!** รหัสงาน **${args.jobId}** อัปเดตเป็น **"${args.status}"** เรียบร้อยครับ!`;
-                        appendAiMessage("ai", fineLog);
-                        chatHistory.push({ role: "assistant", content: `สับเปลี่ยนสถานะใบงานซ่อมรหัส ${args.jobId} เป็นสถานะ ${args.status} เรียบร้อย` });
-
-                    // 🔴 TOOL 3: บันทึกบัญชีการเงินทั่วไป
-                    } else if (fnName === "add_transaction") {
-                        await addDoc(collection(db, "transactions"), {
-                            date: today, type: args.type, category: args.category, description: args.description, method: args.method, paymentMethod: args.method, amount: Number(args.amount), sourceType: "manual", branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: uid
-                        });
-                        const fineReply = `💰 **บันทึกงบบัญชีหน้าร้านสำเร็จ!** รายการ **"${args.description}"** ยอดเงินสุทธิ **${args.amount} ฿** วิ่งตรงเข้าตารางการเงินเรียบร้อยครับ!`;
-                        appendAiMessage("ai", fineReply);
-                        chatHistory.push({ role: "assistant", content: `ลงงบบัญชีรายการ ${args.description} ยอด ${args.amount} บาท สำเร็จ` });
-                    }
-                } else {
-                    const aiText = msgObj.content || response.text || (typeof response === 'string' ? response : "กำลังประมวลผลข้อความครับลูกพี่เบน");
-                    appendAiMessage("ai", aiText);
-                    chatHistory.push({ role: "assistant", content: aiText });
-                }
-
-                if (chatHistory.length > 20) chatHistory.splice(0, 2);
-                localStorage.setItem("ben_motor_puter_permanent_memory", JSON.stringify(chatHistory));
-
-            }).catch((err) => {
-                console.error("Puter API Callback Error:", err);
-                document.getElementById(loadingId)?.remove();
-                appendAiMessage("ai", `❌ **คลาวด์ Puter ขัดข้องหน้าร้าน:** ${err.message}`);
+            // 🚀 PASS 1: ยิงหา OpenAI ตรวจสอบโครงข่ายคำสั่งคุมร้าน
+            const res = await fetch(`https://api.openai.com/v1/chat/completions`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4o-mini",
+                    messages: messagesPayload,
+                    tools: aiFunctionTools,
+                    tool_choice: "auto"
+                })
             });
 
+            const resData = await res.json();
+
+            if (!res.ok) throw new Error(resData.error?.message || "เชื่อมต่อเซิร์ฟเวอร์ OpenAI ล้มเหลว");
+
+            const responseMessage = resData.choices[0].message;
+
+            // 🚨 ตรวจจับจังหวะการสับรางสั่งงานฐานข้อมูลหลังบ้าน (Tool/Function Calling Flow)
+            if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
+                // บันทึกคำสั่งฝั่ง Assistant ตัวที่มีการขอรัน Tool ลงคลังความจำ
+                chatHistory.push(responseMessage);
+
+                const toolCall = responseMessage.tool_calls[0];
+                const fnName = toolCall.function.name;
+                const args = JSON.parse(toolCall.function.arguments);
+                
+                const today = new Date().toISOString().split("T")[0];
+                const branchId = currentProfile?.branchId || null;
+                const uid = currentUid || "autonomous-system";
+                const mechanicName = currentProfile?.displayName || "ช่างเบน";
+
+                let executionResult = { status: "error", message: "ฟังก์ชันไม่ได้ทำงาน" };
+
+                // 🔴 RUN ACTION 1: เปิดบิลใบงานซ่อมรถลงระบบ Firebase
+                if (fnName === "create_bill") {
+                    const rawParts = args.parts || []; const rawLabor = args.laborItems || [];
+                    const payMethod = args.paymentMethod || "cash";
+                    let itemsArray = []; let laborArray = []; let partsTotal = 0; let laborTotal = 0;
+
+                    for(const p of rawParts) {
+                        let itemPrice = Number(p.unitPrice) || 140; 
+                        let itemName = p.stockName || "อะไหล่ทั่วไป";
+
+                        if(p.stockId) {
+                            const sRef = doc(db, "stock", p.stockId); const sSnap = await getDoc(sRef);
+                            if(sSnap.exists()) {
+                                const sData = sSnap.data();
+                                itemPrice = Number(sData.salePrice) || itemPrice;
+                                itemName = sData.name || itemName;
+                                const qty = Number(p.qty) || 1;
+                                await updateDoc(sRef, { qty: Math.max(0, (Number(sData.qty)||0) - qty), updatedAt: serverTimestamp() });
+                            }
+                        }
+                        const qty = Number(p.qty) || 1;
+                        const lineTotal = qty * itemPrice;
+                        partsTotal += lineTotal;
+                        itemsArray.push({ stockId: p.stockId || "", stockName: itemName, qty, unitPrice: itemPrice, lineTotal });
+                    }
+
+                    for(const l of rawLabor) {
+                        const price = Number(l.price) || 0; laborTotal += price;
+                        laborArray.push({ name: l.name || "ค่าบริการ/ค่าแรงช่าง", price });
+                    }
+
+                    const discount = Number(args.discount) || 0;
+                    const totalAmount = Math.max(0, (partsTotal + laborTotal) - discount);
+                    const customerName = args.customerName || "ลูกค้าทั่วไป";
+
+                    const jobRef = await addDoc(collection(db, "jobs"), {
+                        date: today, customerName, customerPhone: args.customerPhone || "-",
+                        plate: args.plate || "-", brand: args.brand || "-", model: args.model || "-", mileage: "",
+                        problem: args.problem, status: "repairing", priority: args.priority || "normal",
+                        paymentMethod: payMethod, mechanicName, notes: "",
+                        items: itemsArray, laborItems: laborArray,
+                        partsTotal, laborTotal, discount, totalAmount, branchId, isDeleted: false,
+                        createdBy: uid, createdByName: mechanicName, createdAt: serverTimestamp()
+                    });
+
+                    if (totalAmount > 0 && payMethod !== 'pending') {
+                        await addDoc(collection(db, "transactions"), {
+                            date: today, type: "income", category: "ค่าซ่อม",
+                            description: `ค่าซ่อมรถมอเตอร์ไซค์ ทะเบียน ${args.plate} (${customerName})`,
+                            method: payMethod, paymentMethod: payMethod, amount: totalAmount,
+                            sourceType: "job", sourceId: jobRef.id, branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: uid
+                        });
+                    }
+                    executionResult = { status: "success", message: `เปิดบิลสำเร็จ ทะเบียนรถ ${args.plate} ยอดสุทธิเข้าเก๊ะ ${totalAmount} บาท บันทึกเรียบร้อย` };
+
+                // 🔴 RUN ACTION 2: เปลี่ยนสถานะงานซ่อม
+                } else if (fnName === "update_job_status") {
+                    const jRef = doc(db, "jobs", args.jobId);
+                    await updateDoc(jRef, { status: args.status, updatedAt: serverTimestamp() });
+                    executionResult = { status: "success", message: `อัปเดตเปลี่ยนสถานะดีลงาน ${args.jobId} เป็นสถานะ ${args.status} เรียบร้อย` };
+
+                // 🔴 RUN ACTION 3: ลงบัญชีการเงินทั่วไป
+                } else if (fnName === "add_transaction") {
+                    await addDoc(collection(db, "transactions"), {
+                        date: today, type: args.type, category: args.category, description: args.description, method: args.method, paymentMethod: args.method, amount: Number(args.amount), sourceType: "manual", branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: uid
+                    });
+                    executionResult = { status: "success", message: `บันทึกประวัติงบการเงิน รายการ ${args.description} ยอดเงิน ${args.amount} บาท เข้าหน้าบัญชีสำเร็จ` };
+                }
+
+                // บันทึก Log ผลลัพธ์กลับเข้าไปในโครงสร้างความจำ (role: tool) ตามมาตรฐานของ OpenAI
+                chatHistory.push({
+                    role: "tool",
+                    tool_call_id: toolCall.id,
+                    name: fnName,
+                    content: JSON.stringify(executionResult)
+                });
+
+                // 🚀 PASS 2: ยิงหา OpenAI รอบที่สอง (ส่งผลลัพธ์ของฟังก์ชันกลับไปให้มันสรุปออกมาเป็นคำพูดหล่อๆ)
+                const secondRes = await fetch(`https://api.openai.com/v1/chat/completions`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${OPENAI_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini",
+                        messages: [ { role: "system", content: systemRuleInstruction }, ...chatHistory ]
+                    })
+                });
+
+                const secondData = await secondRes.json();
+                document.getElementById(loadingId)?.remove();
+
+                if (secondRes.ok && secondData.choices) {
+                    const finalAiText = secondData.choices[0].message.content;
+                    appendAiMessage("ai", finalAiText);
+                    chatHistory.push({ role: "assistant", content: finalAiText });
+                }
+
+            } else {
+                // 🧠 โหมดตอบข้อความแชทคุยเล่น ปรึกษาสูตรแต่งรถ หรือคุยทั่วไปปกติ
+                document.getElementById(loadingId)?.remove();
+                const aiText = responseMessage.content;
+                appendAiMessage("ai", aiText);
+                chatHistory.push({ role: "assistant", content: aiText });
+            }
+
+            // ควบคุมขนาดท่อไอเสียความจำแชทไม่ให้บวมเกินพิกัด (ดองไว้สูงสุด 24 ประโยคล่าสุด)
+            if (chatHistory.length > 24) chatHistory.splice(0, 2);
+            localStorage.setItem("ben_motor_openai_permanent_memory", JSON.stringify(chatHistory));
+
         } catch (error) {
-            console.error("AI Core Engine Error:", error);
-            if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-            appendAiMessage("ai", `❌ **กล่องควบคุมเกิดบั๊กรวน:** ${error.message}`);
+            console.error("AI Engine Crash:", error);
+            document.getElementById(loadingId)?.remove();
+            appendAiMessage("ai", `❌ **กล่อง ECU OpenAI เกิดข้อผิดพลาดหลังบ้าน:** ${error.message}`);
         } finally {
             input.disabled = false;
             sBtn.disabled = false;
@@ -389,19 +432,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-function startEngineWithPuter() {
-    if (!window.puter) {
-        const script = document.createElement('script');
-        script.src = "https://js.puter.com/v2/";
-        script.onload = () => {
-            injectAIWidget();
-            setupAiCoreEngine();
-        };
-        document.head.appendChild(script);
-    } else {
-        injectAIWidget();
-        setupAiCoreEngine();
-    }
-}
-
-document.addEventListener("DOMContentLoaded", startEngineWithPuter);
+document.addEventListener("DOMContentLoaded", () => {
+    injectAIWidget();
+    setupAiCoreEngine();
+});
