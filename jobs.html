@@ -350,6 +350,10 @@
                            <td colspan="3" class="text-end small text-muted py-2 border-0 fw-medium">รวมค่าแรง</td>
                            <td class="text-end pe-4 small fw-bold text-dark py-2 border-0" id="jobDetailLaborTotal">0.00 ฿</td>
                         </tr>
+                        <tr id="jobDetailDiscountRow" class="d-none">
+                           <td colspan="3" class="text-end small text-danger py-2 border-0 fw-medium">ส่วนลด</td>
+                           <td class="text-end pe-4 small fw-bold text-danger py-2 border-0" id="jobDetailDiscountTotal">-0.00 ฿</td>
+                        </tr>
                         <tr class="bg-soft-success">
                            <td colspan="3" class="text-end fw-bold text-success py-3 border-0 fs-6">ยอดรวมสุทธิ</td>
                            <td class="text-end pe-4 fw-bold text-success fs-5 py-3 border-0" id="jobDetailGrandTotal">0.00 ฿</td>
@@ -496,6 +500,8 @@
       const jobDetailLaborTbody = document.getElementById("jobDetailLaborTbody");
       const jobDetailPartsTotal = document.getElementById("jobDetailPartsTotal");
       const jobDetailLaborTotal = document.getElementById("jobDetailLaborTotal");
+      const jobDetailDiscountRow = document.getElementById("jobDetailDiscountRow");
+      const jobDetailDiscountTotal = document.getElementById("jobDetailDiscountTotal");
       const jobDetailGrandTotal = document.getElementById("jobDetailGrandTotal");
       
       const jobDetailLogsList = document.getElementById("jobDetailLogsList");
@@ -647,7 +653,6 @@
            jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-range me-1 text-success'></i> ข้อมูลทั้งหมด";
         } else if (start && end) {
            if (start === end) {
-               // ถ้าเป็นวันเดียวกัน ให้โชว์แค่วันเดียวสั้นๆ
                jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start);
            } else {
                jobsDateRangeSummary.innerHTML = "<i class='bi bi-calendar-check me-1 text-success'></i> " + formatDateThaiFromString(start) + " - " + formatDateThaiFromString(end);
@@ -726,7 +731,6 @@
               const priorityInfo = getPriorityInfo(job.priority);
               const tr = document.createElement("tr");
               
-              // แจ้งเตือนสถานะการชำระเงิน
               const paymentBadge = job.paymentMethod === 'pending' 
                 ? '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle rounded-pill ms-2" style="font-size: 0.7rem;"><i class="bi bi-clock-history"></i> รอจ่ายเงิน</span>'
                 : '<span class="badge bg-success bg-opacity-10 text-success border border-success-subtle rounded-pill ms-2" style="font-size: 0.7rem;"><i class="bi bi-check2"></i> จ่ายแล้ว</span>';
@@ -930,6 +934,7 @@
         jobDetailLaborTbody.innerHTML = "";
         jobDetailPartsTotal.textContent = "0.00 ฿";
         jobDetailLaborTotal.textContent = "0.00 ฿";
+        if (jobDetailDiscountRow) jobDetailDiscountRow.classList.add("d-none");
         jobDetailGrandTotal.textContent = "0.00 ฿";
         jobDetailLogsList.innerHTML = `<li class="list-group-item text-center small text-muted py-4">กำลังโหลด...</li>`;
 
@@ -1011,6 +1016,15 @@
 
           jobDetailPartsTotal.textContent = formatNumber(Number(data.partsTotal) || 0) + " ฿";
           jobDetailLaborTotal.textContent = formatNumber(Number(data.laborTotal) || 0) + " ฿";
+
+          // จัดการแสดงส่วนลดใน Modal
+          if (data.discount > 0) {
+              if(jobDetailDiscountRow) jobDetailDiscountRow.classList.remove("d-none");
+              if(jobDetailDiscountTotal) jobDetailDiscountTotal.textContent = "-" + formatNumber(Number(data.discount)) + " ฿";
+          } else {
+              if(jobDetailDiscountRow) jobDetailDiscountRow.classList.add("d-none");
+          }
+
           jobDetailGrandTotal.textContent = formatNumber(Number(data.totalAmount) || 0) + " ฿";
 
           if (jobDetailSoftDeleteBtn) {
@@ -1175,9 +1189,22 @@
                   <tbody>${itemsHtml}</tbody>
                </table>
                <div class="totals">
-                  <div class="total-row">
+                  <div class="total-row" style="font-size: 0.9rem; font-weight: normal; margin-bottom: 5px;">
+                     <span>รวมค่าอะไหล่</span>
+                     <span>${formatNumber(d.partsTotal || 0)} บาท</span>
+                  </div>
+                  <div class="total-row" style="font-size: 0.9rem; font-weight: normal; margin-bottom: 5px;">
+                     <span>รวมค่าแรง</span>
+                     <span>${formatNumber(d.laborTotal || 0)} บาท</span>
+                  </div>
+                  ${d.discount > 0 ? `
+                  <div class="total-row" style="font-size: 0.9rem; font-weight: normal; color: red; margin-bottom: 5px;">
+                     <span>ส่วนลด</span>
+                     <span>-${formatNumber(d.discount)} บาท</span>
+                  </div>` : ''}
+                  <div class="total-row" style="margin-top: 5px; border-top: 1px dashed #ccc; padding-top: 5px;">
                      <span>ยอดรวมสุทธิ</span>
-                     <span>${formatNumber(d.totalAmount)} บาท</span>
+                     <span>${formatNumber(d.totalAmount || 0)} บาท</span>
                   </div>
                </div>
                <div class="footer">
