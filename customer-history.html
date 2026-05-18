@@ -309,6 +309,10 @@
                         <tbody id="dmItemsTableBody" class="bg-white">
                         </tbody>
                         <tfoot class="table-group-divider bg-light fw-bold">
+                            <tr id="dmDiscountRow" class="d-none text-danger">
+                                <td class="text-end py-2 ps-3">ส่วนลดที่ให้ลูกค้า:</td>
+                                <td class="text-end pe-3 py-2 fs-6" id="dmDiscountAmount">-0.00 ฿</td>
+                            </tr>
                             <tr>
                                 <td class="text-end py-2 ps-3 text-dark">ยอดเงินสุทธิรวมทั้งสิ้น:</td>
                                 <td class="text-end pe-3 py-2 text-success fs-6 fw-bold" id="dmTotalAmount">-</td>
@@ -359,7 +363,6 @@
       const userDisplayNameText = document.getElementById("userDisplayNameText");
       const userRoleText = document.getElementById("userRoleText");
       const userAvatarInitial = document.getElementById("userAvatarInitial");
-      const settingsMenuItem = document.getElementById("settingsMenuItem");
       const logoutBtn = document.getElementById("logoutBtn");
 
       // Search
@@ -392,14 +395,9 @@
       const historyEmptyBox = document.getElementById("historyEmptyBox");
       const historyCountLabel = document.getElementById("historyCountLabel");
 
-      // Modals & FAB
+      // Modals
       const detailModalEl = document.getElementById("detailModal");
       const detailModal = bootstrap.Modal.getOrCreateInstance(detailModalEl);
-      
-      const fabOpenBillBtn = document.getElementById("fabOpenBillBtn");
-      const fabAddTxnBtn = document.getElementById("fabAddTxnBtn");
-      const fabStockInBtn = document.getElementById("fabStockInBtn");
-      const fabAddVehicleBtn = document.getElementById("fabAddVehicleBtn");
 
       const mainToastEl = document.getElementById("mainToast");
       const mainToastBody = document.getElementById("mainToastBody");
@@ -519,7 +517,6 @@
         const branchId = currentUserProfile?.branchId || null;
 
         try {
-          // ดึงแบบยืดหยุ่นไม่ใช้เรียงลำดับซ้อนใน Firebase ป้องกัน Compound Missing Index Crash
           const jobsConstraints = [where("isDeleted", "==", false)];
           if (branchId) jobsConstraints.push(where("branchId", "==", branchId));
 
@@ -536,10 +533,8 @@
              if (isMatch) jobs.push({ id: doc.id, ...d });
           });
 
-          // จัดเรียงวันที่ฝั่ง Client-Side ทะลวงบล็อกดัชนีของ Firebase
           jobs.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 
-          // ดึงข้อมูลรถรับซื้อ/ขาย
           const vehiclesCol = collection(db, "vehicles");
           const plateSet = new Set();
           jobs.forEach(j => { if (j.plate) plateSet.add(j.plate.trim()); });
@@ -644,7 +639,7 @@
             plate: j.plate || "-", brand: j.brand || "", model: j.model || "",
             problem: j.problem || "", status: j.status || "repairing",
             totalAmount: Number(j.totalAmount) || 0, createdByName: j.createdByName,
-            customerName: j.customerName, items: j.items || []
+            customerName: j.customerName, items: j.items || [], laborItems: j.laborItems || [], discount: j.discount || 0
           });
         });
 
@@ -672,7 +667,6 @@
           return;
         }
 
-        // เรียงลำดับจากใหม่สุดไปเก่าสุดฝั่ง Client เพื่อความปลอดภัยสูงสุด
         currentHistoryData.sort((a, b) => (b.dateKey || "").localeCompare(a.dateKey || ""));
         historyCountLabel.textContent = currentHistoryData.length + " รายการประวัติ";
 
@@ -806,17 +800,46 @@
           const tbody = document.getElementById('dmItemsTableBody');
           tbody.innerHTML = "";
           
+          let hasItems = false;
+          
+          // ดึงรายการอะไหล่
           if (data.items && data.items.length > 0) {
+              hasItems = true;
               data.items.forEach(item => {
                   const tr = document.createElement('tr');
                   tr.innerHTML = `
-                    <td class="py-2 ps-3 font-medium text-dark">${item.name || "รายการอะไหล่/ค่าแรง"} <span class="text-muted text-xs d-block fw-bold">x${item.qty || 1} ${item.unit || "ชิ้น"}</span></td>
-                    <td class="text-end pe-3 fw-bold font-monospace text-dark">${formatNumber(Number(item.total) || 0)} ฿</td>
+                    <td class="py-2 ps-3 font-medium text-dark">${item.stockName || item.name || "รายการอะไหล่"} <span class="text-muted text-xs d-block fw-bold">x${item.qty || 1} ${item.unit || "ชิ้น"}</span></td>
+                    <td class="text-end pe-3 fw-bold font-monospace text-dark">${formatNumber(Number(item.lineTotal || item.total) || 0)} ฿</td>
                   `;
                   tbody.appendChild(tr);
               });
+          }
+          
+          // ดึงรายการค่าแรง (เพิ่มเข้ามาให้ประวัติแสดงผลสมบูรณ์เหมือนตอนเปิดบิล)
+          if (data.laborItems && data.laborItems.length > 0) {
+              hasItems = true;
+              data.laborItems.forEach(item => {
+                  const tr = document.createElement('tr');
+                  tr.innerHTML = `
+                    <td class="py-2 ps-3 font-medium text-info"><i class="bi bi-wrench me-1"></i> ${item.name || "ค่าแรงช่าง/บริการ"}</td>
+                    <td class="text-end pe-3 fw-bold font-monospace text-info">${formatNumber(Number(item.price || item.total) || 0)} ฿</td>
+                  `;
+                  tbody.appendChild(tr);
+              });
+          }
+
+          if (!hasItems) {
+              tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-4">ไม่มีข้อมูลบันทึกรายการในบิลนี้</td></tr>`;
+          }
+
+          // จัดการการแสดงผลส่วนลด
+          const discountRow = document.getElementById('dmDiscountRow');
+          const discountAmount = document.getElementById('dmDiscountAmount');
+          if (data.discount > 0) {
+              if (discountRow) discountRow.classList.remove('d-none');
+              if (discountAmount) discountAmount.textContent = "-" + formatNumber(data.discount) + " ฿";
           } else {
-              tbody.innerHTML = `<tr><td colspan="2" class="text-center text-muted py-4">ไม่มีข้อมูลบันทึกรายการอะไหล่ในบิลนี้</td></tr>`;
+              if (discountRow) discountRow.classList.add('d-none');
           }
 
           document.getElementById('dmTotalAmount').textContent = formatNumber(data.totalAmount) + " ฿";
@@ -824,7 +847,7 @@
           document.getElementById('dmTimestamp').textContent = data.createdAt ? formatDateTimeThai(data.createdAt) : "-";
 
           const editBtn = document.getElementById('dmEditLink');
-          editBtn.href = `open-bill.html?jobId=${data.id}`;
+          editBtn.href = `open-bill.html?edit=${data.id}`;
 
           detailModal.show();
       };
@@ -878,7 +901,6 @@
             return;
           }
 
-          // Render Profile Topbar
           const name = currentUserProfile.displayName || "ช่างประจำร้าน";
           if (userDisplayNameText) userDisplayNameText.textContent = name;
           if (userRoleText) userRoleText.textContent = currentUserProfile.role === "admin" ? "ผู้ดูแลระบบ" : "ช่างซ่อม";
@@ -887,7 +909,6 @@
           applyTheme(localStorage.getItem("bm-theme-" + user.uid) || currentUserProfile.theme || "light");
           setupEventListeners();
 
-          // ระบบดึงข้อมูลค้นหาแบบอัตโนมัติกรณีกดลิงก์พ่วงมาจากหน้าอื่น
           const urlParams = new URLSearchParams(window.location.search);
           const q = urlParams.get('q');
           if(q) {
