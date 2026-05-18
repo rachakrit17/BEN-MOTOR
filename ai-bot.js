@@ -17,7 +17,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // 🛑 รหัส API KEY ของกูเกิล (ใส่รหัสแท้ใช้งานของลูกพี่ตรงนี้เงียบ ๆ ได้เลยครับ)
-const GEMINI_API_KEY = "AIzaSyDVOFqoHwmFf0j2gnJRTkOXBzYTLGqwYKI"; 
+const GEMINI_API_KEY = "AIzaSyCiDd5r5dhj22aX7adMyJdxWpCndbR_2dY"; 
 
 let currentUid = null;
 let currentProfile = null;
