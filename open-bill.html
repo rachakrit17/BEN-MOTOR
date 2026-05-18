@@ -23,7 +23,7 @@
       .form-control:focus, .form-select:focus { border-color: #198754; box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); }
       .bg-soft-success { background-color: rgba(25, 135, 84, 0.05); }
       
-      /* สไตล์สำหรับการพิมพ์ (Print) */
+      /* สไตล์สำหรับการพิมพ์ (Print) ล้างค่ากึ่งกลางของ Bootstrap */
       @media print {
         nav, main, .bm-fab-container, .bm-bottom-nav, #mainToast, .modal-backdrop { display: none !important; }
         body, html { margin: 0 !important; padding: 0 !important; background: #fff !important; height: auto !important; }
@@ -439,17 +439,17 @@
       </div>
     </nav>
 
-    <div class="position-fixed top-0 start-50 translate-middle-x p-3 d-print-none" style="z-index: 1080;">
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 d-print-none" style="z-index: 1090;">
       <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
         <div class="d-flex px-3 py-2">
-          <div class="toast-body fw-medium fs-6" id="mainToastBody"></div>
+          <div class="toast-body d-flex align-items-center fw-medium fs-6" id="mainToastBody"></div>
           <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ปิด"></button>
         </div>
       </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-	<script type="module">
+    <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
       import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, query, where, orderBy, limit, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -594,7 +594,6 @@
           </td>
         `;
         
-        // ถ้าเป็นข้อมูลเก่าจากการ Edit ให้ Selected ค่ากลับไป
         if(sId) {
            setTimeout(() => {
              const sel = tr.querySelector(".part-stock-select");
@@ -655,7 +654,6 @@
             if (docSnap.exists()) {
                originalJobData = docSnap.data();
                
-               // เติมข้อมูลลงฟอร์ม
                jobDateInput.value = originalJobData.date || "";
                customerNameInput.value = originalJobData.customerName || "";
                customerPhoneInput.value = originalJobData.customerPhone || "";
@@ -671,7 +669,6 @@
                jobNotesInput.value = originalJobData.notes || "";
                discountInput.value = originalJobData.discount || "";
                
-               // เติมตารางอะไหล่
                partsTbody.innerHTML = "";
                if(originalJobData.items && originalJobData.items.length > 0) {
                   originalJobData.items.forEach(item => {
@@ -681,7 +678,6 @@
                   partsTbody.appendChild(createPartRow());
                }
 
-               // เติมตารางค่าแรง
                laborTbody.innerHTML = "";
                if(originalJobData.laborItems && originalJobData.laborItems.length > 0) {
                   originalJobData.laborItems.forEach(item => {
@@ -691,7 +687,6 @@
                   laborTbody.appendChild(createLaborRow());
                }
                
-               // อัปเดต UI ให้อยู่ในโหมดแก้บิล
                editModeAlert.classList.remove("d-none");
                pageTitleLabel.textContent = "อัปเดตข้อมูลบิลซ่อม (Edit Mode)";
                saveBillBtn.classList.remove("btn-success");
@@ -700,7 +695,6 @@
                
                setTimeout(() => recalcTotals(), 100);
                
-               // ล็อคช่องทางการชำระเงินไม่ให้แก้กลับไปเป็น Pending ถ้ารับเงินไปแล้ว เพื่อป้องกันยอดในกระเป๋าคลาดเคลื่อน
                if(originalJobData.paymentMethod !== 'pending') {
                   paymentMethodInput.disabled = true;
                   const helpText = document.createElement("div");
@@ -732,7 +726,6 @@
            });
            stockLoadingState.className="d-none";
            
-           // เช็คว่ามี Parameter edit หรือไม่
            const urlParams = new URLSearchParams(window.location.search);
            editJobId = urlParams.get('edit');
            
@@ -763,7 +756,7 @@
 
       function autoFill(type, val) {
          val = val.trim(); if(!val) return;
-         if(editJobId) return; // ปิด Auto-fill ถ้าอยู่ในโหมด Edit ป้องกันการพิมพ์ทับข้อมูลเดิม
+         if(editJobId) return; 
          
          const rec = historyRecords.find(r => type==="plate"?r.plate===val:r.customerName===val);
          if(rec) {
@@ -896,7 +889,6 @@
             // ============== ส่วนแก้ไขบิล (Edit Mode) ==============
             if (editJobId) {
                
-               // 1. คืนสต๊อกเก่าก่อน
                if (originalJobData.items && originalJobData.items.length > 0) {
                   for (const oldPart of originalJobData.items) {
                      const sRef = doc(db, "stock", oldPart.stockId);
@@ -904,25 +896,22 @@
                      if(curr) {
                         const restoredQty = (Number(curr.qty) || 0) + oldPart.qty;
                         await updateDoc(sRef, { qty: restoredQty });
-                        stockMap[oldPart.stockId].qty = restoredQty; // update local state
+                        stockMap[oldPart.stockId].qty = restoredQty; 
                      }
                   }
                }
                
-               // 2. ตัดสต๊อกใหม่
                for (const p of parts) {
                   const sRef = doc(db, "stock", p.stockId);
                   const curr = stockMap[p.stockId];
                   if(curr) {
                      const newQty = Math.max(0, (Number(curr.qty) || 0) - p.qty);
                      await updateDoc(sRef, { qty: newQty, updatedAt: serverTimestamp() });
-                     stockMap[p.stockId].qty = newQty; // update local state
+                     stockMap[p.stockId].qty = newQty; 
                   }
                }
 
-               // 3. อัปเดตข้อมูลบิล
                jobData.updatedAt = serverTimestamp();
-               // รักษาฟิลด์ข้อมูลชุดเดิมเอาไว้
                jobData.status = originalJobData.status;
                jobData.createdBy = originalJobData.createdBy;
                jobData.createdByName = originalJobData.createdByName;
@@ -930,13 +919,11 @@
 
                await updateDoc(doc(db, "jobs", editJobId), jobData);
 
-               // 4. บันทึกประวัติ Log การแก้ไข
                await addDoc(collection(db, "activityLogs"), {
                   type: "job_updated", message: `ช่างทำการแก้ไขข้อมูลบิลซ่อม ${plate} (ยอดใหม่: ${formatNumber(finalTotal)})`,
                   refId: editJobId, refType: "job", branchId, createdAt: serverTimestamp(), createdBy: currentUser.uid, createdByName: currentUserProfile.displayName
                });
 
-               // 5. ปรับยอดเงินรายรับเข้าบัญชี Transactions (ถ้ามี)
                if(originalJobData.paymentMethod !== 'pending') {
                   const txCol = collection(db, "transactions");
                   const qTx = query(txCol, where("sourceType", "==", "job"), where("sourceId", "==", editJobId));
@@ -950,9 +937,8 @@
                }
 
                showToast("อัปเดตข้อมูลบิลซ่อมเสร็จสมบูรณ์!", "success");
-
                setTimeout(() => { window.location.href = "jobs.html"; }, 2000);
-               return; // หยุดทำงาน ปิดจ็อบ Edit Mode
+               return; 
 
             } else {
                // ============== ส่วนสร้างบิลใหม่ (Create Mode) ==============
@@ -963,7 +949,6 @@
 
                const docRef = await addDoc(collection(db,"jobs"), jobData);
                
-               // ตัดสต๊อกใหม่
                for(const p of parts) {
                   const sRef = doc(db,"stock",p.stockId);
                   const curr = stockMap[p.stockId];
@@ -971,7 +956,6 @@
                   await updateDoc(sRef, { qty: newQty, updatedAt:serverTimestamp() });
                }
 
-               // บันทึกการรับเงิน
                if (paymentMethodInput.value !== 'pending') {
                   await addDoc(collection(db,"transactions"), {
                      date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
@@ -981,7 +965,6 @@
                   });
                }
                
-               // บันทึก Log สร้างใหม่
                await addDoc(collection(db,"activityLogs"), {
                   type:"job_created", message:`เปิดบิลซ่อม ${plate} ยอด ${formatNumber(finalTotal)}`,
                   refId:docRef.id, refType: "job", branchId, createdAt:serverTimestamp(), createdBy:currentUser.uid, createdByName:currentUserProfile.displayName
