@@ -144,7 +144,7 @@
               </div>
               
               <div class="bm-stat-card shadow-sm bg-warning bg-opacity-10 border-start border-4 border-warning p-3">
-                 <div class="bm-stat-label mb-1 fw-bold text-warning-emphasis"><i class="bi bi-safe me-1"></i> มูลค่าทุนคงค้าง (ทุนจม)</div>
+                 <div class="bm-stat-label mb-1 fw-bold text-warning-emphasis"><i class="bi bi-safe me-1"></i> มูลค่าทุนคงค้าง (ทุนรวมค่าปั้น)</div>
                  <div class="bm-stat-value text-dark fs-3 fw-bold" id="vehiclesCountNumber">0.00</div>
                  <div class="bm-stat-sub text-muted small">บาท (จากรถในสต๊อก)</div>
               </div>
@@ -155,7 +155,7 @@
                  <div class="bm-stat-sub text-muted small">คัน</div>
               </div>
               <div class="bm-stat-card shadow-sm bg-primary bg-opacity-10 border-start border-4 border-primary p-3">
-                 <div class="bm-stat-label mb-1 fw-bold text-primary"><i class="bi bi-piggy-bank-fill me-1"></i> กำไรรวม (จากรถที่ขาย)</div>
+                 <div class="bm-stat-label mb-1 fw-bold text-primary"><i class="bi bi-piggy-bank-fill me-1"></i> กำไรรวม (หักทุน+ค่าปั้นแล้ว)</div>
                  <div class="bm-stat-value text-primary fs-3 fw-bold" id="vehicleTotalProfit">0.00</div>
                  <div class="bm-stat-sub text-muted small">บาท</div>
               </div>
@@ -210,7 +210,7 @@
                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-nowrap" id="presetAllBtn">ทั้งหมด</button>
                     </div>
 
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 ms-md-auto">
                         <span class="small text-muted me-1 fw-medium">มุมมอง:</span>
                         <div class="btn-group btn-group-sm bg-light p-1 rounded-pill border shadow-sm" role="group">
                             <button type="button" class="btn btn-sm btn-light rounded-pill border-0 px-3 active text-success fw-bold" id="tableViewBtn">
@@ -241,7 +241,7 @@
                       <th class="ps-4 py-3 fw-semibold" style="min-width: 100px;">วันที่ซื้อ</th>
                       <th class="py-3 fw-semibold" style="min-width: 160px;">ยี่ห้อ / รุ่น</th>
                       <th class="py-3 fw-semibold" style="min-width: 100px;">ทะเบียน</th>
-                      <th class="py-3 fw-semibold text-end" style="min-width: 110px;">ทุนซื้อเข้า</th>
+                      <th class="py-3 fw-semibold text-end" style="min-width: 110px;">ทุนรวม (ซื้อ+ปั้น)</th>
                       <th class="py-3 fw-semibold text-end" style="min-width: 110px;">ราคาขายออก</th>
                       <th class="py-3 fw-semibold text-center" style="min-width: 100px;">สถานะ</th>
                       <th class="py-3 fw-semibold text-end" style="min-width: 110px;">กำไรสุทธิ</th>
@@ -331,13 +331,21 @@
                             <span class="text-muted d-block fw-medium mb-1">เลขไมล์:</span> 
                             <span id="sellVehicleMileageText" class="fw-bold fs-6">-</span>
                         </div>
-                        <div class="col-12 col-sm-6 mt-3 pt-2 border-top">
+                        <div class="col-12 col-sm-3 mt-3 pt-2 border-top">
                             <span class="text-muted d-block fw-medium mb-1">วันที่ซื้อเข้า:</span>
                             <span id="sellVehicleBuyDateText" class="fw-medium">-</span>
                         </div>
-                        <div class="col-12 col-sm-6 mt-3 pt-2 border-top">
-                            <span class="text-muted d-block fw-medium mb-1">ราคาทุนซื้อเข้า:</span>
-                            <span id="sellVehicleBuyPriceText" class="fw-bold text-danger fs-5">-</span>
+                        <div class="col-12 col-sm-3 mt-3 pt-2 border-top">
+                            <span class="text-muted d-block fw-medium mb-1">ทุนซื้อเข้า:</span>
+                            <span id="sellVehicleBuyPriceText" class="fw-bold text-dark fs-6">-</span>
+                        </div>
+                        <div class="col-12 col-sm-3 mt-3 pt-2 border-top">
+                            <span class="text-muted d-block fw-medium mb-1">ค่าซ่อม/ค่าปั้น:</span>
+                            <span id="sellVehicleRepairCostText" class="fw-bold text-warning-emphasis fs-6">-</span>
+                        </div>
+                        <div class="col-12 col-sm-3 mt-3 pt-2 border-top bg-danger bg-opacity-10 rounded-3 p-2">
+                            <span class="text-danger d-block fw-bold mb-1">ต้นทุนรวมสุทธิ:</span>
+                            <span id="sellVehicleTotalCostText" class="fw-bold text-danger fs-5">-</span>
                         </div>
                         <div class="col-12 mt-3">
                             <span class="text-muted fw-medium d-block mb-1">หมายเหตุ:</span>
@@ -366,7 +374,7 @@
                             </div>
                             <div class="col-12 mt-3">
                               <div class="alert alert-success bg-success bg-opacity-10 border-success-subtle d-flex justify-content-between align-items-center py-3 mb-0 rounded-3 shadow-sm" id="sellVehicleProfitPreview">
-                                 <span class="fw-medium text-success-emphasis">กำไรโดยประมาณ:</span>
+                                 <span class="fw-medium text-success-emphasis">กำไรสุทธิโดยประมาณ:</span>
                                  <span class="fw-bold text-success fs-5">0.00 ฿</span>
                               </div>
                             </div>
@@ -390,6 +398,9 @@
                                 <span id="sellVehicleSoldPriceText" class="fw-bold fs-5 text-success">-</span>
                             </div>
                             <div class="col-12"><hr class="my-1 border-light"></div>
+                            <div class="col-12 text-muted small mb-2 text-start">
+                                <div>ทุนซื้อ: <span id="soldInfoBuyPrice"></span> | ค่าปั้น: <span id="soldInfoRepairCost"></span> | ทุนรวม: <span id="soldInfoTotalCost" class="text-danger fw-bold"></span></div>
+                            </div>
                             <div class="col-12 d-flex justify-content-between align-items-center bg-light p-2 rounded-3">
                                 <span class="text-dark fw-bold">กำไรสุทธิ:</span>
                                 <span id="sellVehicleSoldProfitText" class="h3 fw-bold text-success mb-0">-</span>
@@ -402,7 +413,7 @@
 
             <div id="vehicleEditMode" class="d-none">
                 <div class="alert alert-warning bg-warning bg-opacity-10 border-warning-subtle text-warning-emphasis fw-medium small mb-4">
-                   <i class="bi bi-exclamation-triangle-fill me-2"></i> โหมดแก้ไขข้อมูล: โปรดระมัดระวังในการเปลี่ยนแปลงข้อมูลสำคัญ
+                   <i class="bi bi-exclamation-triangle-fill me-2"></i> โหมดแก้ไขข้อมูล: คุณสามารถเพิ่มค่าปั้นรถได้ที่นี่
                 </div>
                 <form id="vehicleEditForm" class="row g-3">
                    <div class="col-12 col-md-6">
@@ -421,9 +432,16 @@
                       <label class="form-label small fw-medium">รุ่น <span class="text-danger">*</span></label>
                       <input type="text" class="form-control" id="editModelInput">
                    </div>
-                   <div class="col-12">
-                      <label class="form-label small text-danger fw-bold">ราคาทุนซื้อเข้า (เฉพาะ Admin เท่านั้น) <span class="text-danger">*</span></label>
+                   <div class="col-12 col-md-6">
+                      <label class="form-label small text-danger fw-bold">ราคาทุนซื้อเข้า (Admin เท่านั้น) <span class="text-danger">*</span></label>
                       <input type="number" class="form-control border-danger fw-bold" id="editBuyPriceInput" readonly>
+                   </div>
+                   <div class="col-12 col-md-6">
+                      <label class="form-label small fw-medium text-warning-emphasis">ค่าซ่อมบำรุง / ค่าปั้นรถสะสม</label>
+                      <div class="input-group">
+                          <input type="number" class="form-control fw-bold border-warning-subtle" id="editRepairCostInput" placeholder="0.00" min="0" step="0.01">
+                          <span class="input-group-text bg-warning-subtle text-warning-emphasis border-warning-subtle">฿</span>
+                      </div>
                    </div>
                    <div class="col-12">
                       <label class="form-label small fw-medium">หมายเหตุ / สภาพรถ</label>
@@ -544,6 +562,8 @@
       const sellVehicleMileageText = document.getElementById("sellVehicleMileageText");
       const sellVehicleBuyDateText = document.getElementById("sellVehicleBuyDateText");
       const sellVehicleBuyPriceText = document.getElementById("sellVehicleBuyPriceText");
+      const sellVehicleRepairCostText = document.getElementById("sellVehicleRepairCostText");
+      const sellVehicleTotalCostText = document.getElementById("sellVehicleTotalCostText");
       const sellVehicleNoteText = document.getElementById("sellVehicleNoteText");
       
       // Modal: Sell Form
@@ -559,6 +579,9 @@
       const sellVehicleSoldDateText = document.getElementById("sellVehicleSoldDateText");
       const sellVehicleSoldPriceText = document.getElementById("sellVehicleSoldPriceText");
       const sellVehicleSoldProfitText = document.getElementById("sellVehicleSoldProfitText");
+      const soldInfoBuyPrice = document.getElementById("soldInfoBuyPrice");
+      const soldInfoRepairCost = document.getElementById("soldInfoRepairCost");
+      const soldInfoTotalCost = document.getElementById("soldInfoTotalCost");
 
       // Modal: Edit Form
       const vehicleEditForm = document.getElementById("vehicleEditForm");
@@ -567,6 +590,7 @@
       const editModelInput = document.getElementById("editModelInput");
       const editMileageInput = document.getElementById("editMileageInput");
       const editBuyPriceInput = document.getElementById("editBuyPriceInput");
+      const editRepairCostInput = document.getElementById("editRepairCostInput");
       const editNoteInput = document.getElementById("editNoteInput");
       const saveEditBtn = document.getElementById("saveEditBtn");
       const cancelEditBtn = document.getElementById("cancelEditBtn");
@@ -644,13 +668,13 @@
                profit += (Number(v.profit) || 0);
             } else {
                inStock++;
-               inStockValue += (Number(v.buyPrice) || 0); // คำนวณทุนจม
+               // ทุนจม = ซื้อเข้า + ค่าปั้น
+               inStockValue += (Number(v.buyPrice) || 0) + (Number(v.repairCost) || 0); 
             }
          });
          vehicleInStockCount.textContent = inStock.toLocaleString();
          vehicleSoldCount.textContent = sold.toLocaleString();
          vehicleTotalProfit.textContent = formatNumber(profit);
-         // โชว์มูลค่าทุนคงค้างแทน
          vehiclesCountNumber.textContent = formatNumber(inStockValue);
       }
 
@@ -674,11 +698,13 @@
                const isSold = v.status === "sold";
                const profitClass = (v.profit || 0) >= 0 ? "text-success" : "text-danger";
                const tr = document.createElement("tr");
+               const totalCost = (Number(v.buyPrice) || 0) + (Number(v.repairCost) || 0);
+               
                tr.innerHTML = `
                   <td class="ps-4 text-muted small fw-medium">${formatDateThai(v.buyDate)}</td>
                   <td class="fw-bold text-dark">${v.brand} ${v.model}</td>
                   <td><span class="badge bg-light text-primary border border-primary-subtle fs-6 shadow-sm fw-bold">${v.plate}</span></td>
-                  <td class="text-end text-danger fw-bold">${formatNumber(v.buyPrice)}</td>
+                  <td class="text-end text-danger fw-bold">${formatNumber(totalCost)}</td>
                   <td class="text-end fw-bold ${isSold?'text-success':''}">${isSold ? formatNumber(v.sellPrice) : '-'}</td>
                   <td class="text-center"><span class="badge rounded-pill px-3 py-2 fw-medium ${isSold?'bg-success text-white shadow-sm':'bg-warning text-dark shadow-sm'}">${isSold?'ขายแล้ว':'พร้อมขาย'}</span></td>
                   <td class="text-end fw-bold fs-6 ${profitClass}">${isSold ? formatNumber(v.profit) : '-'}</td>
@@ -699,6 +725,8 @@
                 const isSold = v.status === "sold";
                 const profitClass = (v.profit || 0) >= 0 ? "text-success" : "text-danger";
                 const col = document.createElement("div");
+                const totalCost = (Number(v.buyPrice) || 0) + (Number(v.repairCost) || 0);
+                
                 col.className = "col-12 col-md-6 col-lg-4";
                 col.innerHTML = `
                    <div class="card h-100 border-0 shadow-sm rounded-4 bm-list-card detail-btn cursor-pointer bg-white" data-id="${v.id}" style="cursor:pointer">
@@ -712,16 +740,17 @@
                          
                          <div class="bg-light rounded-3 p-3 small border shadow-sm">
                              <div class="d-flex justify-content-between text-muted mb-1">
-                                <span><i class="bi bi-box-arrow-in-down me-1 text-danger"></i> ซื้อเข้า:</span>
-                                <span class="fw-bold text-dark">${formatNumber(v.buyPrice)} ฿</span>
+                                <span><i class="bi bi-box-arrow-in-down me-1 text-danger"></i> ทุนรวม:</span>
+                                <span class="fw-bold text-dark">${formatNumber(totalCost)} ฿</span>
                              </div>
+                             ${(v.repairCost > 0) ? `<div class="text-end text-xs text-muted">(ซื้อ ${formatNumber(v.buyPrice)} + ปั้น ${formatNumber(v.repairCost)})</div>` : ''}
                              ${isSold ? `
-                             <div class="d-flex justify-content-between text-muted mb-1">
+                             <div class="d-flex justify-content-between text-muted mb-1 mt-2">
                                 <span><i class="bi bi-box-arrow-up me-1 text-success"></i> ขายออก:</span>
                                 <span class="fw-bold text-dark">${formatNumber(v.sellPrice)} ฿</span>
                              </div>
                              <div class="d-flex justify-content-between pt-2 mt-2 border-top border-secondary-subtle">
-                                <span class="fw-bold text-dark">กำไร:</span>
+                                <span class="fw-bold text-dark">กำไรสุทธิ:</span>
                                 <span class="fw-bold fs-6 ${profitClass}">${formatNumber(v.profit)} ฿</span>
                              </div>` : ''}
                          </div>
@@ -808,6 +837,7 @@
          try {
             const data = {
                brand, model, plate, buyPrice, buyDate,
+               repairCost: 0, // ค่าเริ่มต้นตอนรับเข้าคือ 0
                mileage: parseInt(document.getElementById("mileageInput").value)||0,
                note: document.getElementById("noteInput").value.trim(),
                status: "in_stock", isDeleted: false,
@@ -834,7 +864,6 @@
             e.target.reset();
             document.getElementById("buyDateInput").value = getTodayISO();
             
-            // ปิดช่อง Form ลงหลังเซฟเสร็จ
             const collapseAdd = bootstrap.Collapse.getInstance(document.getElementById("collapseAddVehicle"));
             if(collapseAdd) collapseAdd.hide();
             
@@ -854,11 +883,20 @@
          if(!currentSellVehicleData) return;
          
          const v = currentSellVehicleData;
+         
+         const buyPrice = Number(v.buyPrice) || 0;
+         const repairCost = Number(v.repairCost) || 0;
+         const totalCost = buyPrice + repairCost;
+
          sellVehiclePlateText.textContent = v.plate;
          sellVehicleBrandModelText.textContent = `${v.brand} ${v.model}`;
          sellVehicleMileageText.textContent = (v.mileage || 0).toLocaleString() + " กม.";
          sellVehicleBuyDateText.textContent = formatDateThai(v.buyDate);
-         sellVehicleBuyPriceText.textContent = formatNumber(v.buyPrice) + " ฿";
+         
+         sellVehicleBuyPriceText.textContent = formatNumber(buyPrice) + " ฿";
+         sellVehicleRepairCostText.textContent = formatNumber(repairCost) + " ฿";
+         sellVehicleTotalCostText.textContent = formatNumber(totalCost) + " ฿";
+         
          sellVehicleNoteText.textContent = v.note || "ไม่มีหมายเหตุ";
 
          vehicleViewMode.classList.remove("d-none");
@@ -873,7 +911,13 @@
              
              sellVehicleSoldDateText.textContent = formatDateThai(v.sellDate);
              sellVehicleSoldPriceText.textContent = formatNumber(v.sellPrice) + " ฿";
+             
+             soldInfoBuyPrice.textContent = formatNumber(buyPrice) + " ฿";
+             soldInfoRepairCost.textContent = formatNumber(repairCost) + " ฿";
+             soldInfoTotalCost.textContent = formatNumber(totalCost) + " ฿";
+
              sellVehicleSoldProfitText.textContent = formatNumber(v.profit) + " ฿";
+             sellVehicleSoldProfitText.className = `h3 fw-bold mb-0 ${v.profit >= 0 ? 'text-success' : 'text-danger'}`;
          } else {
              sellVehicleFormSection.classList.remove("d-none");
              sellVehicleSoldInfoSection.classList.add("d-none");
@@ -881,7 +925,7 @@
              
              sellVehicleDateInput.value = getTodayISO();
              sellVehiclePriceInput.value = "";
-             sellVehicleProfitPreview.innerHTML = `<span class="fw-medium text-success-emphasis">กำไรโดยประมาณ:</span><span class="fw-bold text-success fs-5">0.00 ฿</span>`;
+             sellVehicleProfitPreview.innerHTML = `<span class="fw-medium text-success-emphasis">กำไรสุทธิโดยประมาณ:</span><span class="fw-bold text-success fs-5">0.00 ฿</span>`;
          }
 
          if(currentUserProfile.role === 'admin') {
@@ -903,6 +947,7 @@
          editMileageInput.value = v.mileage;
          editNoteInput.value = v.note;
          editBuyPriceInput.value = v.buyPrice;
+         editRepairCostInput.value = v.repairCost || 0;
 
          editBuyPriceInput.readOnly = (currentUserProfile.role !== 'admin');
 
@@ -924,14 +969,18 @@
                  model: editModelInput.value.trim(),
                  mileage: parseInt(editMileageInput.value)||0,
                  note: editNoteInput.value.trim(),
+                 repairCost: parseFloat(editRepairCostInput.value)||0,
                  updatedAt: serverTimestamp()
              };
              
+             const currentBuyPrice = (currentUserProfile.role === 'admin') ? (parseFloat(editBuyPriceInput.value) || 0) : (currentSellVehicleData.buyPrice || 0);
+
              if(currentUserProfile.role === 'admin') {
-                 updates.buyPrice = parseFloat(editBuyPriceInput.value) || 0;
-                 if(currentSellVehicleData.status === 'sold') {
-                     updates.profit = (currentSellVehicleData.sellPrice || 0) - updates.buyPrice;
-                 }
+                 updates.buyPrice = currentBuyPrice;
+             }
+
+             if(currentSellVehicleData.status === 'sold') {
+                 updates.profit = (currentSellVehicleData.sellPrice || 0) - (currentBuyPrice + updates.repairCost);
              }
 
              await updateDoc(doc(db, "vehicles", currentSellVehicleId), updates);
@@ -978,7 +1027,11 @@
          sellVehicleSaveBtn.disabled = true; sellVehicleSaveSpinner.classList.remove("d-none");
          
          try {
-             const profit = sellPrice - (currentSellVehicleData.buyPrice || 0);
+             const buyPrice = Number(currentSellVehicleData.buyPrice) || 0;
+             const repairCost = Number(currentSellVehicleData.repairCost) || 0;
+             const totalCost = buyPrice + repairCost;
+             const profit = sellPrice - totalCost;
+
              await updateDoc(doc(db, "vehicles", currentSellVehicleId), {
                  status: "sold", sellPrice, sellDate, profit, updatedAt: serverTimestamp()
              });
@@ -1010,9 +1063,12 @@
       function exportToCSV() {
          if(!loadedVehicles.length) { showToast("ไม่มีข้อมูลให้ส่งออก", "warning"); return; }
          const bom = "\uFEFF";
-         let csv = bom + "วันที่ซื้อ,ยี่ห้อ/รุ่น,ทะเบียน,ราคาทุน (ซื้อเข้า),ราคาขายออก,กำไร,สถานะ\n";
+         let csv = bom + "วันที่ซื้อ,ยี่ห้อ/รุ่น,ทะเบียน,ราคาทุน (ซื้อเข้า),ค่าปั้นรถ,ต้นทุนรวมสุทธิ,ราคาขายออก,กำไรสุทธิ,สถานะ\n";
          loadedVehicles.forEach(v => {
-             csv += `${v.buyDate},"${v.brand} ${v.model}","${v.plate}",${v.buyPrice},${v.sellPrice||0},${v.profit||0},${v.status === 'sold' ? 'ขายแล้ว' : 'ในสต๊อก'}\n`;
+             const buyPrice = v.buyPrice || 0;
+             const repairCost = v.repairCost || 0;
+             const totalCost = buyPrice + repairCost;
+             csv += `${v.buyDate},"${v.brand} ${v.model}","${v.plate}",${buyPrice},${repairCost},${totalCost},${v.sellPrice||0},${v.profit||0},${v.status === 'sold' ? 'ขายแล้ว' : 'ในสต๊อก'}\n`;
          });
          const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
          const link = document.createElement("a");
@@ -1073,9 +1129,11 @@
          // Profit Calc Preview
          sellVehiclePriceInput.addEventListener("input", () => {
              const price = parseFloat(sellVehiclePriceInput.value) || 0;
-             const buy = currentSellVehicleData ? currentSellVehicleData.buyPrice : 0;
-             const p = price - buy;
-             sellVehicleProfitPreview.innerHTML = `<span class="fw-medium text-${p>=0?'success':'danger'}-emphasis">กำไรโดยประมาณ:</span><span class="fw-bold text-${p>=0?'success':'danger'} fs-5">${formatNumber(p)} ฿</span>`;
+             const buy = currentSellVehicleData ? (currentSellVehicleData.buyPrice || 0) : 0;
+             const repair = currentSellVehicleData ? (currentSellVehicleData.repairCost || 0) : 0;
+             const p = price - (buy + repair);
+             
+             sellVehicleProfitPreview.innerHTML = `<span class="fw-medium text-${p>=0?'success':'danger'}-emphasis">กำไรสุทธิโดยประมาณ:</span><span class="fw-bold text-${p>=0?'success':'danger'} fs-5">${formatNumber(p)} ฿</span>`;
              sellVehicleProfitPreview.className = `alert alert-${p>=0?'success':'danger'} bg-${p>=0?'success':'danger'} bg-opacity-10 border-${p>=0?'success':'danger'}-subtle d-flex justify-content-between align-items-center py-3 mb-0 rounded-3 shadow-sm`;
          });
 
@@ -1118,7 +1176,7 @@
          userAvatarInitial.textContent = name[0].toUpperCase();
          if(settingsMenuItem) settingsMenuItem.classList.toggle("d-none", currentUserProfile.role !== 'admin');
          
-         applyTheme(localStorage.getItem("bm-theme-"+user.uid) || currentUserProfile.theme);
+         applyTheme(localStorage.getItem("bm-theme-"+user.uid) || currentUserProfile.theme || "light");
          
          document.getElementById("buyDateInput").value = getTodayISO();
          
