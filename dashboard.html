@@ -785,8 +785,9 @@
     <script type="module">
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🎯 คีย์แท้ตัวเต็มของคุณเบน จากหน้าต่าง details สมบูรณ์ 100%
-        const API_KEY = "AIzaSyB_3SHLgU79oXOgpP__EbgKg5jZtEwK8MY"; 
+        // 🎯 ลบของเก่าออก แล้วเอาคีย์ใหม่แปะลงในเครื่องหมายฟันหนูในไฟล์ของคุณเบนเองเลยครับ
+        // ❌ ห้ามก๊อปปี้คีย์จริงส่งกลับเข้ามาในแชทนี้นะครับ ไม่งั้นจะโดนบล็อกอีก
+        const API_KEY = "AIzaSyDe3CTcAqkO4WhM9aeoqUPRjL3Ha_z-aTQ"; 
 
         const db = getFirestore();
 
@@ -885,6 +886,10 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
+                if (API_KEY.includes("วางคีย์ใหม่")) {
+                    throw new Error("ลูกพี่ยังไม่ได้เปลี่ยนเอาคีย์จริงไปใส่ในโค้ดไฟล์ dashboard.html ครับ");
+                }
+
                 const shopContext = await fetchShopContext();
                 const finalPrompt = `
 คุณคือ AI อัจฉริยะประจำอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" ตอบคำถามเจ้าของร้าน (ชื่อคุณเบน) แบบเป็นกันเอง สไตล์ช่างคุยกัน
@@ -910,9 +915,8 @@ ${shopContext}
                     document.getElementById(loadingId).remove();
                     addMessage("ai", aiResponseText);
                 } else {
-                    // ตรวจสอบอาการถ้าติดโควตาลิมิต (เครื่องฮีท) ให้แจ้งเตือนดีๆ ไม่ดึง Error พังๆ มาโชว์
                     if (response.status === 429 || (resData.error && resData.error.status === "RESOURCE_EXHAUSTED")) {
-                        throw new Error("🤖 ตอนนี้ระบบเซิร์ฟเวอร์ฟรีของกูเกิลติดคูลดาวน์ (Rate Limit) กรุณารอประมาณ 30-50 วินาที แล้วลองพิมพ์ส่งใหม่อีกครั้งนะครับลูกพี่!");
+                        throw new Error("🤖 ตอนนี้ระบบแชทฟรีติดคูลดาวน์ชั่วคราว กรุณารอประมาณ 30 วินาที แล้วลองพิมพ์ส่งใหม่อีกครั้งนะลูกพี่!");
                     }
                     const errDetail = resData.error ? `[${resData.error.status}] ${resData.error.message}` : "โครงสร้างระบบตอบกลับขัดข้อง";
                     throw new Error(errDetail);
