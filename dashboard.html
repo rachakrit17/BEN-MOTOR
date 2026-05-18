@@ -785,8 +785,8 @@
     <script type="module">
         import { getFirestore, collection, getDocs, query, where, addDoc, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🛑 API KEY ของลูกพี่เบน
-        const API_KEY = "AIzaSyAG-klU4R8wUlwKG3U3a_j2eR5zkq1-Glg"; 
+        // 🛑 API KEY ของลูกพี่เบน (ใส่แล้วเซฟเงียบๆ ในเครื่องพอนะครับ)
+        const API_KEY = "AIzaSyDVOFqoHwmFf0j2gnJRTkOXBzYTLGqwYKI"; 
 
         const db = getFirestore();
 
@@ -817,83 +817,105 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
         }
 
-        // 🧠 ดึงข้อมูลทั้งอู่ไปป้อนให้ AI รู้จัก (สต๊อก, งานซ่อม, การเงิน)
+        // 🧠 ฟังก์ชันดักดึงข้อมูลเรียบลไทม์ส่งให้ AI (เพื่อให้ข้อมูลอัปเดตตลอดเวลา)
         async function fetchShopContext() {
             const today = new Date().toISOString().split("T")[0];
-            let context = `[สถานะอู่ BEN MOTOR วันที่ ${today}]\n`;
+            let context = `[ข้อมูลระบบอู่ BEN MOTOR เรียลไทม์]\n`;
             try {
-                // 1. ดึงสต๊อกทั้งหมด เพื่อให้ AI รู้อะไหล่และราคา
+                // ดึงสต๊อก
                 const stockSnap = await getDocs(query(collection(db, "stock"), where("isDeleted", "==", false)));
                 let stockItems = [];
-                stockSnap.forEach(doc => {
-                    const d = doc.data();
-                    stockItems.push(`ID: ${doc.id} | ชื่อ: ${d.name} | เหลือ: ${d.qty} | ราคาขาย: ${d.salePrice}`);
-                });
-                context += `📦 **สต๊อกอะไหล่ปัจจุบัน** (อ้างอิง ID และราคาขายจากตรงนี้):\n${stockItems.length > 0 ? stockItems.join("\n") : "ไม่มีสต๊อก"}\n\n`;
+                stockSnap.forEach(doc => stockItems.push(`ID: ${doc.id} | ${doc.data().name} (เหลือ ${doc.data().qty} ชิ้น | ราคาขาย ${doc.data().salePrice}บ.)`));
+                context += `📦 **สต๊อกอะไหล่ที่มีตอนนี้:**\n${stockItems.join("\n")}\n\n`;
 
-                // 2. ดึงรถค้างซ่อม
-                const jobsSnap = await getDocs(query(collection(db, "jobs"), where("isDeleted", "==", false), where("status", "==", "repairing")));
+                // ดึงงานซ่อมที่ยังไม่เสร็จ
+                const jobsSnap = await getDocs(query(collection(db, "jobs"), where("isDeleted", "==", false)));
                 let pendingJobs = [];
-                jobsSnap.forEach(doc => pendingJobs.push(`${doc.data().plate} (${doc.data().problem})`));
-                context += `🔧 **รถกำลังซ่อม:** ${pendingJobs.length > 0 ? pendingJobs.join(", ") : "ไม่มี"}\n`;
+                jobsSnap.forEach(doc => {
+                    const d = doc.data();
+                    if(d.status !== "picked_up") pendingJobs.push(`IDงาน: ${doc.id} | ทะเบียน: ${d.plate} | สถานะปัจจุบัน: ${d.status} | อาการ: ${d.problem}`);
+                });
+                context += `🔧 **รายการรถค้างซ่อมในอู่ตอนนี้:**\n${pendingJobs.join("\n")}\n\n`;
+
+                // ดึงรถมือสองในโกดัง
+                const vSnap = await getDocs(query(collection(db, "vehicles"), where("isDeleted", "==", false), where("status", "==", "instock")));
+                let vehicles = [];
+                vSnap.forEach(doc => vehicles.push(`IDรถ: ${doc.id} | ${doc.data().brandModel} | ทะเบียน: ${doc.data().plate}`));
+                context += `🏍️ **รถมือสองที่ยังขายไม่ออก:**\n${vehicles.join("\n")}\n`;
 
             } catch (error) { console.error("Context Error", error); }
             return context;
         }
 
-        // 🧠 ตู้เครื่องมือ (เขียนโครงสร้างให้ตรงกับไฟล์ HTML ของลูกพี่ 100%)
+        // 🧠 ตู้เครื่องมือมหาเทพ (คุมครบทุกไฟล์ตามที่ลูกพี่ต้องการ)
         const aiTools = [{
             functionDeclarations: [
                 {
-                    name: "create_bill", 
-                    description: "สร้างบิลซ่อมรถ (แยกอะไหล่และค่าแรง) และบันทึกลงระบบ",
+                    name: "create_bill", // คุมหน้า open-bill.html / jobs.html (เปิดบิลใหม่)
+                    description: "เปิดบิลซ่อมรถใหม่เข้าสู่ระบบ",
                     parameters: {
                         type: "OBJECT",
                         properties: {
-                            plate: { type: "STRING", description: "ทะเบียนรถ (ถ้าไม่ระบุให้ใส่ '-')" },
-                            brand: { type: "STRING", description: "ยี่ห้อรถ" },
-                            model: { type: "STRING", description: "รุ่นรถ" },
-                            problem: { type: "STRING", description: "อาการเสีย / สิ่งที่ต้องทำ" },
+                            plate: { type: "STRING" }, brand: { type: "STRING" }, model: { type: "STRING" }, problem: { type: "STRING" },
                             parts: { 
-                                type: "ARRAY", 
-                                description: "รายการอะไหล่ (ถ้ามี) ให้ดึง ID และชื่อจากสต๊อกเท่านั้น",
-                                items: { 
-                                    type: "OBJECT", 
-                                    properties: { 
-                                        stockId: {type: "STRING", description: "รหัส ID ของอะไหล่ในสต๊อก"}, 
-                                        name: {type: "STRING", description: "ชื่ออะไหล่"}, 
-                                        qty: {type: "NUMBER", description: "จำนวน"}, 
-                                        price: {type: "NUMBER", description: "ราคาขายต่อชิ้น"} 
-                                    } 
+                                type: "ARRAY", items: { 
+                                    type: "OBJECT", properties: { stockId: {type:"STRING"}, name: {type:"STRING"}, qty: {type:"NUMBER"}, price: {type:"NUMBER"} } 
                                 } 
                             },
-                            labor: { 
-                                type: "ARRAY", 
-                                description: "รายการค่าแรง หรือ งานบริการ (เช่น ค่าแรงเปลี่ยน, ค่าปะยาง)",
-                                items: { 
-                                    type: "OBJECT", 
-                                    properties: { 
-                                        name: {type: "STRING", description: "ชื่องานบริการ"}, 
-                                        price: {type: "NUMBER", description: "ราคาค่าบริการ"} 
-                                    } 
-                                } 
-                            },
-                            discount: { type: "NUMBER", description: "ส่วนลด (ถ้ามี)" }
+                            labor: { type: "ARRAY", items: { type: "OBJECT", properties: { name: {type:"STRING"}, price: {type:"NUMBER"} } } }
                         },
                         required: ["plate", "problem"]
                     }
                 },
                 {
-                    name: "add_transaction", 
-                    description: "บันทึกบัญชีรายรับ-รายจ่าย ของร้าน",
+                    name: "update_job_status", // คุมหน้า jobs.html (เปลี่ยนสถานะงานซ่อม)
+                    description: "เปลี่ยนสถานะรถซ่อม เช่น ซ่อมเสร็จแล้ว หรือ ลูกค้ามารับรถไปแล้ว",
                     parameters: {
                         type: "OBJECT",
                         properties: {
-                            type: { type: "STRING", description: "'income' (รายรับ) หรือ 'expense' (รายจ่าย)" },
-                            category: { type: "STRING", description: "หมวดหมู่ เช่น 'รายรับทั่วไป', 'ซื้ออะไหล่', 'ค่าใช้จ่ายร้าน'" },
-                            amount: { type: "NUMBER", description: "ยอดเงิน" },
-                            note: { type: "STRING", description: "รายละเอียด" },
-                            paymentMethod: { type: "STRING", description: "'cash' (เงินสด) หรือ 'transfer' (โอน)" }
+                            jobId: { type: "STRING", description: "ID ของงานซ่อม ดูจากรายการรถค้างซ่อม" },
+                            status: { type: "STRING", description: "ใส่ 'repairing' (กำลังซ่อม), 'finished' (ซ่อมเสร็จแล้ว), หรือ 'picked_up' (รับรถแล้ว)" }
+                        },
+                        required: ["jobId", "status"]
+                    }
+                },
+                {
+                    name: "add_stock_item", // คุมหน้า stock.html (เพิ่มอะไหล่ใหม่หรือเติมของ)
+                    description: "เพิ่มอะไหล่ใหม่ หรือ อัปเดตจำนวนอะไหล่เข้าคลังสต๊อก",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            name: { type: "STRING", description: "ชื่ออะไหล่" },
+                            qty: { type: "NUMBER", description: "จำนวน" },
+                            buyPrice: { type: "NUMBER", description: "ราคาทุน" },
+                            salePrice: { type: "NUMBER", description: "ราคาขายหน้าร้าน" }
+                        },
+                        required: ["name", "qty", "buyPrice", "salePrice"]
+                    }
+                },
+                {
+                    name: "manage_vehicle", // คุมหน้า vehicles.html (ซื้อเข้า/ขายออก รถมือสอง)
+                    description: "บันทึกการรับซื้อรถมอเตอร์ไซค์เข้าอู่ หรือบันทึกการขายรถออกไป",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            action: { type: "STRING", description: "ใส่ 'buy' (ซื้อเข้า) หรือ 'sell' (ขายออก)" },
+                            plate: { type: "STRING" },
+                            brandModel: { type: "STRING" },
+                            price: { type: "NUMBER", description: "ราคาซื้อหรือราคาขาย" },
+                            vehicleId: { type: "STRING", description: "ID ของรถ (เฉพาะกรณีขายออก)" }
+                        },
+                        required: ["action", "plate", "price"]
+                    }
+                },
+                {
+                    name: "add_transaction", // คุมหน้า finance.html (รายรับ-รายจ่ายทั่วไป)
+                    description: "บันทึกรายรับหรือรายจ่ายทั่วไปที่ไม่เกี่ยวกับบิลซ่อม เช่น ค่าไฟ ค่าข้าว",
+                    parameters: {
+                        type: "OBJECT",
+                        properties: {
+                            type: { type: "STRING", description: "'income' หรือ 'expense'" },
+                            category: { type: "STRING" }, amount: { type: "NUMBER" }, note: { type: "STRING" }, paymentMethod: { type: "STRING" }
                         },
                         required: ["type", "amount", "note", "paymentMethod"]
                     }
@@ -901,7 +923,7 @@
             ]
         }];
 
-        // 🚀 ส่งคำสั่งประมวลผล
+        // 🚀 รันระบบประมวลผลคำสั่ง
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -916,28 +938,26 @@
             const loadingDiv = document.createElement("div");
             loadingDiv.id = loadingId;
             loadingDiv.className = "d-flex justify-content-start text-muted small";
-            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังสั่งการระบบ...</em>`;
+            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังควบคุมระบบ POS...</em>`;
             aiChatBox.appendChild(loadingDiv);
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
                 const shopContext = await fetchShopContext();
                 const finalPrompt = `
-คุณคือ AI ผู้จัดการอู่ "BEN MOTOR" 
-- ถ้าลูกค้าสั่งซ่อม/ทำรถ ให้วิเคราะห์คำสั่ง แยก "อะไหล่" และ "ค่าแรง" ออกจากกันให้ชัดเจน แล้วเรียกใช้ 'create_bill'
-- อะไหล่ต้องค้นจาก [สต๊อกอะไหล่ปัจจุบัน] เสมอ
-- ถ้าลูกค้าแจ้งยอดรวม (เช่น ปะยาง 120) ให้ถือว่าเป็น "ค่าแรง" ทั้งหมด ไม่ต้องใส่อะไหล่
-- ถ้ารับ/จ่ายเงิน ให้เรียกใช้ 'add_transaction'
+คุณคือระบบ AI อัจฉริยะคุมร้าน "BEN MOTOR" หน้าที่ของคุณคือเลือกใช้เครื่องมือให้ตรงกับคำสั่งของคุณเบนร้อยเปอร์เซ็นต์
+- สั่งเปิดบิลซ่อมรถ -> ใช้ create_bill
+- สั่งเปลี่ยนสถานะรถ/แจ้งซ่อมเสร็จ/รับรถ -> ใช้ update_job_status
+- สั่งเพิ่มอะไหล่/ซื้อของเข้าคลัง -> ใช้ add_stock_item
+- สั่งซื้อรถเข้า/ขายรถออก -> ใช้ manage_vehicle
+- สั่งลงบัญชีร้านทั่วไป -> ใช้ add_transaction
 ${shopContext}
 คำสั่งจากคุณเบน: ${prompt}`;
 
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: finalPrompt }] }],
-                        tools: aiTools
-                    })
+                    body: JSON.stringify({ contents: [{ parts: [{ text: finalPrompt }] }], tools: aiTools })
                 });
 
                 const resData = await response.json();
@@ -951,103 +971,87 @@ ${shopContext}
                         const args = aiParts.functionCall.args;
                         const today = new Date().toISOString().split("T")[0];
 
-                        // 🔴 ฟังก์ชันเปิดบิล (ตรงสเปค open-bill.html เป๊ะๆ)
+                        // 🛠️ 1. ท่าเปิดบิลซ่อม (ตรงสเปค jobs.html + ตัดสต๊อก + เงินเข้าแดชบอร์ด)
                         if (fnName === "create_bill") {
-                            const rawParts = args.parts || [];
-                            const rawLabor = args.labor || [];
-                            
-                            let itemsArray = [];
-                            let laborArray = [];
-                            let partsTotal = 0;
-                            let laborTotal = 0;
+                            const rawParts = args.parts || []; const rawLabor = args.labor || [];
+                            let itemsArray = []; let laborArray = []; let partsTotal = 0; let laborTotal = 0;
 
-                            // 1. จัดเรียงค่าอะไหล่ + ตัดสต๊อกอัตโนมัติ
                             for(const p of rawParts) {
-                                const qty = Number(p.qty) || 1;
-                                const price = Number(p.price) || 0;
-                                const lineTotal = qty * price;
+                                const qty = Number(p.qty) || 1; const price = Number(p.price) || 0; const lineTotal = qty * price;
                                 partsTotal += lineTotal;
-                                
-                                // โครงสร้างเดียวกับไฟล์ open-bill.html
-                                itemsArray.push({
-                                    stockId: p.stockId || "",
-                                    name: p.name || "อะไหล่ไม่ระบุ",
-                                    qty: qty,
-                                    price: price,
-                                    total: lineTotal
-                                });
-
-                                // สั่งตัดสต๊อกใน Firebase
+                                itemsArray.push({ stockId: p.stockId || "", name: p.name || "อะไหล่", qty: qty, price: price, total: lineTotal });
                                 if (p.stockId) {
                                     try {
-                                        const sRef = doc(db, "stock", p.stockId);
-                                        const sSnap = await getDoc(sRef);
-                                        if (sSnap.exists()) {
-                                            const currQty = Number(sSnap.data().qty) || 0;
-                                            await updateDoc(sRef, { qty: Math.max(0, currQty - qty) });
-                                        }
-                                    } catch(err) { console.error("ตัดสต๊อกพลาด", err); }
+                                        const sRef = doc(db, "stock", p.stockId); const sSnap = await getDoc(sRef);
+                                        if (sSnap.exists()) { await updateDoc(sRef, { qty: Math.max(0, (Number(sSnap.data().qty)||0) - qty) }); }
+                                    } catch(e) {}
                                 }
                             }
-
-                            // 2. จัดเรียงค่าแรง
                             for(const l of rawLabor) {
-                                const price = Number(l.price) || 0;
-                                laborTotal += price;
+                                const price = Number(l.price) || 0; laborTotal += price;
                                 laborArray.push({ name: l.name || "ค่าบริการ", price: price });
                             }
-
-                            const discount = Number(args.discount) || 0;
-                            const totalAmount = (partsTotal + laborTotal) - discount;
-
-                            // 3. เซฟลง jobs (ตรงโครงสร้าง 100%)
+                            const totalAmount = partsTotal + laborTotal;
                             await addDoc(collection(db, "jobs"), {
-                                date: today,
-                                customerName: "", customerPhone: "",
-                                plate: args.plate || "-", brand: args.brand || "-", model: args.model || "-", mileage: "",
-                                problem: args.problem || "-",
-                                status: "repairing", 
-                                paymentMethod: "unpaid",
-                                items: itemsArray,          // ใส่รายการอะไหล่
-                                laborItems: laborArray,     // ใส่รายการค่าแรง
-                                partsTotal: partsTotal,
-                                laborTotal: laborTotal,
-                                discount: discount,
-                                totalAmount: totalAmount,
-                                createdAt: serverTimestamp(), 
-                                isDeleted: false
+                                date: today, plate: args.plate || "-", brand: args.brand || "-", model: args.model || "-", problem: args.problem,
+                                status: "repairing", paymentMethod: "cash", items: itemsArray, laborItems: laborArray,
+                                partsTotal: partsTotal, laborTotal: laborTotal, discount: 0, totalAmount: totalAmount, createdAt: serverTimestamp(), isDeleted: false
                             });
+                            if (totalAmount > 0) {
+                                await addDoc(collection(db, "transactions"), {
+                                    type: "income", category: "รายรับทั่วไป", amount: totalAmount, note: `ค่าซ่อมรถ ทะเบียน ${args.plate}`, paymentMethod: "cash", date: today, createdAt: serverTimestamp(), isDeleted: false
+                                });
+                            }
+                            addMessage("ai", `✅ **เปิดบิลสำเร็จ!** ยอดรวม ${totalAmount} บาท บันทึกข้อมูลและตัดสต๊อกเรียบร้อยครับ!`);
 
-                            addMessage("ai", `🔧 **เปิดบิลและตัดสต๊อกอัตโนมัติเรียบร้อย!**\n**ทะเบียน:** ${args.plate}\n**อาการ:** ${args.problem}\n**ค่าอะไหล่:** ${partsTotal} ฿\n**ค่าแรง:** ${laborTotal} ฿\n**รวมสุทธิ:** ${totalAmount} ฿\n\n*(ไปเช็คในหน้า 'งานซ่อม' จะเห็นรายละเอียดครบถ้วนครับ!)*`);
-                        
-                        // 🔴 ฟังก์ชันบัญชี (ตรงสเปค finance.html)
+                        // 🛠️ 2. ท่าเปลี่ยนสถานะงานซ่อม (แก้บั๊กกดปิดงานซ่อมเสร็จ)
+                        } else if (fnName === "update_job_status") {
+                            const jRef = doc(db, "jobs", args.jobId);
+                            await updateDoc(jRef, { status: args.status, updatedAt: serverTimestamp() });
+                            const stText = args.status === "finished" ? "ซ่อมเสร็จแล้ว" : "รับรถกลับแล้ว";
+                            addMessage("ai", `✅ อัปเดตสถานะงานซ่อม ID: **${args.jobId}** เป็น **"${stText}"** เรียบร้อยครับลูกพี่!`);
+
+                        // 🛠️ 3. ท่าจัดการคลังสต๊อก (เพิ่ม/เติมอะไหล่)
+                        } else if (fnName === "add_stock_item") {
+                            await addDoc(collection(db, "stock"), {
+                                name: args.name, qty: Number(args.qty), buyPrice: Number(args.buyPrice), salePrice: Number(args.salePrice), minQty: 2, createdAt: serverTimestamp(), isDeleted: false
+                            });
+                            addMessage("ai", `✅ บันทึกเพิ่มอะไหล่ **${args.name}** เข้าหน้าสต๊อกสินค้าเรียบร้อยครับ!`);
+
+                        // 🛠️ 4. ท่าซื้อ-ขายรถมือสอง (vehicles.html)
+                        } else if (fnName === "manage_vehicle") {
+                            if (args.action === "buy") {
+                                await addDoc(collection(db, "vehicles"), {
+                                    plate: args.plate, brandModel: args.brandModel || "-", buyPrice: Number(args.price), salePrice: 0, status: "instock", buyDate: today, createdAt: serverTimestamp(), isDeleted: false
+                                });
+                                await addDoc(collection(db, "transactions"), {
+                                    type: "expense", category: "ซื้อรถเข้าอู่", amount: Number(args.price), note: `ซื้อรถมือสอง ทะเบียน ${args.plate}`, paymentMethod: "cash", date: today, createdAt: serverTimestamp(), isDeleted: false
+                                });
+                                addMessage("ai", `✅ บันทึกรับซื้อรถ **${args.brandModel}** เข้าอู่ และตัดยอดรายจ่ายหน้าบัญชีเรียบร้อยครับ!`);
+                            } else if (args.action === "sell" && args.vehicleId) {
+                                const vRef = doc(db, "vehicles", args.vehicleId);
+                                await updateDoc(vRef, { status: "sold", salePrice: Number(args.price), sellDate: today });
+                                await addDoc(collection(db, "transactions"), {
+                                    type: "income", category: "ขายรถออก", amount: Number(args.price), note: `ขายรถออก ทะเบียน ${args.plate}`, paymentMethod: "cash", date: today, createdAt: serverTimestamp(), isDeleted: false
+                                });
+                                addMessage("ai", `✅ บันทึกขายรถทะเบียน **${args.plate}** ยอดเงินโอนเข้าเก๊ะหน้าบัญชีเรียบร้อยครับ!`);
+                            }
+
+                        // 🛠️ 5. ท่าลงบัญชีทั่วไป
                         } else if (fnName === "add_transaction") {
                             await addDoc(collection(db, "transactions"), {
-                                type: args.type, 
-                                category: args.category || "อื่นๆ",
-                                amount: Number(args.amount), 
-                                note: args.note, 
-                                paymentMethod: args.paymentMethod, 
-                                date: today, 
-                                createdAt: serverTimestamp(), 
-                                isDeleted: false
+                                type: args.type, category: args.category, amount: Number(args.amount), note: args.note, paymentMethod: args.paymentMethod, date: today, createdAt: serverTimestamp(), isDeleted: false
                             });
-                            addMessage("ai", `💰 **บันทึกบัญชีหน้าการเงินเรียบร้อย!**\n**รายการ:** ${args.note}\n**ยอด:** ${args.amount} ฿ (${args.paymentMethod})`);
+                            addMessage("ai", `✅ บันทึกบัญชีหน้าการเงินเรียบร้อยครับลูกพี่!`);
                         }
-                    } else {
-                        addMessage("ai", aiParts.text);
-                    }
-                } else {
-                    throw new Error(`[CODE: ${resData.error?.status}] ${resData.error?.message}`);
-                }
+                    } else { addMessage("ai", aiParts.text); }
+                } else { throw new Error(`[CODE: ${resData.error?.status}] ${resData.error?.message}`); }
             } catch (error) {
                 console.error(error);
                 if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
-                addMessage("ai", `❌ ขัดข้องครับลูกพี่: ${error.message}`);
+                addMessage("ai", `❌ ระบบขัดข้อง: ${error.message}`);
             } finally {
-                aiChatInput.disabled = false;
-                aiSendBtn.disabled = false;
-                aiChatInput.focus();
+                aiChatInput.disabled = false; aiSendBtn.disabled = false; aiChatInput.focus();
             }
         });
     </script>
