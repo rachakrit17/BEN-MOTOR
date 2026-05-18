@@ -55,7 +55,7 @@ function injectAIWidget() {
         <div class="card-body p-3 ai-chat-box" id="dynamicAiChatBox">
             <div class="d-flex justify-content-start">
                 <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตค่าตัวแปร Puter.js แมตช์ตรงรุ่น เรียบร้อย สั่งเปิดบิล คุมคลัง เช็คเงินได้เต็มระบบเลยครับ! 🔧🤖
+                    สวัสดีครับลูกพี่เบน! ระบบอัปเกรดสมองกลวิเคราะห์ราคาสำรองเรียบร้อย สั่งเปิดบิล คุมคลัง เช็คเงินได้เต็มระบบเลยครับ! 🔧🤖
                 </div>
             </div>
         </div>
@@ -83,7 +83,6 @@ function appendAiMessage(sender, text) {
     box.scrollTop = box.scrollHeight;
 }
 
-// 🧠 ฟังก์ชันสแกนสมองหน้าร้านเรียลไทม์ส่งเข้าหัว AI
 async function getLiveShopContext() {
     const today = new Date().toISOString().split("T")[0];
     let context = `[ฐานข้อมูลสดเรียลไทม์อู่ BEN MOTOR]\n`;
@@ -92,7 +91,7 @@ async function getLiveShopContext() {
         let stockItems = [];
         stockSnap.forEach(doc => {
             const d = doc.data();
-            stockItems.push(`- IDอะไหล่: ${doc.id} | ชื่อสินค้า: ${d.name} | คงเหลือในคลัง: ${d.qty} ชิ้น | ราคาขายหน้าร้าน: ${d.salePrice} บาท`);
+            stockItems.push(`- IDอะไหล่: ${doc.id} | ชื่อสินค้า: ${d.name} | คงเหลือในคลัง: ${d.qty} ชิ้น | ราคาขายหน้าน้าน: ${d.salePrice} บาท`);
         });
         context += `📦 **ตารางสต๊อกสินค้าหน้าร้านปัจจุบัน:**\n${stockItems.join("\n")}\n\n`;
 
@@ -104,7 +103,7 @@ async function getLiveShopContext() {
     return context;
 }
 
-// 🧠 🛠️ แก้ไขวิกฤต: ปรับประเภทพารามิเตอร์ของเครื่องมือเป็น "ตัวพิมพ์เล็กทั้งหมด" ตามกติกา Puter
+// 🧠 ชุดเครื่องมือเวอร์ชัน Puter ตัวแปรพิมพ์เล็กตรงล็อกระบบ
 const aiFunctionTools = [
     {
         type: "function",
@@ -124,27 +123,31 @@ const aiFunctionTools = [
                     paymentMethod: { type: "string", description: "วิธีการจ่ายเงิน: 'cash', 'transfer', 'pending'" },
                     parts: {
                         type: "array",
-                        description: "รายการอะไหล่ในคลังสินค้าที่ต้องการเบิกใช้ตัดสต๊อก",
+                        description: "รายการอะไหล่สินค้า",
                         items: {
                             type: "object",
                             properties: {
-                                stockId: { type: "string", description: "IDอะไหล่ แท้ตรงจากฐานข้อมูลสต๊อกหน้าร้าน" },
-                                qty: { type: "number", description: "จำนวนชิ้นที่เบิกใช้งาน" }
-                            }
+                                stockId: { type: "string", description: "IDอะไหล่ จากตารางคลังสินค้า (ใส่เฉพาะเมื่อเจอไอดีตรงเป๊ะในระบบ)" },
+                                stockName: { type: "string", description: "ชื่อเรียกอะไหล่" },
+                                unitPrice: { type: "number", description: "ราคาประเมินกลางของอะไหล่ชิ้นนี้ (เช่น น้ำมันเครื่องใส่ 140, ยางนอกใส่ 350)" },
+                                qty: { type: "number", description: "จำนวนชิ้น" }
+                            },
+                            required: ["stockName", "unitPrice", "qty"]
                         }
                     },
                     laborItems: {
                         type: "array",
-                        description: "รายการค่าแรงช่างหรือบริการซ่อมชิ้นส่วนที่ไม่มีในคลังสินค้า",
+                        description: "รายการค่าแรงหรือบริการซ่อมแซมหน้าร้าน",
                         items: {
                             type: "object",
                             properties: {
                                 name: { type: "string", description: "ชื่องานบริการซ่อม เช่น ค่าแรงปะยาง" },
-                                price: { type: "number", description: "ราคาค่าแรงช่างชิ้นนั้นๆ" }
-                            }
+                                price: { type: "number", description: "ราคาค่าแรงช่าง" }
+                            },
+                            required: ["name", "price"]
                         }
                     },
-                    discount: { type: "number", description: "ส่วนลดค่าซ่อมรวมหน่วยเป็นบาท" }
+                    discount: { type: "number", description: "ส่วนลดรวมหน่วยเป็นบาท" }
                 },
                 required: ["plate", "problem"]
             }
@@ -154,12 +157,12 @@ const aiFunctionTools = [
         type: "function",
         function: {
             name: "update_job_status",
-            description: "แก้ไขอัปเดตสถานะใบงานซ่อมรถในอู่ เช่น แจ้งซ่อมเสร็จ หรือลูกค้ามารับรถกลับแล้ว",
+            description: "แก้ไขอัปเดตสถานะใบงานซ่อมรถในอู่",
             parameters: {
                 type: "object",
                 properties: {
-                    jobId: { type: "string", description: "IDงานซ่อม แท้ที่ต้องการอัปเดตข้อมูล" },
-                    status: { type: "string", description: "status ใหม่: 'repairing', 'done', 'picked_up'" }
+                    jobId: { type: "string", description: "IDงานซ่อม" },
+                    status: { type: "string", description: "สถานะใหม่: 'repairing', 'done', 'picked_up'" }
                 },
                 required: ["jobId", "status"]
             }
@@ -169,14 +172,14 @@ const aiFunctionTools = [
         type: "function",
         function: {
             name: "add_transaction",
-            description: "บันทึกบัญชีรายรับ-รายจ่ายทั่วไปหน้าร้านอิสระที่ไม่ผ่านใบงานซ่อมรถ เช่น จ่ายค่าข้าว จ่ายค่าไฟ",
+            description: "บันทึกบัญชีรายรับ-รายจ่ายทั่วไปหน้าร้านอิสระ",
             parameters: {
                 type: "object",
                 properties: {
                     type: { type: "string", description: "ใส่คำล็อกระบบ: 'income' หรือ 'expense'" },
-                    category: { type: "string", description: "หมวดหมู่บัญชี เช่น ค่าน้ำไฟ, อาหาร/เครื่องดื่ม, ค่าใช้จ่ายร้าน" },
+                    category: { type: "string", description: "หมวดหมู่บัญชี" },
                     amount: { type: "number", description: "ยอดเงินสุทธิ" },
-                    description: { type: "string", description: "คำอธิบายข้อความกำกับรายการบัญชี" },
+                    description: { type: "string", description: "คำอธิบายประวัติรายการบัญชี" },
                     method: { type: "string", description: "ช่องทางเงิน: 'cash', 'transfer'" }
                 },
                 required: ["type", "category", "amount", "description", "method"]
@@ -185,7 +188,6 @@ const aiFunctionTools = [
     }
 ];
 
-// --- 🚀 3. ระบบทำงานร่วมกับเทคโนโลยี Puter.js Engine ---
 function setupAiCoreEngine() {
     const form = document.getElementById("dynamicAiForm");
     const input = document.getElementById("dynamicAiInput");
@@ -230,7 +232,7 @@ function setupAiCoreEngine() {
         const loadingDiv = document.createElement("div");
         loadingDiv.id = loadingId;
         loadingDiv.className = "d-flex justify-content-start text-muted small p-2";
-        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางเปิดบิลผ่าน Puter ฟรีไม่มีกั๊ก...</em>`;
+        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางเปิดบิลผ่าน Puter คลาวด์ฟรี...</em>`;
         box.appendChild(loadingDiv);
         box.scrollTop = box.scrollHeight;
 
@@ -238,17 +240,14 @@ function setupAiCoreEngine() {
             const liveSnapshot = await getLiveShopContext();
             const systemRuleInstruction = `คุณคือสุดยอดระบบสมองกล AI นามว่า J.A.R.V.I.S ผู้ควบคุมศูนย์บัญชาการระบบ POS หลังบ้านของอู่ "BEN MOTOR"
 [กฎเหล็กในการคำนวณและประมวลผลคำสั่งของคุณเบน]:
-1. เมื่อเปลี่ยนหรือเบิกใช้อะไหล่ที่มีอยู่ใน [ตารางสต๊อกสินค้าหน้าร้านปัจจุบัน] (คงเหลือ > 0) ให้คุณเลือกดึง IDอะไหล่ ไปยัดใส่ในช่อง 'parts' ห้ามคิดรายการเป็นค่าแรงในช่อง 'laborItems' ซ้ำซ้อนขึ้นมาเองเด็ดขาด ยอดรวมบิลต้องเท่ากับราคาสินค้าคูณจำนวนพอดี
-2. หากไม่มีอะไหล่ชิ้นนั้นในคลังสต๊อก (คงเหลือ 0 หรือหาชื่อไม่เจอ) จึงจะปล่อยช่อง parts ว่าง และบันทึกรายการนั้นเป็นค่าบริการช่างลงช่อง 'laborItems' แทน
+1. เมื่อเปลี่ยนหรือเบิกใช้อะไหล่ที่มีอยู่ใน [ตารางสต๊อกสินค้าหน้าร้านปัจจุบัน] ให้คุณประเมินราคาตามชิ้นนั้นๆ ลงช่อง 'parts' ห้ามคิดรายการเป็นค่าแรงซ้ำซ้อนขึ้นมาเอง
+2. หากไม่มีอะไหล่ชิ้นนั้นอยู่ในลิสต์คลังเลย คุณต้องวิเคราะห์ราคาตลาดกลางที่เหมาะสมยัดลงมาในพารามิเตอร์ 'unitPrice' ด้วย ห้ามคำนวณราคาสินค้าออกมาเป็น 0 ฿ เด็ดขาด!
 3. คุยเป็นกันเองในสไตล์ช่างมอเตอร์ไซค์ผู้เชี่ยวชาญกับคุณเบน มีความจำย้อนหลังต่อเนื่องห้ามลืมประเด็นเด็ดขาด
 ${liveSnapshot}`;
 
-            // 🛠️ แก้ไขวิกฤต: แปลงประวัติการคุยทั้งหมดให้เป็น "สายเดียวยาวๆ (String)" เพื่อส่งให้ Puter.js ประมวลผลได้ราบรื่น
             let formattedHistory = chatHistory.map(h => `${h.role === 'user' ? 'คุณเบน' : 'J.A.R.V.I.S'}: ${h.content}`).join("\n");
-            
             const finalPuterPrompt = `${systemRuleInstruction}\n\n[ประวัติการบันทึกสนทนาย้อนหลัง]:\n${formattedHistory}\n\nคุณเบนสั่งล่าสุด: ${prompt}`;
 
-            // 🚀 เรียกใช้งานผ่านเครื่องยนต์ Puter.js โดยตรง การันตีผ่านฉลุย 100%
             puter.ai.chat(finalPuterPrompt, {
                 model: "gpt-4o-mini", 
                 tools: aiFunctionTools
@@ -257,7 +256,6 @@ ${liveSnapshot}`;
                 
                 const msgObj = response.message || response;
                 
-                // ตรวจสอบกระแสคำสั่งการสับราง
                 if (msgObj && msgObj.tool_calls && msgObj.tool_calls.length > 0) {
                     const toolCall = msgObj.tool_calls[0];
                     const fnName = toolCall.function.name;
@@ -268,27 +266,36 @@ ${liveSnapshot}`;
                     const uid = currentUid || "autonomous-system";
                     const mechanicName = currentProfile?.displayName || "ช่างเบน";
 
-                    // 🔴 TOOL 1: เปิดบิลซ่อมลงระบบอู่ตรงรุ่น
+                    // 🔴 TOOL 1: เปิดบิลซ่อมลงระบบอู่ (เวอร์ชันดักจับราคาจม 0 ฿)
                     if (fnName === "create_bill") {
                         const rawParts = args.parts || []; const rawLabor = args.laborItems || [];
                         const payMethod = args.paymentMethod || "cash";
                         let itemsArray = []; let laborArray = []; let partsTotal = 0; let laborTotal = 0;
 
                         for(const p of rawParts) {
+                            let itemPrice = Number(p.unitPrice) || 0;
+                            let itemName = p.stockName || "อะไหล่ทั่วไป";
+
+                            // ถ้า AI ส่งไอดีสต๊อกจริงมา ให้ดึงราคาระบบกลางมาข่มทับและสั่งตัดสต๊อกจริง
                             if(p.stockId) {
                                 const sRef = doc(db, "stock", p.stockId); const sSnap = await getDoc(sRef);
                                 if(sSnap.exists()) {
-                                    const sData = sSnap.data(); const qty = Number(p.qty) || 1;
-                                    const price = Number(sData.salePrice) || 0; const lineTotal = qty * price;
-                                    partsTotal += lineTotal;
-
-                                    itemsArray.push({
-                                        stockId: p.stockId, stockName: sData.name || "อะไหล่",
-                                        qty, unitPrice: price, lineTotal
-                                    });
+                                    const sData = sSnap.data();
+                                    itemPrice = Number(sData.salePrice) || itemPrice;
+                                    itemName = sData.name || itemName;
+                                    const qty = Number(p.qty) || 1;
                                     await updateDoc(sRef, { qty: Math.max(0, (Number(sData.qty)||0) - qty), updatedAt: serverTimestamp() });
                                 }
                             }
+
+                            const qty = Number(p.qty) || 1;
+                            const lineTotal = qty * itemPrice;
+                            partsTotal += lineTotal;
+
+                            itemsArray.push({
+                                stockId: p.stockId || "", stockName: itemName,
+                                qty, unitPrice: itemPrice, lineTotal
+                            });
                         }
 
                         for(const l of rawLabor) {
@@ -319,7 +326,7 @@ ${liveSnapshot}`;
                             });
                         }
 
-                        const okReply = `🔧 **กล่อง Puter สั่งรันเปิดบิลและตัดสต๊อกตรงรุ่นสำเร็จ!**\n- ทะเบียนรถ: **${args.plate}**\n- ยอดสุทธิรวมเข้าเก๊ะเงินโอน: **${totalAmount.toLocaleString()} ฿**\n*(ข้อมูลยิงเข้าตารางประวัติงานซ่อมและอัปเดตกระแสเงินสดหน้าแดชบอร์ดเรียบร้อยครับ)*`;
+                        const okReply = `🔧 **กล่อง Puter สั่งรันเปิดบิลและตัดสต๊อกสำเร็จ!**\n- ทะเบียนรถ: **${args.plate}**\n- ยอดสุทธิรวมเข้าเก๊ะเงิน: **${totalAmount.toLocaleString()} ฿**\n*(ระบบประมวลผลราคาตลาดกลางเรียบร้อย ข้อมูลเด้งเข้าหน้าแดชบอร์ดหลักแล้วครับ)*`;
                         appendAiMessage("ai", okReply);
                         chatHistory.push({ role: "assistant", content: `ทำการเปิดบิลซ่อมสำเร็จ รถทะเบียน ${args.plate} ยอดเงินสุทธิ ${totalAmount} บาทเรียบร้อย` });
 
@@ -341,7 +348,6 @@ ${liveSnapshot}`;
                         chatHistory.push({ role: "assistant", content: `ลงงบบัญชีรายการ ${args.description} ยอด ${args.amount} บาท สำเร็จ` });
                     }
                 } else {
-                    // รับข้อความคุยเล่นทั่วไปจาก Puter
                     const aiText = msgObj.content || response.text || (typeof response === 'string' ? response : "กำลังประมวลผลข้อความครับลูกพี่");
                     appendAiMessage("ai", aiText);
                     chatHistory.push({ role: "assistant", content: aiText });
@@ -386,10 +392,11 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+// 🚦 สั่งรันระบบดึงสายไฟจากคลาวด์ฟรี Puter
 function startEngineWithPuter() {
-    if (!window.puter) {
+    if (!window.window.puter) {
         const script = document.createElement('script');
-        script.src = "https://js.puter.com/v2/"; // เรียกสายไฟหลักของ Puter CDN
+        script.src = "https://js.puter.com/v2/";
         script.onload = () => {
             injectAIWidget();
             setupAiCoreEngine();
