@@ -784,13 +784,11 @@
 
     <script type="module">
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { GoogleGenerativeAI } from "@google/generative-ai";
 
-        // 🛑 เอา API KEY ที่ก๊อปปี้มา วางแทนตัวหนังสือด้านล่างนี้เลยครับ 🛑
+        // 🛑 นำ API KEY จากในรูป Google AI Studio มาแปะตรงนี้ได้เลยครับ 🛑
         const API_KEY = "AIzaSyB_3SHLgU79oXOgpP__EbgKg5jZtEwK8MY"; 
 
         const db = getFirestore();
-        const genAI = new GoogleGenerativeAI(API_KEY);
 
         // --- UI Elements ---
         const aiToggleButton = document.getElementById("aiToggleButton");
@@ -817,7 +815,6 @@
             bubble.className = `rounded-3 p-2 px-3 small shadow-sm ${sender === 'user' ? 'bg-success text-white' : 'bg-white border text-dark'}`;
             bubble.style.maxWidth = "85%";
             
-            // แปลงการเว้นบรรทัดให้แสดงผลใน HTML ได้
             bubble.innerHTML = text.replace(/\n/g, '<br>');
             
             div.appendChild(bubble);
@@ -859,16 +856,16 @@
                         lowStock.push(`${d.name} (เหลือ ${d.qty} ชิ้น)`);
                     }
                 });
-                context += `- อะไหล่ใกล้หมด: ${lowStock.slice(0, 10).join(", ")} ${lowStock.length > 10 ? '...และอื่นๆ' : ''}\n\n`;
+                context += `- อะไหล่ใกล้หมด: ${lowStock.slice(0, 10).join(", ")}\n\n`;
 
             } catch (error) {
                 console.error("Error fetching context for AI", error);
-                context += "(ดึงข้อมูลระบบบางส่วนไม่สำเร็จ)\n\n";
+                context += "(ระบบฐานข้อมูลร้านขัดข้องชั่วคราว กำลังใช้ฐานข้อมูลสำรองในตัวตอบ)\n\n";
             }
             return context;
         }
 
-        // ส่งข้อความไปหา AI
+        // ส่งข้อความไปหา AI แบบต่อสายตรง (API Fetch)
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -888,40 +885,59 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
-                if (API_KEY === "ใส่_API_KEY_ของคุณเบนตรงนี้") {
-                    throw new Error("ลูกพี่ลืมใส่ API KEY ในโค้ดครับ!");
+                if (API_KEY === "เอา_API_KEY_ของคุณเบนมาใส่ตรงนี้ครับ" || API_KEY.includes("xxxx")) {
+                    throw new Error("ลูกพี่ยังไม่ได้เปลี่ยน API KEY เป็นรหัสจริงในโค้ดจุดแรกครับ");
                 }
 
                 const shopContext = await fetchShopContext();
                 const finalPrompt = `
-คุณคือ AI อัจฉริยะประจำอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" หน้าที่คุณคือตอบคำถามเจ้าของร้าน (ชื่อคุณเบน) อย่างสุภาพ เป็นกันเอง แบบช่างคุยกัน และช่วยวิเคราะห์ข้อมูลร้าน
+คุณคือ AI อัจฉริยะประจำอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" ตอบคำถามเจ้าของร้าน (ชื่อคุณเบน) แบบเป็นกันเอง สไตล์ช่างคุยกัน
 
 ${shopContext}
 
 คำถามจากคุณเบน: ${prompt}
                 `;
 
-                // 🛠️ ระบบ Auto-Fallback: รายชื่อโมเดลสำรอง (เรียงจากใหม่สุดไปเก่าสุด)
-                const fallbackModels = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-pro"];
+                // คิวรุ่นและเวอร์ชันสำหรับยิงตรงในปี 2026
+                const apiAttempts = [
+                    { version: "v1", model: "gemini-2.0-flash" },
+                    { version: "v1", model: "gemini-1.5-flash" },
+                    { version: "v1beta", model: "gemini-1.5-flash" },
+                    { version: "v1beta", model: "gemini-pro" }
+                ];
+
                 let aiResponseText = "";
                 let success = false;
+                let lastError = "เชื่อมต่อล้มเหลว";
 
-                // วนลูปทดสอบทีละรุ่น ถ้าพังให้สลับไปรุ่นถัดไป
-                for (const modelName of fallbackModels) {
+                // ระบบวนลูปทดสอบต่อสายตรง
+                for (const att of apiAttempts) {
                     try {
-                        const currentModel = genAI.getGenerativeModel({ model: modelName });
-                        const result = await currentModel.generateContent(finalPrompt);
-                        aiResponseText = await result.response.text();
-                        success = true;
-                        console.log(`✅ ใช้โมเดล: ${modelName} สำเร็จ!`);
-                        break; // ทำงานสำเร็จ ให้ออกจากลูปเลย
-                    } catch (modelError) {
-                        console.warn(`⚠️ โมเดล ${modelName} ใช้งานไม่ได้ กำลังสลับไปรุ่นถัดไป...`, modelError.message);
+                        const response = await fetch(`https://generativelanguage.googleapis.com/${att.version}/models/${att.model}:generateContent?key=${API_KEY}`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: finalPrompt }] }]
+                            })
+                        });
+
+                        const resData = await response.json();
+                        
+                        if (response.ok && resData.candidates && resData.candidates[0].content.parts[0].text) {
+                            aiResponseText = resData.candidates[0].content.parts[0].text;
+                            success = true;
+                            console.log(`✅ ต่อสายตรงสำเร็จด้วยรุ่น: ${att.model}`);
+                            break;
+                        } else {
+                            lastError = resData.error ? resData.error.message : "โครงสร้างคีย์ไม่ถูกต้อง";
+                        }
+                    } catch (err) {
+                        lastError = err.message;
                     }
                 }
 
                 if (!success) {
-                    throw new Error("โมเดลของ Google AI ไม่พร้อมใช้งานสักรุ่นเลยครับ ลองเช็คโควต้า API Key ดูครับ");
+                    throw new Error(lastError);
                 }
 
                 document.getElementById(loadingId).remove();
