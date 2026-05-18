@@ -55,7 +55,7 @@ function injectAIWidget() {
         <div class="card-body p-3 ai-chat-box" id="dynamicAiChatBox">
             <div class="d-flex justify-content-start">
                 <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตค่าตัวแปร Puter.js แมตช์ตรงรุ่น เรียบร้อย สั่งเปิดบิล คุมคลัง เช็คเงินได้เต็มระบบเลยครับ! 🔧🤖
+                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตค่าตัวแปรอัปเกรดความฉลาดตลาดกลางเรียบร้อย ฟรีไม่มีตัดรอบแล้วครับ! 🔧🤖
                 </div>
             </div>
         </div>
@@ -83,8 +83,8 @@ function appendAiMessage(sender, text) {
     box.scrollTop = box.scrollHeight;
 }
 
+// 🧠 ฟังก์ชันสแกนข้อมูลสต๊อกเรียลไทม์ป้อนให้ AI หน้างาน
 async function getLiveShopContext() {
-    const today = new Date().toISOString().split("T")[0];
     let context = `[ฐานข้อมูลสดเรียลไทม์อู่ BEN MOTOR]\n`;
     try {
         const stockSnap = await getDocs(query(collection(db, "stock"), where("isDeleted", "==", false)));
@@ -103,7 +103,7 @@ async function getLiveShopContext() {
     return context;
 }
 
-// 🧠 ชุดเครื่องมือพารามิเตอร์บังคับพิมพ์เล็กตามสเปคโครงสร้าง Puter
+// 🧠 🛠️ ชุดเครื่องมือฟังก์ชัน บังคับฟิลด์ตัวแปรประเภทข้อมูลเป็น "ตัวพิมพ์เล็กทั้งหมด"
 const aiFunctionTools = [
     {
         type: "function",
@@ -129,7 +129,7 @@ const aiFunctionTools = [
                             properties: {
                                 stockId: { type: "string", description: "IDอะไหล่ จากตารางคลังสินค้า (ใส่เฉพาะเมื่อเจอไอดีตรงเป๊ะในระบบ)" },
                                 stockName: { type: "string", description: "ชื่อเรียกอะไหล่" },
-                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย" },
+                                unitPrice: { type: "number", description: "ราคาขายหน้าร้านต่อหน่วย (วิเคราะห์ราคาตลาดกลางห้ามใส่เลข 0 เด็ดขาด เช่น น้ำมันเครื่องทั่วไปใส่ 140 บาท)" },
                                 qty: { type: "number", description: "จำนวนชิ้น" }
                             },
                             required: ["stockName", "unitPrice", "qty"]
@@ -232,7 +232,7 @@ function setupAiCoreEngine() {
         const loadingDiv = document.createElement("div");
         loadingDiv.id = loadingId;
         loadingDiv.className = "d-flex justify-content-start text-muted small p-2";
-        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังประมวลผลคำสั่งระบบ Puter...</em>`;
+        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางเปิดบิลผ่านระบบ Puter...</em>`;
         box.appendChild(loadingDiv);
         box.scrollTop = box.scrollHeight;
 
@@ -240,15 +240,15 @@ function setupAiCoreEngine() {
             const liveSnapshot = await getLiveShopContext();
             const systemRuleInstruction = `คุณคือสุดยอดระบบสมองกล AI นามว่า J.A.R.V.I.S ผู้ควบคุมศูนย์บัญชาการระบบ POS หลังบ้านของอู่ "BEN MOTOR"
 [กฎเหล็กในการคำนวณและประมวลผลคำสั่ง]:
-1. เมื่อเปลี่ยนหรือเบิกใช้อะไหล่หน้าร้าน ให้ประเมินราคาขายจริงยัดลงฟิลด์ 'unitPrice' ด้วย ห้ามให้ราคาสินค้าจมเหลือ 0 ฿ เด็ดขาด
+1. เมื่อเปลี่ยนหรือเบิกใช้อะไหล่หน้าร้าน ให้ประเมินราคาขายจริงยัดลงฟิลด์ 'unitPrice' ด้วย ห้ามให้ราคาสินค้าจมเหลือ 0 ฿ เด็ดขาด!
 2. ชวนคุยเล่นทางเทคนิค ตอบคำถาม และปรึกษาอาการรถมอเตอร์ไซค์ทั่วไปสไตล์ช่างผู้เชี่ยวชาญเป็นกันเองกับคุณเบน มีความจำย้อนหลังต่อเนื่องห้ามลืมเรื่องที่คุย
 ${liveSnapshot}`;
 
-            // บังคับประวัติแชททั้งหมดม้วนเป็น String บรรทัดเดียวตามกฎเหล็ก Puter API
+            // 🛠️ ฟิกซ์จุดตาย: แปลงประวัติการคุยทั้งหมดให้เป็น "สายเดียวยาวๆ (String)" ยิงเข้า Puter ตามกฎเหล็ก 100%
             let formattedHistory = chatHistory.map(h => `${h.role === 'user' ? 'คุณเบน' : 'J.A.R.V.I.S'}: ${h.content}`).join("\n");
             const finalStringPrompt = `${systemRuleInstruction}\n\n[บันทึกประวัติการคุยย้อนหลัง]:\n${formattedHistory}\n\nคุณเบนสั่งล่าสุด: ${prompt}`;
 
-            // ยิงคำสั่งเข้าเครื่องยนต์หลัก
+            // 🚀 เรียกใช้งานผ่านเครื่องยนต์ Puter.js
             window.puter.ai.chat(finalStringPrompt, {
                 model: "gpt-4o-mini", 
                 tools: aiFunctionTools
@@ -274,7 +274,7 @@ ${liveSnapshot}`;
                         let itemsArray = []; let laborArray = []; let partsTotal = 0; let laborTotal = 0;
 
                         for(const p of rawParts) {
-                            let itemPrice = Number(p.unitPrice) || 140; // ดักราคาตลาดกลางเริ่มต้นถ้าระบบหาไม่เจอ
+                            let itemPrice = Number(p.unitPrice) || 140; 
                             let itemName = p.stockName || "อะไหล่ทั่วไป";
 
                             if(p.stockId) {
@@ -345,7 +345,6 @@ ${liveSnapshot}`;
                         chatHistory.push({ role: "assistant", content: `ลงงบบัญชีรายการ ${args.description} ยอด ${args.amount} บาท สำเร็จ` });
                     }
                 } else {
-                    // 🧠 ล็อกจุดแก้ไขวิกฤต: ดึงข้อความตอบกลับธรรมดาให้ไหลลื่นเป็นปกติ
                     const aiText = msgObj.content || response.text || (typeof response === 'string' ? response : "กำลังประมวลผลข้อความครับลูกพี่เบน");
                     appendAiMessage("ai", aiText);
                     chatHistory.push({ role: "assistant", content: aiText });
@@ -377,7 +376,6 @@ ${liveSnapshot}`;
         if(w && !w.classList.contains("d-none")) input?.focus();
     });
     
-    // 🛠️ ล็อกจุดฟิกซ์แก้ไข: เปลี่ยนจาก .addDoc มั่วๆ รอบก่อน ให้กดปิดหน้าต่างแชทได้ปกติเนียนๆ
     document.getElementById("dynamicAiCloseBtn")?.addEventListener("click", () => {
         document.getElementById("dynamicAiWindow")?.classList.add("d-none");
     });
