@@ -785,10 +785,13 @@
     <script type="module">
         import { getFirestore, collection, getDocs, query, where, addDoc, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🛑 API KEY ของลูกพี่เบน (ใส่แล้วเซฟเงียบๆ ในเครื่องพอครับ ห้ามก๊อปคีย์ส่งลงแชทนะลูกพี่)
+        // 🛑 API KEY ของลูกพี่เบน (ใส่แล้วเซฟเงียบๆ ในเครื่องพอนะครับ)
         const API_KEY = "AIzaSyDVOFqoHwmFf0j2gnJRTkOXBzYTLGqwYKI"; 
 
         const db = getFirestore();
+
+        // 🧠 คลังความจำสำรอง (Chat Memory) ประกาศไว้ข้างนอกเพื่อไม่ให้ความจำล้างตอนส่งคำสั่งใหม่
+        let chatHistory = [];
 
         // --- UI Elements ---
         const aiToggleButton = document.getElementById("aiToggleButton");
@@ -817,7 +820,7 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
         }
 
-        // 🧠 ฟังก์ชันสแกนสต๊อกและใบงานป้อนสมอง AI
+        // 🧠 ฟังก์ชันดึงสต๊อกและข้อมูลเรียลไทม์ส่งให้ AI
         async function fetchShopContext() {
             const today = new Date().toISOString().split("T")[0];
             let context = `[ฐานข้อมูลสดเรียลไทม์อู่ BEN MOTOR]\n`;
@@ -838,7 +841,7 @@
             return context;
         }
 
-        // 🧠 ตู้เครื่องมือ Master ปรับฟิลด์คีย์ล็อกตรงกับระบบหลังบ้าน 100%
+        // 🧠 ตู้เครื่องมือ Master ฟิลด์คีย์ล็อกตรงระบบหลังบ้าน 100%
         const aiTools = [{
             functionDeclarations: [
                 {
@@ -895,23 +898,6 @@
                     }
                 },
                 {
-                    name: "manage_stock", 
-                    description: "จัดการคลังสินค้า เพิ่มสินค้าใหม่ หรือบันทึกการซื้ออะไหล่รับเข้าสต๊อก",
-                    parameters: {
-                        type: "OBJECT",
-                        properties: {
-                            action: { type: "STRING", description: "'create' หรือ 'stock_in'" },
-                            stockId: { type: "STRING" },
-                            code: { type: "STRING" },
-                            name: { type: "STRING" },
-                            qty: { type: "NUMBER" },
-                            costPrice: { type: "NUMBER" },
-                            salePrice: { type: "NUMBER" }
-                        },
-                        required: ["action", "name", "qty"]
-                    }
-                },
-                {
                     name: "add_transaction", 
                     description: "บันทึกบัญชีรายรับ-รายจ่ายทั่วไปหน้าร้านที่ไม่เกี่ยวกับงานซ่อมรถ",
                     parameters: {
@@ -935,28 +921,37 @@
             aiChatInput.disabled = true;
             aiSendBtn.disabled = true;
             
+            // 🧠 1. บันทึกคำสั่งลูกพี่ลงหน่วยความจำแชท
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            if (chatHistory.length > 30) chatHistory.shift(); // ควบคุมไม่ให้ความจำล้นเกะกินทอเคน
+
             const loadingId = "loading-" + Date.now();
             const loadingDiv = document.createElement("div");
             loadingDiv.id = loadingId;
             loadingDiv.className = "d-flex justify-content-start text-muted small";
-            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>J.A.R.V.I.S กำลังควบคุมระบบ POS...</em>`;
+            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>J.A.R.V.I.S กำลังประมวลผลคำสั่ง...</em>`;
             aiChatBox.appendChild(loadingDiv);
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
                 const shopContext = await fetchShopContext();
-                const finalPrompt = `
-คุณคือระบบ AI อัจฉริยะผู้ควบคุมศูนย์บัญชาการหลังบ้านของร้าน "BEN MOTOR" 
+                
+                // แยกกฎเกณฑ์ส่งเข้าโครงสร้างตัวแปรระบบกลางอย่างเป็นทางการ
+                const systemRule = `คุณคือระบบ AI อัจฉริยะผู้ควบคุมศูนย์บัญชาการหลังบ้านของร้าน "BEN MOTOR" 
 [กฎเหล็กคำนวณบิล]:
 1. เมื่อเปลี่ยนอะไหล่ที่มีใน [รายการสินค้าในสต๊อกปัจจุบัน] (คงเหลือ > 0) ให้ระบุสินค้าลงช่อง 'parts' เท่านั้น และ **ห้ามคิดค่าแรงลงใน 'laborItems' ซ้ำซ้อนขึ้นมาเองเด็ดขาด** (ปล่อยช่อง laborItems ว่างไว้) ยอดรวมบิลต้องเท่ากับราคาสินค้าคูณจำนวนพอดี
 2. หากไม่มีในคลังสินค้า ให้ปล่อยช่อง parts ว่าง และลงเป็นงานบริการในช่อง 'laborItems' แทน
-${shopContext}
-คำสั่งคุณเบน: ${prompt}`;
+คุยภาษาช่างเป็นกันเองกับคุณเบน มีความจำย้อนหลังตามลำดับบทสนทนา
+${shopContext}`;
 
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: finalPrompt }] }], tools: aiTools })
+                    body: JSON.stringify({ 
+                        systemInstruction: { parts: [{ text: systemRule }] }, // สับสวิตช์ส่งกติการ้านแยกช่องทางหลัก
+                        contents: chatHistory, // ยื่นประวัติแชทความจำให้ AI อ่านย้อนหลัง
+                        tools: aiTools 
+                    })
                 });
 
                 const resData = await response.json();
@@ -982,7 +977,6 @@ ${shopContext}
                             let partsTotal = 0;
                             let laborTotal = 0;
 
-                            // ถอดรหัสหักสต๊อก + ยัดคีย์ตรงล็อกใบเสร็จ (stockId, stockName, qty, unitPrice, lineTotal)
                             for(const p of rawParts) {
                                 if(p.stockId) {
                                     const sRef = doc(db, "stock", p.stockId);
@@ -1002,7 +996,6 @@ ${shopContext}
                                             lineTotal: lineTotal
                                         });
 
-                                        // ตัดคลังจริง
                                         await updateDoc(sRef, { qty: Math.max(0, (Number(sData.qty)||0) - qty), updatedAt: serverTimestamp() });
                                     }
                                 }
@@ -1018,7 +1011,6 @@ ${shopContext}
                             const totalAmount = Math.max(0, (partsTotal + laborTotal) - discount);
                             const customerName = args.customerName || "ลูกค้าทั่วไป";
 
-                            // บันทึกลงตารางงานซ่อม jobs
                             const jobRef = await addDoc(collection(db, "jobs"), {
                                 date: today, customerName, customerPhone: args.customerPhone || "-",
                                 plate: args.plate || "-", brand: args.brand || "-", model: args.model || "-", mileage: "",
@@ -1029,7 +1021,6 @@ ${shopContext}
                                 createdBy: currentUser.uid, createdByName: currentUserProfile?.displayName || "ระบบ", createdAt: serverTimestamp()
                             });
 
-                            // ดันเงินเข้ากระแสเงินสดบัญชี (ตรงคีย์ดักจับหน้า finance.html)
                             if (totalAmount > 0 && payMethod !== 'pending') {
                                 await addDoc(collection(db, "transactions"), {
                                     date: today, type: "income", category: "ค่าซ่อม",
@@ -1039,44 +1030,44 @@ ${shopContext}
                                 });
                             }
 
-                            addMessage("ai", `🔧 **เปิดบิลและตัดสต๊อกตรงรุ่นเรียบร้อยครับ!**\n**ทะเบียน:** ${args.plate}\n**ยอดอะไหล่:** ${partsTotal} ฿ | **ยอดค่าแรง:** ${laborTotal} ฿\n**เงินเข้าเก๊ะรวมสุทธิ:** ${totalAmount} ฿\n*(ข้อมูลสับรางไปหน้า 'งานซ่อม' และสรุปรายรับแดชบอร์ดหน้าร้านสมบูรณ์แล้วครับ)*`);
+                            const successMsg = `🔧 **เปิดบิลและตัดสต๊อกตรงรุ่นเรียบร้อยครับ!**\n**ทะเบียน:** ${args.plate}\n** ยอดสุทธิเงินเข้าเก๊ะ:** ${totalAmount} ฿\n*(ข้อมูลสับรางไปหน้า 'งานซ่อม' และสรุปรายรับแดชบอร์ดเรียบร้อยครับ)*`;
+                            addMessage("ai", successMsg);
+
+                            // บันทึกคำตอบสำเร็จลงคลังความทรงจำ เพื่อให้มันจำได้ว่าเพิ่งทำอะไรลงไป
+                            chatHistory.push({ role: "model", parts: [{ text: `ทำการเปิดบิลซ่อมสำเร็จ ทะเบียนรถ ${args.plate} ยอดรวมราคา ${totalAmount} บาทเรียบร้อย` }] });
 
                         // 🔴 2. เปลี่ยนสถานะงานซ่อม
                         } else if (fnName === "update_job_status") {
                             const jRef = doc(db, "jobs", args.jobId);
                             await updateDoc(jRef, { status: args.status, updatedAt: serverTimestamp() });
-                            addMessage("ai", `✅ อัปเดตสถานะใบงานซ่อม ID: **${args.jobId}** เรียบร้อยครับลูกพี่!`);
+                            const logText = `✅ อัปเดตสถานะใบงานซ่อม ID: **${args.jobId}** เรียบร้อยครับลูกพี่!`;
+                            addMessage("ai", logText);
+                            chatHistory.push({ role: "model", parts: [{ text: `ทำรายการอัปเดตสถานะงานรหัส ${args.jobId} เป็นสถานะ ${args.status} สำเร็จ` }] });
 
-                        // 🔴 3. เพิ่ม/เติมคลังสินค้า
-                        } else if (fnName === "manage_stock") {
-                            if (args.action === "create") {
-                                await addDoc(collection(db, "stock"), {
-                                    code: args.code || "SKU-" + Date.now(), name: args.name, category: "ทั่วไป", unit: "ชิ้น", qty: Number(args.qty), minQty: 2, costPrice: Number(args.costPrice)||0, salePrice: Number(args.salePrice)||0, isDeleted: false, createdAt: serverTimestamp()
-                                });
-                                addMessage("ai", `📦 เพิ่มอะไหล่ใหม่ **${args.name}** เข้าหน้าสต๊อกหลักเรียบร้อยครับ!`);
-                            }
-
-                        // 🔴 4. บันทึกบัญชีอิสระหน้าร้าน
+                        // 🔴 3. บันทึกบัญชีอิสระหน้าร้าน
                         } else if (fnName === "add_transaction") {
                             await addDoc(collection(db, "transactions"), {
                                 date: today, type: args.type, category: args.category, description: args.description, method: args.method, paymentMethod: args.method, amount: Number(args.amount), branchId, isDeleted: false, createdAt: serverTimestamp(), createdBy: currentUser.uid
                             });
-                            addMessage("ai", `💰 บันทึกบัญชีงบ **"${args.description}"** ยอด **${args.amount} ฿** วิ่งตรงไปหน้าการเงินเรียบร้อยครับ!`);
+                            const financeMsg = `💰 บันทึกบัญชีงบ **"${args.description}"** ยอด **${args.amount} ฿** วิ่งตรงไปหน้าการเงินเรียบร้อยครับ!`;
+                            addMessage("ai", financeMsg);
+                            chatHistory.push({ role: "model", parts: [{ text: `บันทึกรายการบัญชีหน้าร้าน รายการ ${args.description} ยอดเงิน ${args.amount} บาท สำเร็จ` }] });
                         }
                     } else {
+                        // 🧠 คุยเล่นทั่วไป: บันทึกคำตอบ AI ลงหน่วยความจำปกติ
                         addMessage("ai", aiParts.text);
+                        chatHistory.push({ role: "model", parts: [{ text: aiParts.text }] });
                     }
                 } else {
                     throw new Error(`[CODE: ${resData.error?.status}] ${resData.error?.message}`);
                 }
 
             } catch (error) {
-                // 🛠️ แก้ไขวิกฤต: เปลี่ยนจาก print(error) เป็น console.error ป้องกันหน้าต่างเครื่องปริ้นเด้งรวน!
+                // 🛠️ ล้างจุดช็อตเรียบร้อย! คืนค่าระบบ Log ปลอดภัย 100%
                 console.error("AI System Error:", error);
                 if (document.getElementById(loadingId)) document.getElementById(loadingId).remove();
                 addMessage("ai", `❌ กล่องระบบสะดุดเล็กน้อยครับลูกพี่: ${error.message}`);
-            } finalPrompt // (ปล่อยฟังก์ชันไหลตามโครงสร้างปกติ)
-            finally {
+            } finally {
                 aiChatInput.disabled = false;
                 aiSendBtn.disabled = false;
                 aiChatInput.focus();
