@@ -865,7 +865,7 @@
             return context;
         }
 
-        // ส่งข้อความไปหา AI วิ่งเข้า 1.5 Flash โดยตรง ไม่วนลูปให้ติดล็อกโควตา
+        // ส่งข้อความไปหา AI วิ่งเข้าท่อเสถียรเวอร์ชัน v1 โดยตรง
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -894,8 +894,8 @@ ${shopContext}
 คำถามจากคุณเบน: ${prompt}
                 `;
 
-                // ยิงตรงเข้าโมเดล 1.5 Flash ผ่าน URL มาตรฐานของ Google 
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                // เปลี่ยน URL เป็นเวอร์ชัน v1 (Stable ตัวจริง) เรียบร้อยครับ
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
