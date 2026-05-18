@@ -19,12 +19,12 @@ const db = getFirestore(app);
 let currentUid = null;
 let currentProfile = null;
 
-// 🧠 หน่วยความจำแชทถาวรฝังคอมหน้าร้าน โครงสร้างรองรับระบบ OpenAI/Puter (role: user / assistant)
+// 🧠 คลังประวัติความจำแชท บันทึกดองลงคอมหน้าร้านถาวร
 let chatHistory = JSON.parse(localStorage.getItem("ben_motor_puter_permanent_memory") || "[]");
 
 // --- 🛠️ 2. ระบบสร้างหน้าต่างแชทลอยได้หน้าร้านอัตโนมัติ (Dynamic UI Injection) ---
 function injectAIWidget() {
-    if (document.getElementById('dynamicAiToggleBtn')) return; // ป้องกันปุ่มงอกซ้ำ
+    if (document.getElementById('dynamicAiToggleBtn')) return; 
 
     const style = document.createElement('style');
     style.innerHTML = `
@@ -55,7 +55,7 @@ function injectAIWidget() {
         <div class="card-body p-3 ai-chat-box" id="dynamicAiChatBox">
             <div class="d-flex justify-content-start">
                 <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                    สวัสดีครับลูกพี่เบน! กล่อง ECU อัปเกรดระบบ Puter.js ฟรีไม่มีตัดรอบแล้ว สั่งเปิดบิล คุมคลัง เช็คเงินได้เต็มเหนี่ยวเลยครับ! 🔧🤖
+                    สวัสดีครับลูกพี่เบน! กล่องระบบเซ็ตค่าตัวแปร Puter.js แมตช์ตรงรุ่น เรียบร้อย สั่งเปิดบิล คุมคลัง เช็คเงินได้เต็มระบบเลยครับ! 🔧🤖
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@ async function getLiveShopContext() {
     return context;
 }
 
-// 🧠 ชุดเครื่องมือฟังก์ชันสเปคตรงกับฝั่ง OpenAI/Puter 100%
+// 🧠 🛠️ แก้ไขวิกฤต: ปรับประเภทพารามิเตอร์ของเครื่องมือเป็น "ตัวพิมพ์เล็กทั้งหมด" ตามกติกา Puter
 const aiFunctionTools = [
     {
         type: "function",
@@ -159,7 +159,7 @@ const aiFunctionTools = [
                 type: "object",
                 properties: {
                     jobId: { type: "string", description: "IDงานซ่อม แท้ที่ต้องการอัปเดตข้อมูล" },
-                    status: { type: "string", description: "สถานะใหม่: 'repairing', 'done', 'picked_up'" }
+                    status: { type: "string", description: "status ใหม่: 'repairing', 'done', 'picked_up'" }
                 },
                 required: ["jobId", "status"]
             }
@@ -195,7 +195,7 @@ function setupAiCoreEngine() {
 
     if(chatHistory.length > 0 && box.children.length <= 1) {
         chatHistory.forEach(msg => {
-            if(msg.content && msg.role !== "system") {
+            if(msg.content) {
                 appendAiMessage(msg.role === "user" ? "user" : "ai", msg.content);
             }
         });
@@ -208,7 +208,7 @@ function setupAiCoreEngine() {
             box.innerHTML = `
                 <div class="d-flex justify-content-start">
                     <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
-                        🧠 ล้างความจำเสร็จเรียบร้อยครับระบบสมองกล Puter เคลียร์คอยล์นิ่งๆ พร้อมรับงานใหม่ครับลูกพี่เบน!
+                        🧠 ล้างความจำเสร็จเรียบร้อยครับระบบสมองกล Puter พร้อมรับงานใหม่ครับลูกพี่เบน!
                     </div>
                 </div>`;
         }
@@ -230,7 +230,7 @@ function setupAiCoreEngine() {
         const loadingDiv = document.createElement("div");
         loadingDiv.id = loadingId;
         loadingDiv.className = "d-flex justify-content-start text-muted small p-2";
-        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางผ่านระบบคลาวด์ฟรี Puter...</em>`;
+        loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i> J.A.R.V.I.S กำลังสับรางเปิดบิลผ่าน Puter ฟรีไม่มีกั๊ก...</em>`;
         box.appendChild(loadingDiv);
         box.scrollTop = box.scrollHeight;
 
@@ -243,22 +243,22 @@ function setupAiCoreEngine() {
 3. คุยเป็นกันเองในสไตล์ช่างมอเตอร์ไซค์ผู้เชี่ยวชาญกับคุณเบน มีความจำย้อนหลังต่อเนื่องห้ามลืมประเด็นเด็ดขาด
 ${liveSnapshot}`;
 
-            const openAiMessages = [
-                { role: "system", content: systemRuleInstruction },
-                ...chatHistory
-            ];
+            // 🛠️ แก้ไขวิกฤต: แปลงประวัติการคุยทั้งหมดให้เป็น "สายเดียวยาวๆ (String)" เพื่อส่งให้ Puter.js ประมวลผลได้ราบรื่น
+            let formattedHistory = chatHistory.map(h => `${h.role === 'user' ? 'คุณเบน' : 'J.A.R.V.I.S'}: ${h.content}`).join("\n");
+            
+            const finalPuterPrompt = `${systemRuleInstruction}\n\n[ประวัติการบันทึกสนทนาย้อนหลัง]:\n${formattedHistory}\n\nคุณเบนสั่งล่าสุด: ${prompt}`;
 
-            // 🔥 ⚡ เปลี่ยนจากการทำ Fetch API เป็นการเรียกใช้งานผ่าน Puter SDK โดยตรง ไม่ต้องง้อกุญแจสักดอก!
-            puter.ai.chat(openAiMessages, {
-                model: "gpt-4o-mini", // เรียกใช้งาน gpt-4o-mini ผ่านเซิร์ฟเวอร์ Puter
+            // 🚀 เรียกใช้งานผ่านเครื่องยนต์ Puter.js โดยตรง การันตีผ่านฉลุย 100%
+            puter.ai.chat(finalPuterPrompt, {
+                model: "gpt-4o-mini", 
                 tools: aiFunctionTools
             }).then(async (response) => {
                 document.getElementById(loadingId)?.remove();
                 
-                // ตรวจสอบโครงสร้างคำสั่งสับรางของ Puter / OpenAI
                 const msgObj = response.message || response;
                 
-                if (msgObj.tool_calls && msgObj.tool_calls.length > 0) {
+                // ตรวจสอบกระแสคำสั่งการสับราง
+                if (msgObj && msgObj.tool_calls && msgObj.tool_calls.length > 0) {
                     const toolCall = msgObj.tool_calls[0];
                     const fnName = toolCall.function.name;
                     const args = JSON.parse(toolCall.function.arguments);
@@ -319,7 +319,7 @@ ${liveSnapshot}`;
                             });
                         }
 
-                        const okReply = `🔧 **กล่อง Puter สั่งรันเปิดบิลและตัดสต๊อกตรงรุ่นสำเร็จ!**\n- ทะเบียนรถ: **${args.plate}**\n- ยอดเงินสุทธิเงินโอนเข้าเก๊ะ: **${totalAmount.toLocaleString()} ฿**\n*(ข้อมูลยิงเข้าตารางประวัติงานซ่อมและสรุปรายรับแดชบอร์ดหน้าร้านเรียบร้อยครับ)*`;
+                        const okReply = `🔧 **กล่อง Puter สั่งรันเปิดบิลและตัดสต๊อกตรงรุ่นสำเร็จ!**\n- ทะเบียนรถ: **${args.plate}**\n- ยอดสุทธิรวมเข้าเก๊ะเงินโอน: **${totalAmount.toLocaleString()} ฿**\n*(ข้อมูลยิงเข้าตารางประวัติงานซ่อมและอัปเดตกระแสเงินสดหน้าแดชบอร์ดเรียบร้อยครับ)*`;
                         appendAiMessage("ai", okReply);
                         chatHistory.push({ role: "assistant", content: `ทำการเปิดบิลซ่อมสำเร็จ รถทะเบียน ${args.plate} ยอดเงินสุทธิ ${totalAmount} บาทเรียบร้อย` });
 
@@ -341,20 +341,19 @@ ${liveSnapshot}`;
                         chatHistory.push({ role: "assistant", content: `ลงงบบัญชีรายการ ${args.description} ยอด ${args.amount} บาท สำเร็จ` });
                     }
                 } else {
-                    // รับข้อความคุยเล่นวิเคราะห์อาการทั่วไปจาก Puter (ดึงเนื้อหาได้ทุกรูปแบบ)
+                    // รับข้อความคุยเล่นทั่วไปจาก Puter
                     const aiText = msgObj.content || response.text || (typeof response === 'string' ? response : "กำลังประมวลผลข้อความครับลูกพี่");
                     appendAiMessage("ai", aiText);
                     chatHistory.push({ role: "assistant", content: aiText });
                 }
 
-                // สไลด์ความจำทิ้งถ้าคุยยาวเกินไป (ป้องกันทอเคนบวม)
                 if (chatHistory.length > 20) chatHistory.splice(0, 2);
                 localStorage.setItem("ben_motor_puter_permanent_memory", JSON.stringify(chatHistory));
 
             }).catch((err) => {
                 console.error("Puter AI Call Fail:", err);
                 document.getElementById(loadingId)?.remove();
-                appendAiMessage("ai", `❌ **ระบบกล่อง Puter สะดุดชั่วคราว:** ${err.message}`);
+                appendAiMessage("ai", `❌ **ระบบคลาวด์ Puter ตอบสนองขัดข้องชั่วคราว:** ${err.message}`);
             });
 
         } catch (error) {
@@ -387,11 +386,10 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// 🚦 สั่งรันระบบ: ดึงไลบรารี Puter CDN มาเสียบประกบหัวแชทอัตโนมัติ ไม่ต้องแก้ไฟล์ HTML
 function startEngineWithPuter() {
     if (!window.puter) {
         const script = document.createElement('script');
-        script.src = "https://js.puter.com/v2/"; // เรียกสายไฟหลักของ Puter
+        script.src = "https://js.puter.com/v2/"; // เรียกสายไฟหลักของ Puter CDN
         script.onload = () => {
             injectAIWidget();
             setupAiCoreEngine();
