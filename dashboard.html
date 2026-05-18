@@ -785,7 +785,7 @@
     <script type="module">
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🛑 ไปสร้างคีย์ใหม่ใน AI Studio แล้วเอามาวางตรงนี้นะครับ (ห้ามส่งเข้ามาในแชทแล้วนะลูกพี่! 555)
+        // 🛑 วาง API KEY ดอกใหม่ของคุณเบนตรงนี้ครับ
         const API_KEY = "AIzaSyDe3CTcAqkO4WhM9aeoqUPRjL3Ha_z-aTQ"; 
 
         const db = getFirestore();
@@ -799,14 +799,12 @@
         const aiChatBox = document.getElementById("aiChatBox");
         const aiSendBtn = document.getElementById("aiSendBtn");
 
-        // Toggle เปิด/ปิด แชท
         aiToggleButton.addEventListener("click", () => {
             aiChatWindow.classList.toggle("d-none");
             if(!aiChatWindow.classList.contains("d-none")) aiChatInput.focus();
         });
         aiCloseButton.addEventListener("click", () => aiChatWindow.classList.add("d-none"));
 
-        // ฟังก์ชันสร้างกล่องข้อความ
         function addMessage(sender, text) {
             const div = document.createElement("div");
             div.className = `d-flex justify-content-${sender === 'user' ? 'end' : 'start'}`;
@@ -814,8 +812,6 @@
             const bubble = document.createElement("div");
             bubble.className = `rounded-3 p-2 px-3 small shadow-sm ${sender === 'user' ? 'bg-success text-white' : 'bg-white border text-dark'}`;
             bubble.style.maxWidth = "85%";
-            
-            // ใช้ Markdown แบบง่ายๆ รองรับการจัดบรรทัด
             bubble.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
             div.appendChild(bubble);
@@ -823,7 +819,6 @@
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
         }
 
-        // ฟังก์ชันดึงข้อมูลจากระบบ POS
         async function fetchShopContext() {
             const today = new Date().toISOString().split("T")[0];
             let context = `[ข้อมูลอู่ BEN MOTOR เรียลไทม์ วันที่ ${today}]\n`;
@@ -846,26 +841,14 @@
                         pendingJobs.push(`${d.plate} (${d.brand} ${d.model} - อาการ: ${d.problem})`);
                     }
                 });
-                context += `- รถค้างซ่อม: ${pendingJobs.length} คัน ${pendingJobs.length > 0 ? `ได้แก่ ${pendingJobs.join(", ")}` : ""}\n`;
-
-                const stockSnap = await getDocs(query(collection(db, "stock"), where("isDeleted", "==", false)));
-                let lowStock = [];
-                stockSnap.forEach(doc => {
-                    const d = doc.data();
-                    if(Number(d.qty) <= Number(d.minQty)) {
-                        lowStock.push(`${d.name} (เหลือ ${d.qty})`);
-                    }
-                });
-                context += `- อะไหล่ใกล้หมด: ${lowStock.length > 0 ? lowStock.join(", ") : "ไม่มี (สต๊อกแน่น)"}\n\n`;
-
+                context += `- รถค้างซ่อม: ${pendingJobs.length} คัน\n`;
             } catch (error) {
                 console.error("Error fetching context for AI", error);
-                context += "(ดึงข้อมูลฐานข้อมูลไม่สำเร็จ ตอบคำถามทั่วไปได้เลย)\n\n";
             }
             return context;
         }
 
-        // ส่งข้อความหา AI พร้อมระบบ Auto-Fallback สลับโมเดลอัตโนมัติ
+        // 🚀 ส่งข้อความยิงตรงเข้า Gemini 2.5 Flash ตัวแรง
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -880,86 +863,47 @@
             const loadingDiv = document.createElement("div");
             loadingDiv.id = loadingId;
             loadingDiv.className = "d-flex justify-content-start text-muted small";
-            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>จาร์วิสกำลังวิเคราะห์...</em>`;
+            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังคิด...</em>`;
             aiChatBox.appendChild(loadingDiv);
             aiChatBox.scrollTop = aiChatBox.scrollHeight;
 
             try {
                 if (API_KEY.includes("วางคีย์ใหม่")) {
-                    throw new Error("ลูกพี่! ลืมเอา API KEY ของจริงไปใส่ในโค้ดครับ ไปเอามาจาก Google AI Studio ด่วนเลย");
+                    throw new Error("ลูกพี่ลืมใส่ API Key ของจริงครับ!");
                 }
 
                 const shopContext = await fetchShopContext();
-                
-                // 🧠 หัวใจความฉลาด: สั่งให้มันสวมบทบาทเซียนมอเตอร์ไซค์
                 const finalPrompt = `
-[SYSTEM PROTOCOL: MASTER MECHANIC J.A.R.V.I.S]
-คุณคือ AI ผู้จัดการอู่และหัวหน้าช่างซ่อมมอเตอร์ไซค์ระดับเทพประจำร้าน "BEN MOTOR"
-กฎเหล็กในการตอบ:
-1. เรียกคู่สนทนาว่า "คุณเบน" หรือ "ลูกพี่" ด้วยความเคารพแต่เป็นกันเอง
-2. ใช้ภาษาช่างมอเตอร์ไซค์แบบมืออาชีพ (เช่น ไล่เม็ด, จูนหนา/บาง, คว้านเสื้อ, เบิกศูนย์)
-3. "ต้องฉลาดและคิดล่วงหน้า": ถ้ายอดตกให้เสนอไอเดียโปรโมชั่น ถ้ารถค้างเยอะให้แนะนำวิธีจัดการคิว ถ้ายางหรืออะไหล่หมดให้เตือนให้สั่งของ
-4. ให้คำปรึกษาเชิงลึกเรื่องการโมดิฟายและซ่อมบำรุงรถได้สมบูรณ์แบบ ตอบแบบรวบรัด ไม่อารัมภบทเยอะ
-
+คุณคือ AI ผู้จัดการอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" 
+- คุยกับเจ้าของร้านชื่อ "คุณเบน" เป็นกันเอง สไตล์ช่าง
+- ฉลาด คิดโปรโมชั่นได้ วิเคราะห์อาการรถเก่ง
 ${shopContext}
-
-คำสั่งจากลูกพี่เบน: ${prompt}
+คำถามจากคุณเบน: ${prompt}
                 `;
 
-                // 🏎️ ระบบ Auto-Fallback: เรียงจากใหม่สุด ฉลาดสุด ไปหาตัวเสถียรสุด
-                const modelsToTry = [
-                    "gemini-3-flash",
-                    "gemini-2.5-flash", 
-                    "gemini-2.0-flash",
-                    "gemini-1.5-flash"
-                ];
+                // ล็อกเป้าที่ gemini-2.5-flash บน v1beta (พอร์ตเสถียรที่สุดตอนนี้)
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: finalPrompt }] }]
+                    })
+                });
 
-                let aiResponseText = "";
-                let success = false;
-                let lastError = "";
-
-                // วนลูปทดสอบทีละรุ่น พังปุ๊บกระโดดไปรุ่นถัดไปทันที
-                for (const modelName of modelsToTry) {
-                    try {
-                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: finalPrompt }] }]
-                            })
-                        });
-
-                        const resData = await response.json();
-                        
-                        if (response.ok && resData.candidates && resData.candidates[0].content.parts[0].text) {
-                            aiResponseText = resData.candidates[0].content.parts[0].text;
-                            success = true;
-                            console.log(`✅ เครื่องสตาร์ทติดด้วยโมเดล: ${modelName}`);
-                            break; // ทำงานสำเร็จ ออกจากลูปเลย
-                        } else {
-                            if (response.status === 429) lastError = "RATE_LIMIT";
-                            else lastError = resData.error ? resData.error.message : "RESPONSE_ERROR";
-                        }
-                    } catch (err) {
-                        lastError = err.message;
-                    }
+                const resData = await response.json();
+                
+                if (response.ok && resData.candidates) {
+                    document.getElementById(loadingId).remove();
+                    addMessage("ai", resData.candidates[0].content.parts[0].text);
+                } else {
+                    // ถ้าพัง ให้คาย Error ต้นฉบับจาก Google ออกมาตรงๆ จะได้เลิกเดา
+                    throw new Error(`[CODE: ${resData.error?.status}] ${resData.error?.message}`);
                 }
-
-                if (!success) {
-                    if (lastError === "RATE_LIMIT") {
-                        throw new Error("🤖 ตอนนี้ระบบแชทฟรีคิวเต็ม (เครื่องฮีท) รอสัก 30 วินาทีแล้วบิดใหม่นะลูกพี่!");
-                    } else {
-                        throw new Error(`เชื่อมต่อ API ไม่สำเร็จทุกรุ่น สาเหตุล่าสุด: ${lastError}`);
-                    }
-                }
-
-                document.getElementById(loadingId).remove();
-                addMessage("ai", aiResponseText);
 
             } catch (error) {
                 console.error(error);
                 document.getElementById(loadingId).remove();
-                addMessage("ai", `${error.message.includes("🤖") ? "" : "❌ งานเข้า! "}${error.message}`);
+                addMessage("ai", `❌ Google ฟ้องว่า: ${error.message}`);
             } finally {
                 aiChatInput.disabled = false;
                 aiSendBtn.disabled = false;
