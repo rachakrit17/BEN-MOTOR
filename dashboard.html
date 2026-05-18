@@ -785,7 +785,7 @@
     <script type="module">
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // 🎯 คีย์แท้ตัวเต็มของคุณเบน เชื่อมต่อผ่านฉลุย
+        // 🎯 คีย์แท้ตัวเต็มของคุณเบน จากหน้าต่าง details สมบูรณ์ 100%
         const API_KEY = "AIzaSyB_3SHLgU79oXOgpP__EbgKg5jZtEwK8MY"; 
 
         const db = getFirestore();
@@ -865,7 +865,7 @@
             return context;
         }
 
-        // ส่งข้อความไปหา AI วิ่งเข้าท่อเสถียรเวอร์ชัน v1 โดยตรง
+        // ส่งข้อความหา AI ล็อกเป้ารุ่นหลัก gemini-2.0-flash บนท่อตรง v1
         aiChatForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const prompt = aiChatInput.value.trim();
@@ -894,8 +894,8 @@ ${shopContext}
 คำถามจากคุณเบน: ${prompt}
                 `;
 
-                // เปลี่ยน URL เป็นเวอร์ชัน v1 (Stable ตัวจริง) เรียบร้อยครับ
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                // ล็อกเป้ายิงตรงเข้าโมเดลหลัก gemini-2.0-flash ผ่านเวอร์ชัน v1 สากล
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -910,14 +910,18 @@ ${shopContext}
                     document.getElementById(loadingId).remove();
                     addMessage("ai", aiResponseText);
                 } else {
-                    const errDetail = resData.error ? `[${resData.error.status}] ${resData.error.message}` : "โครงสร้างระบบตอบกลับไม่ถูกต้อง";
+                    // ตรวจสอบอาการถ้าติดโควตาลิมิต (เครื่องฮีท) ให้แจ้งเตือนดีๆ ไม่ดึง Error พังๆ มาโชว์
+                    if (response.status === 429 || (resData.error && resData.error.status === "RESOURCE_EXHAUSTED")) {
+                        throw new Error("🤖 ตอนนี้ระบบเซิร์ฟเวอร์ฟรีของกูเกิลติดคูลดาวน์ (Rate Limit) กรุณารอประมาณ 30-50 วินาที แล้วลองพิมพ์ส่งใหม่อีกครั้งนะครับลูกพี่!");
+                    }
+                    const errDetail = resData.error ? `[${resData.error.status}] ${resData.error.message}` : "โครงสร้างระบบตอบกลับขัดข้อง";
                     throw new Error(errDetail);
                 }
 
             } catch (error) {
                 console.error(error);
                 document.getElementById(loadingId).remove();
-                addMessage("ai", `❌ เกิดข้อผิดพลาด: ${error.message}`);
+                addMessage("ai", `${error.message.includes("🤖") ? "" : "❌ เกิดข้อผิดพลาด: "}${error.message}`);
             } finally {
                 aiChatInput.disabled = false;
                 aiSendBtn.disabled = false;
