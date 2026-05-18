@@ -16,16 +16,39 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <style>
       /* อัปเกรด UI เล็กน้อยให้ดูเจ๋งขึ้น */
       .card-premium { border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; }
       .card-premium:hover, .bm-stat-card:hover, .bm-list-card:hover { box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.08)!important; transform: translateY(-2px); }
       .bm-stat-card { transition: all 0.3s ease; }
       .table-hover tbody tr:hover { background-color: rgba(25, 135, 84, 0.03); }
+      
+      /* สไตล์สำหรับการพิมพ์ (Print) */
+      @media print {
+        nav, main, .bm-fab-container, .bm-bottom-nav, #mainToast, .modal-backdrop { display: none !important; }
+        body, html { margin: 0 !important; padding: 0 !important; background: #fff !important; height: auto !important; }
+        .modal {
+          position: absolute !important; left: 0 !important; top: 0 !important; margin: 0 !important; padding: 0 !important;
+          width: 100% !important; display: block !important; overflow: visible !important;
+        }
+        .modal-dialog { margin: 0 !important; max-width: 100% !important; transform: translate(0, 0) !important; display: block !important; }
+        .modal-content { border: none !important; box-shadow: none !important; }
+        .modal-header, .modal-footer { display: none !important; }
+        #printArea { padding: 0 !important; }
+        #printArea, #printArea * { color: #000 !important; }
+        .table-print { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .table-print th, .table-print td { border: 1px solid #000 !important; padding: 8px; font-size: 14px; }
+        .table-print th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+      
+      /* สไตล์ใบเสร็จสำหรับใช้แคปรูป */
+      .receipt-capture-container { background: #fff; padding: 20px; border-radius: 8px; font-family: 'Kanit', sans-serif; color: #000; }
     </style>
   </head>
   <body class="bm-theme-light bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top bm-topbar border-bottom d-print-none">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1 fw-bold text-success d-flex align-items-center">
           <i class="bi bi-speedometer2 me-2 fs-4"></i> BEN MOTOR
@@ -61,7 +84,7 @@
       </div>
     </nav>
 
-    <main class="bm-main-content pb-5 mt-5 pt-3">
+    <main class="bm-main-content pb-5 mt-5 pt-3 d-print-none">
       <div class="container py-4">
         <div class="row mb-4 align-items-end">
           <div class="col">
@@ -214,7 +237,7 @@
       </div>
     </main>
 
-    <div class="bm-fab-container">
+    <div class="bm-fab-container d-print-none">
       <div class="dropdown dropup">
         <ul class="dropdown-menu dropdown-menu-end mb-2 shadow-lg rounded-4 border-0 p-2" aria-labelledby="fabDropdownButton">
           <li><button class="dropdown-item d-flex align-items-center rounded-3 py-2" type="button" id="fabOpenBillBtn"><span class="bg-primary bg-opacity-10 rounded-circle p-1 me-2 d-flex"><i class="bi bi-receipt-cutoff text-primary"></i></span>เปิดบิลซ่อมใหม่</button></li>
@@ -225,7 +248,7 @@
       </div>
     </div>
 
-    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg">
+    <nav class="navbar navbar-light bg-white border-top bm-bottom-nav fixed-bottom shadow-lg d-print-none">
       <div class="container-fluid px-0 h-100">
         <div class="row g-0 w-100 h-100 text-center small fw-medium">
           <div class="col h-100"><a href="dashboard.html" class="bm-bottom-nav-link h-100 d-flex flex-column justify-content-center text-decoration-none"><i class="bi bi-speedometer2 d-block fs-5 mb-1"></i><span>แดชบอร์ด</span></a></div>
@@ -241,23 +264,28 @@
     <div class="modal fade" id="jobDetailModal" tabindex="-1" aria-labelledby="jobDetailModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-lg rounded-4">
-          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+          <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 d-print-none">
             <h1 class="modal-title fs-5 fw-bold text-success" id="jobDetailModalLabel">
               <i class="bi bi-file-earmark-text me-2"></i> รายละเอียดงานซ่อม
             </h1>
             <div class="ms-auto d-flex gap-2">
+                 <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold hover-elevate shadow-sm" id="jobDetailShareLineBtn" title="แชร์รูปใบเสร็จเข้า LINE">
+                    <i class="bi bi-line me-1"></i> <span class="d-none d-sm-inline">แชร์</span>
+                 </button>
                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium hover-elevate" id="jobDetailPrintBtn" title="พิมพ์ใบงาน">
                     <i class="bi bi-printer-fill me-1"></i> <span class="d-none d-sm-inline">พิมพ์</span>
                  </button>
                  <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="ปิด"></button>
             </div>
           </div>
+          
           <div class="modal-body p-4 pt-3">
-            <div id="jobDetailLoadingState" class="alert alert-light border text-center text-muted small py-3 d-none">
+            
+            <div id="jobDetailLoadingState" class="alert alert-light border text-center text-muted small py-3 d-none d-print-none">
               <div class="spinner-border spinner-border-sm me-2 text-success" role="status"></div> กำลังโหลดรายละเอียด...
             </div>
 
-            <div id="pendingPaymentBlock" class="alert alert-danger d-none mb-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center rounded-4 border-danger-subtle gap-3 shadow-sm">
+            <div id="pendingPaymentBlock" class="alert alert-danger d-none mb-3 flex-column flex-md-row justify-content-between align-items-md-center rounded-4 border-danger-subtle gap-3 shadow-sm d-print-none">
                 <div>
                     <h6 class="mb-1 fw-bold text-danger"><i class="bi bi-exclamation-circle-fill me-1"></i> บิลนี้ยังค้างชำระ (รอจ่ายเงิน)</h6>
                     <small class="text-danger opacity-75 d-block">กรุณากดรับเงินเมื่อลูกค้าชำระแล้ว ยอดถึงจะถูกบันทึกเป็นรายได้ของร้าน</small>
@@ -273,97 +301,97 @@
                 </div>
             </div>
 
-            <div class="card border-0 bg-light rounded-4 mb-3">
-              <div class="card-body p-4">
-                <div class="row g-3 small">
-                  <div class="col-12 col-md-6 border-end-md border-secondary-subtle">
-                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">วันที่รับงาน</span> <span id="jobDetailDate" class="fw-bold text-dark fs-6">-</span></div>
-                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ลูกค้า</span> <span id="jobDetailCustomerName" class="fw-bold text-dark">-</span></div>
-                    <div><span class="text-muted d-block text-xs fw-medium">เบอร์โทรศัพท์</span> <span id="jobDetailCustomerPhone" class="text-dark fw-medium">-</span></div>
-                  </div>
-                  <div class="col-12 col-md-6 ps-md-3">
-                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ทะเบียนรถ</span> <span id="jobDetailPlate" class="fw-bold text-primary fs-5">-</span></div>
-                    <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ยี่ห้อ / รุ่น</span> <span id="jobDetailBrandModel" class="fw-medium text-dark">-</span></div>
-                    <div><span class="text-muted d-block text-xs fw-medium">เลขไมล์</span> <span id="jobDetailMileage" class="fw-medium text-dark">-</span></div>
-                  </div>
-                  <div class="col-12 pt-3 border-top border-secondary-subtle mt-3">
-                     <span class="text-muted d-block text-xs mb-1 fw-medium">อาการ / ปัญหาที่แจ้ง</span>
-                     <div id="jobDetailProblem" class="bg-white p-3 rounded-3 border-0 text-dark fw-medium shadow-sm">-</div>
+            <div id="receiptCaptureArea" class="receipt-capture-container">
+                <div class="card border-0 bg-light rounded-4 mb-3 d-print-none">
+                  <div class="card-body p-4">
+                    <div class="row g-3 small">
+                      <div class="col-12 col-md-6 border-end-md border-secondary-subtle">
+                        <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">วันที่รับงาน</span> <span id="jobDetailDate" class="fw-bold text-dark fs-6">-</span></div>
+                        <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ลูกค้า</span> <span id="jobDetailCustomerName" class="fw-bold text-dark">-</span></div>
+                        <div><span class="text-muted d-block text-xs fw-medium">เบอร์โทรศัพท์</span> <span id="jobDetailCustomerPhone" class="text-dark fw-medium">-</span></div>
+                      </div>
+                      <div class="col-12 col-md-6 ps-md-3">
+                        <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ทะเบียนรถ</span> <span id="jobDetailPlate" class="fw-bold text-primary fs-5">-</span></div>
+                        <div class="mb-2"><span class="text-muted d-block text-xs fw-medium">ยี่ห้อ / รุ่น</span> <span id="jobDetailBrandModel" class="fw-medium text-dark">-</span></div>
+                        <div><span class="text-muted d-block text-xs fw-medium">เลขไมล์</span> <span id="jobDetailMileage" class="fw-medium text-dark">-</span></div>
+                      </div>
+                      <div class="col-12 pt-3 border-top border-secondary-subtle mt-3">
+                         <span class="text-muted d-block text-xs mb-1 fw-medium">อาการ / ปัญหาที่แจ้ง</span>
+                         <div id="jobDetailProblem" class="bg-white p-3 rounded-3 border-0 text-dark fw-medium shadow-sm">-</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="card border border-warning-subtle bg-warning bg-opacity-10 rounded-4 mb-4">
-               <div class="card-body p-4">
-                  <div class="row align-items-center g-3">
-                     <div class="col-12 col-md-6">
-                        <div class="small text-dark fw-bold mb-2">สถานะปัจจุบัน</div>
-                        <div class="d-flex align-items-center gap-2">
-                           <span id="jobDetailStatusBadge" class="badge rounded-pill px-3 py-2">-</span>
-                           <span id="jobDetailPriorityBadge" class="badge rounded-pill px-3 py-2">-</span>
-                        </div>
-                        <div class="text-xs text-muted mt-2 fw-medium">
-                           ผู้เปิดบิล: <span id="jobDetailCreatedBy" class="text-dark">-</span>
-                        </div>
-                     </div>
-                     <div class="col-12 col-md-6">
-                        <label for="jobDetailStatusSelect" class="form-label small text-dark fw-bold mb-2">อัปเดตสถานะงานซ่อม</label>
-                        <div class="input-group">
-                           <select id="jobDetailStatusSelect" class="form-select border-warning-subtle fw-medium">
-                              <option value="repairing">กำลังซ่อมอยู่</option>
-                              <option value="done">ซ่อมเสร็จแล้ว</option>
-                              <option value="picked_up">ลูกค้ารับรถแล้ว</option>
-                           </select>
-                           <button type="button" class="btn btn-warning text-dark fw-bold px-4 shadow-sm" id="jobDetailSaveStatusBtn">
-                              <span class="spinner-border spinner-border-sm me-1 d-none" id="jobDetailSaveStatusSpinner"></span>
-                              <span id="jobDetailSaveStatusBtnText">บันทึก</span>
-                           </button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+                <div class="card border border-warning-subtle bg-warning bg-opacity-10 rounded-4 mb-4 d-print-none">
+                   <div class="card-body p-4">
+                      <div class="row align-items-center g-3">
+                         <div class="col-12 col-md-6">
+                            <div class="small text-dark fw-bold mb-2">สถานะปัจจุบัน</div>
+                            <div class="d-flex align-items-center gap-2">
+                               <span id="jobDetailStatusBadge" class="badge rounded-pill px-3 py-2">-</span>
+                               <span id="jobDetailPriorityBadge" class="badge rounded-pill px-3 py-2">-</span>
+                            </div>
+                            <div class="text-xs text-muted mt-2 fw-medium">
+                               ผู้เปิดบิล: <span id="jobDetailCreatedBy" class="text-dark">-</span>
+                            </div>
+                         </div>
+                         <div class="col-12 col-md-6">
+                            <label for="jobDetailStatusSelect" class="form-label small text-dark fw-bold mb-2">อัปเดตสถานะงานซ่อม</label>
+                            <div class="input-group">
+                               <select id="jobDetailStatusSelect" class="form-select border-warning-subtle fw-medium">
+                                  <option value="repairing">กำลังซ่อมอยู่</option>
+                                  <option value="done">ซ่อมเสร็จแล้ว</option>
+                                  <option value="picked_up">ลูกค้ารับรถแล้ว</option>
+                               </select>
+                               <button type="button" class="btn btn-warning text-dark fw-bold px-4 shadow-sm" id="jobDetailSaveStatusBtn">
+                                  <span class="spinner-border spinner-border-sm me-1 d-none" id="jobDetailSaveStatusSpinner"></span>
+                                  <span id="jobDetailSaveStatusBtnText">บันทึก</span>
+                               </button>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
 
-            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
-               <div class="card-header bg-white border-bottom py-3 px-4">
-                  <span class="fw-bold text-dark"><i class="bi bi-list-check me-2 text-success"></i> รายการซ่อมทั้งหมด</span>
-               </div>
-               <div class="table-responsive">
-                  <table class="table align-middle mb-0">
-                     <thead class="bg-light text-secondary">
-                        <tr class="small text-uppercase fw-semibold">
-                           <th class="ps-4 border-0 py-3">รายการ (อะไหล่/ค่าแรง)</th>
-                           <th class="text-center border-0 py-3" style="width: 80px;">จำนวน</th>
-                           <th class="text-end border-0 py-3" style="width: 100px;">หน่วยละ</th>
-                           <th class="text-end pe-4 border-0 py-3" style="width: 120px;">รวม</th>
-                        </tr>
-                     </thead>
-                     <tbody id="jobDetailPartsTbody" class="bg-white"></tbody>
-                     <tbody id="jobDetailLaborTbody" class="border-top-0 bg-white"></tbody>
-                     <tfoot class="bg-light">
-                        <tr>
-                           <td colspan="3" class="text-end small text-muted py-2 fw-medium">รวมค่าอะไหล่</td>
-                           <td class="text-end pe-4 small fw-bold text-dark py-2" id="jobDetailPartsTotal">0.00 ฿</td>
-                        </tr>
-                        <tr>
-                           <td colspan="3" class="text-end small text-muted py-2 border-0 fw-medium">รวมค่าแรง</td>
-                           <td class="text-end pe-4 small fw-bold text-dark py-2 border-0" id="jobDetailLaborTotal">0.00 ฿</td>
-                        </tr>
-                        <tr id="jobDetailDiscountRow" class="d-none">
-                           <td colspan="3" class="text-end small text-danger py-2 border-0 fw-medium">ส่วนลด</td>
-                           <td class="text-end pe-4 small fw-bold text-danger py-2 border-0" id="jobDetailDiscountTotal">-0.00 ฿</td>
-                        </tr>
-                        <tr class="bg-soft-success">
-                           <td colspan="3" class="text-end fw-bold text-success py-3 border-0 fs-6">ยอดรวมสุทธิ</td>
-                           <td class="text-end pe-4 fw-bold text-success fs-5 py-3 border-0" id="jobDetailGrandTotal">0.00 ฿</td>
-                        </tr>
-                     </tfoot>
-                  </table>
-               </div>
-            </div>
-
-            <div class="accordion accordion-flush rounded-4 border overflow-hidden shadow-sm" id="accordionLogs">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                   <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between">
+                      <span class="fw-bold text-dark"><i class="bi bi-list-check me-2 text-success"></i> รายการซ่อม</span>
+                      <span id="capCarInfo" class="fw-bold text-primary d-none"></span> </div>
+                   <div class="table-responsive">
+                      <table class="table align-middle mb-0">
+                         <thead class="bg-light text-secondary">
+                            <tr class="small text-uppercase fw-semibold">
+                               <th class="ps-4 border-0 py-3">รายการ (อะไหล่/ค่าแรง)</th>
+                               <th class="text-center border-0 py-3" style="width: 80px;">จำนวน</th>
+                               <th class="text-end border-0 py-3" style="width: 100px;">หน่วยละ</th>
+                               <th class="text-end pe-4 border-0 py-3" style="width: 120px;">รวม</th>
+                            </tr>
+                         </thead>
+                         <tbody id="jobDetailPartsTbody" class="bg-white"></tbody>
+                         <tbody id="jobDetailLaborTbody" class="border-top-0 bg-white"></tbody>
+                         <tfoot class="bg-light">
+                            <tr>
+                               <td colspan="3" class="text-end small text-muted py-2 fw-medium">รวมค่าอะไหล่</td>
+                               <td class="text-end pe-4 small fw-bold text-dark py-2" id="jobDetailPartsTotal">0.00 ฿</td>
+                            </tr>
+                            <tr>
+                               <td colspan="3" class="text-end small text-muted py-2 border-0 fw-medium">รวมค่าแรง</td>
+                               <td class="text-end pe-4 small fw-bold text-dark py-2 border-0" id="jobDetailLaborTotal">0.00 ฿</td>
+                            </tr>
+                            <tr id="jobDetailDiscountRow" class="d-none">
+                               <td colspan="3" class="text-end small text-danger py-2 border-0 fw-medium">ส่วนลด</td>
+                               <td class="text-end pe-4 small fw-bold text-danger py-2 border-0" id="jobDetailDiscountTotal">-0.00 ฿</td>
+                            </tr>
+                            <tr class="bg-soft-success">
+                               <td colspan="3" class="text-end fw-bold text-success py-3 border-0 fs-6">ยอดรวมสุทธิ</td>
+                               <td class="text-end pe-4 fw-bold text-success fs-5 py-3 border-0" id="jobDetailGrandTotal">0.00 ฿</td>
+                            </tr>
+                         </tfoot>
+                      </table>
+                   </div>
+                </div>
+            </div> <div class="accordion accordion-flush rounded-4 border overflow-hidden shadow-sm d-print-none" id="accordionLogs">
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button class="accordion-button collapsed py-3 bg-light text-dark fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseLogs">
@@ -381,7 +409,7 @@
             </div>
 
           </div>
-          <div class="modal-footer border-top-0 px-4 pb-4 pt-0 bg-white">
+          <div class="modal-footer border-top-0 px-4 pb-4 pt-0 bg-white d-print-none">
              <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none me-auto d-none fw-medium" id="jobDetailSoftDeleteBtn">
                <i class="bi bi-trash-fill me-1"></i> ลบบิล (Admin)
              </button>
@@ -398,7 +426,7 @@
       </div>
     </div>
 
-    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 d-print-none" style="z-index: 1080;">
       <div id="mainToast" class="toast align-items-center text-bg-success border-0 shadow-lg rounded-pill" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
         <div class="d-flex px-3 py-2">
           <div class="toast-body fw-medium fs-6" id="mainToastBody"></div>
@@ -482,6 +510,7 @@
       const jobDetailModalLabel = document.getElementById("jobDetailModalLabel");
       const jobDetailLoadingState = document.getElementById("jobDetailLoadingState");
       const jobDetailPrintBtn = document.getElementById("jobDetailPrintBtn");
+      const jobDetailShareLineBtn = document.getElementById("jobDetailShareLineBtn"); // ปุ่มแชร์ใหม่
       
       const jobDetailDate = document.getElementById("jobDetailDate");
       const jobDetailCustomerName = document.getElementById("jobDetailCustomerName");
@@ -937,7 +966,8 @@
         if (jobDetailDiscountRow) jobDetailDiscountRow.classList.add("d-none");
         jobDetailGrandTotal.textContent = "0.00 ฿";
         jobDetailLogsList.innerHTML = `<li class="list-group-item text-center small text-muted py-4">กำลังโหลด...</li>`;
-
+        document.getElementById('capCarInfo').classList.add('d-none'); // ซ่อนหัวข้อในใบเสร็จ
+        
         if (jobDetailEditBtn) jobDetailEditBtn.classList.add("d-none"); 
         
         const pendingBlock = document.getElementById("pendingPaymentBlock");
@@ -1219,6 +1249,74 @@
          printWindow.document.close();
       }
 
+      // --- ฟังก์ชันแคปหน้าจอแชร์ LINE (ใหม่) ---
+      async function captureAndShareLine() {
+         if(!currentJobDetailData) return;
+         
+         const btn = document.getElementById("jobDetailShareLineBtn");
+         const originalHtml = btn.innerHTML;
+         btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> กำลังสร้างภาพ...`;
+         btn.disabled = true;
+
+         // ดึงข้อมูลหัวบิลมาโชว์ตอนแคป
+         const capCarInfo = document.getElementById('capCarInfo');
+         capCarInfo.textContent = currentJobDetailData.plate;
+         capCarInfo.classList.remove('d-none');
+
+         try {
+             // สั่งให้ html2canvas แคปพื้นที่เฉพาะใบเสร็จ
+             const captureArea = document.getElementById('receiptCaptureArea');
+             const canvas = await html2canvas(captureArea, {
+                 scale: 2, // เพิ่มความคมชัด
+                 backgroundColor: '#ffffff',
+                 logging: false
+             });
+
+             // ซ่อนหัวบิลกลับเหมือนเดิม
+             capCarInfo.classList.add('d-none');
+
+             // เตรียมข้อความแนบไปกับรูป
+             const d = currentJobDetailData;
+             const textMsg = `บิลซ่อม BEN MOTOR\nทะเบียน: ${d.plate}\nยอดสุทธิ: ${formatNumber(d.totalAmount)} บาท\nเช็ครายละเอียดในรูปได้เลยครับ`;
+
+             // เช็คว่ามือถือรองรับการแชร์รูปไหม (Web Share API)
+             canvas.toBlob(async (blob) => {
+                 const file = new File([blob], `Bill_${d.plate}.png`, { type: "image/png" });
+                 
+                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                     // โหมดมือถือ: เด้งแชร์เข้าแอปได้เลย
+                     try {
+                         await navigator.share({
+                             title: `บิลซ่อมรถ ${d.plate}`,
+                             text: textMsg,
+                             files: [file]
+                         });
+                         showToast("ส่งแชร์เรียบร้อย!", "success");
+                     } catch (err) {
+                         console.log("ยกเลิกการแชร์", err);
+                     }
+                 } else {
+                     // โหมดคอม: โหลดรปูลงเครื่องเพื่อให้เอาไปลากใส่ LINE PC
+                     const link = document.createElement("a");
+                     link.download = `Bill_${d.plate}.png`;
+                     link.href = canvas.toDataURL("image/png");
+                     link.click();
+                     showToast("ดาวน์โหลดรูปใบเสร็จแล้ว ส่งให้ลูกค้าใน LINE ได้เลย!", "success");
+                 }
+                 
+                 btn.innerHTML = originalHtml;
+                 btn.disabled = false;
+             }, 'image/png');
+
+         } catch (error) {
+             console.error("Capture Error:", error);
+             showToast("ไม่สามารถสร้างรูปภาพได้", "danger");
+             btn.innerHTML = originalHtml;
+             btn.disabled = false;
+             capCarInfo.classList.add('d-none');
+         }
+      }
+
       function setupEventListenersForPage() {
         if (logoutBtn) logoutBtn.addEventListener("click", () => signOut(auth).then(()=>window.location.href="index.html"));
         
@@ -1272,8 +1370,11 @@
         jobDetailSoftDeleteBtn?.addEventListener("click", handleSoftDeleteJob);
         jobDetailPrintBtn?.addEventListener("click", printCurrentJob);
         exportCsvBtn?.addEventListener("click", exportToCSV);
+        
+        // ผูก Event ปุ่มแชร์รูป
+        jobDetailShareLineBtn?.addEventListener("click", captureAndShareLine);
 
-        // --- เพิ่ม Event ปุ่มรับชำระเงินค้างจ่าย (ใหม่) ---
+        // --- เพิ่ม Event ปุ่มรับชำระเงินค้างจ่าย ---
         const btnReceivePayment = document.getElementById("btnReceivePayment");
         if(btnReceivePayment) {
             btnReceivePayment.addEventListener("click", async () => {
