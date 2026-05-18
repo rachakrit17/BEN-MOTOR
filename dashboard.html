@@ -745,5 +745,193 @@
          fabAddVehicleBtn?.addEventListener("click", () => window.location.href="vehicles.html");
       }
     </script>
+    
+    <button id="aiToggleButton" class="btn btn-dark rounded-circle shadow-lg d-flex align-items-center justify-content-center border-2 border-white" style="position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; z-index: 1050; transition: all 0.3s;">
+        <i class="bi bi-robot fs-2 text-warning"></i>
+    </button>
+
+    <div id="aiChatWindow" class="card shadow-lg border-0 rounded-4 d-none" style="position: fixed; bottom: 160px; right: 20px; width: 350px; max-width: 90vw; height: 500px; z-index: 1050; display: flex; flex-direction: column; overflow: hidden;">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3 border-bottom-0">
+            <h6 class="mb-0 fw-bold d-flex align-items-center">
+                <i class="bi bi-robot text-warning me-2 fs-5"></i> BEN AI Assistant
+            </h6>
+            <button type="button" class="btn-close btn-close-white" id="aiCloseButton" aria-label="Close"></button>
+        </div>
+        <div class="card-body bg-light p-3" id="aiChatBox" style="overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 10px;">
+            <div class="d-flex justify-content-start">
+                <div class="bg-white border rounded-3 p-2 px-3 small shadow-sm" style="max-width: 85%;">
+                    สวัสดีครับลูกพี่! ผมคือ AI ประจำอู่ BEN MOTOR วันนี้มีอะไรให้ผมช่วยเช็คยอด หรือวิเคราะห์งานซ่อม พิมพ์ถามมาได้เลยครับ! 🔧🤖
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-top p-2">
+            <form id="aiChatForm" class="input-group">
+                <input type="text" id="aiChatInput" class="form-control border-success-subtle bg-light rounded-start-pill ps-3 small" placeholder="พิมพ์ถามรายรับ, สต๊อก..." autocomplete="off" required>
+                <button class="btn btn-success rounded-end-pill px-3" type="submit" id="aiSendBtn">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
+    <script type="module">
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // 🛑 เอา API KEY ที่ก๊อปปี้มา วางแทนตัวหนังสือสีแดงด้านล่างนี้เลยครับ 🛑
+        const API_KEY = "ใส่_API_KEY_ของคุณเบนตรงนี้"; 
+
+        const db = getFirestore();
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        
+        // เราใช้โมเดล Gemini 1.5 Flash เพราะคิดเลขไวและวิเคราะห์เก่ง
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        // --- UI Elements ---
+        const aiToggleButton = document.getElementById("aiToggleButton");
+        const aiChatWindow = document.getElementById("aiChatWindow");
+        const aiCloseButton = document.getElementById("aiCloseButton");
+        const aiChatForm = document.getElementById("aiChatForm");
+        const aiChatInput = document.getElementById("aiChatInput");
+        const aiChatBox = document.getElementById("aiChatBox");
+        const aiSendBtn = document.getElementById("aiSendBtn");
+
+        // Toggle เปิด/ปิด แชท
+        aiToggleButton.addEventListener("click", () => {
+            aiChatWindow.classList.toggle("d-none");
+            if(!aiChatWindow.classList.contains("d-none")) aiChatInput.focus();
+        });
+        aiCloseButton.addEventListener("click", () => aiChatWindow.classList.add("d-none"));
+
+        // ฟังก์ชันสร้างกล่องข้อความ
+        function addMessage(sender, text) {
+            const div = document.createElement("div");
+            div.className = `d-flex justify-content-${sender === 'user' ? 'end' : 'start'}`;
+            
+            const bubble = document.createElement("div");
+            bubble.className = `rounded-3 p-2 px-3 small shadow-sm ${sender === 'user' ? 'bg-success text-white' : 'bg-white border text-dark'}`;
+            bubble.style.maxWidth = "85%";
+            
+            // แปลงการเว้นบรรทัดให้แสดงผลใน HTML ได้
+            bubble.innerHTML = text.replace(/\n/g, '<br>');
+            
+            div.appendChild(bubble);
+            aiChatBox.appendChild(div);
+            aiChatBox.scrollTop = aiChatBox.scrollHeight; // เลื่อนลงล่างสุดอัตโนมัติ
+        }
+
+        // ฟังก์ชันดึงข้อมูลจากระบบ POS เพื่อป้อนให้ AI รู้จักร้านเรา
+        async function fetchShopContext() {
+            const today = new Date().toISOString().split("T")[0];
+            let context = `ข้อมูลอู่ BEN MOTOR ณ ปัจจุบัน (วันที่ ${today}):\n\n`;
+
+            try {
+                // ดึงรายรับ-รายจ่ายวันนี้
+                const txSnap = await getDocs(query(collection(db, "transactions"), where("date", "==", today), where("isDeleted", "==", false)));
+                let income = 0, expense = 0;
+                txSnap.forEach(doc => {
+                    const d = doc.data();
+                    if(d.type === 'income') income += Number(d.amount||0);
+                    else expense += Number(d.amount||0);
+                });
+                context += `- รายรับวันนี้: ${income} บาท\n`;
+                context += `- รายจ่ายวันนี้: ${expense} บาท\n`;
+
+                // ดึงรถค้างซ่อม
+                const jobsSnap = await getDocs(query(collection(db, "jobs"), where("isDeleted", "==", false)));
+                let pendingJobs = [];
+                jobsSnap.forEach(doc => {
+                    const d = doc.data();
+                    if(d.status !== "picked_up") {
+                        pendingJobs.push(`${d.plate} (${d.brand} ${d.model}) - อาการ: ${d.problem}`);
+                    }
+                });
+                context += `- รถค้างซ่อมในอู่ตอนนี้มี ${pendingJobs.length} คัน ได้แก่: ${pendingJobs.join(", ") || "ไม่มี"}\n`;
+
+                // ดึงสต๊อกใกล้หมด
+                const stockSnap = await getDocs(query(collection(db, "stock"), where("isDeleted", "==", false)));
+                let lowStock = [];
+                stockSnap.forEach(doc => {
+                    const d = doc.data();
+                    if(Number(d.qty) <= Number(d.minQty)) {
+                        lowStock.push(`${d.name} (เหลือ ${d.qty} ชิ้น)`);
+                    }
+                });
+                context += `- อะไหล่ใกล้หมด: ${lowStock.slice(0, 10).join(", ")} ${lowStock.length > 10 ? '...และอื่นๆ' : ''}\n\n`;
+
+            } catch (error) {
+                console.error("Error fetching context for AI", error);
+                context += "(ดึงข้อมูลระบบบางส่วนไม่สำเร็จ)\n\n";
+            }
+            return context;
+        }
+
+        // ส่งข้อความไปหา AI
+        aiChatForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const prompt = aiChatInput.value.trim();
+            if(!prompt) return;
+
+            // แสดงข้อความที่เราพิมพ์
+            addMessage("user", prompt);
+            aiChatInput.value = "";
+            aiChatInput.disabled = true;
+            aiSendBtn.disabled = true;
+            
+            // แสดงสถานะกำลังพิมพ์...
+            const loadingId = "loading-" + Date.now();
+            const loadingDiv = document.createElement("div");
+            loadingDiv.id = loadingId;
+            loadingDiv.className = "d-flex justify-content-start text-muted small";
+            loadingDiv.innerHTML = `<em><i class="bi bi-robot me-1"></i>กำลังคิด...</em>`;
+            aiChatBox.appendChild(loadingDiv);
+            aiChatBox.scrollTop = aiChatBox.scrollHeight;
+
+            try {
+                if (API_KEY === "AIzaSyB_3SHLgU79oXOgpP__EbgKg5jZtEwK8MY") {
+                    throw new Error("ลูกพี่ลืมใส่ API KEY ในโค้ดครับ! ไปเอาที่ Google AI Studio มาใส่ก่อนน้า");
+                }
+
+                // 1. ดึงข้อมูล POS สดๆ ร้อนๆ
+                const shopContext = await fetchShopContext();
+
+                // 2. สร้างคำสั่ง (Prompt) ที่รวมความรู้ของร้าน + คำถาม
+                const finalPrompt = `
+คุณคือ AI อัจฉริยะประจำอู่ซ่อมรถมอเตอร์ไซค์ "BEN MOTOR" หน้าที่คุณคือตอบคำถามเจ้าของร้าน (ชื่อคุณเบน) อย่างสุภาพ เป็นกันเอง แบบช่างคุยกัน และช่วยวิเคราะห์ข้อมูลร้าน
+
+${shopContext}
+
+คำถามจากคุณเบน: ${prompt}
+                `;
+
+                // 3. เรียก API Gemini
+                const result = await model.generateContent(finalPrompt);
+                const response = await result.response;
+                const text = response.text();
+
+                // ลบข้อความ "กำลังคิด..." และแสดงคำตอบ
+                document.getElementById(loadingId).remove();
+                addMessage("ai", text);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById(loadingId).remove();
+                addMessage("ai", `❌ แย่แล้วลูกพี่! เกิดข้อผิดพลาด: ${error.message}`);
+            } finally {
+                aiChatInput.disabled = false;
+                aiSendBtn.disabled = false;
+                aiChatInput.focus();
+            }
+        });
+    </script>
+    
   </body>
 </html>
