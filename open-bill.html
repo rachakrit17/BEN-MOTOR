@@ -304,6 +304,15 @@
                     <div class="col-6 text-end fw-semibold text-dark fs-5" id="laborTotalDisplay">0.00 ฿</div>
                   </div>
                   
+                  <div class="row mb-3 pb-3 border-bottom border-2 border-light align-items-center">
+                    <div class="col-6 text-danger fw-medium d-flex align-items-center">
+                      <i class="bi bi-tag-fill me-2"></i> ส่วนลด (Discount):
+                    </div>
+                    <div class="col-6 text-end">
+                       <input type="number" id="discountInput" class="form-control border-danger text-danger text-end fw-bold d-inline-block shadow-sm" style="width: 130px;" placeholder="0.00" min="0" step="0.01">
+                    </div>
+                  </div>
+                  
                   <div class="row mb-4 align-items-center">
                     <div class="col-5">
                       <div class="small text-muted text-uppercase fw-bold ls-1 mb-1">ยอดรวมสุทธิ</div>
@@ -318,13 +327,13 @@
                         <label class="col-form-label fw-bold text-success">รับเงินมา:</label>
                     </div>
                     <div class="col-6 col-sm-3">
-                        <input type="number" id="receivedAmountInput" class="form-control border-success fw-bold text-end" placeholder="0.00" min="0">
+                        <input type="number" id="receivedAmountInput" class="form-control border-success fw-bold text-end shadow-sm" placeholder="0.00" min="0">
                     </div>
                     <div class="col-6 col-sm-3 text-end mt-2 mt-sm-0">
                         <label class="col-form-label fw-bold text-danger">เงินทอน:</label>
                     </div>
                     <div class="col-6 col-sm-3 mt-2 mt-sm-0">
-                        <input type="text" id="changeAmountDisplay" class="form-control bg-white text-end fw-bold text-danger border-danger" value="0.00" readonly>
+                        <input type="text" id="changeAmountDisplay" class="form-control bg-white text-end fw-bold text-danger border-danger shadow-sm" value="0.00" readonly>
                     </div>
                   </div>
 
@@ -406,6 +415,10 @@
                     <td>รวมค่าแรง:</td>
                     <td id="r_labor_total">0.00</td>
                   </tr>
+                  <tr id="r_discount_row" class="text-danger d-none">
+                    <td>ส่วนลด:</td>
+                    <td id="r_discount_total">-0.00</td>
+                  </tr>
                   <tr class="border-top border-dark fw-bold fs-5">
                     <td>ยอดรวมสุทธิ:</td>
                     <td class="text-success" id="r_grand_total">0.00</td>
@@ -475,8 +488,7 @@
         projectId: "ben-motor",
         storageBucket: "ben-motor.firebasestorage.app",
         messagingSenderId: "814162692446",
-        appId: "1:814162692446:web:7753156248d76938fce7cf",
-        measurementId: "G-TVDDW82Q5B"
+        appId: "1:814162692446:web:7753156248d76938fce7cf"
       };
 
       const app = initializeApp(firebaseConfig);
@@ -525,6 +537,7 @@
       // Summary & Actions
       const partsTotalDisplay = document.getElementById("partsTotalDisplay");
       const laborTotalDisplay = document.getElementById("laborTotalDisplay");
+      const discountInput = document.getElementById("discountInput"); // ตัวแปรส่วนลดใหม่
       const grandTotalDisplay = document.getElementById("grandTotalDisplay");
       const receivedAmountInput = document.getElementById("receivedAmountInput");
       const changeAmountDisplay = document.getElementById("changeAmountDisplay");
@@ -637,7 +650,9 @@
            labor += parseFloat(tr.querySelector(".labor-price-input")?.value)||0;
         });
 
-        const grand = parts + labor;
+        const discount = parseFloat(discountInput.value) || 0;
+        const grand = Math.max(0, parts + labor - discount);
+        
         partsTotalDisplay.textContent = formatNumber(parts)+" ฿";
         laborTotalDisplay.textContent = formatNumber(labor)+" ฿";
         grandTotalDisplay.textContent = formatNumber(grand)+" ฿";
@@ -751,6 +766,16 @@
 
         document.getElementById('r_parts_total').textContent = formatNumber(jobData.partsTotal);
         document.getElementById('r_labor_total').textContent = formatNumber(jobData.laborTotal);
+        
+        // จัดการโชว์บรรทัดส่วนลดเฉพาะบิลที่มีส่วนลด
+        const discountRow = document.getElementById('r_discount_row');
+        if(jobData.discount > 0) {
+            discountRow.classList.remove('d-none');
+            document.getElementById('r_discount_total').textContent = "-" + formatNumber(jobData.discount);
+        } else {
+            discountRow.classList.add('d-none');
+        }
+        
         document.getElementById('r_grand_total').textContent = formatNumber(jobData.totalAmount);
       }
 
@@ -776,7 +801,7 @@
 
             partsTbody.querySelectorAll("tr").forEach(tr=>{
                const sId = tr.querySelector("select").value;
-               const stockName = tr.querySelector("select").options[tr.querySelector("select").selectedIndex].text.replace(/^.*?-\s*/, ''); // ตัด Code ออกตอนโชว์ในบิล
+               const stockName = tr.querySelector("select").options[tr.querySelector("select").selectedIndex].text.replace(/^.*?-\s*/, ''); 
                const qty = parseFloat(tr.querySelector(".part-qty-input").value)||0;
                const pr = parseFloat(tr.querySelector(".part-unit-price-input").value)||0;
                if(sId && qty>0) {
@@ -797,13 +822,17 @@
 
             if(parts.length===0 && labor.length===0) throw new Error("ต้องมีรายการอะไหล่หรือค่าแรงอย่างน้อย 1 รายการ");
 
+            const discount = parseFloat(discountInput.value) || 0;
+            const finalTotal = Math.max(0, partsTot + laborTot - discount);
             const branchId = currentUserProfile.branchId;
+
             const jobData = {
                date, customerName:name, customerPhone:customerPhoneInput.value.trim(),
                plate, brand:brandInput.value.trim(), model:modelInput.value.trim(), mileage:mileageInput.value,
                problem, estimatedTime: estimatedTimeInput.value.trim(), priority:prioritySelect.value, status:"repairing",
                paymentMethod: paymentMethodInput.value, mechanicName: mechanicNameInput.value.trim(), notes: jobNotesInput.value.trim(),
-               items:parts, laborItems:labor, partsTotal:partsTot, laborTotal:laborTot, totalAmount:partsTot+laborTot,
+               items:parts, laborItems:labor, 
+               partsTotal:partsTot, laborTotal:laborTot, discount:discount, totalAmount:finalTotal,
                createdBy:currentUser.uid, createdByName:currentUserProfile.displayName, branchId, isDeleted:false,
                createdAt: serverTimestamp()
             };
@@ -818,18 +847,18 @@
                await updateDoc(sRef, { qty: newQty, updatedAt:serverTimestamp() });
             }
 
-            // Transaction & Log (บันทึกรายรับเข้าบัญชีเฉพาะตอนที่ลูกค้าจ่ายเงินแล้ว)
+            // Transaction & Log (บันทึกรายรับเข้าบัญชีเฉพาะตอนที่ลูกค้าจ่ายเงินแล้ว ยอดสุทธิหลังหักส่วนลด)
             if (paymentMethodInput.value !== 'pending') {
                await addDoc(collection(db,"transactions"), {
                   date, type:"income", category:"ค่าซ่อม", description:`ค่าซ่อม ${plate} (${name})`,
                   paymentMethod: paymentMethodInput.value, 
-                  amount:partsTot+laborTot, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
+                  amount:finalTotal, sourceType:"job", sourceId:docRef.id, branchId, isDeleted:false,
                   createdAt:serverTimestamp(), createdBy:currentUser.uid
                });
             }
             
             await addDoc(collection(db,"activityLogs"), {
-               type:"job_created", message:`เปิดบิลซ่อม ${plate} ยอด ${formatNumber(partsTot+laborTot)}`,
+               type:"job_created", message:`เปิดบิลซ่อม ${plate} ยอด ${formatNumber(finalTotal)}`,
                refId:docRef.id, branchId, createdAt:serverTimestamp(), createdBy:currentUser.uid, createdByName:currentUserProfile.displayName
             });
 
@@ -928,6 +957,7 @@
          laborTbody.addEventListener("input", recalcTotals);
 
          // Form
+         discountInput.addEventListener("input", recalcTotals);
          receivedAmountInput.addEventListener("input", recalcTotals);
          openBillForm.addEventListener("submit", saveBill);
          resetFormBtn.addEventListener("click", ()=>{ 
